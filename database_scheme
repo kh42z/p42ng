@@ -38,11 +38,32 @@ Table guilds {
 
  Table wars {
    id int [pk, increment]
-   from int [ref: - guilds.id]
-   on int [ref: - guilds.id]
+   from int [ref: - guilds.id, unique]
+   on int [ref: - guilds.id, unique]
    start datetime
    end datetime
    prize int
+   from_score int
+   on_score int
+   max_unanswered unsigned
+ }
+
+ table war_times {
+   war_id int [ref: > wars.id]
+   start datetime
+   end datetime
+
+ }
+
+ table war_terms {
+  war_id int [ref: - wars.id]
+  ladder boolean
+  war_addon int [ref: - war_addons.id]
+ }
+
+ table war_addons {
+   id int [pk, increment]
+   name varchar
  }
 
  Table matchs_history {
@@ -72,25 +93,30 @@ Table chat {
   id int [pk, increment]
   privacy int [note: "public/private/protected"]
   password varchar [note: "bcrypt"]
+  owner uid [ref: - users.id]
 }
 
 Table chat_administrators {
   chat_id int [ref: - chat.id]
-  user int [ref: > users.id]
+  uid int [ref: > users.id]
 }
 
 Table chat_participants {
   chat_id int [ref: - chat.id]
-  user int [ref: > users.id]
+  uid int [ref: > users.id]
 }
 
 Table chat_bans {
   chat_id int [ref: - chat.id]
-  user int [ref: > users.id]
+  uid int [ref: > users.id]
 }
 
 Table chat_timeouts {
   chat_id int [ref: - chat.id]
   user int [ref: > users.id]
   end datetime
+}
+
+table admins {
+  uid int [ref: > users.id]
 }
