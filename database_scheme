@@ -19,13 +19,13 @@ Table status {
 }
 
 Table friends {
-  uid int [not null, ref: - users.id]
-  fid int [not null, ref: - users.id]
+  uid int [not null, ref: > users.id]
+  fid int [not null, ref: > users.id]
 }
 
 Table ignore_list {
-  uid int [not null, ref: - users.id]
-  fid int [not null, ref: - users.id]
+  uid int [not null, ref: > users.id]
+  fid int [not null, ref: > users.id]
 }
 
 
@@ -47,8 +47,8 @@ Table guilds {
 
  Table matchs_history {
   id int [pk, increment]
-  winner int [ref: - users.id]
-  looser int [ref: - users.id]
+  winner int [ref: > users.id]
+  looser int [ref: > users.id]
   type int [ref: - match_types.id]
   date datetime
  }
@@ -76,21 +76,21 @@ Table chat {
 
 Table chat_administrators {
   chat_id int [ref: - chat.id]
-  user int [ref: - users.id]
+  user int [ref: > users.id]
 }
 
 Table chat_participants {
   chat_id int [ref: - chat.id]
-  user int [ref: - users.id]
+  user int [ref: > users.id]
 }
 
 Table chat_bans {
   chat_id int [ref: - chat.id]
-  user int [ref: - users.id]
+  user int [ref: > users.id]
 }
 
 Table chat_timeouts {
   chat_id int [ref: - chat.id]
-  user int [ref: - users.id]
+  user int [ref: > users.id]
   end datetime
 }
