@@ -1,0 +1,60 @@
+Table users as U {
+  id int [pk, increment] // auto-increment
+  nickname varchar [not null, unique]
+  avatar varchar [note: 'path to png']
+  two_factor varchar
+  guild  int [ref: - guilds.id]
+  achievements int [ref: < u_achievements.id]
+  status int [ref: - status.id]
+  ladder int [ref: - ladders.id]
+}
+
+Table ladders {
+  id int [pk, increment]
+  name varchar
+}
+
+Table status {
+  id int [pk, increment]
+  name varchar
+}
+
+Table friends as F {
+  uid int [not null, ref: - users.id]
+  fid int [not null, ref: - users.id]
+}
+
+
+Table guilds {
+  id int [pk]
+  name varchar
+  anagram  varchar [not null, unique]
+  score int
+ }
+
+ Table matchs_history {
+  id int [pk, increment]
+  winner int [ref: - users.id]
+  looser int [ref: - users.id]
+  type int [ref: - match_types.id]
+ }
+
+ table match_types {
+   id int [pk, increment]
+   name varchar
+ }
+
+ Table u_achievements {
+   id int
+   aid int [ref: - achievements.id]
+ }
+
+ Table achievements {
+   id int [pk, increment]
+   name varchar
+ }
+
+Table chat {
+
+}
+
