@@ -4,7 +4,6 @@ Table users {
   avatar varchar [note: 'path to png']
   two_factor varchar
   guild  int [ref: - guilds.id]
-  achievements int [ref: < u_achievements.id]
   status int [ref: - status.id]
   ladder int [ref: - ladders.id]
 }
@@ -59,8 +58,8 @@ Table guilds {
    name varchar [note: "duel/ladder/tournament"]
  }
 
- Table u_achievements {
-   id int
+ Table user_achievements {
+   uid int [ref: > users.id]
    aid int [ref: - achievements.id]
  }
 
