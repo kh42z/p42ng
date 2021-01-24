@@ -19,7 +19,6 @@ RSpec.configure do |config|
       openapi: '3.0.1',
       info: {
         title: 'Pong API V1',
-        version: 'v1',
       description: 'Ping API'
       },
       paths: {},

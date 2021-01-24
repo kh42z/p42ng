@@ -2,7 +2,6 @@
 openapi: 3.0.1
 info:
   title: Pong API V1
-  version: v1
   description: Ping API
 paths:
   "/api/users":
@@ -28,6 +27,46 @@ paths:
                   type: string
               required:
               - nickname
+  "/api/users/{id}":
+    get:
+      summary: Retrieves an user
+      tags:
+      - Users
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: user found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  avatar:
+                    type: string
+                  guild_id:
+                    type: integer
+                  status_id:
+                    type: integer
+                  ladder_id:
+                    type: integer
+                  two_factor:
+                    type: boolean
+                  nickname:
+                    type: string
+                required:
+                - nickname
+                - avatar
+                - guild_id
+                - status_id
+                - ladder_id
+                - two_factor
 servers:
 - url: http://{defaultHost}:3000
   variables:
