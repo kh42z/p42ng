@@ -1,0 +1,35 @@
+---
+openapi: 3.0.1
+info:
+  title: Pong API V1
+  version: v1
+  description: Ping API
+paths:
+  "/api/users":
+    post:
+      summary: Creates a user
+      tags:
+      - Users
+      parameters: []
+      responses:
+        '201':
+          description: user created
+          content: {}
+        '422':
+          description: invalid request
+          content: {}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nickname:
+                  type: string
+              required:
+              - nickname
+servers:
+- url: http://{defaultHost}:3000
+  variables:
+    defaultHost:
+      default: localhost

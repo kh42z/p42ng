@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  belongs_to :guild
-  belongs_to :ladder
+  has_one :guild
+  has_one :ladder
   validates_presence_of :nickname
 end
