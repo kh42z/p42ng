@@ -8,6 +8,7 @@ services:
       POSTGRES_PASSWORD: secure
   rails:
     build: .
+    container_name: pong
     volumes:
       - ./server/:/app
     ports:

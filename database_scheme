@@ -18,12 +18,12 @@ Table status {
   name varchar [note: "online/offline/fighting"]
 }
 
-Table friends {
-  uid int [not null, ref: > users.id]
-  fid int [not null, ref: > users.id]
+Table friendships {
+  uid1 int [not null, ref: > users.id]
+  uid2 int [not null, ref: > users.id]
 }
 
-Table ignore_list {
+Table ignores {
   uid int [not null, ref: > users.id]
   fid int [not null, ref: > users.id]
 }
@@ -79,7 +79,7 @@ Table guilds {
    name varchar [note: "duel/ladder/tournament"]
  }
 
- Table user_achievements {
+ Table personnal_achievements {
    uid int [ref: > users.id]
    aid int [ref: - achievements.id]
  }
@@ -87,6 +87,7 @@ Table guilds {
  Table achievements {
    id int [pk, increment]
    name varchar
+   desc text
  }
 
 Table chat {
