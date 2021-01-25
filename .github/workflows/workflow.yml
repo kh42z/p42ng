@@ -3,9 +3,9 @@ defaults:
     working-directory: server
 env:
   RUBY_VERSION: 2.7
-  POSTGRES_USER: postgres
-  POSTGRES_PASSWORD: secure
-  POSTGRES_HOST: pg
+  PG_USER: postgres
+  PG_PASSWORD: secure
+  PG_HOST: pg
 
 name: Rails tests
 on: [push,pull_request]
@@ -31,9 +31,8 @@ jobs:
         ports:
           - 5432:5432
         env:
-          PG_USER: ${{ env.POSTGRES_USER }}
-          PG_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
-          PG_HOST: ${{ env.POSTGRES_HOST }}
+          POSTGRES_USER: ${{ env.PG_USER }}
+          POSTGRES_PASSWORD: ${{ env.PG_PASSWORD }}
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-ruby@v1
