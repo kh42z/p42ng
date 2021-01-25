@@ -17,7 +17,7 @@ ActiveRecord::Schema.define(version: 2021_01_24_112332) do
 
   create_table "guilds", force: :cascade do |t|
     t.string "name"
-    t.string "anagram", limit: 5
+    t.string "anagram", limit: 5, null: false
     t.integer "score"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -33,10 +33,10 @@ ActiveRecord::Schema.define(version: 2021_01_24_112332) do
   create_table "users", force: :cascade do |t|
     t.string "nickname", null: false
     t.string "avatar", default: "default_avatar.png", null: false
-    t.integer "status"
-    t.boolean "two_factor"
+    t.integer "status", default: 0
+    t.boolean "two_factor", default: false
     t.bigint "guild_id"
-    t.bigint "ladder_id"
+    t.bigint "ladder_id", default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["guild_id"], name: "index_users_on_guild_id"

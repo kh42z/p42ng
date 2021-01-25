@@ -13,6 +13,7 @@ describe 'Users API' do
         required: ['nickname']
       }
       response '201', 'user created' do
+        schema '$ref' => '#/definitions/user'
         let(:user) {{ nickname: 'foo'}}
         run_test!
       end
@@ -33,6 +34,7 @@ describe 'Users API' do
         },
       }
       response '200', 'user modified' do
+        schema '$ref' => '#/definitions/user'
         let(:user) {{ nickname: 'modified'}}
         run_test!
       end

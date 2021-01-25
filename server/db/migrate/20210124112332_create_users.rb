@@ -17,7 +17,7 @@ class CreateUsers < ActiveRecord::Migration[6.1]
       t.integer :status, :default => 0
       t.boolean :two_factor, :default => false
       t.references :guild, foreign_key: true
-      t.references :ladder, foreign_key: true
+      t.references :ladder, :default => 0, foreign_key: true, null: false
       t.timestamps
     end
   end

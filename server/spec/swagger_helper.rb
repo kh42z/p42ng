@@ -51,7 +51,7 @@ RSpec.configure do |config|
         properties: {
           id: { type: :integer },
           avatar: { type: :string },
-          guild_id: { type: :integer },
+          guild_id: { type: :integer, nullable: true },
           status_id: { type: :integer},
           ladder_id: { type: :integer},
           two_factor: { type: :boolean},

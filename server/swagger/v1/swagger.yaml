@@ -102,6 +102,7 @@ definitions:
         type: string
       guild_id:
         type: integer
+        nullable: true
       status_id:
         type: integer
       ladder_id:
