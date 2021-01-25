@@ -23,7 +23,7 @@ describe 'Users API' do
     end
   end
   path '/api/users/{id}' do
-    put 'Modifies an user' do
+    patch 'Modifies an user' do
       tags 'Users'
       consumes 'application/json'
       parameter name: :id, in: :path, type: :integer, in: :body, schema: {
@@ -44,17 +44,7 @@ describe 'Users API' do
       produces 'application/json'
       parameter name: :id, in: :path, type: :integer
       response '200', 'user found' do
-        schema type: :object,
-               properties: {
-                 id: { type: :integer },
-                 avatar: { type: :string },
-                 guild_id: { type: :integer },
-                 status_id: { type: :integer},
-                 ladder_id: { type: :integer},
-                 two_factor: { type: :boolean},
-                 nickname: { type: :string }
-               },
-               required: ['nickname', 'avatar', 'guild_id', 'status_id', 'ladder_id', 'two_factor']
+        schema '$ref' => '#/definitions/user'
         let(:id) { User.create(nickname: 'foo').id }
         run_test!
       end

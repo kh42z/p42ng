@@ -31,8 +31,36 @@ RSpec.configure do |config|
             }
           }
         }
-      ]
+      ],
+      definitions: {
+        errors_object: {
+          type: 'object',
+          properties: {
+            errors: { '$ref' => '#/definitions/errors_map' }
+          }
+        },
+        errors_map: {
+          type: 'object',
+          additionalProperties: {
+            type: 'array',
+            items: { type: 'string' }
+          }
+        },
+      user: {
+        type: :object,
+        properties: {
+          id: { type: :integer },
+          avatar: { type: :string },
+          guild_id: { type: :integer },
+          status_id: { type: :integer},
+          ladder_id: { type: :integer},
+          two_factor: { type: :boolean},
+          nickname: { type: :string }
+        },
+        required: ['nickname', 'avatar', 'guild_id', 'status_id', 'ladder_id', 'two_factor']
+      },
     }
+  }
   }
 
   # Specify the format of the output Swagger file when running 'rswag:specs:swaggerize'.
