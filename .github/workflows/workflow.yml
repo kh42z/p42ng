@@ -49,8 +49,10 @@ jobs:
         run: |
           bundler exec rails db:create RAILS_ENV=test
           bundler exec rails db:migrate RAILS_ENV=test
+      - name: Generate tests
+        run: rake rswag
       - name: Run tests
-        run: bundler exec
+        run: bundle exec rspec spec/integration
       - name: Upload coverage results
         uses: actions/upload-artifact@master
         if: always()
