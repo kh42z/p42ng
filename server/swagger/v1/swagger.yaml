@@ -29,7 +29,7 @@ paths:
               - nickname
   "/api/users/{id}":
     put:
-      summary: Modify a user
+      summary: Modifies an user
       tags:
       - Users
       parameters: []
@@ -85,7 +85,7 @@ paths:
                 - ladder_id
                 - two_factor
     delete:
-      summary: Delete an user
+      summary: Deletes an user
       tags:
       - Users
       parameters:

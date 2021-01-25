@@ -23,7 +23,7 @@ describe 'Users API' do
     end
   end
   path '/api/users/{id}' do
-    put 'Modify a user' do
+    put 'Modifies an user' do
       tags 'Users'
       consumes 'application/json'
       parameter name: :id, in: :path, type: :integer, in: :body, schema: {
@@ -61,7 +61,7 @@ describe 'Users API' do
     end
   end
   path '/api/users/{id}' do
-    delete 'Delete an user' do
+    delete 'Deletes an user' do
       tags 'Users'
       produces 'application/json'
       parameter name: :id, in: :path, type: :integer
