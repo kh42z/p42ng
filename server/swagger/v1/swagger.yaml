@@ -28,6 +28,23 @@ paths:
               required:
               - nickname
   "/api/users/{id}":
+    put:
+      summary: Modify a user
+      tags:
+      - Users
+      parameters: []
+      responses:
+        '200':
+          description: user modified
+          content: {}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nickname:
+                  type: string
     get:
       summary: Retrieves an user
       tags:
@@ -67,6 +84,20 @@ paths:
                 - status_id
                 - ladder_id
                 - two_factor
+    delete:
+      summary: Delete an user
+      tags:
+      - Users
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: user deleted
+          content: {}
 servers:
 - url: http://{defaultHost}:3000
   variables:

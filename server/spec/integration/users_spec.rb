@@ -20,7 +20,22 @@ describe 'Users API' do
         let(:user) {{}}
         run_test!
       end
-
+    end
+  end
+  path '/api/users/{id}' do
+    put 'Modify a user' do
+      tags 'Users'
+      consumes 'application/json'
+      parameter name: :id, in: :path, type: :integer, in: :body, schema: {
+        type: :object,
+        properties: {
+          nickname: { type: :string}
+        },
+      }
+      response '200', 'user modified' do
+        let(:user) {{ nickname: 'modified'}}
+        run_test!
+      end
     end
   end
   path '/api/users/{id}' do
@@ -39,7 +54,18 @@ describe 'Users API' do
                  two_factor: { type: :boolean},
                  nickname: { type: :string }
                },
-               required: [ 'nickname', 'avatar', 'guild_id', 'status_id', 'ladder_id', 'two_factor' ]
+               required: ['nickname', 'avatar', 'guild_id', 'status_id', 'ladder_id', 'two_factor']
+        let(:id) { User.create(nickname: 'foo').id }
+        run_test!
+      end
+    end
+  end
+  path '/api/users/{id}' do
+    delete 'Delete an user' do
+      tags 'Users'
+      produces 'application/json'
+      parameter name: :id, in: :path, type: :integer
+      response '200', 'user deleted' do
         let(:id) { User.create(nickname: 'foo').id }
         run_test!
       end
