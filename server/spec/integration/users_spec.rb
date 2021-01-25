@@ -5,7 +5,7 @@ describe 'Users API' do
     post 'Creates a user' do
       tags 'Users'
       consumes 'application/json'
-      parameter in: :body, schema: {
+      parameter name: :user, in: :body, schema: {
         type: :object,
         properties: {
           nickname: { type: :string}
@@ -13,7 +13,7 @@ describe 'Users API' do
         required: ['nickname']
       }
       response '201', 'user created' do
-        let(:user) {{ nickname: 'foo', content: 'bar'}}
+        let(:user) {{ nickname: 'foo'}}
         run_test!
       end
       response '422', 'invalid request' do
