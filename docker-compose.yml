@@ -17,3 +17,5 @@ services:
       - pg
     environment:
       PG_PASSWORD: secure
+      PG_USER: postgres
+      PG_HOST: pg

@@ -20,8 +20,8 @@ default: &default
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   timeout: 5000
-  host: pg
-  username: postgres
+  host: <%= ENV.fetch("PG_HOST") %>
+  username: <%= ENV.fetch("PG_USER") %>
   password: <%= ENV.fetch("PG_PASSWORD") %>
 
 
