@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_24_112332) do
+ActiveRecord::Schema.define(version: 2021_01_25_132416) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,8 +24,9 @@ ActiveRecord::Schema.define(version: 2021_01_24_112332) do
   end
 
   create_table "ladders", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.text "desc"
+    t.integer "mmr_threshold"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -36,7 +37,7 @@ ActiveRecord::Schema.define(version: 2021_01_24_112332) do
     t.integer "status", default: 0
     t.boolean "two_factor", default: false
     t.bigint "guild_id"
-    t.bigint "ladder_id", default: 0, null: false
+    t.bigint "ladder_id", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["guild_id"], name: "index_users_on_guild_id"
