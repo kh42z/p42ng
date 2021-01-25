@@ -8,13 +8,13 @@ describe 'Users API' do
       parameter name: :user, in: :body, schema: {
         type: :object,
         properties: {
-          nickname: { type: :string}
-        },
+          nickname: { type: :string},
+      },
         required: ['nickname']
       }
       response '201', 'user created' do
         schema '$ref' => '#/definitions/user'
-        let(:user) {{ nickname: 'foo'}}
+        let(:user) {{ nickname: 'foo' }}
         run_test!
       end
       response '422', 'invalid request' do
@@ -24,10 +24,13 @@ describe 'Users API' do
     end
   end
   path '/api/users/{id}' do
+    parameter name: :id, in: :path, type: :string
+    let(:id) {{ nickname: 'foo' }}
+
     patch 'Modifies an user' do
       tags 'Users'
       consumes 'application/json'
-      parameter name: :id, in: :path, type: :integer, in: :body, schema: {
+      parameter name: :user, in: :body, schema: {
         type: :object,
         properties: {
           nickname: { type: :string}
@@ -35,7 +38,6 @@ describe 'Users API' do
       }
       response '200', 'user modified' do
         schema '$ref' => '#/definitions/user'
-        let(:user) {{ nickname: 'modified'}}
         run_test!
       end
     end
@@ -57,8 +59,8 @@ describe 'Users API' do
       tags 'Users'
       produces 'application/json'
       parameter name: :id, in: :path, type: :integer
-      response '200', 'user deleted' do
-        let(:id) { User.create(nickname: 'foo').id }
+      response '204', 'user deleted' do
+        let(:id) { User.create(nickname: 'deleted').id }
         run_test!
       end
     end

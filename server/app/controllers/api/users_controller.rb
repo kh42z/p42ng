@@ -1,5 +1,6 @@
 module Api
   class UsersController < ApplicationController
+    before_action :set_user, only: [:show, :update, :destroy]
         def index
             @users = User.all
             json_response(@users)
@@ -10,13 +11,27 @@ module Api
             json_response(user, :created)
         end
 
-        private
+        def update
+            @user.update(user_params)
+            head :no_content
+        end
+
+        def show
+            json_response(@user)
+        end
+
+        def destroy
+            @user.destroy
+            head :no_content
+        end
+
+   private
         def user_params
             params.permit(:nickname)
         end
 
         def set_user
-            @user = User.find(params[:user_id])
+            @user = User.find(params[:id])
         end
   end
 end

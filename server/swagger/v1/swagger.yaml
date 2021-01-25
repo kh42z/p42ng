@@ -28,6 +28,12 @@ paths:
               required:
               - nickname
   "/api/users/{id}":
+    parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
     patch:
       summary: Modifies an user
       tags:
@@ -73,7 +79,7 @@ paths:
         schema:
           type: integer
       responses:
-        '200':
+        '204':
           description: user deleted
           content: {}
 servers:

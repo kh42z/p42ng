@@ -38,7 +38,7 @@ ActiveRecord::Schema.define(version: 2021_01_25_132416) do
     t.boolean "two_factor", default: false
     t.integer "mmr", default: 200
     t.bigint "guild_id"
-    t.bigint "ladder_id", default: 0
+    t.bigint "ladder_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["guild_id"], name: "index_users_on_guild_id"
