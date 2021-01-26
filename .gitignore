@@ -67,4 +67,7 @@ server/.yarn-integrity
 # Ignore uploaded files in development
 server/storage/*
 !/server/storage/.keep
-/server/public/uploads
+server/public/uploads
+
+#
+server/swagger/v1/swagger.json
