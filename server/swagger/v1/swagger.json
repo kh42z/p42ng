@@ -1,0 +1,71 @@
+---
+swagger: '2.0'
+info:
+  title: Pong API V1
+  description: Ping API
+paths:
+  "/api/users":
+    post:
+      summary: Creates a user
+      tags:
+      - Users
+      consumes:
+      - application/json
+      parameters:
+      - in: body
+        schema:
+          type: object
+          properties:
+            nickname:
+              type: string
+          required:
+          - nickname
+      responses:
+        '201':
+          description: user created
+        '422':
+          description: invalid request
+  "/api/users/{id}":
+    get:
+      summary: Retrieves an user
+      tags:
+      - Users
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        type: integer
+        required: true
+      responses:
+        '200':
+          description: user found
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+              avatar:
+                type: string
+              guild_id:
+                type: integer
+              status_id:
+                type: integer
+              ladder_id:
+                type: integer
+              two_factor:
+                type: boolean
+              nickname:
+                type: string
+            required:
+            - nickname
+            - avatar
+            - guild_id
+            - status_id
+            - ladder_id
+            - two_factor
+servers:
+- url: http://{defaultHost}:3000
+  variables:
+    defaultHost:
+      default: localhost
