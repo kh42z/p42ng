@@ -1,4 +1,5 @@
-class Api::LaddersController < ApplicationController
+module Api
+class LaddersController < ApplicationController
   before_action :set_ladder, only: [:show]
   def index
     @ladders = Ladder.all
@@ -11,6 +12,7 @@ class Api::LaddersController < ApplicationController
 
   private
   def set_ladder
-      @user = User.find(params[:id])
+      @ladder = Ladder.find(params[:id])
     end
+end
 end

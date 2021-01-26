@@ -1,14 +1,14 @@
 require 'swagger_helper'
 
-RSpec.describe 'api/ladders', type: :request do
+describe 'Ladder API' do
+  let(:id) { Ladder.create(name: 'foo', desc: 'foo too').id }
   path '/api/ladders/{id}' do
     get 'Retrieves an ladder' do
       tags 'Ladders'
       produces 'application/json'
       parameter name: :id, in: :path, type: :integer
       response '200', 'ladder found' do
-        schema '$ref' => '#/definitions/ladder'
-        let(:id) { Ladder.create(name: 'foo', desc: 'foo too').id }
+        schema '$ref' => '#/components/schemas/ladder'
         run_test!
       end
     end
@@ -18,7 +18,7 @@ RSpec.describe 'api/ladders', type: :request do
       tags 'Ladders'
       produces 'application/json'
       response '200', 'ladders found' do
-        schema '$ref' => '#/definitions/ladder'
+        schema '$ref' => '#/components/schemas/ladder'
         let(:id) { Ladder.create(name: 'foo', desc: 'foo too').id }
         run_test!
       end

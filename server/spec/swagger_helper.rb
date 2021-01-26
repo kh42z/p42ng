@@ -32,44 +32,46 @@ RSpec.configure do |config|
           }
         }
       ],
-      definitions: {
-        errors_object: {
-          type: 'object',
-          properties: {
-            errors: { '$ref' => '#/definitions/errors_map' }
-          }
-        },
-        errors_map: {
-          type: 'object',
-          additionalProperties: {
-            type: 'array',
-            items: { type: 'string' }
-          }
-        },
-        user: {
-          type: :object,
-          properties: {
-            id: { type: :integer },
-            avatar: { type: :string },
-            guild_id: { type: :integer, nullable: true },
-            status_id: { type: :integer},
-            ladder_id: { type: :integer},
-            two_factor: { type: :boolean},
-            nickname: { type: :string }
+      components: {
+        schemas: {
+          errors_object: {
+            type: 'object',
+            properties: {
+              errors: { '$ref' => '#/components/schemas/errors_map' }
+            }
           },
-          required: ['nickname', 'avatar', 'guild_id', 'status_id', 'ladder_id', 'two_factor']
-        },
-        ladder: {
-          type: :object,
-          properties: {
-            id: { type: :integer },
-            name: { type: :string },
-            desc: { type: :integer, nullable: true },
-            mmr_threshold: { type: :integer}
+          errors_map: {
+            type: 'object',
+            additionalProperties: {
+              type: 'array',
+              items: { type: 'string' }
+            }
           },
-          required: ['name']
-        }
+          user: {
+            type: :object,
+            properties: {
+              id: { type: :integer },
+              avatar: { type: :string },
+              guild_id: { type: :integer, nullable: true },
+              status_id: { type: :integer, nullable: true},
+              ladder_id: { type: :integer, nullable: true},
+              two_factor: { type: :boolean},
+              nickname: { type: :string }
+            },
+            required: %w[nickname]
+          },
+          ladder: {
+            type: :object,
+            properties: {
+              id: { type: :integer },
+              name: { type: :string },
+              desc: { type: :string, nullable: true },
+              mmr_threshold: { type: :integer}
+            },
+            required: ['name']
+          }
       }
+    }
   }
 }
   # Specify the format of the output Swagger file when running 'rswag:specs:swaggerize'.

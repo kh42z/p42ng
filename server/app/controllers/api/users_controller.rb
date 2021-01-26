@@ -13,7 +13,7 @@ module Api
 
         def update
             @user.update(user_params)
-            head :no_content
+            json_response(@user)
         end
 
         def show
