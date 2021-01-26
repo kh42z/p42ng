@@ -18,8 +18,8 @@ RSpec.configure do |config|
     'v1/swagger.yaml' => {
       openapi: '3.0.1',
       info: {
-        title: 'Pong API V1',
-      description: 'Ping API'
+        title: 'Pong API',
+      description: 'Pong API'
       },
       paths: {},
       servers: [
@@ -46,23 +46,32 @@ RSpec.configure do |config|
             items: { type: 'string' }
           }
         },
-      user: {
-        type: :object,
-        properties: {
-          id: { type: :integer },
-          avatar: { type: :string },
-          guild_id: { type: :integer, nullable: true },
-          status_id: { type: :integer},
-          ladder_id: { type: :integer},
-          two_factor: { type: :boolean},
-          nickname: { type: :string }
+        user: {
+          type: :object,
+          properties: {
+            id: { type: :integer },
+            avatar: { type: :string },
+            guild_id: { type: :integer, nullable: true },
+            status_id: { type: :integer},
+            ladder_id: { type: :integer},
+            two_factor: { type: :boolean},
+            nickname: { type: :string }
+          },
+          required: ['nickname', 'avatar', 'guild_id', 'status_id', 'ladder_id', 'two_factor']
         },
-        required: ['nickname', 'avatar', 'guild_id', 'status_id', 'ladder_id', 'two_factor']
-      },
-    }
+        ladder: {
+          type: :object,
+          properties: {
+            id: { type: :integer },
+            name: { type: :string },
+            desc: { type: :integer, nullable: true },
+            mmr_threshold: { type: :integer}
+          },
+          required: ['name']
+        }
+      }
   }
-  }
-
+}
   # Specify the format of the output Swagger file when running 'rswag:specs:swaggerize'.
   # The swagger_docs configuration option has the filename including format in
   # the key, this may want to be changed to avoid putting yaml in json files.

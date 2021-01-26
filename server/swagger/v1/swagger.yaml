@@ -1,9 +1,39 @@
 ---
 openapi: 3.0.1
 info:
-  title: Pong API V1
-  description: Ping API
+  title: Pong API
+  description: Pong API
 paths:
+  "/api/ladders/{id}":
+    get:
+      summary: Retrieves an ladder
+      tags:
+      - Ladders
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: ladder found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/definitions/user"
+  "/api/ladders":
+    get:
+      summary: Retrieves all ladders
+      tags:
+      - Ladders
+      responses:
+        '200':
+          description: ladders found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/definitions/ladder"
   "/api/users":
     post:
       summary: Creates a user
@@ -124,3 +154,17 @@ definitions:
     - status_id
     - ladder_id
     - two_factor
+  ladder:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      desc:
+        type: integer
+        nullable: true
+      mmr_threshold:
+        type: integer
+    required:
+    - name
