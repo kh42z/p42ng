@@ -13,5 +13,7 @@ COPY server/Gemfile /app/Gemfile
 COPY server/Gemfile.lock /app/Gemfile.lock
 RUN bundle install
 RUN yarn install
+ADD docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod 0755 /docker-entrypoint.sh
 EXPOSE 3000
-CMD ["rails", "server", "-b", "0.0.0.0"]
+ENTRYPOINT ["/bin/bash", "-c", "/docker-entrypoint.sh"]
