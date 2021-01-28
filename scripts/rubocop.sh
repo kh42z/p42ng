@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 set -e
-cd "${0%/*}/.."
+cd "${0%/*}/../../server"
 
 
 echo "Running rubocop"
-rubocop ../server/ -A
+rubocop -A

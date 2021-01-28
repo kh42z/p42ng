@@ -21,8 +21,7 @@ jobs:
       - name: Install Rubocop
         run: gem install rubocop
       - name: Check code
-        run: rubocop server
-        working-directory: /home/runner/work/pong/
+        run: rubocop
   rspec-test:
     name: RSpec
     runs-on: ubuntu-18.04
