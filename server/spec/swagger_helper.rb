@@ -19,7 +19,7 @@ RSpec.configure do |config|
       openapi: '3.0.1',
       info: {
         title: 'Pong API',
-      description: 'Pong API'
+        description: 'Pong API'
       },
       paths: {},
       servers: [
@@ -53,9 +53,9 @@ RSpec.configure do |config|
               id: { type: :integer },
               avatar: { type: :string },
               guild_id: { type: :integer, nullable: true },
-              status_id: { type: :integer, nullable: true},
-              ladder_id: { type: :integer, nullable: true},
-              two_factor: { type: :boolean},
+              status_id: { type: :integer, nullable: true },
+              ladder_id: { type: :integer, nullable: true },
+              two_factor: { type: :boolean },
               nickname: { type: :string }
             },
             required: %w[nickname]
@@ -66,14 +66,14 @@ RSpec.configure do |config|
               id: { type: :integer },
               name: { type: :string },
               desc: { type: :string, nullable: true },
-              mmr_threshold: { type: :integer}
+              mmr_threshold: { type: :integer }
             },
             required: ['name']
           }
+        }
       }
     }
   }
-}
   # Specify the format of the output Swagger file when running 'rswag:specs:swaggerize'.
   # The swagger_docs configuration option has the filename including format in
   # the key, this may want to be changed to avoid putting yaml in json files.

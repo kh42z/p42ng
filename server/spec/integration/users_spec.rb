@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'swagger_helper'
 
 describe 'User API' do
@@ -8,17 +10,17 @@ describe 'User API' do
       parameter name: :user, in: :body, schema: {
         type: :object,
         properties: {
-          nickname: { type: :string},
+          nickname: { type: :string }
         },
         required: ['nickname']
       }
       response '201', 'user created' do
         schema '$ref' => '#/components/schemas/user'
-        let(:user) {{ nickname: 'foo' }}
+        let(:user) { { nickname: 'foo' } }
         run_test!
       end
       response '422', 'invalid request' do
-        let(:user) {{}}
+        let(:user) { {} }
         run_test!
       end
     end
@@ -36,7 +38,7 @@ describe 'User API' do
         '$ref' => '#/components/schemas/user'
       }
       response '200', 'user modified' do
-        schema oneOf: [{'$ref' => '#/components/schemas/user'}]
+        schema oneOf: [{ '$ref' => '#/components/schemas/user' }]
         run_test!
       end
     end
@@ -47,7 +49,7 @@ describe 'User API' do
       produces 'application/json'
       parameter name: :id, in: :path, type: :integer
       response '200', 'user found' do
-        schema oneOf: [{'$ref' => '#/components/schemas/user'}]
+        schema oneOf: [{ '$ref' => '#/components/schemas/user' }]
         let(:id) { User.create(nickname: 'foo').id }
         run_test!
       end
@@ -64,5 +66,4 @@ describe 'User API' do
       end
     end
   end
-
 end
