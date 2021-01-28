@@ -22,7 +22,7 @@ jobs:
         run: gem install rubocop
       - name: Check code
         run: rubocop server
-        working-directory: /
+        working-directory: ..
   rspec-test:
     name: RSpec
     runs-on: ubuntu-18.04
