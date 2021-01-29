@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -12,40 +10,41 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_210_125_132_416) do
+ActiveRecord::Schema.define(version: 2021_01_25_132416) do
+
   # These are extensions that must be enabled in order to support this database
-  enable_extension 'plpgsql'
+  enable_extension "plpgsql"
 
-  create_table 'guilds', force: :cascade do |t|
-    t.string 'name'
-    t.string 'anagram', limit: 5, null: false
-    t.integer 'score'
-    t.datetime 'created_at', precision: 6, null: false
-    t.datetime 'updated_at', precision: 6, null: false
+  create_table "guilds", force: :cascade do |t|
+    t.string "name"
+    t.string "anagram", limit: 5, null: false
+    t.integer "score"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table 'ladders', force: :cascade do |t|
-    t.string 'name', null: false
-    t.text 'desc'
-    t.integer 'mmr_threshold'
-    t.datetime 'created_at', precision: 6, null: false
-    t.datetime 'updated_at', precision: 6, null: false
+  create_table "ladders", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "desc"
+    t.integer "mmr_threshold"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table 'users', force: :cascade do |t|
-    t.string 'nickname', null: false
-    t.string 'avatar', default: 'default_avatar.png', null: false
-    t.integer 'status', default: 0
-    t.boolean 'two_factor', default: false
-    t.integer 'mmr', default: 200
-    t.bigint 'guild_id'
-    t.bigint 'ladder_id'
-    t.datetime 'created_at', precision: 6, null: false
-    t.datetime 'updated_at', precision: 6, null: false
-    t.index ['guild_id'], name: 'index_users_on_guild_id'
-    t.index ['ladder_id'], name: 'index_users_on_ladder_id'
+  create_table "users", force: :cascade do |t|
+    t.string "nickname", null: false
+    t.string "avatar", default: "default_avatar.png", null: false
+    t.integer "status", default: 0
+    t.boolean "two_factor", default: false
+    t.integer "mmr", default: 200
+    t.bigint "guild_id"
+    t.bigint "ladder_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["guild_id"], name: "index_users_on_guild_id"
+    t.index ["ladder_id"], name: "index_users_on_ladder_id"
   end
 
-  add_foreign_key 'users', 'guilds'
-  add_foreign_key 'users', 'ladders'
+  add_foreign_key "users", "guilds"
+  add_foreign_key "users", "ladders"
 end

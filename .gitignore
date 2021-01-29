@@ -71,3 +71,7 @@ server/public/uploads
 
 #
 server/swagger/v1/swagger.json
+server/vendor/assets
+server/.config
+.idea
+

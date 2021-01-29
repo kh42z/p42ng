@@ -18,6 +18,7 @@ RSpec.configure do |config|
     'v1/swagger.yaml' => {
       openapi: '3.0.1',
       info: {
+        version: 'v1',
         title: 'Pong API',
         description: 'Pong API'
       },
