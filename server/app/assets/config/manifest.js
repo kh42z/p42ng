@@ -3,3 +3,6 @@
 //= link_directory ../stylesheets .css
 
 //= require backbone.js
+//= require underscore.js
+//= require jquery.js
+//= require app.js

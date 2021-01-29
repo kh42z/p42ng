@@ -2,6 +2,7 @@ database/*
 *.rbc
 capybara-*.html
 .rspec
+server/db/schema.rb
 server/db/*.sqlite3
 server/db/*.sqlite3-journal
 server/db/*.sqlite3-[0-9]*
