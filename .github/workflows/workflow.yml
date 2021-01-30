@@ -56,4 +56,4 @@ jobs:
         if: always()
         with:
           name: coverage-report
-          path: coverage
+          path: server/coverage
