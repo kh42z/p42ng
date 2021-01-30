@@ -2,7 +2,10 @@
 
 FactoryBot.define do
   factory :user do
-    title { nickname::Lorem.word }
-    created_by { Faker::Number.number(10) }
+    nickname { Faker::Name }
+    avatar { Faker::Avatar }
+    two_factor { Faker::Boolean }
+    status { 0 }
+    ladder
   end
 end

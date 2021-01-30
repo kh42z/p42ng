@@ -37,14 +37,11 @@ ActiveRecord::Schema.define(version: 2021_01_25_132416) do
     t.integer "status", default: 0
     t.boolean "two_factor", default: false
     t.integer "mmr", default: 200
-    t.bigint "guild_id"
     t.bigint "ladder_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["guild_id"], name: "index_users_on_guild_id"
     t.index ["ladder_id"], name: "index_users_on_ladder_id"
   end
 
-  add_foreign_key "users", "guilds"
   add_foreign_key "users", "ladders"
 end

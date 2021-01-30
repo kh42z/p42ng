@@ -20,7 +20,6 @@ class Init < ActiveRecord::Migration[6.1]
       t.integer :status, default: 0
       t.boolean :two_factor, default: false
       t.integer :mmr, default: 200
-      t.references :guild, foreign_key: true
       t.references :ladder, foreign_key: true
       t.timestamps
     end

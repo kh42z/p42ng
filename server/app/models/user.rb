@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
-  has_one :guild
-  has_one :ladder
+  belongs_to :ladder
   validates_presence_of :nickname
+  validates_presence_of :avatar
+  validates_presence_of :two_factor
+  validates_presence_of :status
 end
