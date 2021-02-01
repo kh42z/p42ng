@@ -2,9 +2,9 @@
 
 FactoryBot.define do
   factory :user do
-    nickname { Faker::Name }
+    nickname { Faker::Name.unique.name }
     avatar { Faker::Avatar }
-    two_factor { Faker::Boolean }
+    two_factor { 1 }
     status { 0 }
     ladder
   end
