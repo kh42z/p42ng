@@ -7,6 +7,7 @@ class Users < ActiveRecord::Migration[6.1]
       t.integer :two_factor, default: 0
       t.integer :mmr, default: 200
       t.references :ladder, foreign_key: true
+      t.references :guild, foreign_key: true, null: true
       t.timestamps
     end
   end

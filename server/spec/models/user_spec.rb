@@ -7,5 +7,6 @@ RSpec.describe User, type: :model do
   it { should validate_presence_of(:avatar) }
   it { should validate_presence_of(:two_factor) }
   it { should belong_to(:ladder) }
+  it { should belong_to(:guild) }
   it { should validate_presence_of(:status) }
 end
