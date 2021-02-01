@@ -105,7 +105,11 @@ paths:
       responses:
         '201':
           description: user created
-          content: {}
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - "$ref": "#/components/schemas/user_response"
         '422':
           description: invalid request
           content: {}
@@ -113,12 +117,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                nickname:
-                  type: string
-              required:
-                - nickname
+              "$ref" : "#/components/schemas/user"
   "/api/users/{id}":
     parameters:
       - name: id
@@ -139,7 +138,7 @@ paths:
             application/json:
               schema:
                 oneOf:
-                  - "$ref": "#/components/schemas/user"
+                  - "$ref": "#/components/schemas/user_response"
       requestBody:
         content:
           application/json:
@@ -162,7 +161,7 @@ paths:
             application/json:
               schema:
                 oneOf:
-                  - "$ref": "#/components/schemas/user"
+                  - "$ref": "#/components/schemas/user_response"
     delete:
       summary: Deletes an user
       tags:
@@ -198,8 +197,6 @@ components:
     user:
       type: object
       properties:
-        id:
-          type: integer
         avatar:
           type: string
         guild_id:
@@ -217,6 +214,13 @@ components:
           type: string
       required:
         - nickname
+    user_response:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+        - $ref: "#/components/schemas/user"
     ladder:
       type: object
       properties:
