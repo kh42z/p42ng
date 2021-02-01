@@ -1,0 +1,23 @@
+{
+  "name": "pong",
+  "homepage": "https://github.com/kh42z/pong",
+  "authors": [
+    "kh42z <tterrail@student.42.fr>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "vendor/assets/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "backbone": "^1.4.0",
+    "jquery": "^3.5.1"
+  }
+}
