@@ -10,12 +10,12 @@ module Api
     end
 
     def update
-      @guild.update!(user_params)
+      @guild.update!(guild_param)
       json_response(@guild)
     end
 
     def create
-      new = Guild.create(user_params)
+      new = Guild.create(guild_param)
       json_response(new, :created)
     end
 
@@ -45,6 +45,10 @@ module Api
     end
 
     private
+    def guild_param
+      param.require(:name, :anagram)
+    end
+
     def set_guild
       @guild = Guild.find(params[:id])
     end
