@@ -1,6 +1,6 @@
 //$(document).ready(function() {
 //console.log("ici dans users");
-var UsersView = Backbone.View.extend({
+let UsersView = Backbone.View.extend({
 		el: $('#app'),
 		initialize: function () {
 				//this.render();

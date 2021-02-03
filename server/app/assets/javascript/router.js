@@ -3,7 +3,7 @@ import { usersView } from "./users_view"
 import { PongView } from "./pong.js"
 //		console.log("la dans router");
 
-export var Router = Backbone.Router.extend(
+export let Router = Backbone.Router.extend(
 	{
 		initialize: function() {
 			this.appView = appView;

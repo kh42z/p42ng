@@ -1,6 +1,6 @@
 
 //console.log("la dans app");
-var AppView = Backbone.View.extend({
+let AppView = Backbone.View.extend({
 		el: $('#app'),
 		initialize: function () {
 				//this.render();
@@ -11,7 +11,7 @@ var AppView = Backbone.View.extend({
 		}
 });
 export const appView = new AppView;
-//var appView	= new AppView();
+//let appView	= new AppView();
 //appView.render();
 //export const appView = new AppView;
 

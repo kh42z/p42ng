@@ -1,4 +1,4 @@
-var script = `
+let script = `
 <script>
 
 	var WIDTH = 1000;
@@ -484,7 +484,7 @@ var script = `
 </canvas>
 </section>`
 
-export var PongView = Backbone.View.extend({
+export let PongView = Backbone.View.extend({
 		el: $('#app'),
 		initialize: function () {
 				//this.render();
