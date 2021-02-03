@@ -244,8 +244,12 @@ components:
           type: string
         anagram:
           type: string
+        owner_id:
+          type: integer
+          nullable: true
         score:
           type: integer
       required:
         - name
         - anagram
+        - owner_id

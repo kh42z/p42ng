@@ -10,43 +10,32 @@ module Api
     end
 
     def update
-      @guild.update!(guild_param)
+      @guild.update!(guild_params)
       json_response(@guild)
     end
 
     def create
-      new = Guild.create(guild_param)
-      json_response(new, :created)
+      guild = Guild.new(guild_params)
+      if guild.save
+        json_response(guild, :created)
+      else
+        json_response(guild.errors, :unprocessable_entity)
+      end
     end
 
     def destroy
-      @guild.destroy
+      Guild.find(params[:id]).destroy!
       head :no_content
     end
-
-#    def search
-#      case @guilds.count
-#      when 0 then render action: "no_results"
-#      when 1 then render action: "show"
-#      when 2..10 then render action: "show_many"
-#      end
-#    end
-#
-#    def no_results
-#      # code here
-#    end
-#
-#    def show_many
-#      # code here
-#    end
 
     def show
       json_response(@guild)
     end
 
     private
-    def guild_param
-      param.require(:name, :anagram)
+
+    def guild_params
+      param.require(:guild).permit(:name, :anagram)
     end
 
     def set_guild
