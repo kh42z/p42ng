@@ -1,5 +1,6 @@
 import { appView } from "./app.js"
 import { usersView } from "./users_view"
+import { PongView } from "./pong.js"
 //		console.log("la dans router");
 
 export var Router = Backbone.Router.extend(
@@ -7,6 +8,7 @@ export var Router = Backbone.Router.extend(
 		initialize: function() {
 			this.appView = appView;
 			this.usersView = usersView;
+			this.pongView = new PongView;
 			console.log("In router initialize");
 		},
 
@@ -15,6 +17,7 @@ export var Router = Backbone.Router.extend(
 			//"/l": "home_view",
 			"users": "users_view",
 			"home": "home_view",
+			"pong": "pong_view",
 			'': "home_view"
 		},
 
@@ -28,6 +31,12 @@ export var Router = Backbone.Router.extend(
 		{
 			console.log("in users_view route");
 			this.usersView.render();
+		},
+
+		pong_view: function(url)
+		{
+			console.log("in pong view");
+			this.pongView.render();
 		}
 	});
 
