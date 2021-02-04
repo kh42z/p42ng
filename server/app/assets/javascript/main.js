@@ -1,4 +1,4 @@
-import { Router } from "./router.js"
+import { Router } from "./router/router.js"
 
 $(document).ready(function() {
 	let mainRouter = new Router;
