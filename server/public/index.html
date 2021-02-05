@@ -17,16 +17,51 @@
 	<head>
 		<meta charset="utf-8">
 		<link rel="stylesheet" type="text/css" href="./css/stylesheet.css" media="screen" />
+		<!-- <link rel="stylesheet" type="text/css" href="./css/style2.css" media="screen" /> -->
+
 		<script type="text/javascript" src="/assets/jquery.js"></script>
 	    <script type="text/javascript" src="/assets/underscore.js"></script>
 	    <script type="text/javascript" src="/assets/backbone.js"></script>
 	    <script type="text/javascript" src="/assets/handlebars.js"></script>
-		<script type ="module" src="/assets/main.js"></script>
-	    <title>Pong</title>
+		<script type="text/javascript" src="/assets/requirejs"></script>
 	</head>
 	<body>
-		<script id="navbar-template" src="/assets/templates/navbar.handlebars" type="text/x-handlebars-template"></script>
+			 
+	<div id="contentDiv"></div>
+		
+	<!-- Compile with handlebars groceries.handlebars -f groceries.js -->
+		
+	<script type="module" src="/assets/groceries.js"></script>
+	<script type="module" src="/assets/view.js"></script>
+		
+	<script id="groceries-template" src="/assets/templates/groceries.handlebars" type="text/x-handlebars-template"></script>
+	<!-- <script id="groceries-template" type="text/x-handlebars-template">
 
-		<div id="app"></div>
-	</body>
+			{{#each groceries}}
+			<div class='grocery-item'>
+			<p>Item: {{this.item}} </p>
+			</div>
+		{{/each}}
+	</script> -->
+
+	<!-- var templateInfo = document.getElementById("grocery-template").innerHTML;
+	var template = Handlebars.compile(templateInfo);
+	var template = Handlebars.templates['groceries'];
+		
+	var context = {
+	groceries:[
+	{item: "Potato"},
+	{item: "Flour"},
+	{item: "Yogurt"},
+	{item: "Beans"}
+		]
+	}
+		
+	var templateData = template(context);
+		
+	document.getElementById('contentDiv').innerHTML += templateData;
+		
+	</script> -->
+			 
+</body>
 </html>
