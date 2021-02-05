@@ -18,6 +18,8 @@
   ],
   "dependencies": {
     "backbone": "^1.4.0",
-    "jquery": "^3.5.1"
+    "jquery": "^3.5.1",
+    "handlebars": "^4.7.6",
+    "Minified": "minified#^2015.1.1"
   }
 }
