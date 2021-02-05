@@ -38,13 +38,3 @@ export let Router = Backbone.Router.extend(
 			this.pongView.render();
 		}
 });
-
-//$(document).ready();
-//$(document).ready(function() {
-// all this should be in a main.js i think
-/*new Router();
-Backbone.history.start();
-
-console.log("Router created");*/
-//	export const router = new Router;
-//});
