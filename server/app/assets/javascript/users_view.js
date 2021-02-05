@@ -4,7 +4,7 @@ let UsersView = Backbone.View.extend({
 			console.log("UsersView created");
 	    	let templateInfo = document.getElementById("navbar-template").innerHTML;
 			let template = Handlebars.compile(templateInfo);
-			template = Handlebars.templates['navbar'];
+			template = Handlebars.templates['navbar-item'];
 			
 			let context = {
 				welcome: "Users! page"
