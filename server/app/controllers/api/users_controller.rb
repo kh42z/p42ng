@@ -9,15 +9,15 @@ module Api
       json_response(users)
     end
 
-    def create
-      user = User.create!(user_params)
-      json_response(user, :created)
-    end
-
-    def update
-      @user.update(user_params)
-      json_response(@user)
-    end
+    #     def create
+    #       user = User.create!(user_params)
+    #       json_response(user, :created)
+    #     end
+    #
+    #     def update
+    #       @user.update(user_params)
+    #       json_response(@user)
+    #     end
 
     def show
       json_response(@user)
