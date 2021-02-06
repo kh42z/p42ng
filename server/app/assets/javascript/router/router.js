@@ -12,7 +12,7 @@ export const Router = Backbone.Router.extend({
 
   routes:
   {
-    users: 'users_view',
+    user_page: 'users_view',
     home: 'home_view',
     pong: 'pong_view'
   },

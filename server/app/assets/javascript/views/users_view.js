@@ -3,10 +3,11 @@ const UsersView = Backbone.View.extend({
   initialize: function () {
   },
   render: function () {
-    const template = Handlebars.templates.navbar
+    const template = Handlebars.templates.topnav
 
     const context = {
-      welcome: 'Users! page'
+      welcome: 'Users! page',
+      user: 'default'
     }
 
     const templateData = template(context)
