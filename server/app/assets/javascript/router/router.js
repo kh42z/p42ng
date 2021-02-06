@@ -1,10 +1,10 @@
-import { appView } from '../views/app.js'
-import { usersView } from '../views/users_view'
-import { pongView } from '../views/pong.js'
+import { homeView } from '../views/home_view.js'
+import { usersView } from '../views/users_view.js'
+import { pongView } from '../views/pong_view.js'
 
 export const Router = Backbone.Router.extend({
   initialize: function () {
-    this.appView = appView
+    this.homeView = homeView
     this.usersView = usersView
     this.pongView = pongView
     console.log('In router initialize')
@@ -19,7 +19,7 @@ export const Router = Backbone.Router.extend({
 
   home_view: function (url) {
     console.log('in home route')
-    this.appView.render()
+    this.homeView.render()
   },
 
   users_view: function (url) {

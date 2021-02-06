@@ -1,4 +1,4 @@
-const AppView = Backbone.View.extend({
+const HomeView = Backbone.View.extend({
   el: $('#app'),
   initialize: function () {
   },
@@ -12,4 +12,4 @@ const AppView = Backbone.View.extend({
     this.$el.html(templateData)
   }
 })
-export const appView = new AppView()
+export const homeView = new HomeView()
