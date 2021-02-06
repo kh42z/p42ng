@@ -10,10 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_03_161532) do
+ActiveRecord::Schema.define(version: 2021_02_04_151232) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "guild_officers", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "guild_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["guild_id"], name: "index_guild_officers_on_guild_id"
+    t.index ["user_id"], name: "index_guild_officers_on_user_id"
+  end
 
   create_table "guilds", force: :cascade do |t|
     t.string "name"
@@ -47,6 +56,8 @@ ActiveRecord::Schema.define(version: 2021_02_03_161532) do
     t.index ["ladder_id"], name: "index_users_on_ladder_id"
   end
 
+  add_foreign_key "guild_officers", "guilds"
+  add_foreign_key "guild_officers", "users"
   add_foreign_key "guilds", "users", column: "owner_id"
   add_foreign_key "users", "guilds"
   add_foreign_key "users", "ladders"

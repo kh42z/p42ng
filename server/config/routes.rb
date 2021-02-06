@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  mount Rswag::Ui::Engine => '/api-docs'
-  mount Rswag::Api::Engine => '/api-docs'
   namespace :api do
-    resources :users
-    resources :ladders
-    resources :guilds
+    resources :users, :ladders, :guilds
+    resources :guilds do
+      resources :guild_officers
+    end
   end
 end

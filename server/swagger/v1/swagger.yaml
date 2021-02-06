@@ -1,255 +1,285 @@
----
-openapi: 3.0.1
-info:
-  version: v1
-  title: Pong API
-  description: Pong API
-paths:
-  "/api/guilds/":
-    get:
-      summary: Retrieves guilds
-      tags:
-        - Guilds
-      responses:
-        '200':
-          description: guilds found
-          content:
-            application/json:
+    ---
+    openapi: 3.0.1
+    info:
+      version: v1
+      title: Pong API
+      description: Pong API
+    paths:
+      "/api/guilds/":
+        get:
+          summary: Retrieves guilds
+          tags:
+            - Guilds
+          responses:
+            '200':
+              description: guilds found
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/guild"
+        post:
+          summary: Creates a guild
+          tags:
+            - Guilds
+          parameters: [ ]
+          responses:
+            '201':
+              description: Created
+              content: { }
+            '422':
+              description: invalid request
+              content: { }
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/guild'
+      "/api/guilds/{id}":
+        get:
+          summary: Retrieves a guild
+          tags:
+            - Guilds
+          parameters:
+            - name: id
+              in: path
+              required: true
               schema:
-                $ref: "#/components/schemas/guild"
-    post:
-      summary: Creates a guild
-      tags:
-        - Guilds
-      parameters: []
-      responses:
-        '201':
-          description: Created
-          content: {}
-        '422':
-          description: invalid request
-          content: {}
-      requestBody:
-        content:
-          application/json:
+                type: integer
+          responses:
+            '200':
+              description: guild found
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/guild"
+        delete:
+          summary: Deletes a guild
+          tags:
+            - Guilds
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: integer
+          responses:
+            '204':
+              description: guild deleted
+              content: { }
+      '/api/guilds/{id}/guild_officers':
+        get:
+          summary: Retrieves officers of a specific guild
+          tags:
+            - Guilds
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: integer
+          responses:
+            '200':
+              description: officers found
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/guild_officers"
+
+      "/api/ladders/{id}":
+        get:
+          summary: Retrieves a ladder
+          tags:
+            - Ladders
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: integer
+          responses:
+            '200':
+              description: ladder found
+              content:
+                application/json:
+                  schema:
+                    "$ref": "#/components/schemas/ladder"
+      "/api/ladders":
+        get:
+          summary: Retrieves all ladders
+          tags:
+            - Ladders
+          responses:
+            '200':
+              description: ladders found
+              content:
+                application/json:
+                  schema:
+                    "$ref": "#/components/schemas/ladder"
+      "/api/users":
+        post:
+          summary: Creates a user
+          tags:
+            - Users
+          parameters: [ ]
+          responses:
+            '201':
+              description: user created
+              content:
+                application/json:
+                  schema:
+                    oneOf:
+                      - "$ref": "#/components/schemas/user_response"
+            '422':
+              description: invalid request
+              content: { }
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  "$ref": "#/components/schemas/user"
+      "/api/users/{id}":
+        parameters:
+          - name: id
+            in: path
+            required: true
             schema:
-              $ref: '#/components/schemas/guild'
-  "/api/guilds/{id}":
-    get:
-      summary: Retrieves a guild
-      tags:
-        - Guilds
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: guild found
-          content:
-            application/json:
+              type: string
+        patch:
+          summary: Modifies an user
+          tags:
+            - Users
+          operationId: patchUser
+          parameters: [ ]
+          responses:
+            '200':
+              description: user modified
+              content:
+                application/json:
+                  schema:
+                    oneOf:
+                      - "$ref": "#/components/schemas/user_response"
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  "$ref": "#/components/schemas/user"
+        get:
+          summary: Retrieves an user
+          tags:
+            - Users
+          parameters:
+            - name: id
+              in: path
+              required: true
               schema:
-                $ref: "#/components/schemas/guild"
-    delete:
-      summary: Deletes a guild
-      tags:
-        - Guilds
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        '204':
-          description: guild deleted
-          content: {}
-  "/api/ladders/{id}":
-    get:
-      summary: Retrieves a ladder
-      tags:
-        - Ladders
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: ladder found
-          content:
-            application/json:
+                type: integer
+          responses:
+            '200':
+              description: user found
+              content:
+                application/json:
+                  schema:
+                    oneOf:
+                      - "$ref": "#/components/schemas/user_response"
+        delete:
+          summary: Deletes an user
+          tags:
+            - Users
+          parameters:
+            - name: id
+              in: path
+              required: true
               schema:
-                "$ref": "#/components/schemas/ladder"
-  "/api/ladders":
-    get:
-      summary: Retrieves all ladders
-      tags:
-        - Ladders
-      responses:
-        '200':
-          description: ladders found
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/ladder"
-  "/api/users":
-    post:
-      summary: Creates a user
-      tags:
-        - Users
-      parameters: []
-      responses:
-        '201':
-          description: user created
-          content:
-            application/json:
-              schema:
-                oneOf:
-                  - "$ref": "#/components/schemas/user_response"
-        '422':
-          description: invalid request
-          content: {}
-      requestBody:
-        content:
-          application/json:
-            schema:
-              "$ref" : "#/components/schemas/user"
-  "/api/users/{id}":
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-    patch:
-      summary: Modifies an user
-      tags:
-        - Users
-      operationId: patchUser
-      parameters: []
-      responses:
-        '200':
-          description: user modified
-          content:
-            application/json:
-              schema:
-                oneOf:
-                  - "$ref": "#/components/schemas/user_response"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/user"
-    get:
-      summary: Retrieves an user
-      tags:
-        - Users
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: user found
-          content:
-            application/json:
-              schema:
-                oneOf:
-                  - "$ref": "#/components/schemas/user_response"
-    delete:
-      summary: Deletes an user
-      tags:
-        - Users
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        '204':
-          description: user deleted
-          content: {}
-servers:
-  - url: http://{defaultHost}:3000
-    variables:
-      defaultHost:
-        default: localhost
-components:
-  schemas:
-    errors_object:
-      type: object
-      properties:
-        errors:
-          "$ref": "#/components/schemas/errors_map"
-    errors_map:
-      type: object
-      additionalProperties:
-        type: array
-        items:
-          type: string
-    user:
-      type: object
-      properties:
-        avatar:
-          type: string
-        guild_id:
-          type: integer
-          nullable: true
-        status_id:
-          type: integer
-          nullable: true
-        ladder_id:
-          type: integer
-          nullable: true
-        two_factor:
-          type: boolean
-        nickname:
-          type: string
-      required:
-        - nickname
-    user_response:
-      allOf:
-        - type: object
+                type: integer
+          responses:
+            '204':
+              description: user deleted
+              content: { }
+    servers:
+      - url: http://{defaultHost}:3000
+        variables:
+          defaultHost:
+            default: localhost
+    components:
+      schemas:
+        errors_object:
+          type: object
+          properties:
+            errors:
+              "$ref": "#/components/schemas/errors_map"
+        errors_map:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        user:
+          type: object
+          properties:
+            avatar:
+              type: string
+            guild_id:
+              type: integer
+              nullable: true
+            status_id:
+              type: integer
+              nullable: true
+            ladder_id:
+              type: integer
+              nullable: true
+            two_factor:
+              type: boolean
+            nickname:
+              type: string
+          required:
+            - nickname
+        user_response:
+          allOf:
+            - type: object
+              properties:
+                id:
+                  type: string
+            - $ref: "#/components/schemas/user"
+        ladder:
+          type: object
           properties:
             id:
+              type: integer
+            name:
               type: string
-        - $ref: "#/components/schemas/user"
-    ladder:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        desc:
-          type: string
-          nullable: true
-        mmr_threshold:
-          type: integer
-      required:
-        - name
-    guild:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        anagram:
-          type: string
-        owner_id:
-          type: integer
-          nullable: true
-        score:
-          type: integer
-      required:
-        - name
-        - anagram
-        - owner_id
+            desc:
+              type: string
+              nullable: true
+            mmr_threshold:
+              type: integer
+          required:
+            - name
+        guild:
+          type: object
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+            anagram:
+              type: string
+            owner_id:
+              type: integer
+            score:
+              type: integer
+          required:
+            - name
+            - anagram
+            - owner_id
+        guild_officers:
+          type: object
+          properties:
+            guild_id:
+              type: integer
+            user_id:
+              type: integer
+          required:
+            - guild_id
+            - user_id
+
+
