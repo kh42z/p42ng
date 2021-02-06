@@ -75,3 +75,5 @@ server/coverage
 .idea
 
 database
+
+node_modules
