@@ -2,7 +2,6 @@
 
 module Api
   class GuildOfficersController < ApplicationController
-
     def index
       json_response(GuildOfficer.where(guild_id: params[:guild_id]))
     end

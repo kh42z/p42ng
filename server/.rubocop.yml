@@ -8,3 +8,4 @@ AllCops:
     - script/**
     - bin/**
     - spec/**/*
+    - vendor/**/*
