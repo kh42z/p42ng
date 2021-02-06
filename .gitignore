@@ -74,5 +74,5 @@ server/vendor/assets
 server/.config
 server/coverage
 .idea
-
+node_modules
 database
