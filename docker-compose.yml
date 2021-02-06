@@ -2,8 +2,6 @@ version: '3.0'
 services:
   pg:
     image: postgres:12.1
-    volumes:
-      - ./database:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: secure
   rails:
