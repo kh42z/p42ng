@@ -1,6 +1,6 @@
-import { appView } from "./app.js"
-import { usersView } from "./users_view"
-import { PongView } from "./pong.js"
+import { appView } from "../views/app.js"
+import { usersView } from "../views/users_view"
+import { PongView } from "../views/pong.js"
 
 export let Router = Backbone.Router.extend(
 	{

@@ -24,6 +24,7 @@
     "install": "^1.0.4",
     "Minified": "minified#^2015.1.1",
     "handlebars-helper-minify": "*",
-    "handlebars": "^4.7.6"
+    "handlebars": "^4.7.6",
+    "underscore": "^1.12.0"
   }
 }
