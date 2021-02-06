@@ -281,5 +281,3 @@
           required:
             - guild_id
             - user_id
-
-

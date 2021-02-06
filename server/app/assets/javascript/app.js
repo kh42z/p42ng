@@ -1,18 +1,13 @@
+$(function() {
+    var AppView = Backbone.View.extend({
+        el: $('#app'),
+        initialize: function () {
+            this.render();
+        },
+        render: function () {
+            this.$el.html("This text was written in a Backbone view!");
+        }
+    });
 
-//console.log("la dans app");
-let AppView = Backbone.View.extend({
-		el: $('#app'),
-		initialize: function () {
-				//this.render();
-				console.log("yo");
-		},
-		render: function () {
-				this.$el.html("Home page");
-		}
+    var App = new AppView;
 });
-export const appView = new AppView;
-//let appView	= new AppView();
-//appView.render();
-//export const appView = new AppView;
-
-//});

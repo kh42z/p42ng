@@ -484,14 +484,14 @@ let script = `
 </canvas>
 </section>`
 
-export let PongView = Backbone.View.extend({
-		el: $('#app'),
-		initialize: function () {
-				//this.render();
-				console.log("yo");
-		},
-		render: function () {
-				this.$el.html("pong page");
-		}
-});
-//export const pongView = new PongView;
+// eslint-disable-next-line no-undef
+const PongView = Backbone.View.extend({
+  // eslint-disable-next-line no-undef
+  el: $('#app'),
+  initialize: function () {
+  },
+  render: function () {
+    this.$el.html('pong page')
+  }
+})
+export const pongView = new PongView()

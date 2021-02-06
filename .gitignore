@@ -51,6 +51,7 @@ server/.byebug_history
 
 # Ignore node_modules
 server/node_modules/
+node_modules/
 
 # Ignore precompiled javascript packs
 server/public/packs
@@ -74,3 +75,4 @@ server/.config
 server/coverage
 .idea
 
+database
