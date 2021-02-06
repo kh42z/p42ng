@@ -1,4 +1,4 @@
-let script = `
+const script = `
 <script>
 
 	var WIDTH = 1000;
@@ -484,9 +484,7 @@ let script = `
 </canvas>
 </section>`
 
-// eslint-disable-next-line no-undef
 const PongView = Backbone.View.extend({
-  // eslint-disable-next-line no-undef
   el: $('#app'),
   initialize: function () {
   },

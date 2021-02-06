@@ -2,7 +2,6 @@ import { appView } from '../views/app.js'
 import { usersView } from '../views/users_view'
 import { pongView } from '../views/pong.js'
 
-// eslint-disable-next-line no-undef
 export const Router = Backbone.Router.extend({
   initialize: function () {
     this.appView = appView
