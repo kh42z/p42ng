@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y \
   echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
   apt-get update && apt-get install -y nodejs yarn
 RUN npm install -g bower
-RUN git clone https://github.com/kh42z/omniauth-marvin.git && cd omniauth-marvin && gem build omniauth-marvin.gemspec && gem install omniauth-marvin
+RUN git clone https://github.com/kh42z/omniauth-marvin.git && cd omniauth-marvin && gem build omniauth-marvin.gemspec && gem install omniauth-marvin && gem uninstall -i /usr/local/lib/ruby/gems/2.7.0 minitest
 COPY server/Gemfile /app/Gemfile
 COPY server/Gemfile.lock /app/Gemfile.lock
 RUN bundle install

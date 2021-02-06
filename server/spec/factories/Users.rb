@@ -3,9 +3,11 @@
 FactoryBot.define do
   factory :user do
     nickname { Faker::Name.unique.name }
-    avatar { Faker::Avatar }
+    image_url { Faker::Internet.url }
     two_factor { 1 }
     status { 0 }
+    password { Faker::Internet.password }
+    email { Faker::Internet.email }
     ladder
   end
 end
