@@ -51,11 +51,13 @@ server/.byebug_history
 
 # Ignore node_modules
 server/node_modules/
+node_modules/
 
 # Ignore precompiled javascript packs
 server/public/packs
 server/public/packs-test
 server/public/assets
+server/public/node_js
 
 # Ignore yarn files
 server/yarn-error.log

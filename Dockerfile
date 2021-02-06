@@ -8,7 +8,8 @@ RUN apt-get update && apt-get install -y \
   curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
   echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
   apt-get update && apt-get install -y nodejs yarn
-RUN gem install rails
+RUN git clone --depth 1 https://github.com/kh42z/omniauth-marvin.git && cd omniauth-marvin && gem build omniauth-marvin.gemspec && gem install omniauth-marvin
+RUN git clone -b v1.1.5 --depth 1 https://github.com/lynndylanhurley/devise_token_auth.git && cd devise_token_auth && gem build devise_token_auth.gemspec && gem install devise_token_auth
 RUN npm install -g bower
 COPY server/Gemfile /app/Gemfile
 COPY server/Gemfile.lock /app/Gemfile.lock
