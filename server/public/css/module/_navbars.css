@@ -1,0 +1,30 @@
+.topnav {
+    background-image: url("../../images/background.jpg");    
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+
+    width: 100%;
+}
+
+.topnav-btn {
+    font-family: Quantico-Regular;
+    color: white;
+    text-decoration: none;
+}
+
+.logo {
+    font-family: MajorMonoDisplay-Regular;
+}
+
+.logo::before {
+    content: 'PonG';
+    color: yellow;
+}
+
+.logo::after {
+    content: 'Ame';
+    color: white;
+}
+
