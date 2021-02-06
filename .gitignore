@@ -57,7 +57,6 @@ node_modules/
 server/public/packs
 server/public/packs-test
 server/public/assets
-server/public/node_js
 
 # Ignore yarn files
 server/yarn-error.log
