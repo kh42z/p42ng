@@ -19,12 +19,6 @@
   "dependencies": {
     "backbone": "^1.4.0",
     "jquery": "^3.5.1",
-    "requirejs": "^2.3.6",
-    "bower": "*",
-    "install": "^1.0.4",
-    "Minified": "minified#^2015.1.1",
-    "handlebars-helper-minify": "*",
-    "handlebars": "^4.7.6",
-    "underscore": "^1.12.0"
+    "requirejs": "^2.3.6"
   }
 }

@@ -1,4 +1,6 @@
-class Guilds < ActiveRecord::Migration[6.1]
+# frozen_string_literal: true
+
+class Guilds < ActiveRecord::Migration[6.0]
   def change
     create_table :guilds do |t|
       t.string :name, unique: true

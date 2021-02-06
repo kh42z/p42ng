@@ -19,3 +19,6 @@ services:
       PG_PASSWORD: secure
       PG_USER: postgres
       PG_HOST: pg
+      MARVIN_APP_ID: 54aaca883a80bf7f0590646dab1e4596485789f577ff3d6ab766c85d1d30914e
+      MARVIN_APP_SECRET: c320a88988be18b3b61e0fa75361e6e710f35d4bfa068ae6534cd97bb43b9821
+      MARVIN_PROVIDER_CALLBACK: "https://api.intra.42.fr"

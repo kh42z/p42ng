@@ -1,4 +1,6 @@
-class Ladders < ActiveRecord::Migration[6.1]
+# frozen_string_literal: true
+
+class Ladders < ActiveRecord::Migration[6.0]
   def change
     create_table :ladders do |t|
       t.string :name, null: false
