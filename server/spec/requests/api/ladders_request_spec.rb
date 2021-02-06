@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Ladders', type: :request do
-  let!(:ladders) { create_list(:ladder, 4) }
+  let!(:ladders) { create_list(:ladder, 5) }
   let(:ladder_id) { ladder.first.id }
 
   describe 'requires auth token' do
@@ -24,12 +24,11 @@ RSpec.describe 'Ladders', type: :request do
 
     it 'returns ladders' do
       expect(json).not_to be_empty
-      expect(json.size).to eq(5)
+      expect(json.size).to eq(6)
     end
 
     it 'returns status code 200' do
       expect(response).to have_http_status(200)
     end
-
   end
 end

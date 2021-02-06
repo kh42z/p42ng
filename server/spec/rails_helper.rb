@@ -2,7 +2,6 @@
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
-require 'database_cleaner'
 require 'simplecov'
 SimpleCov.start
 
@@ -81,15 +80,6 @@ RSpec.configure do |config|
 
   ### https://www.digitalocean.com/community/tutorials/build-a-restful-json-api-with-rails-5-part-one
   config.include FactoryBot::Syntax::Methods
-  config.before(:suite) do
-    DatabaseCleaner.clean_with(:truncation)
-    DatabaseCleaner.strategy = :transaction
-  end
-  config.around(:each) do |example|
-    DatabaseCleaner.cleaning do
-      example.run
-    end
-  end
 
   # devise
   config.include Devise::Test::IntegrationHelpers, type: :request
