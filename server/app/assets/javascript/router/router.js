@@ -1,7 +1,6 @@
 import { appView } from "../views/app.js"
 import { usersView } from "../views/users_view"
 import { PongView } from "../views/pong.js"
-//		console.log("la dans router");
 
 export let Router = Backbone.Router.extend(
 	{
@@ -38,14 +37,4 @@ export let Router = Backbone.Router.extend(
 			console.log("in pong view");
 			this.pongView.render();
 		}
-	});
-
-//$(document).ready();
-//$(document).ready(function() {
-// all this should be in a main.js i think
-/*new Router();
-Backbone.history.start();
-
-console.log("Router created");*/
-//	export const router = new Router;
-//});
+});

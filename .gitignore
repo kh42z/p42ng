@@ -74,3 +74,4 @@ server/.config
 server/coverage
 .idea
 
+database

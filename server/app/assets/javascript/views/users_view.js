@@ -1,16 +1,17 @@
-//$(document).ready(function() {
-//console.log("ici dans users");
 let UsersView = Backbone.View.extend({
 		el: $('#app'),
 		initialize: function () {
-				//this.render();
-				console.log("UsersView created");
+			let template = Handlebars.templates['navbar'];
+			
+			let context = {
+				welcome: "Users! page"
+			}
+
+			let templateData = template(context);
+			this.render(templateData);
 		},
-		render: function () {
-				this.$el.html("Users! page");
+		render: function (templateData) {
+				this.$el.html(templateData);
 		}
 });
 export const usersView = new UsersView;
-
-//console.log("mkldsqjdqs");
-//});
