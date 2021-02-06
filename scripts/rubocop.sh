@@ -5,4 +5,7 @@ cd "${0%/*}/../../server"
 
 
 echo "Running rubocop"
-rubocop -A
+rubocop
+
+echo "Running rspec"
+docker exec -i pong rspec
