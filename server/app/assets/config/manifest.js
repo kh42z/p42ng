@@ -5,4 +5,5 @@
 //= require backbone.js
 //= require underscore.js
 //= require jquery.js
-//= require app.js
+//= require handlebars.js
+//= require requirejs
