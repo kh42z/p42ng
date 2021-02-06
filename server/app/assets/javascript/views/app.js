@@ -1,18 +1,18 @@
-let AppView = Backbone.View.extend({
-	el: $('#app'),
-	initialize: function () {
-		let template = Handlebars.templates['navbar'];
-		console.log(template)
+// eslint-disable-next-line no-undef
+const AppView = Backbone.View.extend({
+  // eslint-disable-next-line no-undef
+  el: $('#app'),
+  initialize: function () {
+  },
+  render: function () {
+  // eslint-disable-next-line no-undef
+    const template = Handlebars.templates.navbar
+    const context = {
+      welcome: 'Home page'
+    }
 
-		let context = {
-			welcome: "Home page"
-		}
-
-		let templateData = template(context);
-		this.render(templateData);
-	},
-	render: function (templateData) {
-			this.$el.html(templateData);
-	}
-});
-export const appView = new AppView;
+    const templateData = template(context)
+    this.$el.html(templateData)
+  }
+})
+export const appView = new AppView()

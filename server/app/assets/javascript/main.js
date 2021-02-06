@@ -1,8 +1,9 @@
-import { Router } from "./router/router.js"
+import { Router } from './router/router.js'
 
-$(document).ready(function() {
-	let mainRouter = new Router;
-	Backbone.history.start();
-
-	console.log("Router created");
-});
+// eslint-disable-next-line no-undef
+$(document).ready(function () {
+  // eslint-disable-next-line no-unused-vars
+  const mainRouter = new Router()
+  // eslint-disable-next-line no-undef
+  Backbone.history.start()
+})

@@ -1,17 +1,19 @@
-let UsersView = Backbone.View.extend({
-		el: $('#app'),
-		initialize: function () {
-			let template = Handlebars.templates['navbar'];
-			
-			let context = {
-				welcome: "Users! page"
-			}
+// eslint-disable-next-line no-undef
+const UsersView = Backbone.View.extend({
+  // eslint-disable-next-line no-undef
+  el: $('#app'),
+  initialize: function () {
+  },
+  render: function () {
+    // eslint-disable-next-line no-undef
+    const template = Handlebars.templates.navbar
 
-			let templateData = template(context);
-			this.render(templateData);
-		},
-		render: function (templateData) {
-				this.$el.html(templateData);
-		}
-});
-export const usersView = new UsersView;
+    const context = {
+      welcome: 'Users! page'
+    }
+
+    const templateData = template(context)
+    this.$el.html(templateData)
+  }
+})
+export const usersView = new UsersView()
