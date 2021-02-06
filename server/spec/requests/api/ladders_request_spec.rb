@@ -6,6 +6,15 @@ RSpec.describe 'Ladders', type: :request do
   let!(:ladders) { create_list(:ladder, 4) }
   let(:ladder_id) { ladder.first.id }
 
+  describe 'requires auth token' do
+    before {
+      get '/api/ladders'
+    }
+
+    it 'returns status code 401' do
+      expect(response).to have_http_status(401)
+    end
+  end
 
   describe 'retrieves all ladders' do
     before {
