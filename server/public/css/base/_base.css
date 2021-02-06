@@ -1,6 +1,8 @@
 body {
     background-color: white;
     /* background-image: url("../../gif/pong.gif"); */
+    margin: 0;
+    padding: 0;
 }
 
 p {
