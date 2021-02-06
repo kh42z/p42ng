@@ -3,7 +3,7 @@
 module Api
   # user's Ladders
   class LaddersController < ApplicationController
-    before_action :authenticate_user!
+    #before_action :authenticate_user!
     before_action :set_ladder, only: [:show]
     def index
       @ladders = Ladder.all
