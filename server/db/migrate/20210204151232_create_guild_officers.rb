@@ -1,4 +1,4 @@
-class CreateGuildOfficers < ActiveRecord::Migration[6.1]
+class CreateGuildOfficers < ActiveRecord::Migration[6.0]
   def change
     create_table :guild_officers do |t|
       t.references :user, foreign_key: true
