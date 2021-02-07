@@ -4,14 +4,17 @@ const HomeView = Backbone.View.extend({
     this.render()
   },
   render: function () {
-    const template = Handlebars.templates.topnav
+    const templateTopNav = Handlebars.templates.topnav
+    const templateHome = Handlebars.templates.home
+
     const context = {
-      welcome: 'Home page',
-      user: 'default'
+      user: 'pganglof'
     }
 
-    const templateData = template(context)
-    this.$el.html(templateData)
+    const templateDataHome = templateHome(context)
+    const templateDataTopNav = templateTopNav(context)
+    this.$el.html(templateDataTopNav + templateDataHome)
+    // this.$el.html(templateDataTopNa +v)
   }
 })
 export const homeView = new HomeView()

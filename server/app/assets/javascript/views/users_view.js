@@ -7,7 +7,7 @@ const UsersView = Backbone.View.extend({
 
     const context = {
       welcome: 'Users! page',
-      user: 'default'
+      user: 'pganglof'
     }
 
     const templateData = template(context)
