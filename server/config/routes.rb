@@ -2,7 +2,7 @@
 
 Rails.application.routes.draw do
   namespace :api do
-    resources :users, :ladders, :guilds
+    resources :users, :ladders, :guilds, :chats
     resources :guilds do
       resources :guild_officers
     end

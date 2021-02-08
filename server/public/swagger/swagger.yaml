@@ -4,6 +4,59 @@ info:
   title: Pong API
   description: Pong API
 paths:
+  "/api/chats/":
+    get:
+      summary: Retrieves chats
+      tags:
+        - Chats
+      responses:
+        '200':
+          description: chats found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/chat'
+    post:
+      summary: Creates a chat
+      tags:
+        - Chats
+      parameters: [ ]
+      responses:
+        '201':
+          description: Created
+          content: { }
+  "/api/chats/{id}":
+    get:
+      summary: Retrieves a chat
+      tags:
+        - Chats
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: chat found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/chat"
+    delete:
+      summary: Deletes a chat
+      tags:
+        - Chats
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: chat deleted
+          content: { }
   "/api/guilds/":
     get:
       summary: Retrieves guilds
@@ -275,3 +328,14 @@ components:
       required:
         - guild_id
         - user_id
+    chat:
+      type: object
+      properties:
+        id:
+          type: integer
+        privacy:
+          type: integer
+        password:
+          type: string
+        owner_id:
+          type: integer

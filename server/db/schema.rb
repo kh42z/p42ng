@@ -10,10 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_04_151232) do
+ActiveRecord::Schema.define(version: 2021_02_08_155932) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "chats", force: :cascade do |t|
+    t.integer "privacy", default: 0
+    t.string "password", default: ""
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "owner_id"
+    t.index ["owner_id"], name: "index_chats_on_owner_id"
+  end
 
   create_table "guild_officers", force: :cascade do |t|
     t.bigint "user_id"
@@ -79,6 +88,7 @@ ActiveRecord::Schema.define(version: 2021_02_04_151232) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "chats", "users", column: "owner_id"
   add_foreign_key "guild_officers", "guilds"
   add_foreign_key "guild_officers", "users"
   add_foreign_key "guilds", "users", column: "owner_id"
