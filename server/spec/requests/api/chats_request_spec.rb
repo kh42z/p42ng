@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Chats', type: :request do
-  let!(:users) { FactoryBot.create(:user, nickname: "Tom") }
+  #let!(:users) { FactoryBot.create(:user, nickname: "Tom") }
   let!(:chats) { create_list(:chat, 5) }
   describe 'retrieves all chats' do
     before do
