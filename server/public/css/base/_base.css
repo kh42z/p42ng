@@ -3,38 +3,25 @@ body {
 
     margin: 0;
     padding: 0;
+
+    z-index: 0;
 }
 
 p {
     color: black;
+    font-family: Roboto-Regular;
 }
 
-.home {
-    height: 100%;
-    width: 100%;
-    background-color: black;
+:root {
+    --primary-color:#F2C94C;
+    --secondary-color: #fff;
+    --table-color: #1B2534;
 }
 
-.pong-gif {
-    background: url('../../gif/pong.gif');
-    background-repeat: no-repeat;
-    background-size: 1280px;
-    background-position: center;
-    height: 100%;
-    width: 100%;
-
-    position: relative;
-}
-
-.play-gif {
-    background: url('../../gif/play.gif');
-    background-repeat: no-repeat;
-    background-size: 248px;
-    background-position: center;
-    height: 100%;
-    width: 100%;
-
-    position: absolute;
-    top: 0%;
-    left: 0%;
+button {
+    background-color: var(--primary-color);
+    color: #000;
+    border: none;
+    font-family: Roboto-Regular;
+    font-size: 16px;
 }
