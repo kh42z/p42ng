@@ -65,9 +65,7 @@
 }
 
 .topnav .right-menu .profile_pic {
-    background: url('../../images/profile-pic.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
+    object-fit: cover;
     background-position: 50% 0;
 
     position: relative;

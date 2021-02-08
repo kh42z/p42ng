@@ -8,6 +8,7 @@ const HomeView = Backbone.View.extend({
   render: function () {
     const context = {
       user: 'pganglof',
+      profile_pic: '../../images/profile-pic.jpg'
     }
 
     const templateDataTopNav = this.templateTopNav(context)
