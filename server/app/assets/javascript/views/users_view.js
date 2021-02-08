@@ -8,7 +8,8 @@ const UsersView = Backbone.View.extend({
     const templateTable = Handlebars.templates.table
 
     const contextTopNav = {
-      user: 'pganglof'
+      user: 'pganglof',
+      profile_pic: '../../images/profile-pic.jpg'
     }
 
     const contextTable = {
@@ -45,7 +46,7 @@ const UsersView = Backbone.View.extend({
 
     const templateDataTopNav = templateTopNav(contextTopNav)
     const templateDataUserTable = templateTable(contextTable)
-    this.$el.html(templateDataUserTable)
+    this.$el.html(templateDataTopNav + templateDataUserTable)
   }
 })
 export const usersView = new UsersView()
