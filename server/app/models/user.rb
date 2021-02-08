@@ -10,7 +10,7 @@ class User < ApplicationRecord
   belongs_to :guild, optional: true
   validates_presence_of :nickname
   validates_presence_of :image_url
-  validates_presence_of :two_factor
+  validates_inclusion_of :two_factor, in: [true, false]
   validates_presence_of :status
   validates_presence_of :mmr
 end
