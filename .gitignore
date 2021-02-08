@@ -76,3 +76,8 @@ server/coverage
 .idea
 node_modules
 database
+
+package.json
+package-lock.json
+.eslintrc.json
+.eslintignore
