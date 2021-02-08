@@ -26,6 +26,7 @@ const UsersView = Backbone.View.extend({
       ],
 
       number : "1",
+      profil_pic: '../../images/profile-pic.jpg',
 
       infos : [
         'pganglof',
@@ -36,7 +37,10 @@ const UsersView = Backbone.View.extend({
       ],
 
       status: 'IN GAME',
-      follow: 'Follow'
+      follow: 'Follow',
+
+      slideshow: '../../icons/slideshow-ingame.svg',
+      game: 'in game'
     }
 
     const templateDataTopNav = templateTopNav(contextTopNav)
