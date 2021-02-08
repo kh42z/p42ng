@@ -3,7 +3,7 @@
 class User < ApplicationRecord
   # extend Devise::Models
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable, :omniauthable
+         :validatable, :omniauthable
 
   include DeviseTokenAuth::Concerns::User
   belongs_to :ladder, optional: true
@@ -12,4 +12,5 @@ class User < ApplicationRecord
   validates_presence_of :image_url
   validates_presence_of :two_factor
   validates_presence_of :status
+  validates_presence_of :mmr
 end

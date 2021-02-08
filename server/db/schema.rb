@@ -61,7 +61,6 @@ ActiveRecord::Schema.define(version: 2021_02_04_151232) do
     t.json "tokens"
     t.string "displayname"
     t.string "location"
-    t.string "login"
     t.string "image_url"
     t.string "phone"
     t.integer "status", default: 0

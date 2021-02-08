@@ -39,11 +39,10 @@ class DeviseTokenAuthCreateUsers < ActiveRecord::Migration[6.0]
       ###
       t.string :displayname
       t.string :location
-      t.string :login
       t.string :image_url
       t.string :phone
       t.integer :status, default: 0
-      t.integer :two_factor, default: 0
+      t.boolean :two_factor, default: false
       t.integer :mmr, default: 200
       t.references :ladder, foreign_key: true
       t.references :guild, foreign_key: true, null: true
