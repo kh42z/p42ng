@@ -70,11 +70,10 @@ ActiveRecord::Schema.define(version: 2021_02_08_155932) do
     t.json "tokens"
     t.string "displayname"
     t.string "location"
-    t.string "login"
     t.string "image_url"
     t.string "phone"
     t.integer "status", default: 0
-    t.integer "two_factor", default: 0
+    t.boolean "two_factor", default: false
     t.integer "mmr", default: 200
     t.bigint "ladder_id"
     t.bigint "guild_id"

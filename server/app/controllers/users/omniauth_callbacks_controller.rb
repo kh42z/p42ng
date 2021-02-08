@@ -11,7 +11,7 @@ module Users
                                email: auth_hash['info']['email'],
                                nickname: auth_hash['info']['nickname'],
                                image_url: auth_hash['info']['image'],
-                               password: Devise.friendly_token[0, 20]
+                               mmr: 200
                              })
     end
   end

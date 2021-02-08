@@ -10,11 +10,24 @@ RSpec.describe 'Users', type: :request do
   let!(:guild_id) { guilds.first.id }
   let!(:user_id) { users.first.id }
 
+  describe 'requires auth token' do
+    before {
+      get '/api/users'
+    }
+
+    it 'returns status code 401' do
+      expect(response).to have_http_status(401)
+    end
+  end
+
   describe 'retrieves all users' do
-    before { get '/api/users' }
+    before {
+      @user = FactoryBot.create(:user)
+      get '/api/users', headers: @user.create_new_auth_token
+    }
     it 'returns users' do
       expect(json).not_to be_empty
-      expect(json.size).to eq(20)
+      expect(json.size).to eq(21)
     end
 
     it 'returns status code 200' do
@@ -23,7 +36,10 @@ RSpec.describe 'Users', type: :request do
   end
 
   describe 'retrieves one user' do
-    before { get "/api/users/#{user_id}" }
+    before {
+      @user = FactoryBot.create(:user)
+      get "/api/users/#{user_id}", headers: @user.create_new_auth_token
+    }
     it 'returns user' do
       expect(json).not_to be_empty
     end
@@ -33,30 +49,25 @@ RSpec.describe 'Users', type: :request do
     end
   end
 
-#   describe 'creates one user' do
-#     before { post '/api/users', params: valid_user.as_json }
-#     it 'create an user' do
-#       expect(json).not_to be_empty
-#     end
-#
-#     it 'returns status code 201' do
-#       expect(response).to have_http_status(201)
-#     end
-#   end
-#
-#   describe 'modifies one user' do
-#     before { patch "/api/users/#{user_id}", params: { 'nickname' => 'Michel' } }
-#     it 'update user' do
-#       expect(json).not_to be_empty
-#     end
-#
-#     it 'returns status code 200' do
-#       expect(response).to have_http_status(200)
-#     end
-#   end
+  describe 'modifies one user' do
+    before {
+      @user = FactoryBot.create(:user)
+      patch "/api/users/#{user_id}", params: { 'nickname' => 'Michel' }, headers: @user.create_new_auth_token
+    }
+    it 'update user' do
+      expect(json).not_to be_empty
+    end
+
+    it 'returns status code 200' do
+      expect(response).to have_http_status(200)
+     end
+   end
 
   describe 'delete one user' do
-    before { delete "/api/users/#{user_id}" }
+    before {
+      @user = FactoryBot.create(:user)
+      delete "/api/users/#{user_id}", headers: @user.create_new_auth_token
+    }
     it 'returns status code 204' do
       expect(response).to have_http_status(204)
     end
