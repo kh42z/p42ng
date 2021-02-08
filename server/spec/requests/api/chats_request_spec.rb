@@ -1,10 +1,13 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe "Api::Chats", type: :request do
+RSpec.describe 'Chats', type: :request do
+  let!(:users) { FactoryBot.create(:user, nickname: "Tom") }
   let!(:chats) { create_list(:chat, 5) }
   describe 'retrieves all chats' do
     before do
-      get '/api/chats/'
+      get '/api/chats'
     end
 
     it 'returns chats' do
