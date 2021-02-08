@@ -1,0 +1,105 @@
+.table {
+    width: 1190px;
+    font-size: 16px;
+    text-align: left;
+}
+
+.table .categories {
+    font-family: Roboto-Bold;
+
+    display: grid;
+    grid-gap: 8px;
+    grid-template-columns: 32px 32px 64px 128px 128px 128px 128px 128px 192px 128px;
+
+    height: 32px;
+    line-height: 30px;
+    padding-left: 16px;
+}
+
+.table .infos {
+    font-family: Roboto-Regular;
+
+    display: grid;
+    grid-gap: 8px;
+    grid-template-columns: 32px 32px 64px 128px 128px 128px 128px 128px 192px 128px;
+
+    background-color: var(--table-color);;
+    color: #fff;
+    height: 60px;
+    line-height: 60px;
+    vertical-align: middle;
+    border-radius: 10px 10px 10px 10px;
+    box-shadow: 0px 4px 6px rgba(59, 60, 64, 0.4);
+    padding-left: 16px;
+}
+
+.table .infos .league {
+    background: url('../../icons/gold.svg');
+    background-size: 30px 44px;
+    background-repeat: no-repeat;
+    height: 60px;
+    line-height: 60px;
+    background-position: left center;
+}
+
+.table .infos .profile-pic {
+    background: url('../../images/image.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 0;
+    border-radius: 50%;
+    width: 42px;
+    height: 42px;
+
+
+    position: relative;
+    top: 9px;
+    left: 9px;
+}
+
+.table .infos .number {
+    text-align: right;
+}
+
+.table .infos .follow {
+    font-size: 14px;
+    text-align: center;
+    text-decoration: none;
+
+    width: 80px;
+    height: 22px;
+    margin: 19px 0;
+
+    cursor: pointer;
+    border-radius: 5px;
+    align-self:flex-end;
+}
+
+.table .infos .status {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+}
+
+.table .infos .status .pastille {
+    height: 8px;
+    width: 8px;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+}
+
+.table .infos .status .status-type {
+    font-size: 14px;
+}
+
+.table .infos .status .slideshow {
+    background: url('../../icons/slideshow-ingame.svg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 0;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    fill: var(--primary-color);
+}
