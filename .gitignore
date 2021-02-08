@@ -74,12 +74,5 @@ server/vendor/assets
 server/.config
 server/coverage
 .idea
-<<<<<<< HEAD
 node_modules
 database
-=======
-
-database
-
-node_modules
->>>>>>> settings eslint
