@@ -13,7 +13,7 @@ const UsersView = Backbone.View.extend({
     }
 
     const contextTable = {
-      categories : [
+      categories: [
         '', // League
         '', // Number
         '', // Image
@@ -26,26 +26,26 @@ const UsersView = Backbone.View.extend({
         ''
       ],
 
-      row : [{
-        number: "1",
+      row: [{
+        number: '1',
         profil_pic: '../../images/profile-pic.jpg',
 
-        infos : [
+        infos: [
           'pganglof',
           '42',
           '1',
           '5',
-          '5',
+          '5'
         ],
 
         status: 'IN GAME',
         follow: 'Follow',
 
         slideshow: '../../icons/slideshow-ingame.svg',
-        game: 'in game'}
+        game: 'in game'
+      }
       ]
     }
-
 
     const templateDataTopNav = templateTopNav(contextTopNav)
     const templateDataUserTable = templateTable(contextTable)
