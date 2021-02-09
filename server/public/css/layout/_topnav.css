@@ -13,7 +13,7 @@
 
     display: grid;
     grid-gap: 8px;
-    grid-template-columns: 200px auto auto auto 200px 100px 100px 150px;
+    grid-template-columns: 200px 175px minmax(auto, 300px) minmax(auto, 300px) minmax(auto, 300px) auto 100px 100px 150px;
 
     padding: 0px 32px 0px 32px;
     padding-right: 32px;
@@ -59,9 +59,6 @@
 
     position: relative;
     top: 17px;
-
-
-    position: relative;
     left: 25%;
 }
 
@@ -72,9 +69,10 @@
     height: 40px;
     width: 40px;
 
+    display: flex;
+    justify-self: flex-end;
     position: relative;
     top: 25%;
-    left: 75%;
 }
 
 .topnav .exit {
@@ -85,7 +83,7 @@
     height: 31.29px;
     position: relative;
     top: 25.35px;
-    left: 25%
+    left: 25%;
 }
 
 .topnav .user {
