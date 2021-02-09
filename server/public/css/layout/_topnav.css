@@ -1,90 +1,93 @@
 .topnav {
     background: url('../../images/background.jpg');    
     background-position: 50% 0;
+    background-position: 0 0;
     box-shadow: inset 0 0 0 1000px rgba(0,0,0, .3);
     position: fixed;
-
-    display: flex;
-    flex-direction: row;
-    align-content: space-between;
-    align-items: center;
-
-    height: 9%;
+    
+    line-height: 82px;
+    height: 82px;
     width: 100%;
 
     z-index: 1;
+
+    display: grid;
+    grid-gap: 8px;
+    grid-template-columns: 200px auto auto auto 200px 100px 100px 150px;
+
+    padding: 0px 32px 0px 32px;
+    padding-right: 32px;
 }
 
-.topnav-btn {
+.topnav .btn {
     font-family: Quantico-Regular;
+    font-size: 24px;
     color: white;
+    text-align: center;
     text-decoration: none;
-    font-size: 1.5rem;
 }
 
-.left-menu {
-    display: grid;
-    grid-auto-flow: column;
-    grid-column-gap: 32px;
-    position: absolute;
-    left: 28px;
-}
-
-.topnav .right-menu {
-    position: absolute;
-    right: 32px;
-    align-content: flex-end;
-    align-items: center;
-
-    display: grid;
-    grid-auto-flow: column;
-    grid-column-gap: 32px;
-}
-
-.topnav .right-menu .user-page {
-    display: grid;
-    grid-auto-flow: column;
-    justify-items: center;
-    grid-column-gap: 8px;
-}
-
-.logo {
+.topnav .logo {
     font-family: MajorMonoDisplay-Regular;
     align-content: flex-start;
     font-size: 2rem;
+    text-align: left;
 }
 
-.logo::before {
+.topnav .logo::before {
     content: 'PonG';
     color: var(--primary-color);
 }
 
-.logo::after {
+.topnav .logo::after {
     content: 'Ame';
     color: white;
 }
 
-.topnav .right-menu .profile_pic {
-    object-fit: cover;
-    background-position: 50% 0;
-
-    position: relative;
-    width: 61px;
-    height: 48px;
+.topnav .tournaments {
+    text-align: right;
 }
 
-.topnav .right-menu .chat {
+.topnav .guilds {
+    text-align: left;
+}
+
+.topnav .profile_pic {
+    object-fit: cover;
+    width: 61px;
+    height: 48px;
+
+    position: relative;
+    top: 17px;
+
+
+    position: relative;
+    left: 25%;
+}
+
+.topnav .chat {
     background: url('../../icons/chat.svg');
     background-size: contain;
     background-repeat: no-repeat;
     height: 40px;
-    width: 40px; 
+    width: 40px;
+
+    position: relative;
+    top: 25%;
+    left: 75%;
 }
 
-.topnav .right-menu .exit {
+.topnav .exit {
     background: url('../../icons/exit.svg');
     background-size: contain;
     background-repeat: no-repeat;
     width: 59px;
     height: 31.29px;
+    position: relative;
+    top: 25.35px;
+    left: 25%
+}
+
+.topnav .user {
+    text-align: left;
 }
