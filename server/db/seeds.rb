@@ -17,7 +17,6 @@ Ladder.create(name: 'Diamond', desc: 'mhe.', mmr_threshold: 1000)
 
 (1..20).each do |id|
     User.create!(
-      id: id,
       nickname: Faker::Name.unique.name,
       image_url: Faker::Internet.url,
       two_factor: 1,
