@@ -154,7 +154,7 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/states"
-  "/api/status":
+  "/api/states":
     get:
       summary: Retrieves all states
       tags:
