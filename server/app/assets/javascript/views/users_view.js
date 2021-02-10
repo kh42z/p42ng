@@ -1,13 +1,15 @@
-const UsersView = Backbone.View.extend({
+
+export const UsersView = Backbone.View.extend({
   initialize: function () {},
   el: $('#app'),
+
   render: function () {
     const templateTopNav = Handlebars.templates.topnav
     const templateTable = Handlebars.templates.table
-
     const contextTopNav = {
-      user: 'pganglof',
+      user: this.model.get('nickname'),
       profile_pic: '../../images/profile-pic.jpg'
+      // profile_pic: this.model.get('image_url') // image url -> server wrong photo
     }
 
     const contextTable = {
@@ -29,7 +31,7 @@ const UsersView = Backbone.View.extend({
         profil_pic: '../../images/profile-pic.jpg',
 
         infos: [
-          'pganglof',
+          this.model.get('nickname'),
           '42',
           '1',
           '5',
@@ -41,14 +43,11 @@ const UsersView = Backbone.View.extend({
 
         slideshow: '../../icons/slideshow-ingame.svg',
         game: 'in game'
-      }
-      ]
+      }]
     }
     const templateDataTopNav = templateTopNav(contextTopNav)
     const templateDataUserTable = templateTable(contextTable)
     this.$el.html(templateDataTopNav + templateDataUserTable)
-
     return this
   }
 })
-export const usersView = new UsersView()
