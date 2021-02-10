@@ -29,8 +29,8 @@ export const Router = Backbone.Router.extend({
         url: users.urlRoot,
         headers: {
         // Authentification
-          client: '3wy2VwUgD-pEv7gWJJh9dw',
-          'access-token': 'xT4ql1Yq2ALJDSG9cgh1kA',
+          client: '_TYEEhyVWtrUSw92O-1iZg',
+          'access-token': 'daceCjCc0F-cA_ouqz5d7w',
           uid: '56065'
         },
         success: function (response) {
