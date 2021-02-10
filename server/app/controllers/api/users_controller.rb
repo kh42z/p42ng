@@ -5,12 +5,17 @@ module Api
   class UsersController < ApplicationController
     before_action :authenticate_user!
     before_action :set_user, only: %i[show update destroy]
+
+    UserReducer = Rack::Reducer.new(
+      User.all,
+      ->(ladder_id:) { where(ladder_id: ladder_id) },
+      ->(status_id:) { where(status_id: status_id) },
+      ->(guild_id:) { where(guild_id: guild_id) }
+    )
+
     def index
-      if params[:ladder_id].present?
-        json_response(User.all.where(ladder: params[:ladder_id]))
-      else
-        json_response(User.all)
-      end
+      @users = UserReducer.apply(params)
+      json_response(@users)
     end
 
     def update

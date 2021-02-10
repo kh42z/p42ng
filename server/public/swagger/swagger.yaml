@@ -173,6 +173,22 @@ paths:
       summary: Retrieves users
       tags:
         - Users
+      parameters:
+        - in: query
+          name: ladder_id
+          schema:
+            type: integer
+          description: filter by ladder_id
+        - in: query
+          name: guild_id
+          schema:
+            type: integer
+          description: filter by status_id
+        - in: query
+          name: status_id
+          schema:
+            type: integer
+          description: filter by status_id
       responses:
         '200':
           description: users found

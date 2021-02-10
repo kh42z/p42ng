@@ -24,7 +24,7 @@ Ladder.create(name: 'Diamond', desc: 'mhe.', mmr_threshold: 1000)
       password: Faker::Internet.password,
       email: Faker::Internet.email,
       mmr: mmr_ = %w[200 400 600 800 1000].sample,
-      ladder_id: rand(0..4)
+      ladder_id: rand(1..5)
     )
 end
 
@@ -33,7 +33,7 @@ end
     id: id,
     privacy: Faker::Number.leading_zero_number(digits: 3),
     password: "password",
-    owner_id: rand(0..19),
+    owner_id: rand(1..20),
     )
 end
 
@@ -44,4 +44,8 @@ end
     anagram: Faker::Name.unique.initials(number: 5),
     owner_id: id
     )
+end
+
+(1..20).each do |id|
+  User.find(id).update!(guild: Guild.find(rand(1..5)))
 end
