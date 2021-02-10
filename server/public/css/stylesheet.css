@@ -1,7 +1,7 @@
 @import url(base/_base.css);
+@import url(base/_fonts.css);
 
 @import url(layout/_home.css);
 @import url(layout/_topnav.css);
 
-@import url(module/_fonts.css);
 @import url(module/_table.css);
