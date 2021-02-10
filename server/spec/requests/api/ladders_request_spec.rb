@@ -38,7 +38,7 @@ RSpec.describe 'Ladders', type: :request do
 
     it 'returns ladders' do
       expect(json).not_to be_empty
-      expect(json.size).to eq(6)
+      expect(json.size).to eq(5)
     end
 
     it 'returns status code 200' do

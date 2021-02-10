@@ -21,7 +21,7 @@ RSpec.describe "Api::States", type: :request do
     }
     it 'returns states' do
       expect(json).not_to be_empty
-      expect(json.size).to eq(11)
+      expect(json.size).to eq(10)
     end
 
     it 'returns status code 200' do

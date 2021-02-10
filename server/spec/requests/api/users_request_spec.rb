@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Users', type: :request do
+  let!(:states) { create_list(:state, 3)}
+  let!(:ladders) { create_list(:ladder, 5)}
   let!(:users) { create_list(:user, 10) }
   let!(:first) { users.first }
   let!(:user_id) { users.last.id }
