@@ -37,13 +37,14 @@ class DeviseTokenAuthCreateUsers < ActiveRecord::Migration[6.0]
       t.json :tokens
 
       ###
-      t.string :displayname
-      t.string :location
+      #t.string :displayname
+      #t.string :location
       t.string :image_url
-      t.string :phone
+      #t.string :phone
       t.integer :status, default: 0
       t.boolean :two_factor, default: false
-      t.integer :mmr, default: 200
+      t.integer :ladder_games_won, default: 0
+      t.integer :ladder_games_lost, default: 0
       t.references :ladder, foreign_key: true
       t.references :guild, foreign_key: true, null: true
       t.timestamps

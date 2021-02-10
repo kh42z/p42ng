@@ -46,7 +46,6 @@ ActiveRecord::Schema.define(version: 2021_02_08_155932) do
   create_table "ladders", force: :cascade do |t|
     t.string "name", null: false
     t.text "desc"
-    t.integer "mmr_threshold"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -68,13 +67,11 @@ ActiveRecord::Schema.define(version: 2021_02_08_155932) do
     t.string "image"
     t.string "email"
     t.json "tokens"
-    t.string "displayname"
-    t.string "location"
     t.string "image_url"
-    t.string "phone"
     t.integer "status", default: 0
     t.boolean "two_factor", default: false
-    t.integer "mmr", default: 200
+    t.integer "ladder_games_won", default: 0
+    t.integer "ladder_games_lost", default: 0
     t.bigint "ladder_id"
     t.bigint "guild_id"
     t.datetime "created_at", precision: 6, null: false

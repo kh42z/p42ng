@@ -309,6 +309,10 @@ components:
           type: boolean
         nickname:
           type: string
+        ladder_games_won:
+          type: integer
+        ladder_games_lost:
+          type: integer
       required:
         - nickname
     user_response:

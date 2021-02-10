@@ -8,24 +8,16 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 require 'faker'
+require 'factory_bot_rails'
 
-Ladder.create(name: 'Bronze', desc: 'meh.', mmr_threshold: 200)
-Ladder.create(name: 'Silver', desc: 'hem.', mmr_threshold: 400)
-Ladder.create(name: 'Gold', desc: 'ehm.', mmr_threshold: 600)
-Ladder.create(name: 'Platine', desc: 'mhe.', mmr_threshold: 800)
-Ladder.create(name: 'Diamond', desc: 'mhe.', mmr_threshold: 1000)
+Ladder.create(name: 'Bronze', desc: 'meh.')
+Ladder.create(name: 'Silver', desc: 'hem.')
+Ladder.create(name: 'Gold', desc: 'ehm.')
+Ladder.create(name: 'Platine', desc: 'mhe.')
+Ladder.create(name: 'Diamond', desc: 'mhe.')
 
 (1..20).each do |id|
-    User.create!(
-      nickname: Faker::Name.unique.name,
-      image_url: Faker::Internet.url,
-      two_factor: 1,
-      status: 0,
-      password: Faker::Internet.password,
-      email: Faker::Internet.email,
-      mmr: mmr_ = %w[200 400 600 800 1000].sample,
-      ladder_id: rand(1..5)
-    )
+  FactoryBot.create(:user)
 end
 
 (1..5).each do |id|
@@ -33,7 +25,7 @@ end
     id: id,
     privacy: Faker::Number.leading_zero_number(digits: 3),
     password: "password",
-    owner_id: rand(1..20),
+    owner_id: rand(1..20)
     )
 end
 

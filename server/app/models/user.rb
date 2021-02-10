@@ -13,5 +13,6 @@ class User < ApplicationRecord
   validates_presence_of :image_url
   validates_inclusion_of :two_factor, in: [true, false]
   validates_presence_of :status
-  validates_presence_of :mmr
+  validates_presence_of :ladder_games_won
+  validates_presence_of :ladder_games_lost
 end

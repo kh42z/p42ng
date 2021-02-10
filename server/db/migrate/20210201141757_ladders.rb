@@ -5,7 +5,6 @@ class Ladders < ActiveRecord::Migration[6.0]
     create_table :ladders do |t|
       t.string :name, null: false
       t.text :desc
-      t.integer :mmr_threshold
       t.timestamps
     end
   end
