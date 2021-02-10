@@ -8,7 +8,6 @@ export const Router = Backbone.Router.extend({
     this.homeView = homeView
     this.usersView = new UsersView()
     this.pongView = pongView
-    console.log('In router initialize')
   },
 
   routes:
@@ -19,13 +18,12 @@ export const Router = Backbone.Router.extend({
   },
 
   home_view: function (url) {
-    console.log('in home route')
     this.homeView.render()
   },
 
   users_view: function (url) {
-    console.log('in users_view route')
     const users = new Users()
+
     async function userFetch () {
       await users.fetch({
         url: users.urlRoot,
@@ -43,10 +41,12 @@ export const Router = Backbone.Router.extend({
           console.log(errorResponse)
         }
       })
+
       const user = users.get('1')
       const usersView = new UsersView({ model: user })
       usersView.render()
     }
+
     userFetch()
   },
 
