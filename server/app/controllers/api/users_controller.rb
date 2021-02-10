@@ -6,7 +6,11 @@ module Api
     before_action :authenticate_user!
     before_action :set_user, only: %i[show update destroy]
     def index
-      json_response(User.all)
+      if params[:ladder_id].present?
+        json_response(User.all.where(ladder: params[:ladder_id]))
+      else
+        json_response(User.all)
+      end
     end
 
     def update
