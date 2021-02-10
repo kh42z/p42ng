@@ -4,7 +4,7 @@ const HomeView = Backbone.View.extend({
     this.templateHome = Handlebars.templates.home
     this.render()
   },
-  el: this.$('#app'),
+  el: $('#app'),
   render: function () {
     const context = {
       user: 'pganglof',

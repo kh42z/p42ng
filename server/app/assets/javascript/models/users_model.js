@@ -14,14 +14,14 @@ const Person = Backbone.Model.extend({
     })
   },
 
-  urlRoot: '/api/users/',
+  urlRoot: '/api/guilds/',
   url: function () {
     return this.urlRoot + this.id
-  },
-
-  parse: function (response) {
-    return response[2]
   }
+
+  // parse: function (response) {
+  //   return response[1]
+  // }
 })
 
 // const person = new Person({
@@ -45,6 +45,7 @@ person.fetch({
   success: function (response) {
     console.log('Inside success')
     console.log(response)
+    console.log(response[2])
     console.log('after success')
     // console.log('parse: ' + person.parse(response))
   },
