@@ -1,8 +1,6 @@
 const UsersView = Backbone.View.extend({
-  el: $('#app'),
-  initialize: function () {
-  },
-
+  initialize: function () {},
+  el: this.$('#app'),
   render: function () {
     const templateTopNav = Handlebars.templates.topnav
     const templateTable = Handlebars.templates.table
@@ -46,10 +44,11 @@ const UsersView = Backbone.View.extend({
       }
       ]
     }
-
     const templateDataTopNav = templateTopNav(contextTopNav)
     const templateDataUserTable = templateTable(contextTable)
     this.$el.html(templateDataTopNav + templateDataUserTable)
+
+    return this
   }
 })
 export const usersView = new UsersView()
