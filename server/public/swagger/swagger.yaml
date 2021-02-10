@@ -136,6 +136,36 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/guild_officers"
+  "/api/states/{id}":
+    get:
+      summary: Retrieves a user state
+      tags:
+        - States
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: user state found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/states"
+  "/api/status":
+    get:
+      summary: Retrieves all states
+      tags:
+        - States
+      responses:
+        '200':
+          description: states found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/states"
 
   "/api/ladders/{id}":
     get:
@@ -313,6 +343,8 @@ components:
           type: integer
         ladder_games_lost:
           type: integer
+        uid:
+          type: string
       required:
         - nickname
     user_response:
@@ -332,8 +364,15 @@ components:
         desc:
           type: string
           nullable: true
-        mmr_threshold:
+      required:
+        - name
+    states:
+      type: object
+      properties:
+        id:
           type: integer
+        name:
+          type: string
       required:
         - name
     guild:

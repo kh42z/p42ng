@@ -4,11 +4,8 @@ require 'rails_helper'
 
 RSpec.describe 'Users', type: :request do
   let!(:users) { create_list(:user, 10) }
-  let!(:ladders) { create_list(:ladder, 10) }
-  let!(:ladder_id) { ladders.first.id }
-  let!(:guilds) { create_list(:guild, 10) }
-  let!(:guild_id) { guilds.first.id }
-  let!(:user_id) { users.first.id }
+  let!(:first) { users.first }
+  let!(:user_id) { users.last.id }
 
   describe 'requires auth token' do
     before {
@@ -22,12 +19,11 @@ RSpec.describe 'Users', type: :request do
 
   describe 'retrieves all users' do
     before {
-      @user = FactoryBot.create(:user)
-      get '/api/users', headers: @user.create_new_auth_token
+      get '/api/users', headers: first.create_new_auth_token
     }
     it 'returns users' do
       expect(json).not_to be_empty
-      expect(json.size).to eq(21)
+      expect(json.size).to eq(10)
     end
 
     it 'returns status code 200' do
@@ -37,8 +33,7 @@ RSpec.describe 'Users', type: :request do
 
   describe 'retrieves one user' do
     before {
-      @user = FactoryBot.create(:user)
-      get "/api/users/#{user_id}", headers: @user.create_new_auth_token
+      get "/api/users/#{user_id}", headers: first.create_new_auth_token
     }
     it 'returns user' do
       expect(json).not_to be_empty
@@ -51,8 +46,7 @@ RSpec.describe 'Users', type: :request do
 
   describe 'modifies one user' do
     before {
-      @user = FactoryBot.create(:user)
-      patch "/api/users/#{user_id}", params: { 'nickname' => 'Michel' }, headers: @user.create_new_auth_token
+      patch "/api/users/#{user_id}", params: { 'nickname' => 'Michel' }, headers: first.create_new_auth_token
     }
     it 'update user' do
       expect(json).not_to be_empty
@@ -65,8 +59,7 @@ RSpec.describe 'Users', type: :request do
 
   describe 'delete one user' do
     before {
-      @user = FactoryBot.create(:user)
-      delete "/api/users/#{user_id}", headers: @user.create_new_auth_token
+      delete "/api/users/#{user_id}", headers: first.create_new_auth_token
     }
     it 'returns status code 204' do
       expect(response).to have_http_status(204)

@@ -3,6 +3,7 @@
 Rails.application.routes.draw do
   namespace :api do
     resources :users, :ladders, :guilds, :chats
+    resources :states
     resources :guilds do
       resources :guild_officers
     end

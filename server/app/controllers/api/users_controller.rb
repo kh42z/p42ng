@@ -9,7 +9,7 @@ module Api
     UserReducer = Rack::Reducer.new(
       User.all,
       ->(ladder_id:) { where(ladder_id: ladder_id) },
-      ->(status_id:) { where(status_id: status_id) },
+      ->(states_id:) { where(states_id: states_id) },
       ->(guild_id:) { where(guild_id: guild_id) }
     )
 

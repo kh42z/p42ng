@@ -50,6 +50,12 @@ ActiveRecord::Schema.define(version: 2021_02_08_155932) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "states", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "provider", default: "email", null: false
     t.string "uid", default: "", null: false
@@ -68,12 +74,12 @@ ActiveRecord::Schema.define(version: 2021_02_08_155932) do
     t.string "email"
     t.json "tokens"
     t.string "image_url"
-    t.integer "status", default: 0
     t.boolean "two_factor", default: false
     t.integer "ladder_games_won", default: 0
     t.integer "ladder_games_lost", default: 0
     t.bigint "ladder_id"
     t.bigint "guild_id"
+    t.bigint "state_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
@@ -81,6 +87,7 @@ ActiveRecord::Schema.define(version: 2021_02_08_155932) do
     t.index ["guild_id"], name: "index_users_on_guild_id"
     t.index ["ladder_id"], name: "index_users_on_ladder_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["state_id"], name: "index_users_on_state_id"
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
@@ -90,4 +97,5 @@ ActiveRecord::Schema.define(version: 2021_02_08_155932) do
   add_foreign_key "guilds", "users", column: "owner_id"
   add_foreign_key "users", "guilds"
   add_foreign_key "users", "ladders"
+  add_foreign_key "users", "states"
 end

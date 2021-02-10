@@ -10,5 +10,5 @@ RSpec.describe User, type: :model do
   it { should validate_presence_of(:ladder_games_lost) }
   it { should belong_to(:ladder) }
   it { should belong_to(:guild) }
-  it { should validate_presence_of(:status) }
+  it { should belong_to(:state) }
 end
