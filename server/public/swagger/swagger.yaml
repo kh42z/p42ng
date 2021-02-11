@@ -90,9 +90,9 @@ paths:
           $ref: '#/components/responses/500'
   '/api/chats/{id}/chat_admins':
     get:
-      summary: Retrieves chat admins
+      summary: Retrives all admins of current chat
       tags:
-        - Chats
+        - ChatAdmins
       parameters:
         - name: id
           in: path
@@ -101,7 +101,7 @@ paths:
             type: integer
       responses:
         '200':
-          description: chat admins found
+          description: chat admin added
           content:
             application/json:
               schema:
@@ -206,13 +206,79 @@ paths:
           $ref: '#/components/responses/403'
         '500':
           $ref: '#/components/responses/500'
-  '/api/guilds/{id}/guild_officers':
+  '/api/guilds/{guild_id}/guild_officers':
     get:
-      summary: Retrieves officers of a specific guild
+      summary: Retrieves all officers from a specific guild
+      description: You could also use "/api/guilds" if you want to have every details (including officers) of a specific guild.
       tags:
-        - Guilds
+        - GuildOfficers
       parameters:
-        - name: id
+        - name: guild_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: officers found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/guild_officers"
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      summary: Adds an officer to a specific guild
+      tags:
+        - GuildOfficers
+      parameters:
+        - name: guild_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                user_id:
+                  type: integer
+                guild_id:
+                  type: integer
+      responses:
+        '200':
+          description: officers found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/guild_officers"
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
+  '/api/guilds/{guild_id}/guild_officers/{officer_id}':
+    delete:
+      summary: Deletes an officer from a specific guild
+      tags:
+        - GuildOfficers
+      parameters:
+        - name: guild_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: officer_id
           in: path
           required: true
           schema:
