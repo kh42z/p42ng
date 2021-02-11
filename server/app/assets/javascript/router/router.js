@@ -1,12 +1,15 @@
 import { homeView } from '../views/home_view.js'
 import { UsersView } from '../views/users_view.js'
 import { pongView } from '../views/pong_view.js'
-import { Users } from '../collections/users_collection'
+import { User } from '../models/user_model'
+import { HeaderView } from '../views/header_view'
 
 export const Router = Backbone.Router.extend({
   initialize: function () {
+    this.headerView = new HeaderView()
+    this.headerView.render()
     this.homeView = homeView
-    this.usersView = new UsersView()
+    // this.usersView = new UsersView()
     this.pongView = pongView
   },
 
@@ -22,32 +25,9 @@ export const Router = Backbone.Router.extend({
   },
 
   users_view: function (url) {
-    const users = new Users()
-
-    async function userFetch () {
-      await users.fetch({
-        url: users.urlRoot,
-        headers: {
-        // Authentification
-          client: '_TYEEhyVWtrUSw92O-1iZg',
-          'access-token': 'daceCjCc0F-cA_ouqz5d7w',
-          uid: '56065'
-        },
-        success: function (response) {
-          console.log(response)
-        },
-        error: function (errorResponse) {
-          console.log('error')
-          console.log(errorResponse)
-        }
-      })
-
-      const user = users.get('1')
-      const usersView = new UsersView({ model: user })
-      usersView.render()
-    }
-
-    userFetch()
+    const user = new User('/api/users/1')
+    const usersView = new UsersView({ model: user })
+    // usersView.render()
   },
 
   pong_view: function (url) {

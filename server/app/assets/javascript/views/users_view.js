@@ -1,10 +1,22 @@
 
 export const UsersView = Backbone.View.extend({
-  initialize: function () {},
+  events: {
+    'click .follow': 'change_model'
+  },
+
+  initialize: function () {
+    this.listenTo(this.model, 'sync', function () {
+      this.render()
+    }, this)
+
+    this.listenTo(this.model, 'change', function () {
+      this.render()
+    }, this)
+  },
   el: $('#app'),
 
   render: function () {
-    const templateTopNav = Handlebars.templates.topnav
+    // const templateTopNav = Handlebars.templates.topnav
     const templateTable = Handlebars.templates.table
     const contextTopNav = {
       user: this.model.get('nickname'),
@@ -64,9 +76,15 @@ export const UsersView = Backbone.View.extend({
       }
       ]
     }
-    const templateDataTopNav = templateTopNav(contextTopNav)
+    // const templateDataTopNav = templateTopNav(contextTopNav)
     const templateDataUserTable = templateTable(contextTable)
-    this.$el.html(templateDataTopNav + templateDataUserTable)
+    this.$el.html(templateDataUserTable)
+    // this.$el.html(templateDataTopNav + templateDataUserTable)
     return this
+  },
+
+  change_model: function () {
+    console.log('change_model')
+    this.model.set({ nickname: 'pauline' })
   }
 })
