@@ -213,12 +213,12 @@ paths:
           name: guild_id
           schema:
             type: integer
-          description: filter by status_id
+          description: filter by guid_id
         - in: query
-          name: status_id
+          name: states_id
           schema:
             type: integer
-          description: filter by status_id
+          description: filter by states_id
       responses:
         '200':
           description: users found
@@ -329,7 +329,7 @@ components:
         guild_id:
           type: integer
           nullable: true
-        status_id:
+        states_id:
           type: integer
           nullable: true
         ladder_id:
@@ -345,8 +345,10 @@ components:
           type: integer
         uid:
           type: string
-      required:
-        - nickname
+        chat_ids:
+          type: array
+          items:
+            type: integer
     user_response:
       allOf:
         - type: object
@@ -409,7 +411,5 @@ components:
           type: integer
         privacy:
           type: integer
-        password:
-          type: string
         owner_id:
           type: integer

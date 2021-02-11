@@ -8,7 +8,7 @@ class User < ApplicationRecord
   include DeviseTokenAuth::Concerns::User
   belongs_to :ladder, optional: true
   belongs_to :guild, optional: true
-  # belongs_to :chat, optional: true # Un utilisateur pouvant appartenir a n-chats ca ne peut pas etre un belongs_to
+  has_many :chats, foreign_key: 'owner_id'
   belongs_to :state, optional: true
   validates_presence_of :nickname
   validates_presence_of :image_url
