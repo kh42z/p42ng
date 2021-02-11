@@ -208,8 +208,8 @@ paths:
           $ref: '#/components/responses/500'
   '/api/guilds/{guild_id}/guild_officers':
     get:
-      summary: Retrieves all officers from a specific guild
-      description: You could also use "/api/guilds" if you want to have every details (including officers) of a specific guild.
+      summary: Retrieves all officers from this guild
+      description: You could also use "/api/guilds" if you want to have every details (including officers) from Guilds.
       tags:
         - GuildOfficers
       parameters:
@@ -233,8 +233,9 @@ paths:
           $ref: '#/components/responses/403'
         '500':
           $ref: '#/components/responses/500'
+  '/api/guilds/{guild_id}/guild_officers/{user_id}':
     put:
-      summary: Adds an officer to a specific guild
+      summary: Adds an officer to this guild
       tags:
         - GuildOfficers
       parameters:
@@ -243,15 +244,11 @@ paths:
           required: true
           schema:
             type: integer
-      requestBody:
-        content:
-          application/json:
-            schema:
-              properties:
-                user_id:
-                  type: integer
-                guild_id:
-                  type: integer
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
       responses:
         '200':
           description: officers found
@@ -267,9 +264,8 @@ paths:
           $ref: '#/components/responses/403'
         '500':
           $ref: '#/components/responses/500'
-  '/api/guilds/{guild_id}/guild_officers/{officer_id}':
     delete:
-      summary: Deletes an officer from a specific guild
+      summary: Deletes an officer from this guild
       tags:
         - GuildOfficers
       parameters:
@@ -278,7 +274,7 @@ paths:
           required: true
           schema:
             type: integer
-        - name: officer_id
+        - name: user_id
           in: path
           required: true
           schema:
@@ -610,8 +606,6 @@ components:
     guild_officers:
       type: object
       properties:
-        guild_id:
-          type: integer
         user_id:
           type: integer
       required:
