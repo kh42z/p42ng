@@ -27,8 +27,11 @@ export const User = Backbone.Model.extend({
   },
 
   urlRoot: '/api/users/',
+
   url: function () {
-    if (this.id !== undefined) { return this.urlRoot + this.id }
+    if (this.id !== undefined) {
+      return this.urlRoot + this.id
+    }
     return this.urlRoot
   }
 })

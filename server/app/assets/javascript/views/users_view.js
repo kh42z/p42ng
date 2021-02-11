@@ -9,7 +9,6 @@ export const UsersView = Backbone.View.extend({
     const contextTopNav = {
       user: this.model.get('nickname'),
       profile_pic: '../../images/profile-pic.jpg'
-      // profile_pic: this.model.get('image_url') // image url -> server wrong photo
     }
 
     const contextTable = {
@@ -43,7 +42,27 @@ export const UsersView = Backbone.View.extend({
 
         slideshow: '../../icons/slideshow-ingame.svg',
         game: 'in game'
-      }]
+      },
+
+      {
+        number: '1',
+        profil_pic: '../../images/profile-pic.jpg',
+
+        infos: [
+          this.model.get('nickname'),
+          '42',
+          '1',
+          '5',
+          '5'
+        ],
+
+        status: 'IN GAME',
+        follow: 'Follow',
+
+        slideshow: '../../icons/slideshow-ingame.svg',
+        game: 'in game'
+      }
+      ]
     }
     const templateDataTopNav = templateTopNav(contextTopNav)
     const templateDataUserTable = templateTable(contextTable)
