@@ -1,4 +1,4 @@
-# Pong ![Backend](https://github.com/kh42z/pong/workflows/Backend/badge.svg)
+# Pong ![](https://github.com/kh42z/pong/workflows/Rails%20tests/badge.svg)
 
 ### Run:
 `docker-compose up --build`
