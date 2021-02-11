@@ -2,7 +2,7 @@ FactoryBot.define do
   factory :guild do
     name { Faker::Name.unique.name }
     anagram { Faker::Name.initials(number: 5) }
-    owner factory: :user
+    owner
   end
 end
 
@@ -12,3 +12,4 @@ FactoryBot.define do
     guild factory: :guild
   end
 end
+

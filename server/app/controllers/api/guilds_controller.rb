@@ -35,7 +35,7 @@ module Api
     private
 
     def guild_params
-      param.require(:guild).permit(:name, :anagram)
+      params.require(:guild).permit(:name, :anagram)
     end
 
     def set_guild

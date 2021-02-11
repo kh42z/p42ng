@@ -3,14 +3,13 @@
 require 'rails_helper'
 
 describe 'Guild API', type: :request do
+  let!(:guilds) { create_list(:guild, 2) }
   describe 'GET /guilds' do
     before do
-      FactoryBot.create(:guild, name: "YouThink", anagram: "YITOK")
-      FactoryBot.create(:guild, name: "NoShroud", anagram: "NOSRD")
+      get '/api/guilds'
     end
 
     it 'returns all guilds' do
-      get '/api/guilds'
       expect(response).to have_http_status(:success)
       expect(JSON.parse(response.body).size).to eq(2)
     end

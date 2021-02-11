@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :user do
+  factory :user, aliases: [:owner] do
     nickname { Faker::Name.unique.name }
     image_url { Faker::Internet.url }
     two_factor { Faker::Boolean.boolean }

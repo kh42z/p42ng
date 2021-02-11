@@ -57,6 +57,24 @@ paths:
         '204':
           description: chat deleted
           content: { }
+  '/api/chats/{id}/chat_admins':
+    get:
+      summary: Retrieves chat admins
+      tags:
+        - Chats
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: chat admins found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/chat_admins"
   "/api/guilds/":
     get:
       summary: Retrieves guilds
@@ -412,4 +430,11 @@ components:
         privacy:
           type: integer
         owner_id:
+          type: integer
+    chat_admins:
+      type: object
+      properties:
+        chat_id:
+          type: integer
+        user_id:
           type: integer
