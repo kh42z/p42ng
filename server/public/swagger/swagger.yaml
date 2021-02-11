@@ -16,6 +16,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/chat'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
     post:
       summary: Creates a chat
       tags:
@@ -23,8 +31,15 @@ paths:
       parameters: [ ]
       responses:
         '201':
-          description: Created
-          content: { }
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
   "/api/chats/{id}":
     get:
       summary: Retrieves a chat
@@ -43,6 +58,14 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/chat"
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
     delete:
       summary: Deletes a chat
       tags:
@@ -57,6 +80,14 @@ paths:
         '204':
           description: chat deleted
           content: { }
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
   '/api/chats/{id}/chat_admins':
     get:
       summary: Retrieves chat admins
@@ -75,6 +106,14 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/chat_admins"
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
   "/api/guilds/":
     get:
       summary: Retrieves guilds
@@ -87,6 +126,14 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/guild"
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
     post:
       summary: Creates a guild
       tags:
@@ -94,16 +141,23 @@ paths:
       parameters: [ ]
       responses:
         '201':
-          description: Created
-          content: { }
+          $ref: '#/components/responses/201'
         '422':
-          description: invalid request
-          content: { }
+          $ref: '#/components/responses/422'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/guild'
+
   "/api/guilds/{id}":
     get:
       summary: Retrieves a guild
@@ -122,6 +176,14 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/guild"
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
     delete:
       summary: Deletes a guild
       tags:
@@ -136,6 +198,14 @@ paths:
         '204':
           description: guild deleted
           content: { }
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
   '/api/guilds/{id}/guild_officers':
     get:
       summary: Retrieves officers of a specific guild
@@ -154,6 +224,14 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/guild_officers"
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
   "/api/states/{id}":
     get:
       summary: Retrieves a user state
@@ -172,6 +250,14 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/states"
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
   "/api/states":
     get:
       summary: Retrieves all states
@@ -184,7 +270,14 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/states"
-
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
   "/api/ladders/{id}":
     get:
       summary: Retrieves a ladder
@@ -203,6 +296,14 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/ladder"
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
   "/api/ladders":
     get:
       summary: Retrieves all ladders
@@ -215,7 +316,14 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/ladder"
-
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
   "/api/users":
     get:
       summary: Retrieves users
@@ -244,6 +352,14 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/user_response"
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
   "/api/users/{id}":
     parameters:
       - name: id
@@ -265,6 +381,14 @@ paths:
               schema:
                 oneOf:
                   - "$ref": "#/components/schemas/user_response"
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
       requestBody:
         content:
           application/json:
@@ -290,6 +414,14 @@ paths:
               schema:
                 oneOf:
                   - "$ref": "#/components/schemas/user_response"
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
     delete:
       summary: Deletes an user
       tags:
@@ -304,6 +436,14 @@ paths:
         '204':
           description: user deleted
           content: { }
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
 servers:
   - url: http://{defaultHost}:3000
     variables:
@@ -328,17 +468,6 @@ components:
       name: uid
       in: header
   schemas:
-    errors_object:
-      type: object
-      properties:
-        errors:
-          "$ref": "#/components/schemas/errors_map"
-    errors_map:
-      type: object
-      additionalProperties:
-        type: array
-        items:
-          type: string
     user:
       type: object
       properties:
@@ -438,3 +567,53 @@ components:
           type: integer
         user_id:
           type: integer
+
+    errors_object:
+      type: object
+      properties:
+        errors:
+          $ref: '#/components/schemas/errors_map'
+    errors_map:
+      type: object
+      additionalProperties:
+        type: array
+        items:
+          type: string
+
+  responses:
+    '201':
+      description: Created
+      content: { }
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errors_map'
+    '401':
+      description: The user is not authenticated in the system
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errors_map'
+    '403':
+      description: The user does not have permissions to access this endpoint
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errors_map'
+    '404':
+      description: Data not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errors_map'
+    '422':
+      description: invalid request
+      content: { }
+    '500':
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errors_map'
