@@ -1,4 +1,4 @@
-# Pong
+# Pong ![Backend](https://github.com/kh42z/pong/workflows/Backend/badge.svg)
 
 ### Run:
 `docker-compose up --build`
