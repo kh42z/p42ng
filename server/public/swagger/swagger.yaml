@@ -537,10 +537,10 @@ components:
           type: integer
         score:
           type: integer
-      required:
-        - name
-        - anagram
-        - owner_id
+        officer_ids:
+          type: array
+          items:
+            type: integer
     guild_officers:
       type: object
       properties:

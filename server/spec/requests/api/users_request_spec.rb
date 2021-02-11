@@ -18,7 +18,6 @@ RSpec.describe 'Users', type: :request do
 
   describe 'retrieves all users' do
     before { get '/api/users', headers: first.create_new_auth_token }
-    #    before { get '/api/users', headers: users.first.create_new_auth_token }
     it 'returns users' do
       expect(json).not_to be_empty
       expect(json.size).to eq(10)

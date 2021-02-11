@@ -36,6 +36,11 @@ end
     )
 end
 
+
+(1..10).each do |id|
+  GuildOfficer.create(guild: Guild.find(1), user: User.find(id))
+end
+
 (1..20).each do |id|
   User.find(id).update!(guild: Guild.find(rand(1..5)))
 end
