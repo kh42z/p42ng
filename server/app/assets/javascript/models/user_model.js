@@ -21,8 +21,19 @@ export const User = Backbone.Model.extend({
     updated_at: undefined
   },
 
-  initialize: function () {
-    this.on('all', function (e) {
+  initialize: function (url) {
+    // this.on('all', function (e) {
+    // })
+
+    this.fetch({
+      url: url,
+      success: function (response) {
+        console.log(response)
+      },
+      error: function (errorResponse) {
+        console.log('error')
+        console.log(errorResponse)
+      }
     })
   },
 
