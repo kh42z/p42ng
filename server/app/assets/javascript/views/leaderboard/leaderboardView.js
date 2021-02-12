@@ -1,10 +1,11 @@
 export const LeaderboardView = Backbone.View.extend({
   el: $('#app'),
   initialize: function () {
-		this.render()
+		this.listenTo(this.collection, 'sync', function () {
+		this.render()}, this)
   },
   render: function () {
-    this.$el.html('Achivements')
+    this.$el.html('Leaderboard')
   }
 })
 
