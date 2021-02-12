@@ -2,14 +2,19 @@
 import { HomeView } from '../views/home_view.js'
 import { UsersView } from '../views/profile/users_view.js'
 import { PongView } from '../views/pong/pong_view.js'
-import { User } from '../models/user_model'
 import { HeaderView } from '../views/header_view'
 import { LeaderboardView } from '../views/leaderboard/leaderboardView.js'
 import { TournamentsView } from '../views/tournaments/tournamentsView.js'
+import { GuildsView } from '../views/guild/guildsView.js'
 
 // controlers
 import { ProfileController } from '../views/profile/profileController.js'
 import { GuildController } from '../views/guild/guildController.js'
+
+//models and collection
+import { User } from '../models/user_model'
+import { Guilds } from '../collections/guilds_collection.js'
+
 // import { ChatController } from '../view/chat/chatController.js' // not here
 
 export const Router = Backbone.Router.extend({
@@ -60,6 +65,9 @@ export const Router = Backbone.Router.extend({
 
 	guilds_view: function () {
 		console.log("guild_list")
+		let guilds = new Guilds('/api/guilds/')
+	//	let guildsView = new GuildsView({ collection: guilds })
+		guildsView.render()
 	},
 
 	guild_view: function (id, page) {
