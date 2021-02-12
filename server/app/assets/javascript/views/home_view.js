@@ -1,4 +1,4 @@
-const HomeView = Backbone.View.extend({
+export const HomeView = Backbone.View.extend({
   initialize: function () {
     // this.templateTopNav = Handlebars.templates.topnav
     this.templateHome = Handlebars.templates.home
@@ -18,4 +18,3 @@ const HomeView = Backbone.View.extend({
     return this
   }
 })
-export const homeView = new HomeView()
