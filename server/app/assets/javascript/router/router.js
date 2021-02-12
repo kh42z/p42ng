@@ -19,8 +19,8 @@ import { Guilds } from '../collections/guilds_collection.js'
 
 export const Router = Backbone.Router.extend({
   initialize: function () {
-    this.headerView = new HeaderView()
-    this.headerView.render()
+// 		this.headerView = new HeaderView()
+  //  this.headerView.render()
 		this.profileController = new ProfileController
 		this.guildController = new GuildController
     // this.usersView = new UsersView()

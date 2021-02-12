@@ -4,6 +4,10 @@ import { MatchHistoryView } from './matchHistoryView.js'
 import { FriendsView } from './friendsView.js'
 import { ProfileOverviewView } from "./overviewView.js"
 
+import { User } from "../../models/user_model.js"
+
+import { UserHandler } from "../../utils/userHandler.js"
+
 export class ProfileController
 {
 	loadView(id, page)
@@ -29,7 +33,10 @@ export class ProfileController
 		}
 		else if (page == null || page == "overview" || page == "/")
 		{
-			view = new ProfileOverviewView()
+			//let userHandler = new UserHandler(id)
+			let user = new User("/api/users/" + id)
+			//console.log(userH.get("nickname"))
+			view = new ProfileOverviewView({ model: user })
 		}
 		else // error, page invalid
 			return ;
