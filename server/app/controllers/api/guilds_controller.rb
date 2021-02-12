@@ -43,14 +43,12 @@ module Api
     end
 
     def update_officers
-      return unless params[:officer_ids].present?
-
       Guild.find(params[:id]).guild_officers.destroy_all
       create_officers(params[:id])
     end
 
     def guild_params
-      params.permit(:name, :anagram, :owner_id, :officer_ids)
+      params.permit(%i[name anagram owner_id officer_ids])
     end
 
     def set_guild

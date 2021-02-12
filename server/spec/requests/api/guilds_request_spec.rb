@@ -3,7 +3,7 @@
 require "rails_helper"
 
 describe "Guild API", type: :request do
-  let!(:guilds) { create_list(:guild, 5) }
+  let!(:guilds) { create_list(:guild_with_officers, 5) }
   let!(:guild_id) { guilds.first.id }
   let!(:valid_attributes) {
     {name: "Updated", anagram: "upd4t",
@@ -30,6 +30,19 @@ describe "Guild API", type: :request do
 
     it "returns status code 201" do
       expect(response).to have_http_status(201)
+    end
+  end
+
+  describe 'retrieves one guild' do
+    before {
+      get "/api/guilds/#{guild_id}"
+    }
+    it 'returns user' do
+      expect(json).not_to be_empty
+    end
+
+    it 'returns status code 200' do
+      expect(response).to have_http_status(200)
     end
   end
 

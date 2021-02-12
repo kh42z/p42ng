@@ -8,6 +8,7 @@ class User < ApplicationRecord
   include DeviseTokenAuth::Concerns::User
   belongs_to :ladder, optional: true
   belongs_to :guild, optional: true
+  has_one :guild_officer, dependent: :destroy
   has_many :chats, foreign_key: 'owner_id'
   belongs_to :state, optional: true
   validates_presence_of :nickname

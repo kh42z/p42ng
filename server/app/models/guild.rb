@@ -6,5 +6,5 @@ class Guild < ApplicationRecord
   validates :name, uniqueness: true
   validates :anagram, length: { is: 5 }, allow_blank: false, uniqueness: true
   belongs_to :owner, class_name: 'User'
-  has_many :guild_officers, foreign_key: 'guild_id'
+  has_many :guild_officers, foreign_key: 'guild_id', dependent: :destroy
 end
