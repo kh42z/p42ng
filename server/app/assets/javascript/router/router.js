@@ -5,6 +5,7 @@ import { PongView } from '../views/pong/pong_view.js'
 import { HeaderView } from '../views/header_view'
 import { LeaderboardView } from '../views/leaderboard/leaderboardView.js'
 import { TournamentsView } from '../views/tournaments/tournamentsView.js'
+import { GuildsView } from '../views/guild/guildsView.js'
 import { OauthView } from '../views/oauth/oauthView.js'
 
 // models
@@ -16,6 +17,7 @@ import { GuildController } from '../views/guild/guildController.js'
 
 // models and collection
 import { Guilds } from '../collections/guilds_collection.js'
+import { Users } from '../collections/users_collection.js'
 
 // import { ChatController } from '../view/chat/chatController.js' // not here
 
@@ -25,8 +27,8 @@ import { OauthService } from '../service/oauthService.js'
 export const Router = Backbone.Router.extend({
   initialize: function () {
     this.oauthService = undefined
-    this.headerView = new HeaderView()
-    this.headerView.render()
+   // this.headerView = new HeaderView()
+    //this.headerView.render()
     this.profileController = new ProfileController()
     this.guildController = new GuildController()
     // this.usersView = new UsersView()
@@ -80,7 +82,10 @@ export const Router = Backbone.Router.extend({
   },
 
   guilds_view: function () {
+
     console.log('guild_list')
+		let guilds = new Guilds()
+		const guildsView = new GuildsView( { collection: guilds})
   },
 
   guild_view: function (id, page) {
