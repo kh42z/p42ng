@@ -1,4 +1,3 @@
-
 export const UsersView = Backbone.View.extend({
   events: {
     'click .follow': 'change_model'

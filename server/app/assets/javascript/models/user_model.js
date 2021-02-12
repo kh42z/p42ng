@@ -21,12 +21,14 @@ export const User = Backbone.Model.extend({
     updated_at: undefined
   },
 
-  initialize: function (url) {
-    // this.on('all', function (e) {
-    // })
-
+  initialize: function (url, oauthService) {
     this.fetch({
       url: url,
+      headers: {
+        'access-token': oauthService.getAuthToken(),
+        uid: oauthService.getUid(),
+        client: oauthService.getClientId()
+      },
       success: function (response) {
         console.log(response)
       },

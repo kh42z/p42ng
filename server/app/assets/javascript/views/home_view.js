@@ -1,8 +1,16 @@
 export const HomeView = Backbone.View.extend({
   initialize: function () {
-    // this.templateTopNav = Handlebars.templates.topnav
     this.templateHome = Handlebars.templates.home
+<<<<<<< HEAD
     this.render()
+=======
+    console.log(window.location)
+
+    const urlParams = new URLSearchParams(window.location.search)
+    console.log(urlParams.get('auth_token'))
+    console.log(urlParams.get('uid'))
+    console.log(urlParams.get('client_id'))
+>>>>>>> oauth ok
   },
   el: $('#app'),
   render: function () {
@@ -10,11 +18,8 @@ export const HomeView = Backbone.View.extend({
       user: 'pganglof',
       profile_pic: '../../images/profile-pic.jpg'
     }
-
-    // const templateDataTopNav = this.templateTopNav(context)
     const templateDataHome = this.templateHome(context)
     this.$el.html(templateDataHome)
-    // this.$el.html(templateDataTopNav + templateDataHome)
     return this
   }
 })
