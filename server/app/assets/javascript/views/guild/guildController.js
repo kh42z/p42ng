@@ -26,8 +26,8 @@ export class GuildController
 		}
 		else // error, page invalid
 			return ;
-		// id should be check valid here
-		// maybe we should send the model directly
+		//
+		// maybe we should send the model directly to the view
 		// view.render(model, id) ??
 	}
 };
