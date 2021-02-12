@@ -14,8 +14,7 @@ import { User } from '../models/user_model'
 import { ProfileController } from '../views/profile/profileController.js'
 import { GuildController } from '../views/guild/guildController.js'
 
-//models and collection
-import { User } from '../models/user_model'
+// models and collection
 import { Guilds } from '../collections/guilds_collection.js'
 
 // import { ChatController } from '../view/chat/chatController.js' // not here
