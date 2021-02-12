@@ -1,7 +1,16 @@
 export const HomeView = Backbone.View.extend({
   initialize: function () {
     this.templateHome = Handlebars.templates.home
+<<<<<<< HEAD
     this.render()
+=======
+    console.log(window.location)
+
+    const urlParams = new URLSearchParams(window.location.search)
+    console.log(urlParams.get('auth_token'))
+    console.log(urlParams.get('uid'))
+    console.log(urlParams.get('client_id'))
+>>>>>>> oauth ok
   },
   el: $('#app'),
   render: function () {
