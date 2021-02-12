@@ -4,10 +4,6 @@ import { MatchHistoryView } from './matchHistoryView.js'
 import { FriendsView } from './friendsView.js'
 import { ProfileOverviewView } from './overviewView.js'
 
-import { User } from '../../models/user_model.js'
-
-import { UserHandler } from '../../utils/userHandler.js'
-
 export class ProfileController {
   loadView (id, page, model) {
     let view
