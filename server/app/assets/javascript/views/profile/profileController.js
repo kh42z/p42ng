@@ -6,7 +6,7 @@ import { ProfileOverviewView } from "./overviewView.js"
 
 export class ProfileController
 {
-	loadView(id, page, model)
+	loadView(id, page)
 	{
 		let view;
 

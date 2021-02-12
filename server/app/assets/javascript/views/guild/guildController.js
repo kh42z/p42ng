@@ -5,7 +5,7 @@ import { GuildOverviewView } from "./overviewView.js"
 
 export class GuildController
 {
-	loadView(id, page, model)
+	loadView(id, page)
 	{
 		let view;
 
