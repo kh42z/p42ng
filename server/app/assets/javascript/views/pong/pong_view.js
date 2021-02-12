@@ -1,3 +1,15 @@
+
+export const PongView = Backbone.View.extend({
+  el: $('#app'),
+  initialize: function () {
+  },
+  render: function () {
+		console.log("pong page")
+    this.$el.html('pong page')
+  }
+})
+
+
 const script = `
 <script>
 
@@ -483,13 +495,3 @@ const script = `
 <canvas id="game_window" width="1000" height="600">
 </canvas>
 </section>`
-
-const PongView = Backbone.View.extend({
-  el: $('#app'),
-  initialize: function () {
-  },
-  render: function () {
-    this.$el.html('pong page')
-  }
-})
-export const pongView = new PongView()
