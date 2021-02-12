@@ -11,12 +11,14 @@ module Api
 
     def update
       @guild.update!(guild_params)
+      update_officers
       json_response(@guild)
     end
 
     def create
       guild = Guild.new(guild_params)
       if guild.save
+        create_officers(guild.id)
         json_response(guild, :created)
       else
         json_response(guild.errors, :unprocessable_entity)
@@ -34,8 +36,21 @@ module Api
 
     private
 
+    def create_officers(id)
+      params[:officer_ids].each do |officer|
+        GuildOfficer.create(user_id: officer, guild_id: id)
+      end
+    end
+
+    def update_officers
+      return unless params[:officer_ids].present?
+
+      Guild.find(params[:id]).guild_officers.destroy_all
+      create_officers(params[:id])
+    end
+
     def guild_params
-      params.require(:guild).permit(:name, :anagram)
+      params.permit(:name, :anagram, :owner_id, :officer_ids)
     end
 
     def set_guild
