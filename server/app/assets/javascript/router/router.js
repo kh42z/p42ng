@@ -32,8 +32,10 @@ export const Router = Backbone.Router.extend({
     home: 'home_view',
     pong: 'pong_view',
 		"profile/:id(/:page)": 'profile_view',
+		"profile/:id/": 'profile_view',
 		"guilds": 'guilds_view',
 		"guild/:id(/:page)": 'guild_view',
+		"guild/:id/": 'guild_view',
 		"chat/:id(/:page)": 'chat_view',
 		"leaderboard": 'leaderboard_view',
 		"tournaments": 'tournaments_view',
@@ -42,7 +44,6 @@ export const Router = Backbone.Router.extend({
 
   home_view: function (url) {
 		let homeView = new HomeView()
-    homeView.render()
   },
 
   users_view: function (url) {
@@ -54,7 +55,6 @@ export const Router = Backbone.Router.extend({
   pong_view: function (url) {
     console.log('in pong view')
 		let pongView = new PongView()
-    pongView.render()
 	},
 
 	profile_view: function (id, page) {
@@ -65,9 +65,8 @@ export const Router = Backbone.Router.extend({
 
 	guilds_view: function () {
 		console.log("guild_list")
-		let guilds = new Guilds('/api/guilds/')
-	//	let guildsView = new GuildsView({ collection: guilds })
-		guildsView.render()
+	//	let guilds = new Guilds('/api/guilds/')
+		let guildsView = new GuildsView()
 	},
 
 	guild_view: function (id, page) {
@@ -82,12 +81,10 @@ export const Router = Backbone.Router.extend({
 	leaderboard_view: function () {
 		console.log("leaderboard")
 		let leaderboardView = new LeaderboardView()
-		leaderboardView.render()
 	},
 
 	tournaments_view: function () {
 		console.log("Tournaments")
 		let tournamentsView = new TournamentsView()
-		tournamentsView.render()
 	}
 })
