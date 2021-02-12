@@ -60,7 +60,7 @@ export const Router = Backbone.Router.extend({
 	profile_view: function (id, page) {
 		console.log("profile " + id + page)
 	//	let profileController = new ProfileController(id, page, "model control not implemented yet")
-		this.profileController.loadView(id, page, "model control not implemented yet")
+		this.profileController.loadView(id, page)
 	},
 
 	guilds_view: function () {
@@ -71,7 +71,7 @@ export const Router = Backbone.Router.extend({
 
 	guild_view: function (id, page) {
 		console.log("guild " + id + page)
-		this.guildController.loadView(id, page, "a model")
+		this.guildController.loadView(id, page)
 	},
 
 	chat_view: function (id, page) {
