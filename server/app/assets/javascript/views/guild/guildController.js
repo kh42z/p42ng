@@ -1,6 +1,7 @@
 import { CurrentWarView } from "./currentWarView.js"
 import { LastWarView } from "./lastWarView.js"
 import { MembersView } from "./membersView.js"
+import { GuildOverviewView } from "./overviewView.js"
 
 export class GuildController
 {
@@ -11,18 +12,19 @@ export class GuildController
 		if (page == "current_war")
 		{
 			view = new CurrentWarView()
-			view.render()
 		}
 		else if (page == "last_war")
 		{
 			view = new LastWarView()
-			view.render()
 		}
 		else if (page == "members")
 		{
 			view = new MembersView()
 			//veiw.render(user_collection, id)
-			view.render()
+		}
+		else if (page == null || page == "overview" || page == "/")
+		{
+			view = new GuildOverviewView()
 		}
 		else // error, page invalid
 			return ;
