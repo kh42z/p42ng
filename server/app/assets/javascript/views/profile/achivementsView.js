@@ -6,5 +6,6 @@ export const AchivementsView = Backbone.View.extend({
   render: function () {
     console.log('Achivements View')
     this.$el.html('Achivements')
+    return this
   }
 })

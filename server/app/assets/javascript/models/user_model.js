@@ -22,21 +22,7 @@ export const User = Backbone.Model.extend({
   },
 
   initialize: function (url, oauthService) {
-    this.fetch({
-      url: url,
-      headers: {
-        // 'access-token': oauthService.getAuthToken(),
-        // uid: oauthService.getUid(),
-        // client: oauthService.getClientId()
-      },
-      success: function (response) {
-        console.log(response)
-      },
-      error: function (errorResponse) {
-        console.log('error')
-        console.log(errorResponse)
-      }
-    })
+
   },
 
   urlRoot: '/api/users/',
@@ -46,38 +32,23 @@ export const User = Backbone.Model.extend({
       return this.urlRoot + this.id
     }
     return this.urlRoot
+  },
+
+  getUser: function (url, oauthService) {
+    this.fetch({
+      url: this.urlRoot + url,
+      headers: {
+        'access-token': oauthService.getAuthToken(),
+        uid: oauthService.getUid(),
+        client: oauthService.getClientId()
+      },
+      success: function (response) {
+        console.log(response)
+      },
+      error: function (errorResponse) {
+        console.log('error')
+        console.log(errorResponse)
+      }
+    })
   }
 })
-
-// const user = new User({ id: 1 })
-
-// async function showAvatar () {
-//   await user.fetch({
-//     url: user.urlRoot + '1',
-//     headers: {
-//       // Authentification
-//       client: '3wy2VwUgD-pEv7gWJJh9dw',
-//       'access-token': 'xT4ql1Yq2ALJDSG9cgh1kA',
-//       uid: '56065'
-//     },
-//     success: function (response) {
-
-//     },
-//     error: function (errorResponse) {
-//       console.log('error')
-//       console.log(errorResponse)
-//     }
-//   })
-//   console.log(user.get('email'))
-//   console.log(user.get('image_url'))
-//   console.log(user.get('avatar'))
-//   console.log(user.get('image'))
-//   console.log(user.get('ladder_id'))
-// }
-
-// showAvatar()
-
-// const users = new Users()
-// // users.create(user)
-
-// // console.log('parse: ' + User.parse())

@@ -1,8 +1,8 @@
 export const FriendsView = Backbone.View.extend({
-  el: $('#app'),
   initialize: function () {
     this.render()
   },
+  el: $('#app'),
   render: function () {
     console.log('Friends view')
     this.$el.html('Friends')
