@@ -10,8 +10,7 @@ module Users
       user.assign_attributes({
                                email: auth_hash['info']['email'],
                                nickname: auth_hash['info']['nickname'],
-                               image_url: auth_hash['info']['image'],
-                               mmr: 200
+                               image_url: auth_hash['info']['image']
                              })
     end
   end
