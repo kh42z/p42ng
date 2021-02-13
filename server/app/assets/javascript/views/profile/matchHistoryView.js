@@ -1,10 +1,11 @@
 export const MatchHistoryView = Backbone.View.extend({
   el: $('#app'),
   initialize: function () {
-		this.render()
+    this.render()
   },
   render: function () {
-		console.log("match history wiew")
+    console.log('match history wiew')
     this.$el.html('matchHistory')
+    return this
   }
 })
