@@ -9,7 +9,7 @@
     height: 82px;
     width: 100%;
 
-   /* z-index: 1;*/
+   z-index: 1;
 
     display: grid;
     grid-gap: 8px;

@@ -47,7 +47,8 @@ export const Router = Backbone.Router.extend({
     leaderboard: 'leaderboard_view',
     tournaments: 'tournaments_view',
     connexion: 'connexion_view',
-    '': 'oauth_view'
+    '': 'home_view'
+    // '': 'oauth_view'
   },
 
   oauth_view: function (url) {
@@ -84,10 +85,16 @@ export const Router = Backbone.Router.extend({
 
   guilds_view: function () {
     const guild = new Guild({ oauthService: this.oauthService })
-    guild.create('/api/guilds/', this.oauthService)
+    // guild.create('/api/guilds')
+    guild.set({
+      name: 'teste',
+      anagram: 'azedz',
+      owner_id: 1
+    })
+    guild.save()
     console.log('guild_list')
-    const guilds = new Guilds()
-    const guildsView = new GuildsView({ collection: guilds })
+    // const guilds = new Guilds()
+    // const guildsView = new GuildsView({ collection: guilds })
   },
 
   guild_view: function (id, page) {

@@ -2,14 +2,14 @@
 export const PongView = Backbone.View.extend({
   el: $('#app'),
   initialize: function () {
-		this.render()
+    this.render()
   },
   render: function () {
-		console.log("pong page")
+    console.log('pong page')
     this.$el.html('pong page')
+    return this
   }
 })
-
 
 const script = `
 <script>
