@@ -16,7 +16,6 @@ FactoryBot.define do
         create_list(:guild_officer, evaluator.officers_count, guild: guild)
         guild.reload
       end
-
     end
   end
 end

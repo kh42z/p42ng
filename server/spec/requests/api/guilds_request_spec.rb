@@ -3,11 +3,14 @@
 require "rails_helper"
 
 describe "Guild API", type: :request do
+  let!(:user) { create(:user) }
+  let!(:officer_1) { create(:user) }
+  let!(:officer_2) { create(:user) }
   let!(:guilds) { create_list(:guild_with_officers, 5) }
   let!(:guild_id) { guilds.first.id }
   let!(:valid_attributes) {
     {name: "Updated", anagram: "upd4t",
-     owner_id: User.first.id,
+     owner_id: user.id,
      officer_ids: [FactoryBot.create(:user).id, FactoryBot.create(:user).id]}
   }
   describe "GET /guilds" do
@@ -24,19 +27,21 @@ describe "Guild API", type: :request do
   describe "Creates a guild" do
     before do
       @params = FactoryBot.attributes_for(:guild)
-      @params['officer_ids'] = [User.first.id, User.last.id]
-      post "/api/guilds/", params: @params
+      @params['officer_ids'] = [officer_1.id, officer_2.id] #[User.first.id, User.last.id]
     end
 
     it "returns status code 201" do
+      post "/api/guilds/", params: {guild: @params}
       expect(response).to have_http_status(201)
     end
-  end
+
+    it "should create a guild" do
+      expect { post "/api/guilds/", params: {guild: @params} }.to change { Guild.count }.by(1)
+    end
+end
 
   describe 'retrieves one guild' do
-    before {
-      get "/api/guilds/#{guild_id}"
-    }
+    before { get "/api/guilds/#{guild_id}" }
     it 'returns user' do
       expect(json).not_to be_empty
     end
@@ -48,7 +53,7 @@ describe "Guild API", type: :request do
 
   describe "Update one guild" do
     before do
-      put "/api/guilds/#{guild_id}", params: valid_attributes
+      put "/api/guilds/#{guild_id}", params: {guild: valid_attributes}
     end
 
     it "owner_id to be update" do
