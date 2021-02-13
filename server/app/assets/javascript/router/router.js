@@ -31,8 +31,7 @@ export const Router = Backbone.Router.extend({
     this.userLogged = undefined
     this.profileController = new ProfileController()
     this.guildController = new GuildController()
-    // this.usersView = new UsersView()
-    this.userLogged = undefined
+    this.userLogged = new User()
   },
 
   routes:
@@ -56,8 +55,7 @@ export const Router = Backbone.Router.extend({
 
   connexion_view: function (url) {
     this.oauthService = new OauthService()
-    this.userLogged = new User()
-    this.userLogged.getUser(this.oauthService.getUserId(), this.oauthService)
+    this.userLogged.getUser(this.oauthService.getUserId())
     this.headerView = new HeaderView({ model: this.userLogged })
     const homeView = new HomeView()
     homeView.render()
@@ -87,7 +85,7 @@ export const Router = Backbone.Router.extend({
   },
 
   guilds_view: function () {
-    const guild = new Guild({ oauthService: this.oauthService })
+    const guild = new Guild()
     console.log('guild_list')
     const guilds = new Guilds()
     const guildsView = new GuildsView({ collection: guilds })

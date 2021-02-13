@@ -37,11 +37,6 @@ export const User = Backbone.Model.extend({
   getUser: function (url, oauthService) {
     this.fetch({
       url: this.urlRoot + url,
-      headers: {
-        'access-token': oauthService.getAuthToken(),
-        uid: oauthService.getUid(),
-        client: oauthService.getClientId()
-      },
       success: function (response) {
         console.log(response)
       },
