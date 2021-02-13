@@ -18,28 +18,19 @@ if Rails.env.development?
   FactoryBot.create(:user)
 end
 
-(1..20).each do |id|
+(1..20).each do
   Chat.create!(
-    id: id,
     privacy: Faker::Number.leading_zero_number(digits: 3),
     password: "password",
     owner_id: rand(1..5)
     )
 end
 
-(1..5).each do |id|
-  Guild.create!(
-    id: id,
-    name: Faker::Name.unique.name,
-    anagram: Faker::Name.unique.initials(number: 5),
-    owner_id: id
-    )
+(1..5).each do
+  FactoryBot.create(:guild_with_officers)
 end
 
 
-(1..10).each do |id|
-  GuildOfficer.create(guild: Guild.find(1), user: User.find(id))
-end
 
 (1..20).each do |id|
   User.find(id).update!(guild: Guild.find(rand(1..5)))
