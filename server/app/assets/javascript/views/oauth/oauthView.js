@@ -13,7 +13,6 @@ export const OauthView = Backbone.View.extend({
     this.$el.html(templateDataOauth)
     return this
   },
-
   signin: function () {
     console.log('event signin')
     // this.model.getOauth()

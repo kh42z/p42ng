@@ -10,6 +10,7 @@ import { GuildsView } from '../views/guild/guildsView.js'
 
 // models
 import { User } from '../models/user_model'
+import { Guild } from '../models/guild_model.js'
 
 // controlers
 import { ProfileController } from '../views/profile/profileController.js'
@@ -82,6 +83,8 @@ export const Router = Backbone.Router.extend({
   },
 
   guilds_view: function () {
+    const guild = new Guild({ oauthService: this.oauthService })
+    guild.create('/api/guilds/', this.oauthService)
     console.log('guild_list')
     const guilds = new Guilds()
     const guildsView = new GuildsView({ collection: guilds })

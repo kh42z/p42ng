@@ -4,32 +4,58 @@ export const Guild = Backbone.Model.extend({
     name: undefined,
     anagram: undefined,
     owner_id: undefined,
-    score: undefined
+    score: undefined,
+    oauthService: undefined
   },
 
   initialize: function (id) {
-    /*this.on('all', function (e) {
+    /* this.on('all', function (e) {
       //
-    })*/
-		this.url = "/api/guilds/" + id
-		console.log(this.url)
-		this.fetch({
-			url: this.url,
-			success: function (response) {
-				console.log(response)
-			},
-			error: function (errorResponse) {
-				console.log('error')
-				console.log(errorResponse)
-			}
-		})
-		console.log(this.id)
+    }) */
+    this.url = '/api/guilds/' + id
+    console.log(this.url)
+    this.fetch({
+      url: this.url,
+      success: function (response) {
+        console.log(response)
+      },
+      error: function (errorResponse) {
+        console.log('error')
+        console.log(errorResponse)
+      }
+    })
+    console.log(this.id)
   },
 
   urlRoot: 'api/guilds/',
   url: function () {
     if (this.id !== undefined) { return this.urlRoot + this.id }
     return this.urlRoot
+  },
+
+  create: function (url, oauthService) {
+    this.save({
+      url: url,
+      headers: {
+        'access-token': oauthService.getAuthToken(),
+        uid: oauthService.getUid(),
+        client: oauthService.getClientId()
+      },
+      data: {
+        id: '0',
+        name: 'test',
+        anagram: '',
+        owner_id: '1',
+        score: '0'
+      },
+      success: function (response) {
+        console.log(response)
+      },
+      error: function (errorResponse) {
+        console.log('error')
+        console.log(errorResponse)
+      }
+    })
   }
 })
 
