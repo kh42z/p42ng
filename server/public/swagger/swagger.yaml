@@ -255,7 +255,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/states"
+                "$ref": "#/components/schemas/state"
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -275,7 +275,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/states"
+                "$ref": "#/components/schemas/state"
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -347,10 +347,10 @@ paths:
             type: integer
           description: filter by guid_id
         - in: query
-          name: states_id
+          name: state_id
           schema:
             type: integer
-          description: filter by states_id
+          description: filter by state_id
       responses:
         '200':
           description: users found
@@ -482,7 +482,7 @@ components:
         guild_id:
           type: integer
           nullable: true
-        states_id:
+        state_id:
           type: integer
           nullable: true
         ladder_id:
@@ -530,7 +530,7 @@ components:
           nullable: true
       required:
         - name
-    states:
+    state:
       type: object
       properties:
         id:
