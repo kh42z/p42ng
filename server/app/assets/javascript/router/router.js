@@ -28,11 +28,11 @@ import { OauthService } from '../service/oauthService.js'
 export const Router = Backbone.Router.extend({
   initialize: function () {
     this.oauthService = undefined
-    this.headerView = new HeaderView()
-    this.headerView.render()
+    this.userLogged = undefined
     this.profileController = new ProfileController()
     this.guildController = new GuildController()
     // this.usersView = new UsersView()
+    this.userLogged = undefined
   },
 
   routes:
@@ -47,8 +47,7 @@ export const Router = Backbone.Router.extend({
     leaderboard: 'leaderboard_view',
     tournaments: 'tournaments_view',
     connexion: 'connexion_view',
-    '': 'home_view'
-    // '': 'oauth_view'
+    '': 'oauth_view'
   },
 
   oauth_view: function (url) {
@@ -57,6 +56,9 @@ export const Router = Backbone.Router.extend({
 
   connexion_view: function (url) {
     this.oauthService = new OauthService()
+    this.userLogged = new User()
+    this.userLogged.getUser(this.oauthService.getUserId(), this.oauthService)
+    this.headerView = new HeaderView({ model: this.userLogged })
     const homeView = new HomeView()
     homeView.render()
   },
@@ -67,8 +69,9 @@ export const Router = Backbone.Router.extend({
   },
 
   users_view: function (url) {
-    const user = new User('/api/users/1', this.oauthService)
-    const usersView = new UsersView({ model: user })
+    console.log('user view')
+    const usersView = new UsersView({ model: this.userLogged })
+    usersView.render()
   },
 
   pong_view: function (url) {
@@ -85,16 +88,9 @@ export const Router = Backbone.Router.extend({
 
   guilds_view: function () {
     const guild = new Guild({ oauthService: this.oauthService })
-    // guild.create('/api/guilds')
-    guild.set({
-      name: 'teste',
-      anagram: 'azedz',
-      owner_id: 1
-    })
-    guild.save()
     console.log('guild_list')
-    // const guilds = new Guilds()
-    // const guildsView = new GuildsView({ collection: guilds })
+    const guilds = new Guilds()
+    const guildsView = new GuildsView({ collection: guilds })
   },
 
   guild_view: function (id, page) {

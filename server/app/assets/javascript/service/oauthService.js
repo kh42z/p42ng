@@ -15,4 +15,8 @@ export class OauthService {
   getClientId () {
     return this.urlParams.get('client_id')
   }
+
+  getUserId () {
+    return this.urlParams.get('user_id')
+  }
 }
