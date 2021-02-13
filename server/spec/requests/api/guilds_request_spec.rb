@@ -3,11 +3,14 @@
 require "rails_helper"
 
 describe "Guild API", type: :request do
+  let!(:user) { create(:user) }
+  let!(:officer_1) { create(:user) }
+  let!(:officer_2) { create(:user) }
   let!(:guilds) { create_list(:guild_with_officers, 5) }
   let!(:guild_id) { guilds.first.id }
   let!(:valid_attributes) {
     {name: "Updated", anagram: "upd4t",
-     owner_id: User.first.id,
+     owner_id: user.id,
      officer_ids: [FactoryBot.create(:user).id, FactoryBot.create(:user).id]}
   }
   describe "GET /guilds" do
@@ -25,7 +28,7 @@ describe "Guild API", type: :request do
     context "when the request is valid" do
       before do
         @params = FactoryBot.attributes_for(:guild)
-        @params['officer_ids'] = [User.first.id, User.last.id]
+        @params["officer_ids"] = [officer_1.id, officer_2.id]
         post "/api/guilds/", params: @params
       end
 
@@ -34,31 +37,29 @@ describe "Guild API", type: :request do
       end
     end
 
-    context 'when the request is invalid' do
-      before {
-        post '/api/guilds/', params: {}
-      }
+    context "when the request is invalid" do
+      before do
+        post "/api/guilds/", params: {}
+      end
 
-      it 'returns status code 422' do
+      it "returns status code 422" do
         expect(response).to have_http_status(422)
       end
 
-      it 'returns a validation failure message' do
+      it "returns a validation failure message" do
         expect(response.body)
           .to match("can't be blank")
       end
     end
   end
 
-  describe 'retrieves one guild' do
-    before {
-      get "/api/guilds/#{guild_id}"
-    }
-    it 'returns user' do
+  describe "retrieves one guild" do
+    before { get "/api/guilds/#{guild_id}" }
+    it "returns user" do
       expect(json).not_to be_empty
     end
 
-    it 'returns status code 200' do
+    it "returns status code 200" do
       expect(response).to have_http_status(200)
     end
   end
@@ -86,7 +87,4 @@ describe "Guild API", type: :request do
       expect(response).to have_http_status(204)
     end
   end
-
-
-
 end

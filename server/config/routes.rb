@@ -6,7 +6,7 @@ Rails.application.routes.draw do
     resources :users, :ladders, :guilds, :chats
     resources :states
     resources :guilds do
-      resources :guild_officers
+      resources :guild_officers # only: [:index]
     end
     resources :chats do
       resources :chat_admins
