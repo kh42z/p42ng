@@ -37,18 +37,22 @@ module Api
     private
 
     def create_officers(id)
+      return unless params.key?(:officer_ids)
+
       params[:officer_ids].each do |officer|
         GuildOfficer.create(user_id: officer, guild_id: id)
       end
     end
 
     def update_officers
+      return unless params.key?(:officer_ids)
+
       Guild.find(params[:id]).guild_officers.destroy_all
       create_officers(params[:id])
     end
 
     def guild_params
-      params.permit(%i[name anagram owner_id officer_ids])
+      params.permit(:name, :anagram, :owner_id)
     end
 
     def set_guild

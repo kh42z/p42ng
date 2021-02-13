@@ -17,15 +17,32 @@ RSpec.describe 'Users', type: :request do
   end
 
   describe 'retrieves all users' do
-    before { get '/api/users', headers: first.create_new_auth_token }
-    it 'returns users' do
-      expect(json).not_to be_empty
-      expect(json.size).to eq(10)
+    context 'asking for all users' do
+      before { get '/api/users', headers: first.create_new_auth_token }
+      it 'returns users' do
+        expect(json).not_to be_empty
+        expect(json.size).to eq(10)
+      end
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
     end
-    it 'returns status code 200' do
-      expect(response).to have_http_status(200)
+    context 'search with state_id' do
+      before {
+        User.first.update(state_id: State.create(name: 'Offline').id)
+        get '/api/users', headers: first.create_new_auth_token, params: { state_id: User.first.state_id}
+      }
+      it 'returns users' do
+        expect(json).not_to be_empty
+        expect(json.size).to eq(1)
+      end
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
     end
   end
+
+
 
   describe 'retrieves one user' do
     before {

@@ -22,14 +22,31 @@ describe "Guild API", type: :request do
   end
 
   describe "Creates a guild" do
-    before do
-      @params = FactoryBot.attributes_for(:guild)
-      @params['officer_ids'] = [User.first.id, User.last.id]
-      post "/api/guilds/", params: @params
+    context "when the request is valid" do
+      before do
+        @params = FactoryBot.attributes_for(:guild)
+        @params['officer_ids'] = [User.first.id, User.last.id]
+        post "/api/guilds/", params: @params
+      end
+
+      it "returns status code 201" do
+        expect(response).to have_http_status(201)
+      end
     end
 
-    it "returns status code 201" do
-      expect(response).to have_http_status(201)
+    context 'when the request is invalid' do
+      before {
+        post '/api/guilds/', params: {}
+      }
+
+      it 'returns status code 422' do
+        expect(response).to have_http_status(422)
+      end
+
+      it 'returns a validation failure message' do
+        expect(response.body)
+          .to match("can't be blank")
+      end
     end
   end
 
@@ -69,4 +86,7 @@ describe "Guild API", type: :request do
       expect(response).to have_http_status(204)
     end
   end
+
+
+
 end
