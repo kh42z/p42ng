@@ -9,7 +9,11 @@
     height: 82px;
     width: 100%;
 
+<<<<<<< HEAD
     z-index: 1;
+=======
+   z-index: 1;
+>>>>>>> post test
 
     display: grid;
     grid-gap: 8px;
