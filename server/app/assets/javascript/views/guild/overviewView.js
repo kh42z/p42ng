@@ -1,10 +1,10 @@
 export const GuildOverviewView = Backbone.View.extend({
   el: $('#app'),
   initialize: function () {
-		this.render()
+    this.render()
   },
   render: function () {
-		console.log("overview")
+    console.log('overview')
     this.$el.html('overview')
   }
 })

@@ -47,19 +47,16 @@ export const Router = Backbone.Router.extend({
     tournaments: 'tournaments_view',
     connexion: 'connexion',
     exit: 'oauth_view',
-    '': 'oauth_view',
-    oauth: 'oauth_view'
+    '': 'oauth_view'
   },
 
   connexion: function (url) {
     this.oauthService = new OauthService()
     this.userLogged.getUser(window.localStorage.getItem('user_id'))
-    const homeView = new HomeView()
     this.navigate('#home', { trigger: true })
   },
 
   refresh: function () {
-    const url = Backbone.history.fragment
     this.userLogged.getUser(window.localStorage.getItem('user_id'))
     this.headerView = new HeaderView({ model: this.userLogged })
   },
@@ -74,6 +71,7 @@ export const Router = Backbone.Router.extend({
   oauth_view: function (url) {
     if (this.headerView !== undefined) { this.headerView.remove() }
     window.localStorage.clear()
+    history.replaceState({}, null, '/')
     const oauthView = new OauthView()
   },
 
