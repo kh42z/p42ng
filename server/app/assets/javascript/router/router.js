@@ -28,10 +28,10 @@ import { OauthService } from '../service/oauthService.js'
 export const Router = Backbone.Router.extend({
   initialize: function () {
     this.oauthService = undefined
-    this.userLogged = undefined
+    this.userLogged = new User()
+    this.headerView = new HeaderView({ model: this.userLogged })
     this.profileController = new ProfileController()
     this.guildController = new GuildController()
-    this.userLogged = new User()
   },
 
   routes:
@@ -45,69 +45,84 @@ export const Router = Backbone.Router.extend({
     'chat/:id(/:page)': 'chat_view',
     leaderboard: 'leaderboard_view',
     tournaments: 'tournaments_view',
-    connexion: 'connexion_view',
-    '': 'oauth_view'
+    connexion: 'connexion',
+    exit: 'oauth_view',
+    '': 'oauth_view',
+    oauth: 'oauth_view'
+  },
+
+  connexion: function (url) {
+    this.oauthService = new OauthService()
+    this.userLogged.getUser(window.localStorage.getItem('user_id'))
+    const homeView = new HomeView()
+    this.navigate('#home', { trigger: true })
+  },
+
+  refresh: function () {
+    const url = Backbone.history.fragment
+    this.userLogged.getUser(window.localStorage.getItem('user_id'))
+    this.headerView = new HeaderView({ model: this.userLogged })
+  },
+
+  accessPage: function () {
+    if (window.localStorage.getItem('access-token') === null) {
+      this.oauth_view()
+      return 1
+    } else if (performance.navigation.type === 1) { this.refresh() }
   },
 
   oauth_view: function (url) {
+    if (this.headerView !== undefined) { this.headerView.remove() }
+    window.localStorage.clear()
     const oauthView = new OauthView()
   },
 
-  connexion_view: function (url) {
-    this.oauthService = new OauthService()
-    this.userLogged.getUser(this.oauthService.getUserId())
-    this.headerView = new HeaderView({ model: this.userLogged })
-    const homeView = new HomeView()
-    homeView.render()
-  },
-
   home_view: function (url) {
+    if (this.accessPage()) { return }
     const homeView = new HomeView()
-    homeView.render()
   },
 
   users_view: function (url) {
-    console.log('user view')
+    if (this.accessPage()) { return }
     const usersView = new UsersView({ model: this.userLogged })
-    usersView.render()
   },
 
   pong_view: function (url) {
-    console.log('in pong view')
+    if (this.accessPage()) { return }
     const pongView = new PongView()
     pongView.render()
   },
 
   profile_view: function (id, page) {
-    console.log('profile ' + id + page)
+    if (this.accessPage()) { return }
     //	let profileController = new ProfileController(id, page, "model control not implemented yet")
     this.profileController.loadView(id, page, 'model control not implemented yet')
   },
 
   guilds_view: function () {
+    if (this.accessPage()) { return }
     const guild = new Guild()
-    console.log('guild_list')
     const guilds = new Guilds()
     const guildsView = new GuildsView({ collection: guilds })
   },
 
   guild_view: function (id, page) {
-    console.log('guild ' + id + page)
+    if (this.accessPage()) { return }
     this.guildController.loadView(id, page, 'a model')
   },
 
   chat_view: function (id, page) {
-    console.log('chat ' + id + page)
+    if (this.accessPage()) { }
   },
 
   leaderboard_view: function () {
-    console.log('leaderboard')
+    if (this.accessPage()) { return }
     const leaderboardView = new LeaderboardView()
     leaderboardView.render()
   },
 
   tournaments_view: function () {
-    console.log('Tournaments')
+    if (this.accessPage()) { return }
     const tournamentsView = new TournamentsView()
     tournamentsView.render()
   }

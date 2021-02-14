@@ -1,7 +1,6 @@
 export const HeaderView = Backbone.View.extend({
   initialize: function () {
     this.templateTopNav = Handlebars.templates.topnav
-
     this.listenTo(this.model, 'sync', function () {
       this.render()
     }, this)
