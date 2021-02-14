@@ -4,13 +4,11 @@ export const UsersView = Backbone.View.extend({
   },
 
   initialize: function () {
-    // this.listenTo(this.model, 'sync', function () {
-    //   this.render()
-    // }, this)
+    this.render()
 
-    // this.listenTo(this.model, 'change', function () {
-    //   this.render()
-    // }, this)
+    this.listenTo(this.model, 'change', function () {
+      this.render()
+    }, this)
   },
   el: $('#app'),
 

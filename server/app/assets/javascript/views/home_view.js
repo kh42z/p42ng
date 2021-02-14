@@ -1,6 +1,7 @@
 export const HomeView = Backbone.View.extend({
   initialize: function () {
     this.templateHome = Handlebars.templates.home
+    this.render()
   },
   el: $('#app'),
   render: function () {
