@@ -57,10 +57,11 @@ export const Router = Backbone.Router.extend({
   },
 
   accessPage: function () {
+    console.log(performance.navigation.type)
     if (window.localStorage.getItem('access-token') === null) {
       this.oauth_view()
       return 1
-    } else if (performance.navigation.type === 1) {
+    } else if (performance.navigation.type === 1 || performance.navigation.type === 2) {
       this.userLogged.getUser(window.localStorage.getItem('user_id'))
     }
   },
