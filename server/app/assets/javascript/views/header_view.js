@@ -4,6 +4,10 @@ export const HeaderView = Backbone.View.extend({
     this.listenTo(this.model, 'sync', function () {
       this.render()
     }, this)
+
+    this.listenTo(this.model, 'change', function () {
+      this.render()
+    }, this)
   },
   el: $('#header'),
   render: function () {
