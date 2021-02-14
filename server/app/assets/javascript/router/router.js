@@ -56,16 +56,13 @@ export const Router = Backbone.Router.extend({
     this.navigate('#home', { trigger: true })
   },
 
-  refresh: function () {
-    this.userLogged.getUser(window.localStorage.getItem('user_id'))
-    this.headerView = new HeaderView({ model: this.userLogged })
-  },
-
   accessPage: function () {
     if (window.localStorage.getItem('access-token') === null) {
       this.oauth_view()
       return 1
-    } else if (performance.navigation.type === 1) { this.refresh() }
+    } else if (performance.navigation.type === 1) {
+      this.userLogged.getUser(window.localStorage.getItem('user_id'))
+    }
   },
 
   oauth_view: function (url) {
