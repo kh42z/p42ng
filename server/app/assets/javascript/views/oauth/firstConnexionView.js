@@ -15,18 +15,7 @@ export const FirstConnexionView = Backbone.View.extend({
   },
 
   change_nickname: function () {
-    console.log('change nickname')
     this.model.saveNickname(document.getElementById('nickname').value)
-    this.model.save({ first_login: false }, { patch: true },
-      {
-        success: function (response) {
-          console.log('success')
-          console.log(response)
-        },
-        error: function (response) {
-          console.log('error')
-          console.log(response)
-        }
-      })
+    this.model.saveFirstLogin(false)
   }
 })

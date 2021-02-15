@@ -54,10 +54,8 @@ export const Router = Backbone.Router.extend({
 
   connexion: function (url) {
     this.oauthService = new OauthService()
-    // this.userLogged.fetchUser(window.localStorage.getItem('user_id'))
     const fetchUser = async () => {
       await this.userLogged.fetchUser(window.localStorage.getItem('user_id'))
-      this.userLogged.save({ first_login: true }, { patch: true })
       if (this.userLogged.get('first_login')) { this.navigate('#firstConnexion', { trigger: true }) } else {
         this.navigate('#home', { trigger: true })
       }
@@ -83,6 +81,7 @@ export const Router = Backbone.Router.extend({
 
   oauth_view: function (url) {
     if (this.headerView !== undefined) { this.headerView.remove() }
+    this.headerView = new HeaderView({ model: this.userLogged })
     window.localStorage.clear()
     history.replaceState({}, null, '/')
     const oauthView = new OauthView()
@@ -90,6 +89,7 @@ export const Router = Backbone.Router.extend({
 
   home_view: function (url) {
     if (this.accessPage()) { return }
+    this.headerView.render()
     console.log(this.userLogged.get('nickname'))
     const homeView = new HomeView()
   },

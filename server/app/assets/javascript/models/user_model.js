@@ -66,5 +66,10 @@ export const User = Backbone.Model.extend({
         console.log(response)
       }
     })
+  },
+
+  saveFirstLogin: function (firstLogin) {
+    this.set({ first_login: firstLogin })
+    this.save({ first_login: firstLogin }, { patch: true })
   }
 })
