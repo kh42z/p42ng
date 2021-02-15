@@ -7,6 +7,8 @@ module Users
     end
 
     def assign_provider_attrs(user, auth_hash)
+      return unless @resource.new_record?
+
       user.assign_attributes({
                                email: auth_hash['info']['email'],
                                nickname: auth_hash['info']['nickname'],
