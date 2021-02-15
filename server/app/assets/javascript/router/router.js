@@ -46,16 +46,10 @@ export const Router = Backbone.Router.extend({
     'chat/:id(/:page)': 'chat_view',
     leaderboard: 'leaderboard_view',
     tournaments: 'tournaments_view',
-<<<<<<< HEAD
     connexion: 'connexion',
     exit: 'oauth_view',
     firstConnexion: 'firstConnexion_view',
     '': 'oauth_view'
-=======
-    connexion: 'connexion_view',
-    '': 'home_view'
-    // '': 'oauth_view'
->>>>>>> post test
   },
 
   connexion: function (url) {
@@ -118,24 +112,10 @@ export const Router = Backbone.Router.extend({
   },
 
   guilds_view: function () {
-<<<<<<< HEAD
     if (this.accessPage()) { return }
     const guild = new Guild()
     const guilds = new Guilds()
     const guildsView = new GuildsView({ collection: guilds })
-=======
-    const guild = new Guild({ oauthService: this.oauthService })
-    // guild.create('/api/guilds')
-    guild.set({
-      name: 'teste',
-      anagram: 'azedz',
-      owner_id: 1
-    })
-    guild.save()
-    console.log('guild_list')
-    // const guilds = new Guilds()
-    // const guildsView = new GuildsView({ collection: guilds })
->>>>>>> post test
   },
 
   guild_view: function (id, page) {

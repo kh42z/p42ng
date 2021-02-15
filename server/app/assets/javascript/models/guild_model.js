@@ -36,14 +36,6 @@ export const Guild = Backbone.Model.extend({
   create: function (url) {
     this.set({
       url: url,
-<<<<<<< HEAD
-=======
-      headers: {
-        // 'access-token': oauthService.getAuthToken(),
-        // uid: oauthService.getUid(),
-        // client: oauthService.getClientId()
-      },
->>>>>>> post test
       data: {
         name: 'test',
         anagram: '',
