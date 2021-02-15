@@ -5,7 +5,7 @@ module Api
     before_action :set_guild, only: %i[show update destroy]
 
     def index
-      json_response(Guild.all)
+      json_response(Guild.all.order(:name))
     end
 
     def update
@@ -15,9 +15,6 @@ module Api
     end
 
     def create
-      # raise params.inspect - stop at error and print
-      # puts params.inspect - print output
-      # binding.irb - breakpoint debug
       guild = Guild.new(guild_params)
       if guild.save
         create_officers(guild.id)
@@ -55,7 +52,7 @@ module Api
 
     def guild_params
       params.permit(:name, :anagram, :owner_id)
-      # params.require(:guild).permit(%i[name anagram owner_id officer_ids])
+      # puts params.require(:guild).permit(%i[name anagram owner_id officer_ids]).inspect
     end
 
     def set_guild

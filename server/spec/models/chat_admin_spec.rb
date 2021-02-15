@@ -15,5 +15,4 @@ RSpec.describe ChatAdmin, type: :model do
       expect(subject.chat.owner.nickname).to eq("Tom")
     end
   end
-
 end

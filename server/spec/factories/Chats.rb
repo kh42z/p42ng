@@ -17,7 +17,6 @@ FactoryBot.define do
       end
       after(:create) do |chat, evaluator|
         create_list(:chat_admin, evaluator.admins_count, chat: chat)
-        #guild.reload
       end
     end
   end
