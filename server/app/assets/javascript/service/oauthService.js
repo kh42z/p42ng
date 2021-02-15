@@ -8,9 +8,9 @@ export class OauthService {
     window.localStorage.setItem('user_id', this.urlParams.get('user_id'))
     $.ajaxSetup({
       headers: {
-        'access-token': window.localStorage.getItem('access-token'),
-        uid: window.localStorage.getItem('uid'),
-        client: window.localStorage.getItem('client_id')
+        'access-token': this.urlParams.get('auth_token'),
+        uid: this.urlParams.get('uid'),
+        client: this.urlParams.get('client_id')
       }
     })
   }

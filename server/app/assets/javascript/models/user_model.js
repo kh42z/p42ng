@@ -50,6 +50,7 @@ export const User = Backbone.Model.extend({
       }
     })
   },
+<<<<<<< HEAD
 
   saveNickname: function (nickname) {
     console.log('save nickname')
@@ -67,8 +68,23 @@ export const User = Backbone.Model.extend({
       }
     })
   }
+=======
+>>>>>>> save login avancement
 
-  getFirstLogin(): function () {
-    
+  saveNickname: function (nickname) {
+    console.log('save nickname')
+    this.set({ nickname: nickname })
+    console.log(this.get('nickname'))
+    console.log(this.nickname)
+    this.save({ nickname: this.get('nickname') }, { patch: true }, {
+      success: function (response) {
+        console.log('success')
+        console.log(response)
+      },
+      error: function (response) {
+        console.log('error')
+        console.log(response)
+      }
+    })
   }
 })

@@ -7,6 +7,7 @@ import { LeaderboardView } from '../views/leaderboard/leaderboardView.js'
 import { TournamentsView } from '../views/tournaments/tournamentsView.js'
 import { OauthView } from '../views/oauth/oauthView.js'
 import { GuildsView } from '../views/guild/guildsView.js'
+import { FirstConnexionView } from '../views/oauth/firstConnexionView.js'
 
 // models
 import { User } from '../models/user_model'
@@ -48,6 +49,7 @@ export const Router = Backbone.Router.extend({
 <<<<<<< HEAD
     connexion: 'connexion',
     exit: 'oauth_view',
+    firstConnexion: 'firstConnexion_view',
     '': 'oauth_view'
 =======
     connexion: 'connexion_view',
@@ -58,10 +60,15 @@ export const Router = Backbone.Router.extend({
 
   connexion: function (url) {
     this.oauthService = new OauthService()
-    this.userLogged.fetchUser(window.localStorage.getItem('user_id'))
-    if (this.userLogged.getFirstLogin()) { this.navigate('#firstConnexion', { trigger: true }) } else {
-      this.navigate('#home', { trigger: true })
+    // this.userLogged.fetchUser(window.localStorage.getItem('user_id'))
+    const fetchUser = async () => {
+      await this.userLogged.fetchUser(window.localStorage.getItem('user_id'))
+      this.userLogged.save({ first_login: true }, { patch: true })
+      if (this.userLogged.get('first_login')) { this.navigate('#firstConnexion', { trigger: true }) } else {
+        this.navigate('#home', { trigger: true })
+      }
     }
+    fetchUser()
   },
 
   accessPage: function () {
@@ -73,9 +80,12 @@ export const Router = Backbone.Router.extend({
     }
   },
 
-  firstConnexion: function () {
-
-  }
+  firstConnexion_view: function () {
+    if (this.headerView !== undefined) { this.headerView.remove() } // TO DO
+    console.log('first connexion view')
+    if (this.accessPage()) { return }
+    const firstConnexionView = new FirstConnexionView({ model: this.userLogged })
+  },
 
   oauth_view: function (url) {
     if (this.headerView !== undefined) { this.headerView.remove() }
@@ -86,6 +96,7 @@ export const Router = Backbone.Router.extend({
 
   home_view: function (url) {
     if (this.accessPage()) { return }
+    console.log(this.userLogged.get('nickname'))
     const homeView = new HomeView()
   },
 
