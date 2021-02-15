@@ -5,6 +5,8 @@ module Api
   class UsersController < ApplicationController
     before_action :authenticate_user!
     before_action :set_user, only: %i[show update destroy]
+    before_action :allowed?, only: %i[update destroy]
+    skip_after_action :update_auth_header, only: [:destroy]
 
     UserReducer = Rack::Reducer.new(
       User.all,
@@ -33,6 +35,14 @@ module Api
     end
 
     private
+
+    def allowed?
+      return unless current_user.id != @user.id
+
+      render json: {
+        errors: [I18n.t('notAllowed')]
+      }, status: 401
+    end
 
     def user_params
       params.permit(:two_factor, :nickname, :first_login)

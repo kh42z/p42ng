@@ -59,7 +59,7 @@ RSpec.describe 'Users', type: :request do
 
   describe 'modifies one user' do
     before {
-      patch "/api/users/#{user_id}", params: { 'nickname' => 'Michel' }, headers: first.create_new_auth_token
+      patch "/api/users/#{user_id}", params: { 'nickname' => 'Michel' }, headers: users.last.create_new_auth_token
     }
     it 'update user' do
       expect(json).not_to be_empty
@@ -72,7 +72,8 @@ RSpec.describe 'Users', type: :request do
 
   describe 'delete one user' do
     before {
-      delete "/api/users/#{user_id}", headers: first.create_new_auth_token
+      @last = users.last
+      delete "/api/users/#{@last.id}", headers: @last.create_new_auth_token
     }
     it 'returns status code 204' do
       expect(response).to have_http_status(204)
