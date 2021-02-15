@@ -58,19 +58,24 @@ export const Router = Backbone.Router.extend({
 
   connexion: function (url) {
     this.oauthService = new OauthService()
-    this.userLogged.getUser(window.localStorage.getItem('user_id'))
-    this.navigate('#home', { trigger: true })
+    this.userLogged.fetchUser(window.localStorage.getItem('user_id'))
+    if (this.userLogged.getFirstLogin()) { this.navigate('#firstConnexion', { trigger: true }) } else {
+      this.navigate('#home', { trigger: true })
+    }
   },
 
   accessPage: function () {
-    console.log(performance.navigation.type)
     if (window.localStorage.getItem('access-token') === null) {
       this.oauth_view()
       return 1
     } else if (performance.navigation.type === 1 || performance.navigation.type === 2) {
-      this.userLogged.getUser(window.localStorage.getItem('user_id'))
+      this.userLogged.fetchUser(window.localStorage.getItem('user_id'))
     }
   },
+
+  firstConnexion: function () {
+
+  }
 
   oauth_view: function (url) {
     if (this.headerView !== undefined) { this.headerView.remove() }

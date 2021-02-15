@@ -67,4 +67,8 @@ export const User = Backbone.Model.extend({
       }
     })
   }
+
+  getFirstLogin(): function () {
+    
+  }
 })

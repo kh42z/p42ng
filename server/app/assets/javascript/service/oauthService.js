@@ -14,4 +14,8 @@ export class OauthService {
       }
     })
   }
+
+  isFirstConnexion () {
+    return this.urlParams.get('connexion')
+  }
 }
