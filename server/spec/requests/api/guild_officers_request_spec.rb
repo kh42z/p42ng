@@ -3,34 +3,29 @@
 require 'rails_helper'
 
 RSpec.describe "GuildOfficers", type: :request do
-  let!(:guild) { FactoryBot.create(:guild, name: "YouThink", anagram: "YITOK") }
-  let!(:user) { FactoryBot.create(:user, nickname: "Tom") }
-  let!(:guild_officers) { FactoryBot.create(:guild_officer, guild_id: guild.id, user_id: user.id) }
+
   describe 'retrieves all officers of specific guild' do
+    let(:guilds) { create_list(:guild_with_officers, 2) }
     before do
-      get api_guild_guild_officers_path(guild_id: guild.id)
+      get api_guild_guild_officers_path(guilds)
     end
 
     it 'returns guild officers' do
       expect(json).not_to be_empty
-      expect(json.size).to eq(1)
-    end
-
-    it 'returns status code 200' do
+      expect(json.size).to eq(2)
       expect(response).to have_http_status(200)
     end
   end
 
   describe 'create one officer' do
     before {
-      newUser = FactoryBot.create(:user)
-      put "/api/guilds/#{Guild.first.id}/guild_officers/#{newUser.id}"
+      user = create(:user)
+      guild = create(:guild)
+      put "/api/guilds/#{guild.id}/guild_officers/#{user.id}"
     }
-
-    it 'returns new officer' do
-      expect(GuildOfficer.all.count).to eq(2)
+    it 'returns new officers' do
+      expect(GuildOfficer.all.count).to eq(1)
     end
-
     it 'returns status code 201' do
       expect(response).to have_http_status(201)
     end
@@ -38,8 +33,13 @@ RSpec.describe "GuildOfficers", type: :request do
 
   describe 'delete one officer' do
     before {
-      delete "/api/guilds/#{Guild.first.id}/guild_officers/#{Guild.first.guild_officers.first.user_id}"
+      guild = create(:guild_with_officers)
+      delete "/api/guilds/#{guild.id}/guild_officers/#{guild.guild_officers.first.user_id}"
     }
+    it 'returns new officers' do
+      expect(GuildOfficer.all.count).to eq(1)
+    end
+
     it 'returns status code 204' do
       expect(response).to have_http_status(204)
     end
