@@ -35,7 +35,7 @@ module Api
     private
 
     def user_params
-      params.permit(:two_factor)
+      params.permit(:two_factor, :nickname, :first_login)
     end
 
     def set_user

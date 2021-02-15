@@ -14,6 +14,7 @@ class User < ApplicationRecord
   validates_presence_of :nickname
   validates_presence_of :image_url
   validates_inclusion_of :two_factor, in: [true, false]
+  validates_inclusion_of :first_login, in: [true, false]
   validates_presence_of :ladder_games_won
   validates_presence_of :ladder_games_lost
 end

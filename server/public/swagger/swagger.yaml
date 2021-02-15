@@ -402,6 +402,10 @@ paths:
               properties:
                 two_factor:
                   type: boolean
+                first_login:
+                  type: boolean
+                nickname:
+                  type: string
     get:
       summary: Retrieves an user
       tags:
@@ -489,6 +493,8 @@ components:
           type: integer
           nullable: true
         two_factor:
+          type: boolean
+        first_login:
           type: boolean
         nickname:
           type: string

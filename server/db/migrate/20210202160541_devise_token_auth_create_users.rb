@@ -39,6 +39,7 @@ class DeviseTokenAuthCreateUsers < ActiveRecord::Migration[6.0]
       ###
       t.string :image_url
       t.boolean :two_factor, default: false
+      t.boolean :first_login, default: true
       t.integer :ladder_games_won, default: 0
       t.integer :ladder_games_lost, default: 0
       t.references :ladder, foreign_key: true

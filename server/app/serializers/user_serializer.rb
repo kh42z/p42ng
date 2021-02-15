@@ -11,6 +11,7 @@ class UserSerializer < ActiveModel::Serializer
              :ladder_games_won,
              :ladder_games_lost,
              :uid,
+             :first_login,
              :chat_ids
 
   def chat_ids
