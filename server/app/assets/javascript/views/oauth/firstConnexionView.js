@@ -2,10 +2,13 @@ export const FirstConnexionView = Backbone.View.extend({
   events: {
     'click .validate': 'change_nickname'
   },
+
   initialize: function () {
     this.render()
   },
+
   el: $('#app'),
+
   render: function () {
     this.template = Handlebars.templates.firstConnexion
     const context = {}
@@ -15,7 +18,10 @@ export const FirstConnexionView = Backbone.View.extend({
   },
 
   change_nickname: function () {
-    this.model.saveNickname(document.getElementById('nickname').value)
-    this.model.saveFirstLogin(false)
+    const saveNickname = async () => {
+      await this.model.saveNickname(document.getElementById('nickname').value)
+      this.model.saveFirstLogin(false)
+    }
+    saveNickname()
   }
 })

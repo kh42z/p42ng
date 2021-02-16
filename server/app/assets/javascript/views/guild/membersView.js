@@ -1,10 +1,11 @@
 export const MembersView = Backbone.View.extend({
-  el: $('#app'),
   initialize: function () {
-		this.render()
+    this.render()
   },
+  el: $('#app'),
   render: function () {
-		console.log('Members')
+    console.log('Members')
     this.$el.html('Guild members')
+    return this
   }
 })

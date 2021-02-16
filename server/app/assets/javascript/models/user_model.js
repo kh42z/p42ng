@@ -53,7 +53,7 @@ export const User = Backbone.Model.extend({
 
   saveNickname: function (nickname) {
     this.set({ nickname: nickname })
-    this.save({ nickname: this.get('nickname') }, { patch: true })
+    return this.save({ nickname: this.get('nickname') }, { patch: true })
   },
 
   saveFirstLogin: function (firstLogin) {
