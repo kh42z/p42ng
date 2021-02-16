@@ -4,8 +4,8 @@ module Api
   # Users Controller
   class UsersController < ApplicationController
     before_action :authenticate_user!
-    before_action :set_user, only: %i[show update destroy]
-    before_action :allowed?, only: %i[update destroy]
+    before_action :set_user, only: %i[show update destroy upload_avatar]
+    before_action :allowed?, only: %i[update destroy upload_avatar]
     skip_after_action :update_auth_header, only: [:destroy]
 
     UserReducer = Rack::Reducer.new(
@@ -32,6 +32,15 @@ module Api
     def destroy
       @user.destroy
       head :no_content
+    end
+
+    def upload_avatar
+      return unless params.key?(:avatar)
+
+      @user.avatar.attach(params[:avatar])
+      url = url_for(@user.avatar)
+      @user.update(image_url: url)
+      json_response({ image_url: url })
     end
 
     private
