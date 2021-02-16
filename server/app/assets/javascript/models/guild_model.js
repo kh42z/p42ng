@@ -8,6 +8,7 @@ export const Guild = Backbone.Model.extend({
     oauthService: undefined
   },
 
+
   initialize: function (id) {
     /* this.on('all', function (e) {
       //
@@ -26,6 +27,7 @@ export const Guild = Backbone.Model.extend({
   //   })
   //   console.log(this.id)
   },
+
 
   urlRoot: 'api/guilds',
   url: function () {

@@ -1,11 +1,35 @@
 export const MembersView = Backbone.View.extend({
   initialize: function () {
-    this.render()
+		this.users = this.model.get("users").get("obj")
+		this.guilds = this.model.get("guilds").get("obj")
+		this.listenTo(this.guilds, 'sync', function (){this.getUsers()}, this)
+		//this.render()
   },
-  el: $('#app'),
+
+	getUsers: function() {
+		this.listenTo(this.users, 'sync', function () {this.render()}, this)
+	},
+
   render: function () {
-    console.log('Members')
-    this.$el.html('Guild members')
-    return this
+
+		const template = Handlebars.templates.guild_members
+		let members = Array()
+
+		for (let i = 1; i <= this.users.length; i++)
+		{
+			if (this.users.get(i).get("guild_id") == this.id) // get here ????
+				members.push(JSON.parse(JSON.stringify(this.users.at(i))))
+		}
+
+		let context = {guild_name: this.guilds.at(this.id).get("name"),
+		anagram: this.guilds.at(this.id).get("anagram"),
+		members: members}
+		//console.log(templateData)
+		let templateData = template(context)
+		console.log(this.guilds.at(this.id).get("name"))
+
+    this.$el.html(templateData)
   }
+
+
 })

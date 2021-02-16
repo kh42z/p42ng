@@ -1,23 +1,27 @@
 import { Guild } from '../../models/guild_model.js'
 import { Ladder } from '../../models/ladderModel.js'
 
+// useless view for test only
+
 export const ProfileOverviewView = Backbone.View.extend({
   el: $('#app'),
   initialize: function () {
     this.templateProfileOverview = Handlebars.templates.profileOverview
     //	this.userHandler = new UserHandler()
-    this.listenTo(this.model, 'sync', function () {
+		this.users = this.model.get("users").get("obj")
+	//	this.guilds = this.model.get("guilds").get("obj")
+
+		console.log(this.user)
+    this.listenTo(this.users, 'sync', function () {
       this.getGuild()
     }, this)
-
-    //	while (this.model.get("guildModel") === undefined) ;
-    console.log('dsqds')
-    // this.userHandler = new UserHandler()
   },
 
   getGuild: function () {
-    this.guild = new Guild(this.model.get('guild_id'))
-    this.listenTo(this.guild, 'sync', function () {
+    //this.guild = new Guild(this.model.get('guild_id'))
+		console.log("yo")
+		this.guilds = this.model.get("guilds").get("obj")
+    this.listenTo(this.guilds, 'sync', function () {
       this.getLadder()
     }, this)
   },
@@ -25,16 +29,17 @@ export const ProfileOverviewView = Backbone.View.extend({
   getLadder: function () {
     //		this.ladder = new Ladder(0)
     //	this.listenTo(this.ladder, 'sync', function () {
+		console.log("yes")
     this.render()
     // }, this)
   },
 
   render: function () {
     const context = {
-      nickname: this.model.get('nickname'),
-      user_mmr: this.model.get('mmr'),
-      user_guild: this.guild.get('anagram'),
-      user_guild_id: this.model.get('guild_id')
+      nickname: this.users.at(this.id).get('nickname'),
+      user_mmr: this.users.at(this.id).get('mmr'),
+      user_guild: this.guilds.at(this.id).get('anagram'),
+      user_guild_id: this.users.at(this.id).get('guild_id')
       //	user_ladder: this.ladder.get("name")
     }
 

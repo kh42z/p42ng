@@ -42,8 +42,6 @@ RSpec.describe 'Users', type: :request do
     end
   end
 
-
-
   describe 'retrieves one user' do
     before {
       get "/api/users/#{user_id}", headers: first.create_new_auth_token

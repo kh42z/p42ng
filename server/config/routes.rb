@@ -3,7 +3,10 @@
 Rails.application.routes.draw do
   get 'chat_admins/index'
   namespace :api do
-    resources :users, :ladders, :guilds, :chats
+    resources :ladders, :guilds, :chats
+    resources :users do
+      post :avatar, on: :member, to: 'users#upload_avatar'
+    end
     resources :states
     resources :guilds do
       resources :guild_officers # only: [:index]

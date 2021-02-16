@@ -16,8 +16,12 @@ module Api
 
     def create
       guild = Guild.new(guild_params)
+      guild.score = 0
+      guild.owner = current_user
+
       if guild.save
         create_officers(guild.id)
+        # redirect_to api_guild_path(guild.id)
         json_response(guild, :created)
       else
         json_response(guild.errors, :unprocessable_entity)
@@ -25,7 +29,8 @@ module Api
     end
 
     def destroy
-      Guild.find(params[:id]).destroy!
+      @guild.destroy!
+      # redirect_to api_guilds_path
       head :no_content
     end
 
@@ -52,7 +57,6 @@ module Api
 
     def guild_params
       params.permit(:name, :anagram, :owner_id)
-      # puts params.require(:guild).permit(%i[name anagram owner_id officer_ids]).inspect
     end
 
     def set_guild

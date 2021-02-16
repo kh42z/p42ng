@@ -1,6 +1,6 @@
 export const HeaderView = Backbone.View.extend({
   events: {
-    'click .btn': 'change_url'
+    'click .btn': 'target_url'
   },
   initialize: function () {
     // this.listenTo(this.model, 'sync', function () {
@@ -17,9 +17,6 @@ export const HeaderView = Backbone.View.extend({
     this.urlParams = new URLSearchParams(window.location.search)
     const array = {}
 
-    console.log('test')
-    console.log(target)
-
     if (target === undefined) { target = '#home' }
     array[target.substring(1)] = true
     array.active = 'active'
@@ -31,10 +28,8 @@ export const HeaderView = Backbone.View.extend({
     return this
   },
 
-  change_url: function (e) {
+  target_url: function (e) {
     const target = $(e.currentTarget).attr('href')
-    // history.replaceState({}, null, $(e.currentTarget).attr('href'))
     this.render(target)
-    // window.router.navigate(Backbone.history.getFragment(), { trigger: true })
   }
 })
