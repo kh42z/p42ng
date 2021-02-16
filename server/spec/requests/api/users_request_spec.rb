@@ -30,7 +30,7 @@ RSpec.describe 'Users', type: :request do
     context 'search with state_id' do
       before {
         User.first.update(state_id: State.create(name: 'Offline').id)
-        get '/api/users', headers: first.create_new_auth_token, params: { state_id: User.first.state_id}
+        get '/api/users', headers: first.create_new_auth_token, params: {state_id: User.first.state_id}
       }
       it 'returns users' do
         expect(json).not_to be_empty
@@ -59,7 +59,7 @@ RSpec.describe 'Users', type: :request do
 
   describe 'modifies one user' do
     before {
-      patch "/api/users/#{user_id}", params: { 'nickname' => 'Michel' }, headers: users.last.create_new_auth_token
+      patch "/api/users/#{user_id}", params: {'nickname' => 'Michel'}, headers: users.last.create_new_auth_token
     }
     it 'update user' do
       expect(json).not_to be_empty
@@ -79,4 +79,15 @@ RSpec.describe 'Users', type: :request do
       expect(response).to have_http_status(204)
     end
   end
+
+  #describe 'create one user avatar' do
+  #  before {
+  #    post "/api/users/#{user_id}/avatar", headers: users.last.create_new_auth_token,
+  #                                         params: {'avatar': File.open(File.join(Rails.root, "/public/images/image.jpg"))}
+  #  }
+  #
+  #  it 'returns status code 200' do
+  #    expect(response).to have_http_status(200)
+  #  end
+  #end
 end

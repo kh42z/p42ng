@@ -88,32 +88,6 @@ paths:
           $ref: '#/components/responses/403'
         '500':
           $ref: '#/components/responses/500'
-  '/api/chats/{id}/chat_admins':
-    get:
-      summary: Retrives all admins of current chat
-      tags:
-        - ChatAdmins
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: chat admin added
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/chat_admins"
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '500':
-          $ref: '#/components/responses/500'
   "/api/guilds/":
     get:
       summary: Retrieves guilds
@@ -276,6 +250,37 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/state"
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
+  "/api/matchsHistory":
+    get:
+      summary: Retrieves all matchs played
+      tags:
+        - MatchsHistory
+      parameters:
+        - in: query
+          name: user_id
+          schema:
+            type: integer
+          description: filter by user_id (either win or loose)
+        - in: query
+          name: type_id
+          schema:
+            type: integer
+          description: filter by game type_id (duel/ladder/tournament)
+      responses:
+        '200':
+          description: Matchs found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/arrayOfMatchs"
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -509,6 +514,23 @@ components:
       name: uid
       in: header
   schemas:
+    arrayOfMatchs:
+      type: array
+      items:
+        $ref:  '#/components/schemas/match'
+    match:
+      type: object
+      properties:
+        winner_id:
+          type: integer
+          description: user_id
+        looser_id:
+          type: integer
+          description: user_id
+        type_id:
+          type: integer
+        created_at:
+          type: string
     user:
       type: object
       properties:
