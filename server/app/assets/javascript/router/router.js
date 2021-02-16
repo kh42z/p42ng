@@ -19,19 +19,26 @@ import { GuildController } from '../views/guild/guildController.js'
 // models and collection
 import { Guilds } from '../collections/guilds_collection.js'
 import { Users } from '../collections/users_collection.js'
+import { Ladders } from '../collections/laddersCollection.js'
+import { Wrapper } from '../models/wrapper.js'
+import { SuperWrapper } from '../collections/superWrapper.js'
 
 // import { ChatController } from '../view/chat/chatController.js' // not here
 
 // services
 import { OauthService } from '../service/oauthService.js'
 
+// Views for test only
+import { TestView } from '../views/testView.js'
+
 export const Router = Backbone.Router.extend({
   initialize: function () {
     this.oauthService = undefined
     this.userLogged = new User()
-    this.headerView = new HeaderView({ model: this.userLogged })
+   	this.headerView = new HeaderView({ model: this.userLogged })
     this.profileController = new ProfileController()
     this.guildController = new GuildController()
+		this.superWrapper = undefined
   },
 
   routes:
@@ -40,13 +47,16 @@ export const Router = Backbone.Router.extend({
     home: 'home_view',
     pong: 'pong_view',
     'profile/:id(/:page)': 'profile_view',
+		'profile/:id(/:page)/': 'profile_view',
     guilds: 'guilds_view',
     'guild/:id(/:page)': 'guild_view',
+		'guild/:id(/:page)/': 'guild_view',
     'chat/:id(/:page)': 'chat_view',
     leaderboard: 'leaderboard_view',
     tournaments: 'tournaments_view',
     connexion: 'connexion',
     exit: 'oauth_view',
+		test: 'test_view',
     '': 'oauth_view'
   },
 
@@ -85,26 +95,23 @@ export const Router = Backbone.Router.extend({
 
   pong_view: function (url) {
     if (this.accessPage()) { return }
-    const pongView = new PongView()
+    const pongView = new PongView( {model: this.loadWraper() })
     pongView.render()
   },
 
   profile_view: function (id, page) {
     if (this.accessPage()) { return }
-    //	let profileController = new ProfileController(id, page, "model control not implemented yet")
-    this.profileController.loadView(id, page, 'model control not implemented yet')
+    this.profileController.loadView(id, page, this.loadWraper())
   },
 
   guilds_view: function () {
     if (this.accessPage()) { return }
-    const guild = new Guild()
-    const guilds = new Guilds()
-    const guildsView = new GuildsView({ collection: guilds })
+    const guildsView = new GuildsView({ model: this.loadWraper() })
   },
 
   guild_view: function (id, page) {
     if (this.accessPage()) { return }
-    this.guildController.loadView(id, page, 'a model')
+    this.guildController.loadView(id, page, this.loadWraper())
   },
 
   chat_view: function (id, page) {
@@ -113,13 +120,24 @@ export const Router = Backbone.Router.extend({
 
   leaderboard_view: function () {
     if (this.accessPage()) { return }
-    const leaderboardView = new LeaderboardView()
-    leaderboardView.render()
+    const leaderboardView = new LeaderboardView({ model: this.loadWraper() })
   },
 
   tournaments_view: function () {
     if (this.accessPage()) { return }
-    const tournamentsView = new TournamentsView()
-    tournamentsView.render()
-  }
+    const tournamentsView = new TournamentsView( {model: this.loadWraper()})
+  },
+
+	test_view: function () {
+		if (this.accessPage()) { return }
+		const testView = new TestView({ model: this.loadWraper()})
+
+	},
+
+	loadWraper: function () {
+			return new SuperWrapper({
+				users: new Wrapper({obj: new Users()}),
+			guilds: new Wrapper({obj: new Guilds()}),
+			userLogged: new Wrapper({obj: this.userLogged})});
+		}
 })

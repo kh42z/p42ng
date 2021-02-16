@@ -10,7 +10,10 @@
 									0
 									{{/if}}
 									</span>
-								<a href="#profile/{{owner_id}}/">owner: (owner, model User not loaded here yet: so i cannot print the name)</a>
+								<a href="#profile/{{owner_id}}/">owner: {{owner_nickname}}</a>
+								<p id=officers> officers:
+									{{#each officers}}<a href="#profile/{{id}}/match_history">{{nickname}} | </a>{{/each}}
+								</p>
         </div>
     {{/each}}
 </div>

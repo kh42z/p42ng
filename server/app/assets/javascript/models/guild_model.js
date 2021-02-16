@@ -7,25 +7,22 @@ export const Guild = Backbone.Model.extend({
     score: undefined,
     oauthService: undefined
   },
-
+/*
   initialize: function (id) {
-    /* this.on('all', function (e) {
-      //
-    }) */
-  //   this.url = '/api/guilds/' + id
-  //   console.log(this.url)
-  //   this.fetch({
-  //     url: this.url,
-  //     success: function (response) {
-  //       console.log(response)
-  //     },
-  //     error: function (errorResponse) {
-  //       console.log('error')
-  //       console.log(errorResponse)
-  //     }
-  //   })
-  //   console.log(this.id)
-  },
+     this.url = '/api/guilds/' + id
+     console.log(this.url)
+    	this.fetch({
+       url: this.url,
+       success: function (response) {
+         console.log(response)
+       },
+       error: function (errorResponse) {
+         console.log('error')
+         console.log(errorResponse)
+       }
+     })
+    console.log(this.id)
+  },*/
 
   urlRoot: 'api/guilds',
   url: function () {

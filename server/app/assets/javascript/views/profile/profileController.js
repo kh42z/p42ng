@@ -5,24 +5,20 @@ import { FriendsView } from './friendsView.js'
 import { ProfileOverviewView } from './overviewView.js'
 
 export class ProfileController {
-  loadView (id, page, model) {
+  loadView (id, page, wrapper) {
     let view
 
     if (page === 'achivements') {
-      view = new AchivementsView()
-      view.render()
+      view = new AchivementsView({ model: wrapper, id: id })
     } else if (page === 'edit_profile') {
-      view = new EditProfileView()
-      view.render()
-    } else if (page === 'match_history') {
-      view = new MatchHistoryView()
+      view = new EditProfileView({ model: wrapper, id: id })
+    } else if (page === 'match_history' || page == null || page == '' || page == '/') {
+      view = new MatchHistoryView({ model: wrapper, id: id })
       // veiw.render(user_collection, id)
-      view.render()
     } else if (page === 'friends') {
-      view = new FriendsView()
-      view.render()
-    } else // error, page invalid
-    {}
+      view = new FriendsView({ model: wrapper, id: id })
+    }
+		else {}
     // id should be check valid here
     // maybe we should send the model directly
     // view.render(model, id) ??
