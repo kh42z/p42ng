@@ -5,6 +5,7 @@ FactoryBot.define do
     nickname { Faker::Name.unique.name }
     image_url { Faker::Internet.url }
     two_factor { Faker::Boolean.boolean }
+    first_login { Faker::Boolean.boolean }
     password { Faker::Internet.password }
     email { Faker::Internet.email }
     ladder_games_won { Faker::Number.number(digits: 3) }

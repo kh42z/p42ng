@@ -84,6 +84,7 @@ ActiveRecord::Schema.define(version: 2021_02_09_094407) do
     t.json "tokens"
     t.string "image_url"
     t.boolean "two_factor", default: false
+    t.boolean "first_login", default: true
     t.integer "ladder_games_won", default: 0
     t.integer "ladder_games_lost", default: 0
     t.bigint "ladder_id"
