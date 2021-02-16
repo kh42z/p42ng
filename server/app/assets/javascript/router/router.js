@@ -83,7 +83,7 @@ export const Router = Backbone.Router.extend({
   },
 
   oauth_view: function (url) {
-    if (this.headerView !== undefined) { this.headerView.remove() } // TO DO
+    if (this.headerView !== undefined) { this.headerView.remove() }
     console.log(this.headerView)
     window.localStorage.clear()
     history.replaceState({}, null, '/')
