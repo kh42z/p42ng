@@ -9,13 +9,12 @@ describe Guild, type: :model do
   it { should validate_length_of(:anagram).is_equal_to(5) }
 
   it "validates uniqueness of name" do
-    FactoryBot.create(:guild, name: 'unique')
+    create(:guild, name: 'unique')
     should validate_uniqueness_of(:name)
   end
 
   it "validates uniqueness of anagram" do
-    FactoryBot.create(:guild, anagram: 'uniqu')
+    create(:guild, anagram: 'uniqu')
     should validate_uniqueness_of(:anagram)
   end
-
 end

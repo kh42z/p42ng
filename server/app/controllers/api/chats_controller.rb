@@ -14,6 +14,7 @@ module Api
 
     def create
       chat = Chat.new(chat_params)
+      chat.owner = current_user
       if chat.save
         json_response(chat, :created)
       else
