@@ -1,9 +1,6 @@
 export const HeaderView = Backbone.View.extend({
   initialize: function () {
     this.templateTopNav = Handlebars.templates.topnav
-    this.listenTo(this.model, 'sync', function () {
-      this.render()
-    }, this)
 
     this.listenTo(this.model, 'change', function () {
       this.render()
@@ -11,10 +8,14 @@ export const HeaderView = Backbone.View.extend({
   },
   el: $('#header'),
   render: function () {
-    const context = {
-      user: this.model.get('nickname'),
-      profile_pic: '../../images/profile-pic.jpg'
-    }
+    this.urlParams = new URLSearchParams(window.location.search)
+    const array = {}
+
+    array[Backbone.history.getFragment()] = true
+    array.active = 'active'
+    array.user = this.model.get('nickname')
+    array.profile_pic = this.model.get('image_url')
+    const context = JSON.parse(JSON.stringify(array))
     const templateDataTopNav = this.templateTopNav(context)
     this.$el.html(templateDataTopNav)
     return this

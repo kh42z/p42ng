@@ -4,6 +4,11 @@
 }
 
 @font-face {
+    font-family: Quantico-Bold;
+    src: url(../../fonts/Quantico-Bold.ttf)
+}
+
+@font-face {
     font-family: MajorMonoDisplay-Regular;
     src: url(../../fonts/MajorMonoDisplay-Regular.ttf);
 }

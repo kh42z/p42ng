@@ -1,0 +1,25 @@
+.topnav.active {
+  box-shadow: inset 0 0 0 1000px rgba(0,0,0, .3);
+}
+
+.topnav .activelogo {
+  font-family: MajorMonoDisplay-Regular;
+  align-content: flex-start;
+  font-size: 2rem;
+  text-align: left;
+}
+
+.topnav .activelogo::before {
+  content: 'PonG';
+  color: var(--primary-color);
+}
+
+.topnav .activelogo::after {
+  content: 'Ame';
+  color: white;
+}
+
+.topnav .active {
+    font-family: Quantico-Bold;
+} 
+
