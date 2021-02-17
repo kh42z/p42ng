@@ -13,10 +13,10 @@ class ChatSerializer < ActiveModel::Serializer
   end
 
   def timeout_ids
-    object.chat_participants.pluck(:user_id)
+    object.chat_timeouts.pluck(:user_id)
   end
 
   def ban_ids
-    object.chat_participants.pluck(:user_id)
+    object.chat_bans.pluck(:user_id)
   end
 end
