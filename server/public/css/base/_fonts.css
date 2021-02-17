@@ -1,0 +1,24 @@
+@font-face {
+    font-family: Quantico-Regular;
+    src: url(../../fonts/Quantico-Regular.ttf);
+}
+
+@font-face {
+    font-family: Quantico-Bold;
+    src: url(../../fonts/Quantico-Bold.ttf)
+}
+
+@font-face {
+    font-family: MajorMonoDisplay-Regular;
+    src: url(../../fonts/MajorMonoDisplay-Regular.ttf);
+}
+
+@font-face {
+    font-family: Roboto-Regular;
+    src: url(../../fonts/Roboto-Regular.ttf);
+}
+
+@font-face {
+    font-family: Roboto-Bold;
+    src: url(../../fonts/Roboto-Bold.ttf);
+}

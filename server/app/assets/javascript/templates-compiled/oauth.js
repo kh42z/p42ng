@@ -1,9 +1,9 @@
 (function () {
   const template = Handlebars.template; const templates = Handlebars.templates = Handlebars.templates || {}
-  templates.home = template({
+  templates.oauth = template({
     compiler: [8, '>= 4.3.0'],
     main: function (container, depth0, helpers, partials, data) {
-      return '<div class="home">\n    <div class="pong-gif"></div>\n    <div class="play-gif" href="#play"></div>\n</div>'
+      return "<div class=\"oauth\">\n    <button class=\"signIn\"\n    onclick=\"window.location.href='http://localhost:3000/auth/marvin?auth_origin_url=http://localhost:3000/#connexion'\">Sign in</button>\n</div>"
     },
     useData: true
   })

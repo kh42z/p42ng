@@ -1,0 +1,19 @@
+<div>
+    {{#each row}}
+        <div class="infos">
+								<a href="#guild/{{id}}/">{{name}}</a>
+								<span>{{anagram}}</span>
+								<span>score:
+									{{#if score}}
+								 	{{score}}
+									{{else}}
+									0
+									{{/if}}
+									</span>
+								<a href="#profile/{{owner_id}}/">owner: {{owner_nickname}}</a>
+								<p id=officers> officers:
+									{{#each officers}}<a href="#profile/{{id}}/match_history">{{nickname}} | </a>{{/each}}
+								</p>
+        </div>
+    {{/each}}
+</div>

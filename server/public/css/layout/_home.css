@@ -1,0 +1,29 @@
+.home {
+    height: 100%;
+    width: 100%;
+    background-color: black;
+}
+
+.pong-gif {
+    background: url('../../gif/pong.gif');
+    background-repeat: no-repeat;
+    background-size: 1280px 545px;
+    background-position: center;
+    height: 100%;
+    width: 100%;
+
+    position: relative;
+}
+
+.play-gif {
+    background: url('../../gif/play.gif');
+    background-repeat: no-repeat;
+    background-size: 248px 56px;
+    background-position: center;
+    height: 100%;
+    width: 100%;
+
+    position: absolute;
+    top: 0%;
+    left: 0%;
+}

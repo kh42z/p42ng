@@ -1,16 +1,13 @@
-<div class="topnav">
-  <div class="left-menu">
-    <a class="topnav-btn logo" href="#home"></a>
-    <a class="topnav-btn" href="#tournaments">Tournaments</a>
-    <a class="topnav-btn" href="#leaderboard">Leaderboard</a>
-    <a class="topnav-btn" href="#guilds">Guilds</a>
-  </div>
-  <div class="right-menu">
-    <a class="topnav-btn chat" href="#chat"></a>
-    <a class="user-page">
-      <a class="topnav-btn profile_pic" href="#user_page"></a>
-      <a class="topnav-btn user" href="#user_page">{{user}}</a>
-    </a>
-    <a class="topnav-btn exit" href="#exit"></a>
-  </div>
+<div class="topnav {{#if home}}{{active}}{{/if}}">
+  <a class="btn {{#if home}}{{active}}{{/if}}logo" href="#home"></a>
+  <a class="btn tournaments{{#if tournaments}} {{active}}{{/if}}" href="#tournaments">Tournaments</a>
+  <a class="btn{{#if leaderboard}} {{active}}{{/if}}" href="#leaderboard">Leaderboard</a>
+  <a class="btn {{#if guilds}} {{active}} {{/if}} guilds" href="#guilds">Guilds</a>
+  <a class="span"></a>
+  <a class="btn {{#if chat}} {{active}} {{/if}} chat" href="#chat"></a>
+  <a class="btn" href="#user_page">
+    <img src={{profile_pic}} class="profile_pic"></img>
+    <a class="btn {{#if user_page}} {{active}} {{/if}} user" href="#user_page">{{user}}</a>
+  </a>
+  <a class="exit" href="#exit"></a>
 </div>
