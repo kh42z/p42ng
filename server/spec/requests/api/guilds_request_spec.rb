@@ -3,6 +3,7 @@
 require "rails_helper"
 
 describe "Guild", type: :request do
+
   describe "#get" do
     it "should return guilds" do
       create_list(:guild, 2)
@@ -23,6 +24,9 @@ describe "Guild", type: :request do
       before {
         @user = create(:user)
         @params = attributes_for(:guild)
+        @officer_1 = create(:user)
+        @officer_2 = create(:user)
+        @params["officer_ids"] = [@officer_1.id, @officer_2.id]
         post api_guilds_url, headers: @user.create_new_auth_token, params: @params
       }
       it "returns status code 201" do
@@ -45,24 +49,25 @@ describe "Guild", type: :request do
     end
   end
 
- describe "#update" do
-   it "should be updated" do
-     user = create(:user)
-     guild = create(:guild)
-     valid_attributes = { name: "Updated", anagram: "upd4t", owner_id: user.id }
-     put api_guild_url(guild.id), headers: user.create_new_auth_token, params: valid_attributes
-     expect(Guild.first.name).to eq("Updated")
-     expect(Guild.count).to eq(1)
-     expect(response).to have_http_status(200)
-   end
- end
+  describe "#update" do
+    it "should be updated" do
+      user = create(:user)
+      guild = create(:guild)
+      valid_attributes = { name: "Updated", anagram: "upd4t", owner_id: user.id,  officer_ids: [FactoryBot.create(:user).id, FactoryBot.create(:user).id]}
+      put api_guild_url(guild.id), headers: user.create_new_auth_token, params: valid_attributes
+      expect(Guild.first.name).to eq("Updated")
+      expect(Guild.count).to eq(1)
+      expect(Guild.first.guild_officers.count).to eq(2)
+      expect(response).to have_http_status(200)
+    end
+  end
 
- describe "#delete" do
-   it "returns status code 204" do
-     guild = create(:guild)
-     delete api_guild_url(guild.id)
-     expect(Guild.count).to eq(0)
-     expect(response).to have_http_status(204)
-   end
- end
+  describe "#delete" do
+    it "returns status code 204" do
+      guild = create(:guild)
+      delete api_guild_url(guild.id)
+      expect(Guild.count).to eq(0)
+      expect(response).to have_http_status(204)
+    end
+  end
 end
