@@ -31,10 +31,10 @@ RSpec.describe 'Chats', type: :request do
       chat = chat_full()
       get api_chat_url(chat.id)
       expect(response).to have_http_status(200)
-      expect(Chat.first.chat_bans).to exist
-      expect(Chat.first.chat_participants).to exist
-      expect(Chat.first.chat_timeouts).to exist
-      expect(Chat.first.chat_admins).to exist
+      expect(Chat.first.chat_bans.first).to be_instance_of(ChatBan)
+      expect(Chat.first.chat_participants.first).to be_instance_of(ChatParticipant)
+      expect(Chat.first.chat_timeouts.first).to be_instance_of(ChatTimeout)
+      expect(Chat.first.chat_admins.first).to be_instance_of(ChatAdmin)
     end
   end
 
