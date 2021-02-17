@@ -28,8 +28,10 @@ export const FirstConnexionView = Backbone.View.extend({
   validate: function (event) {
     const validate = async () => {
       await this.model.saveNickname(document.getElementById('nickname').value)
-      const response = await this.model.saveImage(this.fileObject)
-      this.model.set({ image_url: response.image_url })
+      if (this.fileObject !== undefined) {
+        const response = await this.model.saveImage(this.fileObject)
+        this.model.set({ image_url: response.image_url })
+      }
       this.model.saveFirstLogin(false)
       Backbone.history.navigate('#home', true)
     }
