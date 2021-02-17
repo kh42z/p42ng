@@ -1,6 +1,11 @@
-<label>Nickname:</label>
-<textarea id="nickname" name="nickname"
-          rows="5" cols="33">
-</textarea>
+<div>
+  <label for="nickname">nickname</label>
+  <input type="text" id="nickname" name="nickname">
+</div>
 
-<a class="validate" href="#home">Validate</a>
+<form enctype="multipart/form-data">
+<p><input type="file"  accept="image/*" name="image" id="file"  style="display: none;"></p>
+<p><label for="file" style="cursor: pointer;">Upload Image</label></p>
+<p><img src="{{image}}" id="output" width="200" /></p>
+</form>
+<a class="validate">Validate</a>

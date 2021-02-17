@@ -35,6 +35,9 @@ export const User = Backbone.Model.extend({
     if (this.id !== undefined) {
       return this.urlRoot + this.id
     }
+    if (this.avatar !== undefined) {
+      return this.urlRoot + this.id + '/avatar'
+    }
     return this.urlRoot
   },
 
@@ -42,11 +45,11 @@ export const User = Backbone.Model.extend({
     return this.fetch({
       url: this.urlRoot + url,
       success: function (response) {
-        console.log(response)
+        // console.log(response)
       },
       error: function (errorResponse) {
-        console.log('error')
-        console.log(errorResponse)
+        // console.log('error')
+        // console.log(errorResponse)
       }
     })
   },
@@ -54,6 +57,22 @@ export const User = Backbone.Model.extend({
   saveNickname: function (nickname) {
     this.set({ nickname: nickname })
     return this.save({ nickname: this.get('nickname') }, { patch: true })
+  },
+
+  saveImage: async function (data) {
+    const url = this.urlRoot + this.id + '/avatar'
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'access-token': window.localStorage.getItem('access-token'),
+        uid: window.localStorage.getItem('uid'),
+        client: window.localStorage.getItem('client_id'),
+        accept: 'application/json'
+      },
+      body: data
+    })
+    const data1 = await response.json()
+    return data1
   },
 
   saveFirstLogin: function (firstLogin) {

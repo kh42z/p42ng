@@ -74,7 +74,7 @@ export const Router = Backbone.Router.extend({
     fetchUser()
   },
 
-  accessPage: function () {
+  accessPage: function (url) {
     if (window.localStorage.getItem('access-token') === null) {
       this.oauth_view()
       return 1
@@ -83,20 +83,19 @@ export const Router = Backbone.Router.extend({
         this.oauthService = new OauthService()
         this.oauthService.ajaxSetup()
         await this.userLogged.fetchUser(window.localStorage.getItem('user_id'))
-        this.headerView.render()
+        if (url !== 'firstConnexion') { this.headerView.render() }
       }
       fetchUser()
     }
   },
 
   firstConnexion_view: function () {
-    if (this.accessPage()) { return }
+    if (this.accessPage('firstConnexion')) { return }
     const firstConnexionView = new FirstConnexionView({ model: this.userLogged })
   },
 
   oauth_view: function (url) {
     if (this.headerView !== undefined) { this.headerView.remove() }
-    console.log(this.headerView)
     window.localStorage.clear()
     history.replaceState({}, null, '/')
     const oauthView = new OauthView()

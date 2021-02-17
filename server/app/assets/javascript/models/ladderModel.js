@@ -11,15 +11,15 @@ export const Ladder = Backbone.Model.extend({
       //
     }) */
     this.url = '/api/ladders/' + id
-    console.log(this.url)
+    // console.log(this.url)
     this.fetch({
       url: this.url,
       success: function (response) {
-        console.log(response)
+        // console.log(response)
       },
       error: function (errorResponse) {
-        console.log('error')
-        console.log(errorResponse)
+        // console.log('error')
+        // console.log(errorResponse)
       }
     })
     //	console.log(this.id)
