@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_16_094737) do
+ActiveRecord::Schema.define(version: 2021_02_17_133700) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,6 +45,34 @@ ActiveRecord::Schema.define(version: 2021_02_16_094737) do
     t.index ["user_id"], name: "index_chat_admins_on_user_id"
   end
 
+  create_table "chat_bans", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "chat_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["chat_id"], name: "index_chat_bans_on_chat_id"
+    t.index ["user_id"], name: "index_chat_bans_on_user_id"
+  end
+
+  create_table "chat_participants", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "chat_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["chat_id"], name: "index_chat_participants_on_chat_id"
+    t.index ["user_id"], name: "index_chat_participants_on_user_id"
+  end
+
+  create_table "chat_timeouts", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "chat_id"
+    t.datetime "timeout"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["chat_id"], name: "index_chat_timeouts_on_chat_id"
+    t.index ["user_id"], name: "index_chat_timeouts_on_user_id"
+  end
+
   create_table "chats", force: :cascade do |t|
     t.integer "privacy", default: 0
     t.string "password"
@@ -52,6 +80,16 @@ ActiveRecord::Schema.define(version: 2021_02_16_094737) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "owner_id"
     t.index ["owner_id"], name: "index_chats_on_owner_id"
+  end
+
+  create_table "game_records", force: :cascade do |t|
+    t.bigint "winner_id"
+    t.bigint "looser_id"
+    t.integer "type_id", default: 0
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["looser_id"], name: "index_game_records_on_looser_id"
+    t.index ["winner_id"], name: "index_game_records_on_winner_id"
   end
 
   create_table "guild_officers", force: :cascade do |t|
@@ -125,7 +163,15 @@ ActiveRecord::Schema.define(version: 2021_02_16_094737) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "chat_admins", "chats"
   add_foreign_key "chat_admins", "users"
+  add_foreign_key "chat_bans", "chats"
+  add_foreign_key "chat_bans", "users"
+  add_foreign_key "chat_participants", "chats"
+  add_foreign_key "chat_participants", "users"
+  add_foreign_key "chat_timeouts", "chats"
+  add_foreign_key "chat_timeouts", "users"
   add_foreign_key "chats", "users", column: "owner_id"
+  add_foreign_key "game_records", "users", column: "looser_id"
+  add_foreign_key "game_records", "users", column: "winner_id"
   add_foreign_key "guild_officers", "guilds"
   add_foreign_key "guild_officers", "users"
   add_foreign_key "guilds", "users", column: "owner_id"
