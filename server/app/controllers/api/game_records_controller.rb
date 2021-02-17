@@ -6,8 +6,7 @@ module Api
 
     GameRecordReducer = Rack::Reducer.new(
       GameRecord.all,
-      ->(user_id:) { where(winner_id: user_id) },
-      ->(user_id:) { where(looser_id: user_id) },
+      ->(user_id:) { GameRecord.where(winner_id: user_id).or(GameRecord.where(looser_id: user_id)) },
       ->(type_id:) { where(type_id: type_id) }
     )
 

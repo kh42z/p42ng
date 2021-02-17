@@ -35,4 +35,8 @@ end
 (1..20).each do |id|
   User.find(id).update!(guild: Guild.find(rand(1..5)))
 end
+
+(1..20).each do |id|
+  FactoryBot.create(:gameRecord, winner: User.find(rand(1..20)), looser: User.find(rand(1..20)))
+end
 end
