@@ -34,12 +34,12 @@ import { TestView } from '../views/testView.js'
 
 export const Router = Backbone.Router.extend({
   initialize: function () {
-    this.oauthService = undefined
     this.userLogged = new User()
    	this.headerView = new HeaderView({ model: this.userLogged })
     this.profileController = new ProfileController()
     this.guildController = new GuildController()
-		this.superWrapper = undefined
+    this.superWrapper = undefined
+    this.oauthService = new OauthService()
   },
 
   routes:
@@ -48,10 +48,10 @@ export const Router = Backbone.Router.extend({
     home: 'home_view',
     pong: 'pong_view',
     'profile/:id(/:page)': 'profile_view',
-		'profile/:id(/:page)/': 'profile_view',
+    'profile/:id(/:page)/': 'profile_view',
     guilds: 'guilds_view',
     'guild/:id(/:page)': 'guild_view',
-		'guild/:id(/:page)/': 'guild_view',
+    'guild/:id(/:page)/': 'guild_view',
     'chat/:id(/:page)': 'chat_view',
     leaderboard: 'leaderboard_view',
     tournaments: 'tournaments_view',
@@ -62,8 +62,9 @@ export const Router = Backbone.Router.extend({
   },
 
   connexion: function (url) {
-    this.oauthService = new OauthService()
     const fetchUser = async () => {
+      this.oauthService.setAjaxEnvironnement()
+      this.oauthService.ajaxSetup()
       await this.userLogged.fetchUser(window.localStorage.getItem('user_id'))
       this.userLogged.save({ first_login: true }, { patch: true })
       if (this.userLogged.get('first_login')) { this.navigate('#firstConnexion', { trigger: true }) } else {
@@ -79,6 +80,8 @@ export const Router = Backbone.Router.extend({
       return 1
     } else if (performance.navigation.type === 1 || performance.navigation.type === 2) {
       const fetchUser = async () => {
+        this.oauthService = new OauthService()
+        this.oauthService.ajaxSetup()
         await this.userLogged.fetchUser(window.localStorage.getItem('user_id'))
         this.headerView.render()
       }
@@ -112,7 +115,7 @@ export const Router = Backbone.Router.extend({
 
   pong_view: function (url) {
     if (this.accessPage()) { return }
-    const pongView = new PongView( {model: this.loadWraper() })
+    const pongView = new PongView({ model: this.loadWraper() })
     pongView.render()
   },
 
@@ -142,19 +145,19 @@ export const Router = Backbone.Router.extend({
 
   tournaments_view: function () {
     if (this.accessPage()) { return }
-    const tournamentsView = new TournamentsView( {model: this.loadWraper()})
+    const tournamentsView = new TournamentsView({ model: this.loadWraper() })
   },
 
-	test_view: function () {
-		if (this.accessPage()) { return }
-		const testView = new TestView({ model: this.loadWraper()})
+  test_view: function () {
+    if (this.accessPage()) { return }
+    const testView = new TestView({ model: this.loadWraper() })
+  },
 
-	},
-
-	loadWraper: function () {
-			return new SuperWrapper({
-				users: new Wrapper({obj: new Users()}),
-			guilds: new Wrapper({obj: new Guilds()}),
-			userLogged: new Wrapper({obj: this.userLogged})});
-		}
+  loadWraper: function () {
+    return new SuperWrapper({
+      users: new Wrapper({ obj: new Users() }),
+      guilds: new Wrapper({ obj: new Guilds() }),
+      userLogged: new Wrapper({ obj: this.userLogged })
+    })
+  }
 })
