@@ -258,11 +258,11 @@ paths:
           $ref: '#/components/responses/403'
         '500':
           $ref: '#/components/responses/500'
-  "/api/matchsHistory":
+  "/api/game_records":
     get:
-      summary: Retrieves all matchs played
+      summary: Retrieves all games played
       tags:
-        - MatchsHistory
+        - GameRecords
       parameters:
         - in: query
           name: user_id
@@ -280,7 +280,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/arrayOfMatchs"
+                "$ref": "#/components/schemas/arrayOfGames"
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -514,11 +514,11 @@ components:
       name: uid
       in: header
   schemas:
-    arrayOfMatchs:
+    arrayOfGames:
       type: array
       items:
-        $ref:  '#/components/schemas/match'
-    match:
+        $ref:  '#/components/schemas/gameRecord'
+    gameRecord:
       type: object
       properties:
         winner_id:

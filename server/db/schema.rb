@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_16_094737) do
+ActiveRecord::Schema.define(version: 2021_02_17_102824) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,6 +52,16 @@ ActiveRecord::Schema.define(version: 2021_02_16_094737) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "owner_id"
     t.index ["owner_id"], name: "index_chats_on_owner_id"
+  end
+
+  create_table "game_records", force: :cascade do |t|
+    t.bigint "winner_id"
+    t.bigint "looser_id"
+    t.integer "type_id", default: 0
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["looser_id"], name: "index_game_records_on_looser_id"
+    t.index ["winner_id"], name: "index_game_records_on_winner_id"
   end
 
   create_table "guild_officers", force: :cascade do |t|
@@ -126,6 +136,8 @@ ActiveRecord::Schema.define(version: 2021_02_16_094737) do
   add_foreign_key "chat_admins", "chats"
   add_foreign_key "chat_admins", "users"
   add_foreign_key "chats", "users", column: "owner_id"
+  add_foreign_key "game_records", "users", column: "looser_id"
+  add_foreign_key "game_records", "users", column: "winner_id"
   add_foreign_key "guild_officers", "guilds"
   add_foreign_key "guild_officers", "users"
   add_foreign_key "guilds", "users", column: "owner_id"

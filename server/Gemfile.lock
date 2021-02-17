@@ -249,6 +249,7 @@ DEPENDENCIES
   faker
   listen (~> 3.3)
   omniauth-marvin (= 1.1.0)
+  parallel_tests
   pg (>= 0.18, < 2.0)
   puma (~> 4.1)
   rack-cors
