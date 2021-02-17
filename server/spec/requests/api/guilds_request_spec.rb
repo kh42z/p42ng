@@ -8,13 +8,19 @@ describe "Guild", type: :request do
     it "should return guilds" do
       create_list(:guild, 2)
       get api_guilds_url
-      expect(response).to have_http_status(:success)
       expect(Guild.count).to eq(2)
+      expect(response).to have_http_status(:success)
     end
-    it "returns user" do
+    it "should return guild" do
       guild = create(:guild)
       get api_guild_url(guild)
-      expect(json).not_to be_empty
+      expect(Guild.count).to eq(1)
+      expect(response).to have_http_status(200)
+    end
+    it 'should return guild with officers' do
+      guild = create(:guild_with_officers)
+      get api_guild_url(guild)
+      expect(Guild.first.guild_officers.count).to eq(2)
       expect(response).to have_http_status(200)
     end
   end
@@ -32,7 +38,6 @@ describe "Guild", type: :request do
       it "returns status code 201" do
         expect(response).to have_http_status(201)
       end
-
       it "current_user should be guild's owner" do
         expect(Guild.first.owner_id).to eq(@user.id)
       end
@@ -53,20 +58,26 @@ describe "Guild", type: :request do
     it "should be updated" do
       user = create(:user)
       guild = create(:guild)
-      valid_attributes = { name: "Updated", anagram: "upd4t", owner_id: user.id,  officer_ids: [FactoryBot.create(:user).id, FactoryBot.create(:user).id]}
+      valid_attributes = { name: "Updated", anagram: "upd4t", owner_id: user.id }
       put api_guild_url(guild.id), headers: user.create_new_auth_token, params: valid_attributes
       expect(Guild.first.name).to eq("Updated")
       expect(Guild.count).to eq(1)
-      expect(Guild.first.guild_officers.count).to eq(2)
       expect(response).to have_http_status(200)
     end
   end
 
-  describe "#delete" do
-    it "returns status code 204" do
+  describe "#destroy" do
+    it "should delete guild" do
       guild = create(:guild)
       delete api_guild_url(guild.id)
       expect(Guild.count).to eq(0)
+      expect(response).to have_http_status(204)
+    end
+
+    it 'should delete one officer' do
+      guild = create(:guild_with_officers)
+      delete api_guild_destroy_officer_url(guild), params: { officer_id: guild.guild_officers.first.id }
+      expect(GuildOfficer.all.count).to eq(1)
       expect(response).to have_http_status(204)
     end
   end

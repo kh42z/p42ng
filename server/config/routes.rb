@@ -8,15 +8,15 @@ Rails.application.routes.draw do
     resources :game_records
     resources :states
     resources :guilds
-    resources :chats do
-      resources :chat_admins
-    end
+    resources :chats
     resources :users do
       post :avatar, on: :member, to: 'users#upload_avatar'
     end
+    resources :guilds do
+      delete :destroy_officer
+    end
   end
   mount_devise_token_auth_for 'User', at: 'auth', controllers: {
-    omniauth_callbacks: 'users/omniauth_callbacks',
-  }
+    omniauth_callbacks: 'users/omniauth_callbacks' }
   mount Rswag::Ui::Engine, at: 'api-docs'
 end

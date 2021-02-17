@@ -2,22 +2,31 @@
 
 FactoryBot.define do
 
+
+  factory :chat do
+    privacy { rand(0..2) }
+    password_digest { Faker::Internet.password }
+    owner_id { create(:user).id }
+  end
+
   factory :chat_admin do
     chat
     user
   end
 
-  factory :chat do
-    privacy { rand(0..2) }
-    password { Faker::Internet.password }
-    owner_id { create(:user).id }
-    factory :chat_with_admins do
-      transient do
-        admins_count { 2 }
-      end
-      after(:create) do |chat, evaluator|
-        create_list(:chat_admin, evaluator.admins_count, chat: chat)
-      end
-    end
+  factory :chat_participant do
+    chat
+    user
+  end
+
+  factory :chat_ban do
+    chat
+    user
+  end
+
+  factory :chat_timeout do
+    chat
+    user
+    timeout { Time.now }
   end
 end

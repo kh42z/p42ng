@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Api::States", type: :request do
+RSpec.describe "States", type: :request do
   let!(:states) { create_list(:state, 10) }
   let(:state_id) { states.first.id }
 

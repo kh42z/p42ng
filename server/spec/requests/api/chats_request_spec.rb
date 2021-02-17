@@ -5,17 +5,36 @@ require 'rails_helper'
 RSpec.describe 'Chats', type: :request do
 
   describe '#get' do
-    before { @chats = create_list(:chat, 2) }
-    it "should show chats" do
+    it "should get chats" do
+      create_list(:chat, 2)
       get api_chats_url
       assert_response :success
       expect(json.size).to eq(2)
     end
-    it "should show chat" do
-      chat_id = @chats.first.id
-      get api_chat_url(chat_id)
+    it "should get chat" do
+      chat = create(:chat)
+      get api_chat_url(chat.id)
       expect(response).to have_http_status(200)
-      assert_equal @chats.first.privacy, json['privacy']
+      assert_equal chat.privacy, json['privacy']
+    end
+    it "should return an error" do
+      get api_chat_url(100000)
+      expect(response).to have_http_status(404)
+    end
+    it "should get chat with participants" do
+      chat = chat_with_participants(count: 2)
+      get api_chat_url(chat.id)
+      expect(response).to have_http_status(200)
+      expect(Chat.first.chat_participants.count).to eq(2)
+    end
+    it "should get a chat with admins, participants, timeouts and bans" do
+      chat = chat_full()
+      get api_chat_url(chat.id)
+      expect(response).to have_http_status(200)
+      expect(Chat.first.chat_bans).to exist
+      expect(Chat.first.chat_participants).to exist
+      expect(Chat.first.chat_timeouts).to exist
+      expect(Chat.first.chat_admins).to exist
     end
   end
 
@@ -32,22 +51,32 @@ RSpec.describe 'Chats', type: :request do
     end
   end
 
-  #  describe "GET request with wrong chat ID" do
-  #    before { get "/api/chats/100" }
-  #    it "returns error" do
-  #      expect()
-  #    end
-  #
-  #    it "returns status code 404" do
-  #      expect(response).to have_http_status(404)
-  #    end
-  #  end
+  describe '#destroy' do
+    it 'returns status code 204' do
+      chat = create(:chat)
+      delete "/api/chats/#{chat.id}"
+      expect(response).to have_http_status(204)
+    end
+  end
+end
 
- describe '#delete' do
-   it 'returns status code 204' do
-     chat = create(:chat)
-     delete "/api/chats/#{chat.id}"
-     expect(response).to have_http_status(204)
-   end
- end
+def chat_full
+  create(:chat) do |chat|
+    create(:chat_admin, chat: chat)
+    create(:chat_participant, chat: chat)
+    create(:chat_ban, chat: chat)
+    create(:chat_timeout, chat: chat)
+  end
+end
+
+def chat_with_admins(count: 1)
+  create(:chat) do |chat|
+    create_list(:chat_admin, count, chat: chat)
+  end
+end
+
+def chat_with_participants(count: 1)
+  create(:chat) do |chat|
+    create_list(:chat_participant, count, chat: chat)
+  end
 end

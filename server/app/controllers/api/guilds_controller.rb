@@ -2,10 +2,11 @@
 
 module Api
   class GuildsController < ApplicationController
+    # before_action :authenticate_user!
     before_action :set_guild, only: %i[show update destroy]
 
     def index
-      json_response(Guild.all.order(:name))
+      json_response(Guild.all.order(:score))
     end
 
     def update
@@ -21,7 +22,6 @@ module Api
 
       if guild.save
         create_officers(guild.id)
-        # redirect_to api_guild_path(guild.id)
         json_response(guild, :created)
       else
         json_response(guild.errors, :unprocessable_entity)
@@ -30,7 +30,12 @@ module Api
 
     def destroy
       @guild.destroy!
-      # redirect_to api_guilds_path
+      head :no_content
+    end
+
+    def destroy_officer
+      guild = Guild.find(params[:guild_id])
+      guild.guild_officers.find(params[:officer_id]).destroy!
       head :no_content
     end
 

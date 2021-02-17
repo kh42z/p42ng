@@ -2,10 +2,11 @@
 
 module Api
   class ChatsController < ApplicationController
+    # before_action :authenticate_user!
     before_action :set_chat, only: %i[show update destroy]
 
     def index
-      json_response(Chat.all)
+      json_response(Chat.all.order(:updated_at))
     end
 
     def update

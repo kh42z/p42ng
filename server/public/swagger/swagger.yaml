@@ -143,7 +143,6 @@ paths:
           required: true
           schema:
             type: integer
-
       responses:
         '200':
           description: guild found
@@ -558,9 +557,7 @@ components:
         uid:
           type: string
         chat_ids:
-          type: array
-          items:
-            type: integer
+          $ref: '#/components/schemas/integer_list'
     guild_response:
       allOf:
         - type: object
@@ -608,17 +605,7 @@ components:
         owner_id:
           type: integer
         officer_ids:
-          type: array
-          items:
-            type: integer
-    guild_officers:
-      type: object
-      properties:
-        user_id:
-          type: integer
-      required:
-        - guild_id
-        - user_id
+          $ref: '#/components/schemas/integer_list'
     chat:
       type: object
       properties:
@@ -628,13 +615,18 @@ components:
           type: integer
         owner_id:
           type: integer
-    chat_admins:
-      type: object
-      properties:
-        chat_id:
-          type: integer
-        user_id:
-          type: integer
+        admin_ids:
+          $ref: '#/components/schemas/integer_list'
+        participant_ids:
+          $ref: '#/components/schemas/integer_list'
+        timeout_ids:
+          $ref: '#/components/schemas/integer_list'
+        ban_ids:
+          $ref: '#/components/schemas/integer_list'
+    integer_list:
+      type: array
+      items:
+        type: integer
 
     errors_object:
       type: object
