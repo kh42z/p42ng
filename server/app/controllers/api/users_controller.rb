@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'mini_magick'
+
 module Api
   # Users Controller
   class UsersController < ApplicationController
@@ -36,6 +38,9 @@ module Api
 
     def upload_avatar
       return unless params.key?(:avatar)
+
+      mini_image = MiniMagick::Image.new(params[:avatar].tempfile.path)
+      mini_image.resize '1200x1200'
 
       @user.avatar.attach(params[:avatar])
       url = url_for(@user.avatar)

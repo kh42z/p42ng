@@ -116,6 +116,7 @@ GEM
       mimemagic (~> 0.3.2)
     method_source (1.0.0)
     mimemagic (0.3.5)
+    mini_magick (4.11.0)
     mini_mime (1.0.2)
     minitest (5.14.3)
     msgpack (1.4.2)
@@ -248,8 +249,8 @@ DEPENDENCIES
   factory_bot_rails (~> 4.0)
   faker
   listen (~> 3.3)
+  mini_magick
   omniauth-marvin (= 1.1.0)
-  parallel_tests
   pg (>= 0.18, < 2.0)
   puma (~> 4.1)
   rack-cors
