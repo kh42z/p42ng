@@ -9,8 +9,8 @@ FactoryBot.define do
 
   factory :chat do
     privacy { rand(0..2) }
-    password_digest { Faker::Internet.password }
-    owner_id { FactoryBot.create(:user).id }
+    password { Faker::Internet.password }
+    owner_id { create(:user).id }
     factory :chat_with_admins do
       transient do
         admins_count { 2 }
