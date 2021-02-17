@@ -18,11 +18,17 @@ if Rails.env.development?
   FactoryBot.create_list(:user, 5)
   FactoryBot.create_list(:guild_with_officers, 2)
   FactoryBot.create_list(:chat, 2)
-  FactoryBot.create_list(:chat_with_participants, 2)
 
-  (1..20).each do |id|
-    User.find(id).update!(guild: Guild.find(rand(1..5)))
+  def chat_with_participants(count: 1)
+    FactoryBot.create(:chat) do |chat|
+      FactoryBot.create_list(:chat_participant, count, chat: chat)
+    end
   end
+  chat_with_participants(count: 2)
+
+  #  (1..20).each do |id|
+#    User.find(id).update!(guild: Guild.find(rand(1..5)))
+#  end
 
   (1..20).each do |id|
     FactoryBot.create(:gameRecord, winner: User.find(rand(1..20)), looser: User.find(rand(1..20)))
