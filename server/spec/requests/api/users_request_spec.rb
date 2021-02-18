@@ -87,6 +87,15 @@ RSpec.describe 'Users', type: :request do
         expect(response).to have_http_status(401)
       end
     end
+    context 'when admin modifies someone else' do
+      before {
+        users.last.update(admin: true)
+        patch "/api/users/#{first.id}", params: {'nickname' => 'George'}, headers: users.last.create_new_auth_token
+      }
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
+    end
   end
 
   describe 'delete one user' do

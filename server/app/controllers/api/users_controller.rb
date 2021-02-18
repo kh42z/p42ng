@@ -51,7 +51,7 @@ module Api
     private
 
     def allowed?
-      return unless current_user.id != @user.id
+      return unless current_user.id != @user.id && current_user.admin? == false
 
       render json: {
         errors: [I18n.t('notAllowed')]

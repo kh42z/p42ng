@@ -11,6 +11,8 @@ class UserSerializer < ActiveModel::Serializer
              :ladder_games_won,
              :ladder_games_lost,
              :uid,
+             :admin,
+             :banned,
              :first_login,
              :chat_ids
 
