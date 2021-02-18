@@ -1,0 +1,27 @@
+<div class="table">
+    <div class="categories">
+        {{#each categories}}
+            <span>{{this}}</span>
+        {{/each}}
+    </div>
+    {{#each row}}
+        <div class="infos">
+                <span class="league"></span>
+                <span class="number">{{number}}</span>
+                <img src="{{profil_pic}}" class="profile-pic"></img>
+                {{#each infos}}
+                    <span>{{this}}</span>
+                {{/each}}
+                <div class="status">
+                    <span class="pastille"></span>
+                    <span class="status-type">{{status}}</span>
+                    <img src="{{slideshow}}" class="slideshow" alt="{{game}}"></img>
+                </div>
+                <span>
+                    <button class="follow" type="button">
+                        {{follow}}
+                    </button>
+                </span>
+        </div>
+    {{/each}}
+</div>

@@ -1,0 +1,91 @@
+.topnav {
+    background: url('../../images/background.jpg');
+    background-position: 50% 0;
+    background-position: 0 0;
+    box-shadow: inset 0 0 0 1000px rgba(27, 37, 52, 0.4);
+    position: fixed;
+
+    line-height: 82px;
+    height: 82px;
+    width: 100%;
+
+    z-index: 1;
+
+    display: grid;
+    grid-gap: 8px;
+    grid-template-columns: 200px 175px minmax(auto, 300px) minmax(auto, 300px) minmax(auto, 300px) auto 100px minmax(auto, 200px) 150px;
+
+    padding: 0px 32px 0px 32px;
+    padding-right: 32px;
+}
+
+.topnav .btn {
+    font-family: Quantico-Regular;
+    font-size: 24px;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+}
+
+.topnav .logo {
+    font-family: MajorMonoDisplay-Regular;
+    align-content: flex-start;
+    font-size: 2rem;
+    text-align: left;
+}
+
+.topnav .logo::before {
+    content: 'PonG';
+    color: var(--primary-color);
+}
+
+.topnav .logo::after {
+    content: 'Ame';
+    color: white;
+}
+
+.topnav .tournaments {
+    text-align: right;
+}
+
+.topnav .guilds {
+    text-align: left;
+}
+
+.topnav .profile_pic {
+    object-fit: cover;
+    width: 61px;
+    height: 48px;
+
+    position: relative;
+    top: 17px;
+    left: 25%;
+}
+
+.topnav .chat {
+    background: url('../../icons/chat.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    height: 40px;
+    width: 40px;
+
+    display: flex;
+    justify-self: flex-end;
+    position: relative;
+    top: 25%;
+}
+
+.topnav .exit {
+    background: url('../../icons/exit.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 59px;
+    height: 31.29px;
+    position: relative;
+    top: 25.35px;
+    left: 25%;
+}
+
+.topnav .user {
+    text-align: left;
+}
