@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Api
-  # user's Ladders
-  class LaddersController < ApplicationController
-    before_action :authenticate_user!
+  class LaddersController < ApiController
     before_action :set_ladder, only: [:show]
     def index
       @ladders = Ladder.all

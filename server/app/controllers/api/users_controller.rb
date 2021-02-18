@@ -3,9 +3,7 @@
 require 'mini_magick'
 
 module Api
-  # Users Controller
-  class UsersController < ApplicationController
-    before_action :authenticate_user!
+  class UsersController < ApiController
     before_action :set_user, only: %i[show update destroy upload_avatar]
     before_action :allowed?, only: %i[update destroy upload_avatar]
     skip_after_action :update_auth_header, only: [:destroy]
@@ -23,6 +21,8 @@ module Api
     end
 
     def update
+      return render_not_allowed if user_params.key?(:banned) && current_user.admin? == false
+
       @user.update!(user_params)
       json_response(@user)
     end
@@ -53,13 +53,11 @@ module Api
     def allowed?
       return unless current_user.id != @user.id && current_user.admin? == false
 
-      render json: {
-        errors: [I18n.t('notAllowed')]
-      }, status: 401
+      render_not_allowed
     end
 
     def user_params
-      params.permit(:two_factor, :nickname, :first_login)
+      params.permit(:two_factor, :nickname, :first_login, :banned)
     end
 
     def set_user

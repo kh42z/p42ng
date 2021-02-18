@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 module Api
-  class GuildsController < ApplicationController
-    # before_action :authenticate_user!
+  class GuildsController < ApiController
     before_action :set_guild, only: %i[show update destroy]
 
     def index
