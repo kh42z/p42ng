@@ -33,3 +33,4 @@ en:
   hello: "Hello world"
   notAllowed: "This action is not allowed with your current privileges."
   banned: "Your account is currently banned"
+  hasGuildAlready: "You already have a guild"

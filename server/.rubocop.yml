@@ -9,3 +9,5 @@ AllCops:
     - bin/**
     - spec/**/*
     - vendor/**/*
+Metrics/MethodLength:
+  Max: 15

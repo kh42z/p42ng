@@ -10,4 +10,8 @@ module Response
       errors: [I18n.t('notAllowed')]
     }, status: 403
   end
+
+  def render_error(arg)
+    render json: { errors: [I18n.t(arg)] }, status: 403
+  end
 end

@@ -15,12 +15,15 @@ module Api
     end
 
     def create
+      return render_error('hasGuildAlready') if current_user.guild
+
       guild = Guild.new(guild_params)
       guild.score = 0
       guild.owner = current_user
-
       if guild.save
-        create_officers(guild.id)
+        # create_officers(guild.id)
+        current_user.guild = guild
+        current_user.save
         json_response(guild, :created)
       else
         json_response(guild.errors, :unprocessable_entity)
