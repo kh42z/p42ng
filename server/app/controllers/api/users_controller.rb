@@ -23,7 +23,7 @@ module Api
     end
 
     def update
-      @user.update(user_params)
+      @user.update!(user_params)
       json_response(@user)
     end
 
