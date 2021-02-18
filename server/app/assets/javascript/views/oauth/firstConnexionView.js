@@ -38,11 +38,6 @@ export const FirstConnexionView = Backbone.View.extend({
     validate()
   },
 
-  on_change: function () {
-    console.log('CHANGE')
-    console.log(document.getElementById('picField'))
-  },
-
   loadFile: function (event) {
     this.fileObject = new FormData()
     const image = document.getElementById('output')
