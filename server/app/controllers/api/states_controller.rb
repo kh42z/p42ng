@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 module Api
-  class StatesController < ApplicationController
-    before_action :authenticate_user!
+  class StatesController < ApiController
     before_action :set_state, only: [:show]
     def index
       @states = State.all

@@ -29,18 +29,24 @@ module Users
       @auth_params
     end
 
+    def banned?
+      return unless User.find(@resource.id).banned?
+
+      render json: {
+        errors: [I18n.t('banned')]
+      }, status: 403
+    end
+
     def omniauth_success
       get_resource_from_auth_hash
       set_token_on_resource
 
-      if confirmable_enabled?
-        # don't send confirmation email!!!
-        @resource.skip_confirmation!
-      end
+      @resource.skip_confirmation! if confirmable_enabled?
 
       sign_in(:user, @resource, store: false, bypass: false)
-
       @resource.save!
+
+      return if banned?
 
       create_auth_params
 

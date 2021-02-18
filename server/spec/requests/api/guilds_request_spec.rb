@@ -3,23 +3,24 @@
 require "rails_helper"
 
 describe "Guild", type: :request do
+  let!(:auth) { create(:user) }
 
   describe "#get" do
     it "should return guilds" do
       create_list(:guild, 2)
-      get api_guilds_url
+      get api_guilds_url, headers: auth.create_new_auth_token
       expect(Guild.count).to eq(2)
       expect(response).to have_http_status(:success)
     end
     it "should return guild" do
       guild = create(:guild)
-      get api_guild_url(guild)
+      get api_guild_url(guild), headers: auth.create_new_auth_token
       expect(Guild.count).to eq(1)
       expect(response).to have_http_status(200)
     end
     it 'should return guild with officers' do
       guild = create(:guild_with_officers)
-      get api_guild_url(guild)
+      get api_guild_url(guild), headers: auth.create_new_auth_token
       expect(Guild.first.guild_officers.count).to eq(2)
       expect(response).to have_http_status(200)
     end
@@ -44,7 +45,7 @@ describe "Guild", type: :request do
     end
 
     context "when the request is invalid" do
-      before { post api_guilds_url }
+      before { post api_guilds_url, headers: auth.create_new_auth_token }
       it "returns status code 422" do
         expect(response).to have_http_status(422)
       end
@@ -69,14 +70,14 @@ describe "Guild", type: :request do
   describe "#destroy" do
     it "should delete guild" do
       guild = create(:guild)
-      delete api_guild_url(guild.id)
+      delete api_guild_url(guild.id), headers: auth.create_new_auth_token
       expect(Guild.count).to eq(0)
       expect(response).to have_http_status(204)
     end
 
     it 'should delete one officer' do
       guild = create(:guild_with_officers)
-      delete api_guild_destroy_officer_url(guild), params: { officer_id: guild.guild_officers.first.id }
+      delete api_guild_destroy_officer_url(guild), params: { officer_id: guild.guild_officers.first.id }, headers: auth.create_new_auth_token
       expect(GuildOfficer.all.count).to eq(1)
       expect(response).to have_http_status(204)
     end

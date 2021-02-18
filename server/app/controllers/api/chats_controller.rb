@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 module Api
-  class ChatsController < ApplicationController
-    # before_action :authenticate_user!
+  class ChatsController < ApiController
     before_action :set_chat, only: %i[show update destroy]
 
     def index

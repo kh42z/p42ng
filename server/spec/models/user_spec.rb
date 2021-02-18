@@ -7,6 +7,8 @@ RSpec.describe User, type: :model do
   it { should validate_presence_of(:image_url) }
   it { should allow_values(true, false).for(:two_factor) }
   it { should allow_values(true, false).for(:first_login) }
+  it { should allow_values(true, false).for(:admin) }
+  it { should allow_values(true, false).for(:banned) }
   it { should validate_presence_of(:ladder_games_won) }
   it { should validate_presence_of(:ladder_games_lost) }
   it { should belong_to(:ladder) }

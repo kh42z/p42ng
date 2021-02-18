@@ -548,6 +548,10 @@ components:
           type: boolean
         first_login:
           type: boolean
+        admin:
+          type: boolean
+        banned:
+          type: boolean
         nickname:
           type: string
         ladder_games_won:
