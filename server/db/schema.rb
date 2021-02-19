@@ -146,7 +146,6 @@ ActiveRecord::Schema.define(version: 2021_02_17_133700) do
     t.boolean "first_login", default: true
     t.boolean "admin", default: false
     t.boolean "banned", default: false
-    t.boolean "has_guild", default: false
     t.integer "ladder_games_won", default: 0
     t.integer "ladder_games_lost", default: 0
     t.bigint "ladder_id"

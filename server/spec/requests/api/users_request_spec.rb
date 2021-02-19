@@ -84,7 +84,7 @@ RSpec.describe "Users", type: :request do
         patch "/api/users/#{first.id}", params: {"nickname" => "Michel"}, headers: users.last.create_new_auth_token
       end
       it "returns status code 403" do
-        expect(response).to have_http_status(403)
+        expect(response).to have_http_status(401)
       end
     end
 
@@ -93,7 +93,7 @@ RSpec.describe "Users", type: :request do
         patch "/api/users/#{first.id}", params: {banned: true}, headers: users.last.create_new_auth_token
       end
       it "returns status code 403" do
-        expect(response).to have_http_status(403)
+        expect(response).to have_http_status(401)
       end
     end
 
