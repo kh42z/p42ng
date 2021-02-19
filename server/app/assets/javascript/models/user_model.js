@@ -59,7 +59,15 @@ export const User = Backbone.Model.extend({
 
   saveNickname: function (nickname) {
     this.set({ nickname: nickname })
-    return this.save({ nickname: this.get('nickname') }, { patch: true })
+    return this.save({ nickname: this.get('nickname') }, {
+      patch: true,
+      success: function (response) {
+        console.log(response)
+      },
+      error: function (data, statusText) {
+        console.log(statusText.status)
+      }
+    })
   },
 
   saveImage: async function (data) {

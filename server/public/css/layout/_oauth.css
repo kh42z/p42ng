@@ -1,5 +1,51 @@
 .oauth {
-    position: absolute;
-    top: 200px;
-    left: 50%;
+    background-color: black;
+    background-image: url('../../gif/pong.gif') ;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 70%;
+
+    width: 100vw;
+    height: 100%;
+    
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.logo {
+    margin-top: 10%;
+    margin-bottom: min(150px, 10%);
+
+    font-family: MajorMonoDisplay-Regular;
+    font-size: min(6vw, 100px);
+}
+
+.logo::before {
+    content: 'PonG';
+    color: var(--primary-color);
+}
+
+.logo::after {
+    content: 'Ame';
+    color: var(--secondary-color);
+}
+
+.oauth .signIn {
+    margin-top: min(150px, 10%);
+    margin-bottom: 10%;
+
+    font-size: min(2.5vw, 36px);
+    width: 40vw;
+    max-width: 700px;
+    padding: min(max(2%, 2px), 20px);
+    border-radius: 50px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.oauth .signIn::before {
+    content: 'Sign in';
 }
