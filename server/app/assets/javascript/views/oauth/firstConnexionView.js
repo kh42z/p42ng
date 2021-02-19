@@ -32,9 +32,6 @@ export const FirstConnexionView = Backbone.View.extend({
     const validate = async () => {
       try {
         let response = await this.model.saveNickname(document.getElementById('nickname').value)
-        console.log(response.status)
-        console.log(response.responseText)
-
         if (this.fileObject !== undefined) {
           response = await this.model.saveImage(this.fileObject)
           this.model.set({ image_url: response.image_url })
@@ -43,7 +40,7 @@ export const FirstConnexionView = Backbone.View.extend({
         Backbone.history.navigate('#home', true)
       } catch (error) {
         if (error.status !== 200) {
-          this.render(error.responseText)
+          this.render(error.responseJSON.message)
         }
       }
     }

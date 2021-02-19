@@ -1,0 +1,70 @@
+.firstConnexion {
+    background-color: black;
+
+    width: 100vw;
+    height: 100%;
+    
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.firstConnexion .validate {
+    margin-top: min(150px, 10%);
+    margin-bottom: 10%;
+
+    font-size: min(2vw, 24px);
+    width: 20vw;
+    max-width: 300px;
+    padding: min(max(2%, 2px), 20px);
+    border-radius: 50px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.firstConnexion .nickname {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    margin-bottom: 5%;
+}
+
+.firstConnexion .status {
+    font-size: min(3vw, 36px);
+    color: var(--secondary-color);
+    margin-bottom: 32px;
+}
+
+.firstConnexion .nickname .input {
+    width: 120%;
+    padding: 12px 20px;
+    padding-left: 16px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    background-color: #C4C4C4;
+    color: var(--text-button-color);
+    border-radius: 10px;
+    font-size: min(2vw, 24px);
+}
+
+.firstConnexion .avatar {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.firstConnexion .avatar .image:hover {
+    box-shadow:  0 0 16px  rgba(196, 196, 196, 0.5);
+    background-color: rgba(196, 196, 196, 0.8);
+}
+
+.firstConnexion .error-message {
+    color: var(--error-message-color);
+}
