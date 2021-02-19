@@ -14,11 +14,9 @@ export class ProfileController {
       view = new EditProfileView({ model: wrapper, id: id })
     } else if (page === 'match_history' || page == null || page == '' || page == '/') {
       view = new MatchHistoryView({ model: wrapper, id: id })
-      // veiw.render(user_collection, id)
     } else if (page === 'friends') {
       view = new FriendsView({ model: wrapper, id: id })
-    }
-		else {}
+    } else {}
     // id should be check valid here
     // maybe we should send the model directly
     // view.render(model, id) ??
