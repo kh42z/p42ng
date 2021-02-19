@@ -410,6 +410,8 @@ paths:
                   type: boolean
                 nickname:
                   type: string
+                banned:
+                  type: boolean
     get:
       summary: Retrieves an user
       tags:
