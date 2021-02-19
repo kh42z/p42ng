@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_17_133700) do
+ActiveRecord::Schema.define(version: 2021_02_19_121557) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -146,7 +146,6 @@ ActiveRecord::Schema.define(version: 2021_02_17_133700) do
     t.boolean "first_login", default: true
     t.boolean "admin", default: false
     t.boolean "banned", default: false
-    t.boolean "has_guild", default: false
     t.integer "ladder_games_won", default: 0
     t.integer "ladder_games_lost", default: 0
     t.bigint "ladder_id"
@@ -161,6 +160,49 @@ ActiveRecord::Schema.define(version: 2021_02_17_133700) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["state_id"], name: "index_users_on_state_id"
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
+  end
+
+  create_table "war_addons", force: :cascade do |t|
+    t.string "name"
+    t.bigint "war_term_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["war_term_id"], name: "index_war_addons_on_war_term_id"
+  end
+
+  create_table "war_terms", force: :cascade do |t|
+    t.datetime "start"
+    t.datetime "end"
+    t.boolean "ladder", default: false
+    t.boolean "agreed", default: false
+    t.bigint "war_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["war_id"], name: "index_war_terms_on_war_id"
+  end
+
+  create_table "war_times", force: :cascade do |t|
+    t.datetime "start"
+    t.datetime "end"
+    t.bigint "war_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["war_id"], name: "index_war_times_on_war_id"
+  end
+
+  create_table "wars", force: :cascade do |t|
+    t.integer "from"
+    t.integer "on"
+    t.datetime "start"
+    t.datetime "end"
+    t.integer "prize"
+    t.integer "from_score", default: 0
+    t.integer "on_score", default: 0
+    t.integer "max_unanswered"
+    t.bigint "guild_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["guild_id"], name: "index_wars_on_guild_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -181,4 +223,8 @@ ActiveRecord::Schema.define(version: 2021_02_17_133700) do
   add_foreign_key "users", "guilds"
   add_foreign_key "users", "ladders"
   add_foreign_key "users", "states"
+  add_foreign_key "war_addons", "war_terms"
+  add_foreign_key "war_terms", "wars"
+  add_foreign_key "war_times", "wars"
+  add_foreign_key "wars", "guilds"
 end

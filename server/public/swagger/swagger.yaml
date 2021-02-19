@@ -15,7 +15,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/chat'
+                $ref: '#/components/schemas/chat_response'
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -57,7 +57,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/chat"
+                $ref: "#/components/schemas/chat_response"
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -99,7 +99,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/guild"
+                $ref: "#/components/schemas/guild_response"
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -349,7 +349,7 @@ paths:
           name: guild_id
           schema:
             type: integer
-          description: filter by guid_id
+          description: filter by guild_id
         - in: query
           name: state_id
           schema:
@@ -578,6 +578,15 @@ components:
             id:
               type: string
         - $ref: "#/components/schemas/user"
+    chat_response:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+            privacy:
+              type: integer
+        - $ref: "#/components/schemas/chat"
     ladder:
       type: object
       properties:
@@ -610,6 +619,8 @@ components:
           type: integer
         officer_ids:
           $ref: '#/components/schemas/integer_list'
+        war_history:
+          $ref: '#/components/schemas/integer_list'
     chat:
       type: object
       properties:
@@ -627,6 +638,7 @@ components:
           $ref: '#/components/schemas/integer_list'
         ban_ids:
           $ref: '#/components/schemas/integer_list'
+
     integer_list:
       type: array
       items:

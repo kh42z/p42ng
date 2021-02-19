@@ -20,13 +20,17 @@ module Api
       guild = Guild.new(guild_params)
       guild.score = 0
       guild.owner = current_user
-      if guild.save
-        # create_officers(guild.id)
-        current_user.guild = guild
+      save_and_return(guild)
+    end
+
+    def save_and_return(obj)
+      if obj.save
+        create_officers(obj.id)
+        current_user.guild = obj
         current_user.save
-        json_response(guild, :created)
+        json_response(obj, :created)
       else
-        json_response(guild.errors, :unprocessable_entity)
+        json_response(obj.errors, :unprocessable_entity)
       end
     end
 
@@ -34,18 +38,6 @@ module Api
       @guild.destroy!
       head :no_content
     end
-
-    def destroy_officer
-      guild = Guild.find(params[:guild_id])
-      guild.guild_officers.find(params[:officer_id]).destroy!
-      head :no_content
-    end
-
-    def show
-      json_response(@guild)
-    end
-
-    private
 
     def create_officers(id)
       return unless params.key?(:officer_ids)
@@ -61,6 +53,18 @@ module Api
       Guild.find(params[:id]).guild_officers.destroy_all
       create_officers(params[:id])
     end
+
+    def destroy_officer
+      guild = Guild.find(params[:guild_id])
+      guild.guild_officers.find(params[:officer_id]).destroy!
+      head :no_content
+    end
+
+    def show
+      json_response(@guild)
+    end
+
+    private
 
     def guild_params
       params.permit(:name, :anagram, :owner_id)
