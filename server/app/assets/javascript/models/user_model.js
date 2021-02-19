@@ -1,3 +1,6 @@
+import { FetchAPI } from '../services/fetchAPI'
+import { SuperHeaders } from '../services/headers'
+
 export const User = Backbone.Model.extend({
   defaults: {
     allow_password_change: undefined,
@@ -56,23 +59,21 @@ export const User = Backbone.Model.extend({
 
   saveNickname: function (nickname) {
     this.set({ nickname: nickname })
-    return this.save({ nickname: this.get('nickname') }, { patch: true })
+    return this.save({ nickname: this.get('nickname') }, {
+      patch: true,
+      success: function (response) {
+        console.log(response)
+      },
+      error: function (data, statusText) {
+        console.log(statusText.status)
+      }
+    })
   },
 
   saveImage: async function (data) {
+    const fetchAPI = new FetchAPI()
     const url = this.urlRoot + this.id + '/avatar'
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'access-token': window.localStorage.getItem('access-token'),
-        uid: window.localStorage.getItem('uid'),
-        client: window.localStorage.getItem('client_id'),
-        accept: 'application/json'
-      },
-      body: data
-    })
-    const data1 = await response.json()
-    return data1
+    return fetchAPI.saveImage(url, data)
   },
 
   saveFirstLogin: function (firstLogin) {

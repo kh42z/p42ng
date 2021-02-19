@@ -1,4 +1,7 @@
 export const OauthView = Backbone.View.extend({
+  events: {
+    'click .signIn': 'loading'
+  },
   initialize: function () {
     this.render()
   },
@@ -9,5 +12,8 @@ export const OauthView = Backbone.View.extend({
     const templateDataOauth = this.templateOauth(context)
     this.$el.html(templateDataOauth)
     return this
+  },
+  loading: function () {
+    document.body.style.cursor = 'wait'
   }
 })

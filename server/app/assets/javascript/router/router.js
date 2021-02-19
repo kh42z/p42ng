@@ -35,7 +35,7 @@ import { TestView } from '../views/testView.js'
 export const Router = Backbone.Router.extend({
   initialize: function () {
     this.userLogged = new User()
-   	this.headerView = new HeaderView({ model: this.userLogged })
+    this.headerView = new HeaderView({ model: this.userLogged })
     this.profileController = new ProfileController()
     this.guildController = new GuildController()
     this.superWrapper = undefined

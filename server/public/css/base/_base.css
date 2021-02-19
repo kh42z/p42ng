@@ -4,7 +4,8 @@ body {
     margin: 0;
     padding: 0;
 
-   z-index: 0;
+
+    z-index: 0;
 }
 
 p {
@@ -12,16 +13,23 @@ p {
     font-family: Roboto-Regular;
 }
 
+label {
+    font-family: Roboto-Regular;
+}
+
 :root {
     --primary-color:#F2C94C;
     --secondary-color: #fff;
     --table-color: #1B2534;
+    --text-button-color: #333333;
+    --error-message-color: #EB5757;
 }
 
 button {
     background-color: var(--primary-color);
-    color: #000;
+    color: var(--text-button-color);
     border: none;
     font-family: Roboto-Regular;
-    font-size: 16px;
+    font-size: 1vw;
+    cursor: pointer;
 }

@@ -1,11 +1,16 @@
-<div>
-  <label for="nickname">nickname</label>
-  <input type="text" id="nickname" name="nickname">
-</div>
+<div class="firstConnexion">
+  <div class="nickname">
+    <label class="status" for="nickname">Choose your nickname</label>
+    <input class="input" type="text" id="nickname" name="nickname" minlength="2" maxlength="26" value={{nickname}}>
+    <p class="error-message">{{message}}</p>
+  </div>
 
-<form enctype="multipart/form-data">
-<p><input type="file"  accept="image/*" name="image" id="file"  style="display: none;"></p>
-<p><label for="file" style="cursor: pointer;">Upload Image</label></p>
-<p><img src="{{image}}" id="output" width="200" /></p>
-</form>
-<a class="validate">Validate</a>
+  <div class="avatar">
+    <label class="status" >Choose your avatar</label>
+      <label>
+      <input type="file"  accept="image/*" name="image" id="file"  style="display: none;">
+      <img class="image" alt="avatar" src="{{image_url}}" id="output" width="200" style="cursor: pointer;" />
+    </label>
+  </div>
+  <button class="validate">Validate</button>
+</div>

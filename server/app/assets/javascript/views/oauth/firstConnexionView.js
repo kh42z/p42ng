@@ -15,11 +15,14 @@ export const FirstConnexionView = Backbone.View.extend({
 
   el: $('#app'),
 
-  render: function () {
+  render: function (message = '') {
     this.template = Handlebars.templates.firstConnexion
-    const context = {
-      image: this.model.get('image_url')
-    }
+    let array = {}
+
+    array = JSON.parse(JSON.stringify(this.model))
+    array.message = message
+    const context = JSON.parse(JSON.stringify(array))
+    // const context = JSON.parse(JSON.stringify(this.model))
     const templateData = this.template(context)
     this.$el.html(templateData)
     return this
@@ -27,18 +30,21 @@ export const FirstConnexionView = Backbone.View.extend({
 
   validate: function (event) {
     const validate = async () => {
-      await this.model.saveNickname(document.getElementById('nickname').value)
-      const response = await this.model.saveImage(this.fileObject)
-      this.model.set({ image_url: response.image_url })
-      this.model.saveFirstLogin(false)
-      Backbone.history.navigate('#home', true)
+      try {
+        let response = await this.model.saveNickname(document.getElementById('nickname').value)
+        if (this.fileObject !== undefined) {
+          response = await this.model.saveImage(this.fileObject)
+          this.model.set({ image_url: response.image_url })
+        }
+        this.model.saveFirstLogin(false)
+        Backbone.history.navigate('#home', true)
+      } catch (error) {
+        if (error.status !== 200) {
+          this.render(error.responseJSON.message)
+        }
+      }
     }
     validate()
-  },
-
-  on_change: function () {
-    console.log('CHANGE')
-    console.log(document.getElementById('picField'))
   },
 
   loadFile: function (event) {
