@@ -31,6 +31,7 @@ import { OauthService } from '../services/oauthService.js'
 
 // Views for test only
 import { TestView } from '../views/testView.js'
+import { FetchAPI } from '../services/fetchAPI.js'
 
 export const Router = Backbone.Router.extend({
   initialize: function () {
@@ -56,7 +57,7 @@ export const Router = Backbone.Router.extend({
     leaderboard: 'leaderboard_view',
     tournaments: 'tournaments_view',
     connexion: 'connexion',
-    exit: 'oauth_view',
+    exit: 'exit',
     firstConnexion: 'firstConnexion_view',
     '': 'oauth_view'
   },
@@ -92,6 +93,12 @@ export const Router = Backbone.Router.extend({
   firstConnexion_view: function () {
     if (this.accessPage('firstConnexion')) { return }
     const firstConnexionView = new FirstConnexionView({ model: this.userLogged })
+  },
+
+  exit: function () {
+    const fetchAPI = new FetchAPI()
+    fetchAPI.exit()
+    this.oauth_view()
   },
 
   oauth_view: function (url) {

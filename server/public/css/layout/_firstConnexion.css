@@ -13,7 +13,6 @@
 
 .firstConnexion .validate {
     margin-top: min(150px, 10%);
-    margin-bottom: 10%;
 
     font-size: min(2vw, 24px);
     width: 20vw;
@@ -50,6 +49,7 @@
     color: var(--text-button-color);
     border-radius: 10px;
     font-size: min(2vw, 24px);
+    /* font-family: Roboto-Regular; */
 }
 
 .firstConnexion .avatar {
