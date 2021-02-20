@@ -19,9 +19,14 @@ class ChatChannel < ApplicationCable::Channel
 
   private
 
+  def protected?
+    @chat.privacy == 2
+  end
+
   def reject_user?
     return true if ChatBan.where(user_id: current_user.id, chat_id: params[:chat_id]).count.positive?
-    return true if @chat.privacy == 2 && @chat.authenticate(params[:password]) == false
+
+    return true if protected? && (@chat.authenticate(params[:password]) == false)
 
     false
   end
