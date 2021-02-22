@@ -98,12 +98,12 @@ export const Router = Backbone.Router.extend({
   exit: function () {
     const fetchAPI = new FetchAPI()
     fetchAPI.exit()
+    window.localStorage.clear()
     this.oauth_view()
   },
 
   oauth_view: function (url) {
     if (this.headerView !== undefined) { this.headerView.remove() }
-    window.localStorage.clear()
     history.replaceState({}, null, '/')
     const oauthView = new OauthView()
   },

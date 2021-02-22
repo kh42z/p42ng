@@ -62,10 +62,8 @@ export const User = Backbone.Model.extend({
     return this.save({ nickname: this.get('nickname') }, {
       patch: true,
       success: function (response) {
-        console.log(response)
       },
       error: function (data, statusText) {
-        console.log(statusText.status)
       }
     })
   },
