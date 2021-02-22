@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   namespace :api do
     resources :ladders
     resources :chats
-    resources :game_records
+    resources :games
     resources :states
     resources :chats
     resources :users do

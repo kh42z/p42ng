@@ -694,7 +694,7 @@ components:
           schema:
             $ref: '#/components/schemas/errors_map'
     '401':
-      description: The user is not authenticated in the system
+      description: The user is not authenticated
       content:
         application/json:
           schema:
