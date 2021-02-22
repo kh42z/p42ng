@@ -16,7 +16,7 @@ RSpec.describe User, type: :model do
   it { should belong_to(:state) }
 
   it "validates uniqueness of nickname" do
-    FactoryBot.create(:user, nickname: 'unique name')
+    create(:user, nickname: 'unique name')
     should validate_uniqueness_of(:nickname)
   end
 end

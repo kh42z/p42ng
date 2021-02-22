@@ -15,6 +15,15 @@ ActiveRecord::Schema.define(version: 2021_02_22_110141) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "achievements", force: :cascade do |t|
+    t.string "name"
+    t.string "description"
+    t.bigint "user_achievement_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_achievement_id"], name: "index_achievements_on_user_achievement_id"
+  end
+
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -82,6 +91,13 @@ ActiveRecord::Schema.define(version: 2021_02_22_110141) do
     t.index ["owner_id"], name: "index_chats_on_owner_id"
   end
 
+  create_table "friendships", force: :cascade do |t|
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_friendships_on_user_id"
+  end
+
   create_table "game_invitations", force: :cascade do |t|
     t.bigint "player1_id"
     t.bigint "player2_id"
@@ -141,6 +157,13 @@ ActiveRecord::Schema.define(version: 2021_02_22_110141) do
     t.string "name", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "user_achievements", force: :cascade do |t|
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_user_achievements_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -212,8 +235,8 @@ ActiveRecord::Schema.define(version: 2021_02_22_110141) do
   create_table "wars", force: :cascade do |t|
     t.integer "from"
     t.integer "on"
-    t.datetime "start"
-    t.datetime "end"
+    t.datetime "war_start"
+    t.datetime "war_end"
     t.integer "prize"
     t.integer "from_score", default: 0
     t.integer "on_score", default: 0
@@ -246,8 +269,5 @@ ActiveRecord::Schema.define(version: 2021_02_22_110141) do
   add_foreign_key "users", "guilds"
   add_foreign_key "users", "ladders"
   add_foreign_key "users", "states"
-  add_foreign_key "war_addons", "war_terms"
-  add_foreign_key "war_terms", "wars"
-  add_foreign_key "war_times", "wars"
   add_foreign_key "wars", "guilds"
 end

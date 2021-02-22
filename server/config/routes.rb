@@ -17,7 +17,7 @@ Rails.application.routes.draw do
 #    resources :guilds do
 #      member do
 #        delete 'destroy_officer'
-#        get 'war_history'
+#        get 'war_records'
 #      end
 #    end
   end

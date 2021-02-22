@@ -3,8 +3,8 @@
 class War < ApplicationRecord
   validates_presence_of :from
   validates_presence_of :on
-  validates_presence_of :start
-  validates_presence_of :end
+  validates_presence_of :war_start
+  validates_presence_of :war_end
   validates_presence_of :prize
   validates_presence_of :from_score
   validates_presence_of :on_score

@@ -5,7 +5,7 @@ class CreateWarTerms < ActiveRecord::Migration[6.0]
       t.datetime :end
       t.boolean :ladder, default: false
       t.boolean :agreed, default: false
-      t.references :war, foreign_key: true
+      t.references :war
       t.timestamps
     end
   end
