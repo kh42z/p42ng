@@ -211,57 +211,12 @@ paths:
         '500':
           $ref: '#/components/responses/500'
 
-  "/api/states/{id}":
-    get:
-      summary: Retrieves a user state
-      tags:
-        - States
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: user state found
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/state"
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '500':
-          $ref: '#/components/responses/500'
-  "/api/states":
-    get:
-      summary: Retrieves all states
-      tags:
-        - States
-      responses:
-        '200':
-          description: states found
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/state"
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '500':
-          $ref: '#/components/responses/500'
-  "/api/game_records":
+
+  "/api/games":
     get:
       summary: Retrieves all games played
       tags:
-        - GameRecords
+        - Games
       parameters:
         - in: query
           name: user_id
@@ -275,7 +230,7 @@ paths:
           description: filter by game_type_id (duel/ladder/tournament)
       responses:
         '200':
-          description: Matchs found
+          description: Games found
           content:
             application/json:
               schema:
@@ -288,6 +243,21 @@ paths:
           $ref: '#/components/responses/403'
         '500':
           $ref: '#/components/responses/500'
+    post:
+      summary: creates a game
+      description: Either queue for a ladder game or duel someone
+      tags:
+        - Games
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/game"
+      responses:
+        '204':
+          description: game created
+
   "/api/ladders/{id}":
     get:
       summary: Retrieves a ladder
@@ -326,6 +296,52 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/ladder"
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
+  "/api/states/{id}":
+    get:
+      summary: Retrieves a user state
+      tags:
+        - States
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: user state found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/state"
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
+  "/api/states":
+    get:
+      summary: Retrieves all states
+      tags:
+        - States
+      responses:
+        '200':
+          description: states found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/state"
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -532,6 +548,15 @@ components:
           type: integer
         created_at:
           type: string
+    game:
+      type: object
+      properties:
+        game_type_id:
+          type: integer
+          description: 1 or 2
+        to:
+          type: integer
+          description: User for Duel (should be the user_id of your opponent)
     user:
       type: object
       properties:
