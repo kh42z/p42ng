@@ -13,6 +13,10 @@ State.create(name: 'Offline')
 State.create(name: 'Online')
 State.create(name: 'In Game')
 
+GameType.create(name: 'Duel')
+GameType.create(name: 'Ladder')
+GameType.create(name: 'Tournament')
+
 if Rails.env.development?
 
   FactoryBot.create_list(:user, 20)
@@ -31,7 +35,7 @@ if Rails.env.development?
   end
 
   (1..20).each do |id|
-    FactoryBot.create(:gameRecord, winner: User.find(rand(1..20)), looser: User.find(rand(1..20)))
+    FactoryBot.create(:game_record, winner: User.find(rand(1..20)), looser: User.find(rand(1..20)))
   end
 
 end
