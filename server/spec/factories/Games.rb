@@ -1,8 +1,8 @@
 FactoryBot.define do
-  factory :game_record do
+  factory :game do
     winner { FactoryBot.create(:user) }
     looser { FactoryBot.create(:user) }
-    game_type
+    association :game_type
   end
 end
 

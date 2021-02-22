@@ -18,7 +18,7 @@ RSpec.describe 'Ladders', type: :request do
 
   describe 'retrieves one ladder' do
     before {
-      @user = FactoryBot.create(:user)
+      @user = FactoryBot.create(:user, ladder: ladders.first)
       get "/api/ladders/#{ladder_id}", headers: @user.create_new_auth_token
     }
     it 'returns ladder' do
@@ -32,7 +32,7 @@ RSpec.describe 'Ladders', type: :request do
 
   describe 'retrieves all ladders' do
     before {
-      @user = FactoryBot.create(:user)
+      @user = FactoryBot.create(:user, ladder: ladders.first)
       get '/api/ladders', headers: @user.create_new_auth_token
     }
 

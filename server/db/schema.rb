@@ -110,21 +110,21 @@ ActiveRecord::Schema.define(version: 2021_02_22_110141) do
     t.index ["player2_id"], name: "index_game_invitations_on_player2_id"
   end
 
-  create_table "game_records", force: :cascade do |t|
+  create_table "game_types", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "games", force: :cascade do |t|
     t.bigint "winner_id"
     t.bigint "looser_id"
     t.bigint "game_type_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["game_type_id"], name: "index_game_records_on_game_type_id"
-    t.index ["looser_id"], name: "index_game_records_on_looser_id"
-    t.index ["winner_id"], name: "index_game_records_on_winner_id"
-  end
-
-  create_table "game_types", force: :cascade do |t|
-    t.string "name", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.index ["game_type_id"], name: "index_games_on_game_type_id"
+    t.index ["looser_id"], name: "index_games_on_looser_id"
+    t.index ["winner_id"], name: "index_games_on_winner_id"
   end
 
   create_table "guild_officers", force: :cascade do |t|
@@ -192,7 +192,7 @@ ActiveRecord::Schema.define(version: 2021_02_22_110141) do
     t.integer "ladder_games_lost", default: 0
     t.bigint "ladder_id"
     t.bigint "guild_id"
-    t.bigint "state_id"
+    t.bigint "state_id", default: 1
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
@@ -260,9 +260,9 @@ ActiveRecord::Schema.define(version: 2021_02_22_110141) do
   add_foreign_key "game_invitations", "game_types"
   add_foreign_key "game_invitations", "users", column: "player1_id"
   add_foreign_key "game_invitations", "users", column: "player2_id"
-  add_foreign_key "game_records", "game_types"
-  add_foreign_key "game_records", "users", column: "looser_id"
-  add_foreign_key "game_records", "users", column: "winner_id"
+  add_foreign_key "games", "game_types"
+  add_foreign_key "games", "users", column: "looser_id"
+  add_foreign_key "games", "users", column: "winner_id"
   add_foreign_key "guild_officers", "guilds"
   add_foreign_key "guild_officers", "users"
   add_foreign_key "guilds", "users", column: "owner_id"

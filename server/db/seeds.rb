@@ -35,7 +35,7 @@ if Rails.env.development?
   end
 
   (1..20).each do |id|
-    FactoryBot.create(:game_record, winner: User.find(rand(1..20)), looser: User.find(rand(1..20)))
+    FactoryBot.create(:game, winner: User.find(rand(1..20)), looser: User.find(rand(1..20)), game_type_id: 1)
   end
 
 end

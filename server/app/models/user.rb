@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
-  # extend Devise::Models
   devise :database_authenticatable, :registerable,
          :validatable, :omniauthable
 
   include DeviseTokenAuth::Concerns::User
   belongs_to :ladder, optional: true
   belongs_to :guild, optional: true
-  #  has_one :guild_officer, dependent: :destroy
+  has_one :guild_officer, dependent: :destroy
   has_one_attached :avatar
   has_many :chats, foreign_key: 'owner_id'
   has_many :friendships

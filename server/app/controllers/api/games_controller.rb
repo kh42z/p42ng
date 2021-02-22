@@ -2,15 +2,20 @@
 
 module Api
   class GamesController < ApiController
-    GameRecordReducer = Rack::Reducer.new(
-      GameRecord.all,
-      ->(user_id:) { GameRecord.where(winner_id: user_id).or(GameRecord.where(looser_id: user_id)) },
+    GameReducer = Rack::Reducer.new(
+      Game.all,
+      ->(user_id:) { Game.where(winner_id: user_id).or(Game.where(looser_id: user_id)) },
       ->(game_type_id:) { where(game_type_id: game_type_id) }
     )
 
     def index
-      @games = GameRecordReducer.apply(params)
+      @games = GameReducer.apply(params)
       json_response(@games)
+    end
+
+    def create
+      games_params = params.permit(:game_type_id)
+      json_response(Game.create!(games_params))
     end
   end
 end
