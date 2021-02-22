@@ -269,10 +269,10 @@ paths:
             type: integer
           description: filter by user_id (either win or loose)
         - in: query
-          name: type_id
+          name: game_type_id
           schema:
             type: integer
-          description: filter by game type_id (duel/ladder/tournament)
+          description: filter by game_type_id (duel/ladder/tournament)
       responses:
         '200':
           description: Matchs found

@@ -6,6 +6,7 @@ RSpec.describe ChatChannel, type: :channel do
 
   describe 'Participants' do
     it "should subscribe" do
+      chats.first.update!(privacy: 1)
       stub_connection current_user: current_user
       subscribe(chat_id: chats.first.id)
       expect(subscription).to be_confirmed
