@@ -13,6 +13,13 @@ RSpec.describe 'Chats', type: :request do
       assert_response :success
       expect(json.size).to eq(2)
     end
+    it "should get chats where participant_id equal" do
+      create_list(:chat, 2)
+      ChatParticipant.create(chat: Chat.first, user: User.first)
+      get api_chats_url, headers: access_token, params: { "participant_id": User.first.id}
+      expect(response).to have_http_status(200)
+      expect(json.size).to eq(1)
+    end
     it "should get chat" do
       chat = create(:chat)
       get api_chat_url(chat.id), headers: access_token

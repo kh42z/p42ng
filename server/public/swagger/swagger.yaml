@@ -9,6 +9,12 @@ paths:
       summary: Retrieves chats
       tags:
         - Chats
+      parameters:
+        - in: query
+          name: participant_id
+          schema:
+            type: integer
+          description: filter by participant_id
       responses:
         '200':
           description: chats found
@@ -52,6 +58,8 @@ paths:
                 password:
                   type: string
                 admin_ids:
+                  $ref: '#/components/schemas/integer_list'
+                participant_ids:
                   $ref: '#/components/schemas/integer_list'
   "/api/chats/{id}":
     parameters:
@@ -114,6 +122,8 @@ paths:
                 timeouts_ids:
                   $ref: '#/components/schemas/integer_list'
                 admin_ids:
+                  $ref: '#/components/schemas/integer_list'
+                participant_ids:
                   $ref: '#/components/schemas/integer_list'
     delete:
       summary: Deletes a chat

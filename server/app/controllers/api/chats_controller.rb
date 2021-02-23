@@ -4,8 +4,14 @@ module Api
   class ChatsController < ApiController
     before_action :set_chat, only: %i[show update destroy]
 
+    ChatReducer = Rack::Reducer.new(
+      Chat.all.order(:updated_at),
+      ->(participant_id:) { joins(:chat_participants).where(chat_participants: { user_id: participant_id }) }
+    )
+
     def index
-      json_response(Chat.all.order(:updated_at))
+      chats = ChatReducer.apply(params)
+      json_response(chats)
     end
 
     def update
