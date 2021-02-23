@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   namespace :api do
     resources :ladders
     resources :chats
-    resources :game_records
+    resources :games
     resources :states
     resources :chats
     resources :users do
@@ -17,7 +17,7 @@ Rails.application.routes.draw do
 #    resources :guilds do
 #      member do
 #        delete 'destroy_officer'
-#        get 'war_history'
+#        get 'war_records'
 #      end
 #    end
   end

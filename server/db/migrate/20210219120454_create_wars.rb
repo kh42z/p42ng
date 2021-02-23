@@ -3,8 +3,8 @@ class CreateWars < ActiveRecord::Migration[6.0]
     create_table :wars do |t|
       t.integer :from
       t.integer :on
-      t.datetime :start
-      t.datetime :end
+      t.datetime :war_start
+      t.datetime :war_end
       t.integer :prize, unsigned: true
       t.integer :from_score, default: 0
       t.integer :on_score, default: 0

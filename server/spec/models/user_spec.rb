@@ -14,9 +14,11 @@ RSpec.describe User, type: :model do
   it { should belong_to(:ladder) }
   it { should belong_to(:guild) }
   it { should belong_to(:state) }
+  it { should have_one(:guild_officer).dependent(:destroy) }
 
   it "validates uniqueness of nickname" do
-    FactoryBot.create(:user, nickname: 'unique name')
+    create(:user, nickname: 'unique name')
     should validate_uniqueness_of(:nickname)
   end
+
 end

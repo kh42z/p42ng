@@ -1,5 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe WarTime, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it 'should validate presence of attributes' do
+    should validate_presence_of(:start)
+    should validate_presence_of(:end)
+  end
+
+  it 'should have correct association' do
+    should belong_to(:war)
+  end
 end

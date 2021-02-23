@@ -15,7 +15,7 @@ RSpec.describe "States", type: :request do
 
   describe 'retrieves all states' do
     before {
-      @user = FactoryBot.create(:user)
+      @user = FactoryBot.create(:user, state: states.first)
       get "/api/states", headers: @user.create_new_auth_token
     }
     it 'returns states' do
@@ -29,7 +29,7 @@ RSpec.describe "States", type: :request do
   end
   describe 'retrieves one state' do
     before {
-      @user = FactoryBot.create(:user)
+      @user = FactoryBot.create(:user, state: states.first)
       get "/api/states/#{state_id}", headers: @user.create_new_auth_token
     }
     it 'returns state' do

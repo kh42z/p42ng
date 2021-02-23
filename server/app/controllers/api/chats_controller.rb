@@ -9,7 +9,7 @@ module Api
     end
 
     def update
-      json_response(chat.update(user_params))
+      json_response(chat.update(chat_params))
     end
 
     def create

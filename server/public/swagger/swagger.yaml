@@ -40,17 +40,37 @@ paths:
           $ref: '#/components/responses/403'
         '500':
           $ref: '#/components/responses/500'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                privacy:
+                  type: integer
+                password:
+                  type: string
+                owner_id:
+                  type: integer
+                admin_ids:
+                  $ref: '#/components/schemas/integer_list'
+                participant_ids:
+                  $ref: '#/components/schemas/integer_list'
+                timeout_ids:
+                  $ref: '#/components/schemas/integer_list'
+                ban_ids:
+                  $ref: '#/components/schemas/integer_list'
   "/api/chats/{id}":
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
     get:
       summary: Retrieves a chat
       tags:
         - Chats
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
       responses:
         '200':
           description: chat found
@@ -66,16 +86,39 @@ paths:
           $ref: '#/components/responses/403'
         '500':
           $ref: '#/components/responses/500'
+    patch:
+      summary: Modifies a chat
+      tags:
+        - Chats
+      responses:
+        '200':
+          description: chat modified
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - "$ref": "#/components/schemas/chat_response"
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                privacy:
+                  type: integer
+                password:
+                  type: string
     delete:
       summary: Deletes a chat
       tags:
         - Chats
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
       responses:
         '204':
           description: chat deleted
@@ -88,6 +131,67 @@ paths:
           $ref: '#/components/responses/403'
         '500':
           $ref: '#/components/responses/500'
+  "/api/games":
+    get:
+      summary: Retrieves all games played
+      tags:
+        - Games
+      parameters:
+        - in: query
+          name: user_id
+          schema:
+            type: integer
+          description: filter by user_id (either win or loose)
+        - in: query
+          name: game_type_id
+          schema:
+            type: integer
+          description: filter by game_type_id (duel/ladder/tournament)
+      responses:
+        '200':
+          description: Games found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/arrayOfGames"
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      summary: creates a game
+      description: Either queue for a ladder game or duel someone
+      tags:
+        - Games
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/game"
+      responses:
+        '204':
+          description: invitations sent
+
+  "/api/games/{id}":
+    delete:
+      summary: deletes a game
+      description: If the game has not started yet, you can decline by deleting the game
+      tags:
+        - Games
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: invitation declined
   "/api/guilds/":
     get:
       summary: Retrieves guilds
@@ -130,19 +234,24 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/guild'
+              type: object
+              properties:
+                name:
+                  type: string
+                anagram:
+                  type: string
 
   "/api/guilds/{id}":
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
     get:
       summary: Retrieves a guild
       tags:
         - Guilds
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
       responses:
         '200':
           description: guild found
@@ -158,21 +267,22 @@ paths:
           $ref: '#/components/responses/403'
         '500':
           $ref: '#/components/responses/500'
-    put:
-      summary: Updates a guild
+    patch:
+      summary: Modifies a guild
       tags:
         - Guilds
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/guild'
+              type: object
+              properties:
+                name:
+                  type: string
+                anagram:
+                  type: string
+                officer_ids:
+                  $ref: '#/components/schemas/integer_list'
       responses:
         '200':
           description: guild found
@@ -192,12 +302,6 @@ paths:
       summary: Deletes a guild
       tags:
         - Guilds
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
       responses:
         '204':
           description: guild deleted
@@ -211,83 +315,6 @@ paths:
         '500':
           $ref: '#/components/responses/500'
 
-  "/api/states/{id}":
-    get:
-      summary: Retrieves a user state
-      tags:
-        - States
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: user state found
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/state"
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '500':
-          $ref: '#/components/responses/500'
-  "/api/states":
-    get:
-      summary: Retrieves all states
-      tags:
-        - States
-      responses:
-        '200':
-          description: states found
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/state"
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '500':
-          $ref: '#/components/responses/500'
-  "/api/game_records":
-    get:
-      summary: Retrieves all games played
-      tags:
-        - GameRecords
-      parameters:
-        - in: query
-          name: user_id
-          schema:
-            type: integer
-          description: filter by user_id (either win or loose)
-        - in: query
-          name: type_id
-          schema:
-            type: integer
-          description: filter by game type_id (duel/ladder/tournament)
-      responses:
-        '200':
-          description: Matchs found
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/arrayOfGames"
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '500':
-          $ref: '#/components/responses/500'
   "/api/ladders/{id}":
     get:
       summary: Retrieves a ladder
@@ -326,6 +353,52 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/ladder"
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
+  "/api/states/{id}":
+    get:
+      summary: Retrieves a user state
+      tags:
+        - States
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: user state found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/state"
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
+  "/api/states":
+    get:
+      summary: Retrieves all states
+      tags:
+        - States
+      responses:
+        '200':
+          description: states found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/state"
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -518,20 +591,31 @@ components:
     arrayOfGames:
       type: array
       items:
-        $ref:  '#/components/schemas/gameRecord'
-    gameRecord:
+        $ref:  '#/components/schemas/game_response'
+    game_response:
       type: object
       properties:
         winner_id:
           type: integer
           description: user_id
-        looser_id:
+        player_left_id:
           type: integer
           description: user_id
-        type_id:
+        player_right_id:
+          type: integer
+        game_type_id:
           type: integer
         created_at:
           type: string
+    game:
+      type: object
+      properties:
+        game_type_id:
+          type: integer
+          description: 1 or 2
+        opponent_id:
+          type: integer
+          description: User for Duel (should be the user_id of your opponent)
     user:
       type: object
       properties:
@@ -621,7 +705,7 @@ components:
           type: integer
         officer_ids:
           $ref: '#/components/schemas/integer_list'
-        war_history:
+        war_records:
           $ref: '#/components/schemas/integer_list'
     chat:
       type: object
@@ -630,6 +714,8 @@ components:
           type: integer
         privacy:
           type: integer
+        password:
+          type: string
         owner_id:
           type: integer
         admin_ids:
@@ -669,7 +755,7 @@ components:
           schema:
             $ref: '#/components/schemas/errors_map'
     '401':
-      description: The user is not authenticated in the system
+      description: The user is not authenticated
       content:
         application/json:
           schema:

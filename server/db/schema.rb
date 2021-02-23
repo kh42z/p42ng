@@ -10,10 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_19_121557) do
+ActiveRecord::Schema.define(version: 2021_02_22_110141) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "achievements", force: :cascade do |t|
+    t.string "name"
+    t.string "description"
+    t.bigint "user_achievement_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_achievement_id"], name: "index_achievements_on_user_achievement_id"
+  end
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -74,22 +83,52 @@ ActiveRecord::Schema.define(version: 2021_02_19_121557) do
   end
 
   create_table "chats", force: :cascade do |t|
-    t.integer "privacy", default: 0
-    t.string "password_digest", default: ""
+    t.string "privacy", default: "public"
+    t.string "password_digest"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "owner_id"
     t.index ["owner_id"], name: "index_chats_on_owner_id"
   end
 
-  create_table "game_records", force: :cascade do |t|
-    t.bigint "winner_id"
-    t.bigint "looser_id"
-    t.integer "type_id", default: 0
+  create_table "friendships", force: :cascade do |t|
+    t.bigint "friend_a_id"
+    t.bigint "friend_b_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["looser_id"], name: "index_game_records_on_looser_id"
-    t.index ["winner_id"], name: "index_game_records_on_winner_id"
+    t.index ["friend_a_id"], name: "index_friendships_on_friend_a_id"
+    t.index ["friend_b_id"], name: "index_friendships_on_friend_b_id"
+  end
+
+  create_table "game_invitations", force: :cascade do |t|
+    t.bigint "player1_id"
+    t.bigint "player2_id"
+    t.bigint "game_type_id"
+    t.string "from"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["game_type_id"], name: "index_game_invitations_on_game_type_id"
+    t.index ["player1_id"], name: "index_game_invitations_on_player1_id"
+    t.index ["player2_id"], name: "index_game_invitations_on_player2_id"
+  end
+
+  create_table "game_types", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "games", force: :cascade do |t|
+    t.bigint "winner_id"
+    t.bigint "player_left_id"
+    t.bigint "player_right_id"
+    t.bigint "game_type_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["game_type_id"], name: "index_games_on_game_type_id"
+    t.index ["player_left_id"], name: "index_games_on_player_left_id"
+    t.index ["player_right_id"], name: "index_games_on_player_right_id"
+    t.index ["winner_id"], name: "index_games_on_winner_id"
   end
 
   create_table "guild_officers", force: :cascade do |t|
@@ -124,6 +163,13 @@ ActiveRecord::Schema.define(version: 2021_02_19_121557) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "user_achievements", force: :cascade do |t|
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_user_achievements_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "provider", default: "email", null: false
     t.string "uid", default: "", null: false
@@ -150,7 +196,7 @@ ActiveRecord::Schema.define(version: 2021_02_19_121557) do
     t.integer "ladder_games_lost", default: 0
     t.bigint "ladder_id"
     t.bigint "guild_id"
-    t.bigint "state_id"
+    t.bigint "state_id", default: 1
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
@@ -193,8 +239,8 @@ ActiveRecord::Schema.define(version: 2021_02_19_121557) do
   create_table "wars", force: :cascade do |t|
     t.integer "from"
     t.integer "on"
-    t.datetime "start"
-    t.datetime "end"
+    t.datetime "war_start"
+    t.datetime "war_end"
     t.integer "prize"
     t.integer "from_score", default: 0
     t.integer "on_score", default: 0
@@ -215,16 +261,20 @@ ActiveRecord::Schema.define(version: 2021_02_19_121557) do
   add_foreign_key "chat_timeouts", "chats"
   add_foreign_key "chat_timeouts", "users"
   add_foreign_key "chats", "users", column: "owner_id"
-  add_foreign_key "game_records", "users", column: "looser_id"
-  add_foreign_key "game_records", "users", column: "winner_id"
+  add_foreign_key "friendships", "users", column: "friend_a_id"
+  add_foreign_key "friendships", "users", column: "friend_b_id"
+  add_foreign_key "game_invitations", "game_types"
+  add_foreign_key "game_invitations", "users", column: "player1_id"
+  add_foreign_key "game_invitations", "users", column: "player2_id"
+  add_foreign_key "games", "game_types"
+  add_foreign_key "games", "users", column: "player_left_id"
+  add_foreign_key "games", "users", column: "player_right_id"
+  add_foreign_key "games", "users", column: "winner_id"
   add_foreign_key "guild_officers", "guilds"
   add_foreign_key "guild_officers", "users"
   add_foreign_key "guilds", "users", column: "owner_id"
   add_foreign_key "users", "guilds"
   add_foreign_key "users", "ladders"
   add_foreign_key "users", "states"
-  add_foreign_key "war_addons", "war_terms"
-  add_foreign_key "war_terms", "wars"
-  add_foreign_key "war_times", "wars"
   add_foreign_key "wars", "guilds"
 end
