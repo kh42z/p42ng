@@ -47,18 +47,11 @@ paths:
               type: object
               properties:
                 privacy:
-                  type: integer
+                  type: string
+                  enum: [public, private, protected]
                 password:
                   type: string
-                owner_id:
-                  type: integer
                 admin_ids:
-                  $ref: '#/components/schemas/integer_list'
-                participant_ids:
-                  $ref: '#/components/schemas/integer_list'
-                timeout_ids:
-                  $ref: '#/components/schemas/integer_list'
-                ban_ids:
                   $ref: '#/components/schemas/integer_list'
   "/api/chats/{id}":
     parameters:
@@ -112,9 +105,16 @@ paths:
             schema:
               properties:
                 privacy:
-                  type: integer
+                  type: string
+                  enum: [public, private, protected]
                 password:
                   type: string
+                bans_ids:
+                  $ref: '#/components/schemas/integer_list'
+                timeouts_ids:
+                  $ref: '#/components/schemas/integer_list'
+                admin_ids:
+                  $ref: '#/components/schemas/integer_list'
     delete:
       summary: Deletes a chat
       tags:
@@ -146,6 +146,7 @@ paths:
           name: game_type
           schema:
             type: string
+            enum: [duel, ladder, tournament]
           description: filter by game_type [Duel Ladder Tournament]
       responses:
         '200':
@@ -380,7 +381,8 @@ paths:
         - in: query
           name: status
           schema:
-            type: integer
+            type: string
+            enum: [offline, online, ingame]
           description: filter by status
       responses:
         '200':
@@ -559,6 +561,7 @@ components:
           type: integer
         game_type:
           type: string
+          enum: [duel, ladder, tournament]
         created_at:
           type: string
     game:
@@ -566,10 +569,11 @@ components:
       properties:
         game_type:
           type: string
-          description: [Duel Ladder]
+          description: could be [Duel Ladder]
+          enum: [duel, ladder]
         opponent_id:
           type: integer
-          description: User for Duel (should be the user_id of your opponent)
+          description: user_id of your opponent
     user:
       type: object
       properties:
@@ -580,6 +584,7 @@ components:
           nullable: true
         status:
           type: string
+          enum: [offline, online, ingame]
           nullable: false
         ladder_id:
           type: integer
@@ -658,7 +663,8 @@ components:
         id:
           type: integer
         privacy:
-          type: integer
+          type: string
+          enum: [public, private, protected]
         password:
           type: string
         owner_id:
