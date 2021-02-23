@@ -534,17 +534,19 @@ components:
     arrayOfGames:
       type: array
       items:
-        $ref:  '#/components/schemas/gameRecord'
-    gameRecord:
+        $ref:  '#/components/schemas/game_response'
+    game_response:
       type: object
       properties:
         winner_id:
           type: integer
           description: user_id
-        looser_id:
+        player_left_id:
           type: integer
           description: user_id
-        type_id:
+        player_right_id:
+          type: integer
+        game_type_id:
           type: integer
         created_at:
           type: string
@@ -554,7 +556,7 @@ components:
         game_type_id:
           type: integer
           description: 1 or 2
-        to:
+        opponent_id:
           type: integer
           description: User for Duel (should be the user_id of your opponent)
     user:
