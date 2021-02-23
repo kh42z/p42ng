@@ -9,10 +9,10 @@ RSpec.describe UserChannel, type: :channel do
       subscribe(user_id: current_user.id)
       expect(subscription).to be_confirmed
       current_user.reload
-      expect(current_user.status).to eq('Online')
+      expect(current_user.status).to eq('online')
       unsubscribe
       current_user.reload
-      expect(current_user.status).to eq('Offline')
+      expect(current_user.status).to eq('offline')
     end
   end
 end

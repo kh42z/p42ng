@@ -15,7 +15,7 @@ module Api
 
     def create
       @games_params = params.permit(:game_type)
-      if @games_params[:game_type] == 'Duel'
+      if @games_params[:game_type] == 'duel'
         raise ActiveRecord::RecordInvalid if params.key?(:opponent_id) == false
 
         @games_params[:player_left_id], @games_params[:player_right_id] = [current_user.id,
@@ -33,7 +33,7 @@ module Api
 
     def invite(user_id, game_id)
       user = User.find(user_id)
-      raise ActiveRecord::RecordInvalid if user.status != 'Online'
+      raise ActiveRecord::RecordInvalid if user.status != 'online'
 
       ActionCable.server.broadcast(user, { action: 'invite', game_id: game_id })
     end

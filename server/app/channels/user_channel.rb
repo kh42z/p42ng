@@ -6,12 +6,12 @@ class UserChannel < ApplicationCable::Channel
 
     return reject if reject_user?
 
-    @user.update!(status: 'Online')
+    @user.update!(status: 'online')
     stream_for @user
   end
 
   def unsubscribed
-    @user.update!(status: 'Offline')
+    @user.update!(status: 'offline')
   end
 
   private

@@ -24,7 +24,7 @@ class User < ApplicationRecord
   validates_inclusion_of :first_login, in: [true, false]
   validates_inclusion_of :admin, in: [true, false]
   validates_inclusion_of :banned, in: [true, false]
-  validates_inclusion_of :status, in: %w[Offline Online InGame]
+  validates_inclusion_of :status, in: %w[offline online ingame]
   validates_presence_of :ladder_games_won
   validates_presence_of :ladder_games_lost
 end

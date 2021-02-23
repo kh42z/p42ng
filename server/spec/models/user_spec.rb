@@ -9,7 +9,7 @@ RSpec.describe User, type: :model do
   it { should allow_values(true, false).for(:first_login) }
   it { should allow_values(true, false).for(:admin) }
   it { should allow_values(true, false).for(:banned) }
-  it { should allow_values('Offline', 'Online', 'InGame').for(:status) }
+  it { should allow_values('offline', 'online', 'ingame').for(:status) }
   it { should validate_presence_of(:ladder_games_won) }
   it { should validate_presence_of(:ladder_games_lost) }
   it { should belong_to(:ladder) }

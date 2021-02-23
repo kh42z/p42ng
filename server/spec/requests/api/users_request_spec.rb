@@ -31,8 +31,8 @@ RSpec.describe "Users", type: :request do
     end
     context "search with status" do
       before do
-        User.first.update(status: 'Online')
-        get "/api/users", headers: first.create_new_auth_token, params: {status: 'Online'}
+        User.first.update(status: 'online')
+        get "/api/users", headers: first.create_new_auth_token, params: {status: 'online'}
       end
       it "returns users" do
         expect(json).not_to be_empty

@@ -10,7 +10,7 @@ FactoryBot.define do
     email { Faker::Internet.email }
     ladder_games_won { Faker::Number.number(digits: 3) }
     ladder_games_lost { Faker::Number.number(digits: 3) }
-    status { "Offline" }
+    status { "offline" }
     association :ladder
   end
 end
