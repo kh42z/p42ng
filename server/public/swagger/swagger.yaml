@@ -121,6 +121,67 @@ paths:
           $ref: '#/components/responses/403'
         '500':
           $ref: '#/components/responses/500'
+  "/api/games":
+    get:
+      summary: Retrieves all games played
+      tags:
+        - Games
+      parameters:
+        - in: query
+          name: user_id
+          schema:
+            type: integer
+          description: filter by user_id (either win or loose)
+        - in: query
+          name: game_type_id
+          schema:
+            type: integer
+          description: filter by game_type_id (duel/ladder/tournament)
+      responses:
+        '200':
+          description: Games found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/arrayOfGames"
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      summary: creates a game
+      description: Either queue for a ladder game or duel someone
+      tags:
+        - Games
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/game"
+      responses:
+        '204':
+          description: invitations sent
+
+  "/api/games/{id}":
+    delete:
+      summary: deletes a game
+      description: If the game has not started yet, you can decline by deleting the game
+      tags:
+        - Games
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: invitation declined
   "/api/guilds/":
     get:
       summary: Retrieves guilds
@@ -244,51 +305,6 @@ paths:
         '500':
           $ref: '#/components/responses/500'
 
-  "/api/games":
-    get:
-      summary: Retrieves all games played
-      tags:
-        - Games
-      parameters:
-        - in: query
-          name: user_id
-          schema:
-            type: integer
-          description: filter by user_id (either win or loose)
-        - in: query
-          name: game_type_id
-          schema:
-            type: integer
-          description: filter by game_type_id (duel/ladder/tournament)
-      responses:
-        '200':
-          description: Games found
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/arrayOfGames"
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '500':
-          $ref: '#/components/responses/500'
-    post:
-      summary: creates a game
-      description: Either queue for a ladder game or duel someone
-      tags:
-        - Games
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/game"
-      responses:
-        '204':
-          description: game created
 
   "/api/ladders/{id}":
     get:
