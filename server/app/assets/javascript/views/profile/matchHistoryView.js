@@ -59,6 +59,7 @@ export const MatchHistoryView = Backbone.View.extend({
         })
       }
     }
+		console.log(template(context))
     this.$el.html(template(context))
     return this
   }

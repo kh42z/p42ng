@@ -8,7 +8,7 @@ export const GameRecords = Backbone.Collection.extend({
     this.fetch('success')
   },
   model: GameRecord,
-  urlRoot: '/api/games/',
+  urlRoot: '/api/game_records',
   url: function () {
     return this.urlRoot
   }
