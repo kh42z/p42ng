@@ -1,10 +1,4 @@
-import { SuperWrapper } from '../collections/superWrapper.js'
-import { Wrapper } from '../models/wrapper.js'
-import { Users } from '../collections/users_collection.js'
-import { Guilds } from '../collections/guilds_collection.js'
-
-export const TestView = Backbone.View.extend({
-  el: $('#app'),
+export const ChatView = Backbone.View.extend({
   initialize: function () {
     this.guilds = this.model.get('guilds').get('obj')
     this.userLogged = this.model.get('userLogged').get('obj')
@@ -15,10 +9,13 @@ export const TestView = Backbone.View.extend({
       console.log(this.userLogged.get('nickname'))
     }, this)
   },
-
+  el: $('#app'),
   render: function () {
-    this.$el.html('test in render')
-    console.log(this.guilds.at(0).get('name'))
+    const templateChat = Handlebars.templates.chat
+
+    const context = {}
+    const templateDataChat = templateChat(context)
+    this.$el.html(templateDataChat)
     return this
   }
 })

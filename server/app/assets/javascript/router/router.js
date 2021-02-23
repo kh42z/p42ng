@@ -8,6 +8,7 @@ import { TournamentsView } from '../views/tournaments/tournamentsView.js'
 import { OauthView } from '../views/oauth/oauthView.js'
 import { GuildsView } from '../views/guild/guildsView.js'
 import { FirstConnexionView } from '../views/oauth/firstConnexionView.js'
+import { ChatView } from '../views/chatView'
 
 // models
 import { User } from '../models/user_model'
@@ -54,6 +55,7 @@ export const Router = Backbone.Router.extend({
     'guild/:id(/:page)': 'guild_view',
     'guild/:id(/:page)/': 'guild_view',
     'chat/:id(/:page)': 'chat_view',
+    chat: 'chat_view',
     leaderboard: 'leaderboard_view',
     tournaments: 'tournaments_view',
     connexion: 'connexion',
@@ -141,7 +143,10 @@ export const Router = Backbone.Router.extend({
   },
 
   chat_view: function (id, page) {
-    if (this.accessPage()) { }
+    if (this.accessPage()) { return }
+    console.log('chat view')
+    const chatView = new ChatView({ model: this.loadWraper() })
+    chatView.render()
   },
 
   leaderboard_view: function () {
