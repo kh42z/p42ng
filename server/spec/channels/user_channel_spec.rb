@@ -5,16 +5,14 @@ RSpec.describe UserChannel, type: :channel do
 
   describe 'User' do
     it "should subscribe" do
-      State.create(name: "Offline", id: 1)
-      State.create(name: "Online", id: 2)
       stub_connection current_user: current_user
       subscribe(user_id: current_user.id)
       expect(subscription).to be_confirmed
       current_user.reload
-      expect(current_user.state_id).to eq(2)
+      expect(current_user.status).to eq('Online')
       unsubscribe
       current_user.reload
-      expect(current_user.state_id).to eq(1)
+      expect(current_user.status).to eq('Offline')
     end
   end
 end

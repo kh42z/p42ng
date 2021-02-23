@@ -361,52 +361,6 @@ paths:
           $ref: '#/components/responses/403'
         '500':
           $ref: '#/components/responses/500'
-  "/api/states/{id}":
-    get:
-      summary: Retrieves a user state
-      tags:
-        - States
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: user state found
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/state"
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '500':
-          $ref: '#/components/responses/500'
-  "/api/states":
-    get:
-      summary: Retrieves all states
-      tags:
-        - States
-      responses:
-        '200':
-          description: states found
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/state"
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '500':
-          $ref: '#/components/responses/500'
   "/api/users":
     get:
       summary: Retrieves users
@@ -424,10 +378,10 @@ paths:
             type: integer
           description: filter by guild_id
         - in: query
-          name: state_id
+          name: status
           schema:
             type: integer
-          description: filter by state_id
+          description: filter by status
       responses:
         '200':
           description: users found
@@ -624,9 +578,9 @@ components:
         guild_id:
           type: integer
           nullable: true
-        state_id:
-          type: integer
-          nullable: true
+        status:
+          type: string
+          nullable: false
         ladder_id:
           type: integer
           nullable: true
@@ -683,15 +637,6 @@ components:
         desc:
           type: string
           nullable: true
-      required:
-        - name
-    state:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
       required:
         - name
     guild:

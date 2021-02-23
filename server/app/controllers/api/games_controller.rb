@@ -33,7 +33,7 @@ module Api
 
     def invite(user_id, game_id)
       user = User.find(user_id)
-      raise ActiveRecord::RecordInvalid if user.state_id != 2
+      raise ActiveRecord::RecordInvalid if user.status != 'Online'
 
       ActionCable.server.broadcast(user, { action: 'invite', game_id: game_id })
     end

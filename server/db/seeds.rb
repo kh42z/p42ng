@@ -9,10 +9,6 @@ Ladder.create(name: 'Gold', desc: 'ehm.')
 Ladder.create(name: 'Platine', desc: 'mhe.')
 Ladder.create(name: 'Diamond', desc: 'mhe.')
 
-State.create(name: 'Offline')
-State.create(name: 'Online')
-State.create(name: 'In Game')
-
 GameType.create(name: 'Duel')
 GameType.create(name: 'Ladder')
 GameType.create(name: 'Tournament')
