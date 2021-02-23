@@ -144,8 +144,7 @@ export const Router = Backbone.Router.extend({
 
   chat_view: function (id, page) {
     if (this.accessPage()) { return }
-    console.log('chat view')
-    const chatView = new ChatView({ model: this.loadWraper() })
+    const chatView = new ChatView({ model: this.userLogged })
     chatView.render()
   },
 

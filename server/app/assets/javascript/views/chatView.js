@@ -1,20 +1,18 @@
 export const ChatView = Backbone.View.extend({
   initialize: function () {
-    this.guilds = this.model.get('guilds').get('obj')
-    this.userLogged = this.model.get('userLogged').get('obj')
-    this.listenTo(this.guilds, 'sync', function () {
-      this.render()
-    }, this)
-    this.listenTo(this.userLogged, 'sync', function () {
-      console.log(this.userLogged.get('nickname'))
-    }, this)
+    console.log(this.model)
+    this.render()
   },
   el: $('#app'),
   render: function () {
-    const templateChat = Handlebars.templates.chat
+    this.templateChat = Handlebars.templates.chat
+    let array = {}
 
-    const context = {}
-    const templateDataChat = templateChat(context)
+    array = JSON.parse(JSON.stringify(this.model))
+		for (let i = 0; i < )
+
+    const context = array
+    const templateDataChat = this.templateChat(context)
     this.$el.html(templateDataChat)
     return this
   }
