@@ -20,7 +20,7 @@ class ChatChannel < ApplicationCable::Channel
   private
 
   def protected?
-    @chat.privacy == 2
+    @chat.privacy == 'protected'
   end
 
   def reject_user?

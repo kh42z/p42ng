@@ -27,11 +27,10 @@ RSpec.describe ChatChannel, type: :channel do
     end
 
     it "should not accept password" do
-      @chat.update!(privacy: 'protected', password: "nope")
+      @chat.update!(privacy: "protected", password: "nope")
       stub_connection current_user: current_user
       subscribe(chat_id: @chat.id, password: "42")
-      #expect(subscription).to be_rejected
-      expect(subscription).to be_confirmed
+      expect(subscription).to be_rejected
     end
   end
 
