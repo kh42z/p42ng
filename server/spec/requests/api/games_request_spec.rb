@@ -46,8 +46,10 @@ RSpec.describe "Games", type: :request do
     context "create" do
       describe "a valid duel game" do
         before do
-          to = create(:user)
+          state = State.create(name: "Online", id: 2)
+          to = create(:user, state: state)
           GameType.create(name: "Ladder", id: 1)
+          auth.update(state: state)
           post "/api/games", headers: auth.create_new_auth_token, params: {game_type_id: 1, opponent_id: to.id}
         end
 

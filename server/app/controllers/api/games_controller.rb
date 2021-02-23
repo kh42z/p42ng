@@ -14,14 +14,33 @@ module Api
     end
 
     def create
-      games_params = params.permit(:game_type_id)
-      if games_params[:game_type_id] == '1'
+      @games_params = params.permit(:game_type_id)
+      if @games_params[:game_type_id] == '1'
         raise ActiveRecord::RecordInvalid if params.key?(:opponent_id) == false
 
-        games_params[:player_left_id], games_params[:player_right_id] = [current_user.id,
-                                                                         params[:opponent_id].to_i].shuffle
+        @games_params[:player_left_id], @games_params[:player_right_id] = [current_user.id,
+                                                                           params[:opponent_id].to_i].shuffle
       end
-      json_response(Game.create!(games_params))
+      json_response(create_game)
+    end
+
+    protected
+
+    def send_invites(game)
+      invite(game.player_left.id, game.id)
+      invite(game.player_right.id, game.id)
+    end
+
+    def invite(user_id, game_id)
+      user = User.find(user_id)
+      raise ActiveRecord::RecordInvalid if user.state_id != 2
+
+      ActionCable.server.broadcast(user, { action: 'invite', game_id: game_id })
+    end
+
+    def create_game
+      game = Game.create!(@games_params)
+      send_invites(game)
     end
   end
 end
