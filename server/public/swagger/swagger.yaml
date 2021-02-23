@@ -50,6 +50,16 @@ paths:
                   type: integer
                 password:
                   type: string
+                owner_id:
+                  type: integer
+                admin_ids:
+                  $ref: '#/components/schemas/integer_list'
+                participant_ids:
+                  $ref: '#/components/schemas/integer_list'
+                timeout_ids:
+                  $ref: '#/components/schemas/integer_list'
+                ban_ids:
+                  $ref: '#/components/schemas/integer_list'
   "/api/chats/{id}":
     parameters:
       - name: id
@@ -304,7 +314,6 @@ paths:
           $ref: '#/components/responses/403'
         '500':
           $ref: '#/components/responses/500'
-
 
   "/api/ladders/{id}":
     get:
