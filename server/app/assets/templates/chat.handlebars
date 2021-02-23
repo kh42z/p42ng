@@ -1,0 +1,23 @@
+<div class="chat">
+    <div class="discussions">
+        <a><img src="./icons/add_box.svg"></img></a>
+        {{#each discussions}}
+            <a><span>
+                <img src={{image_url}} class="image_url"></img>
+                <label>{{nickname}}</label>
+            </span></a>
+        {{/each}}
+    </div>
+    <div class="header">
+        <a><span>
+            <img src={{image_url}} class="image_url"></img>
+            <label>{{nickname}}</label>
+            <label>{{state}}</label>
+            <img src="./icons/group_add.svg"></img>
+            <button>Play</button>
+        </span></a>
+    </div>
+    <div class="messages">
+        <input class="input" type="text">
+    </div>
+</div>
