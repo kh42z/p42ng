@@ -1,0 +1,13 @@
+<div class="content">
+	<p>Match History</p>
+	<a href="#profile/{{id}}/match_history"> {{player}} </a>
+	<a href="#guild/{{guildId}}/members"> {{guild}} </a>
+	<ul>
+		{{#each matchs}}
+		<li>
+			<span>{{result}}  against</span>
+			<a href="#profile/{{opponentId}}/match_history">{{opponentName}}</a> <span>|<a href="#guild/{{opponentGuildId}}">{{opponentGuild}}</a></span>|
+			<span>   {{date}} </span>
+			{{/each}}
+	</ul>
+</div>

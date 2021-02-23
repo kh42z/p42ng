@@ -21,11 +21,11 @@ templates['guild_members'] = template({"1":function(container,depth0,helpers,par
         return undefined
     };
 
-  return "<div>\n	<span> "
+  return "<div class=\"content\">\n	<span> "
     + alias2(alias1((depth0 != null ? lookupProperty(depth0,"name") : depth0), depth0))
-    + "   "
+    + "   |"
     + alias2(alias1((depth0 != null ? lookupProperty(depth0,"anagram") : depth0), depth0))
-    + " </span>\n	<ul>\n"
+    + "| </span>\n	<ul>\n"
     + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"members") : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":4,"column":1},"end":{"line":7,"column":10}}})) != null ? stack1 : "")
     + "</ul>\n</div>\n";
 },"useData":true});

@@ -12,14 +12,19 @@ export const SuperWrapper = Backbone.Collection.extend({
   url: function () {
     return this.urlRoot
   }
-})*/
+}) */
+
+// important // NOTE:
+// This order when listenTo several models is important
+// wait for guilds then users work but the opposite no
+// ?????
 
 export const SuperWrapper = Backbone.Model.extend({
-	default:
+  default:
 	{
-		users: undefined,
-		guilds: undefined,
-		ladders: undefined,
-		userLogged: undefined
+	  users: undefined,
+	  guilds: undefined,
+	  ladders: undefined,
+	  userLogged: undefined
 	}
 })
