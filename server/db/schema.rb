@@ -92,10 +92,12 @@ ActiveRecord::Schema.define(version: 2021_02_22_110141) do
   end
 
   create_table "friendships", force: :cascade do |t|
-    t.bigint "user_id"
+    t.bigint "friend_a_id"
+    t.bigint "friend_b_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id"], name: "index_friendships_on_user_id"
+    t.index ["friend_a_id"], name: "index_friendships_on_friend_a_id"
+    t.index ["friend_b_id"], name: "index_friendships_on_friend_b_id"
   end
 
   create_table "game_invitations", force: :cascade do |t|
@@ -259,6 +261,8 @@ ActiveRecord::Schema.define(version: 2021_02_22_110141) do
   add_foreign_key "chat_timeouts", "chats"
   add_foreign_key "chat_timeouts", "users"
   add_foreign_key "chats", "users", column: "owner_id"
+  add_foreign_key "friendships", "users", column: "friend_a_id"
+  add_foreign_key "friendships", "users", column: "friend_b_id"
   add_foreign_key "game_invitations", "game_types"
   add_foreign_key "game_invitations", "users", column: "player1_id"
   add_foreign_key "game_invitations", "users", column: "player2_id"
