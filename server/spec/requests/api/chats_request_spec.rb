@@ -41,7 +41,7 @@ RSpec.describe 'Chats', type: :request do
   end
 
   describe '#post' do
-    before { post api_chats_url, headers: access_token, params: { privacy: 1, password: "asd" } }
+    before { post api_chats_url, headers: access_token, params: { privacy: 'protected', password: "asd" } }
     it 'should return 201 created' do
       expect(response).to have_http_status(201)
     end

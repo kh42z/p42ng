@@ -83,7 +83,7 @@ ActiveRecord::Schema.define(version: 2021_02_22_110141) do
   end
 
   create_table "chats", force: :cascade do |t|
-    t.integer "privacy", default: 0
+    t.string "privacy", default: "public"
     t.string "password_digest", default: ""
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

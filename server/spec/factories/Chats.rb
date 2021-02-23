@@ -3,8 +3,7 @@
 FactoryBot.define do
 
   factory :chat do
-    privacy { rand(0..2) }
-    password_digest { Faker::Internet.password }
+    privacy { %w[public private].sample }
     owner_id { create(:user).id }
   end
 
