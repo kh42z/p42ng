@@ -44,18 +44,23 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/chat'
+              type: object
+              properties:
+                privacy:
+                  type: integer
+                password:
+                  type: string
   "/api/chats/{id}":
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
     get:
       summary: Retrieves a chat
       tags:
         - Chats
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
       responses:
         '200':
           description: chat found
@@ -71,16 +76,39 @@ paths:
           $ref: '#/components/responses/403'
         '500':
           $ref: '#/components/responses/500'
+    patch:
+      summary: Modifies a chat
+      tags:
+        - Chats
+      responses:
+        '200':
+          description: chat modified
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - "$ref": "#/components/schemas/chat_response"
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                privacy:
+                  type: integer
+                password:
+                  type: string
     delete:
       summary: Deletes a chat
       tags:
         - Chats
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
       responses:
         '204':
           description: chat deleted
@@ -135,19 +163,24 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/guild'
+              type: object
+              properties:
+                name:
+                  type: string
+                anagram:
+                  type: string
 
   "/api/guilds/{id}":
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
     get:
       summary: Retrieves a guild
       tags:
         - Guilds
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
       responses:
         '200':
           description: guild found
@@ -163,21 +196,22 @@ paths:
           $ref: '#/components/responses/403'
         '500':
           $ref: '#/components/responses/500'
-    put:
-      summary: Updates a guild
+    patch:
+      summary: Modifies a guild
       tags:
         - Guilds
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/guild'
+              type: object
+              properties:
+                name:
+                  type: string
+                anagram:
+                  type: string
+                officer_ids:
+                  $ref: '#/components/schemas/integer_list'
       responses:
         '200':
           description: guild found
@@ -197,12 +231,6 @@ paths:
       summary: Deletes a guild
       tags:
         - Guilds
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
       responses:
         '204':
           description: guild deleted
@@ -215,7 +243,6 @@ paths:
           $ref: '#/components/responses/403'
         '500':
           $ref: '#/components/responses/500'
-
 
   "/api/games":
     get:
