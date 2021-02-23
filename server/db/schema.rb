@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_22_110141) do
+ActiveRecord::Schema.define(version: 2021_02_22_100552) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -100,32 +100,13 @@ ActiveRecord::Schema.define(version: 2021_02_22_110141) do
     t.index ["friend_b_id"], name: "index_friendships_on_friend_b_id"
   end
 
-  create_table "game_invitations", force: :cascade do |t|
-    t.bigint "player1_id"
-    t.bigint "player2_id"
-    t.bigint "game_type_id"
-    t.string "from"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["game_type_id"], name: "index_game_invitations_on_game_type_id"
-    t.index ["player1_id"], name: "index_game_invitations_on_player1_id"
-    t.index ["player2_id"], name: "index_game_invitations_on_player2_id"
-  end
-
-  create_table "game_types", force: :cascade do |t|
-    t.string "name", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "games", force: :cascade do |t|
     t.bigint "winner_id"
     t.bigint "player_left_id"
     t.bigint "player_right_id"
-    t.bigint "game_type_id"
+    t.string "game_type"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["game_type_id"], name: "index_games_on_game_type_id"
     t.index ["player_left_id"], name: "index_games_on_player_left_id"
     t.index ["player_right_id"], name: "index_games_on_player_right_id"
     t.index ["winner_id"], name: "index_games_on_winner_id"
@@ -256,10 +237,6 @@ ActiveRecord::Schema.define(version: 2021_02_22_110141) do
   add_foreign_key "chats", "users", column: "owner_id"
   add_foreign_key "friendships", "users", column: "friend_a_id"
   add_foreign_key "friendships", "users", column: "friend_b_id"
-  add_foreign_key "game_invitations", "game_types"
-  add_foreign_key "game_invitations", "users", column: "player1_id"
-  add_foreign_key "game_invitations", "users", column: "player2_id"
-  add_foreign_key "games", "game_types"
   add_foreign_key "games", "users", column: "player_left_id"
   add_foreign_key "games", "users", column: "player_right_id"
   add_foreign_key "games", "users", column: "winner_id"

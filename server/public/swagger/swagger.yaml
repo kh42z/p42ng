@@ -143,10 +143,10 @@ paths:
             type: integer
           description: filter by user_id (either win or loose)
         - in: query
-          name: game_type_id
+          name: game_type
           schema:
-            type: integer
-          description: filter by game_type_id (duel/ladder/tournament)
+            type: string
+          description: filter by game_type [Duel Ladder Tournament]
       responses:
         '200':
           description: Games found
@@ -557,16 +557,16 @@ components:
           description: user_id
         player_right_id:
           type: integer
-        game_type_id:
-          type: integer
+        game_type:
+          type: string
         created_at:
           type: string
     game:
       type: object
       properties:
-        game_type_id:
-          type: integer
-          description: 1 or 2
+        game_type:
+          type: string
+          description: [Duel Ladder]
         opponent_id:
           type: integer
           description: User for Duel (should be the user_id of your opponent)

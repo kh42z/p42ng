@@ -5,7 +5,7 @@ RSpec.describe "Games", type: :request do
 
   describe "requires auth token" do
     before do
-      get '/api/games'
+      get "/api/games"
     end
     it "returns status code 401" do
       expect(response).to have_http_status(401)
@@ -16,8 +16,7 @@ RSpec.describe "Games", type: :request do
     context "search with user_id" do
       before do
         create_list(:game, 2)
-        Game.update_all(game_type_id: GameType.first.id)
-        get "/api/games", headers: auth.create_new_auth_token, params: {user_id: User.last.id, game_type_id: GameType.first.id}
+        get "/api/games", headers: auth.create_new_auth_token, params: {user_id: User.last.id, game_type: "Duel"}
       end
       it "returns all games played" do
         expect(json).not_to be_empty
@@ -47,9 +46,8 @@ RSpec.describe "Games", type: :request do
       describe "a valid duel game" do
         before do
           to = create(:user, status: "Online")
-          GameType.create(name: "Ladder", id: 1)
           auth.update(status: "Online")
-          post "/api/games", headers: auth.create_new_auth_token, params: {game_type_id: 1, opponent_id: to.id}
+          post "/api/games", headers: auth.create_new_auth_token, params: {game_type: "Duel", opponent_id: to.id}
         end
 
         it "returns status code 200" do
@@ -58,8 +56,7 @@ RSpec.describe "Games", type: :request do
       end
       describe "an invalid duel game" do
         before do
-          GameType.create(name: "Ladder", id: 1)
-          post "/api/games", headers: auth.create_new_auth_token, params: {game_type_id: 1}
+          post "/api/games", headers: auth.create_new_auth_token, params: {game_type: "Duel"}
         end
 
         it "returns status code 422" do

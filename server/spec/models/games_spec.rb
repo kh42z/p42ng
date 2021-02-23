@@ -4,5 +4,5 @@ RSpec.describe Game, type: :model do
   it { should belong_to(:winner) }
   it { should belong_to(:player_left) }
   it { should belong_to(:player_right) }
-  it { should belong_to(:game_type) }
+  it { should allow_values('Duel', 'Ladder', 'Tournament').for(:game_type) }
 end

@@ -5,7 +5,7 @@ module Api
     GameReducer = Rack::Reducer.new(
       Game.all,
       ->(user_id:) { Game.where(player_left: user_id).or(Game.where(player_right: user_id)) },
-      ->(game_type_id:) { where(game_type_id: game_type_id) }
+      ->(game_type:) { where(game_type: game_type) }
     )
 
     def index
@@ -14,8 +14,8 @@ module Api
     end
 
     def create
-      @games_params = params.permit(:game_type_id)
-      if @games_params[:game_type_id] == '1'
+      @games_params = params.permit(:game_type)
+      if @games_params[:game_type] == 'Duel'
         raise ActiveRecord::RecordInvalid if params.key?(:opponent_id) == false
 
         @games_params[:player_left_id], @games_params[:player_right_id] = [current_user.id,
