@@ -10,7 +10,7 @@ export const GameRecord = Backbone.Model.extend({
 
   },
 
-  urlRoot: 'api/game_records',
+  urlRoot: 'api/games',
   url: function () {
     if (this.id !== undefined) { return this.urlRoot + this.id }
     return this.urlRoot
