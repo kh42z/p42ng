@@ -40,6 +40,11 @@ paths:
           $ref: '#/components/responses/403'
         '500':
           $ref: '#/components/responses/500'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/chat'
   "/api/chats/{id}":
     get:
       summary: Retrieves a chat
@@ -655,6 +660,8 @@ components:
           type: integer
         privacy:
           type: integer
+        password:
+          type: string
         owner_id:
           type: integer
         admin_ids:
