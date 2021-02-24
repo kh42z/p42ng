@@ -3,13 +3,22 @@ import { ChatModel } from '../models/chatModel'
 export const Channels = Backbone.Collection.extend({
   initialize: function () {
   },
-  defaults: {
-    participant_id: undefined
-  },
   model: ChatModel,
   urlRoot: 'api/chats',
   url: function () {
-    if (this.participant_id !== undefined) { return this.url + '?participant_id=' + this.participant_id }
     return this.urlRoot
+  },
+  fetchByUserId: function (id) {
+    this.fetch({
+      url: this.urlRoot + '?participant_id=' + id,
+      success: function (response) {
+        console.log('success')
+        console.log(response)
+      },
+      error: function (response) {
+        console.log('error')
+        console.log(response)
+      }
+    })
   }
 })

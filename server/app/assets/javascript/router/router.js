@@ -171,9 +171,13 @@ export const Router = Backbone.Router.extend({
   },
 
   loadChannelWrapper: function () {
-    return new SuperWrapper({
+    console.log(this.userLogged.get('id'))
+    const userId = this.userLogged.get('id')
+    const superWrapper = new SuperWrapper({
       userLogged: new Wrapper({ obj: this.userLogged }),
-      channels: new Wrapper({ obj: new Channels({ participant_id: this.userLogged.get('id') }) })
+      channels: new Wrapper({ obj: new Channels() })
     })
+    superWrapper.get('channels').get('obj').fetchByUserId(this.userLogged.get('id'))
+    return superWrapper
   }
 })
