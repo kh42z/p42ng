@@ -24,6 +24,7 @@ import { Users } from '../collections/users_collection.js'
 import { Ladders } from '../collections/laddersCollection.js'
 import { Wrapper } from '../models/wrapper.js'
 import { SuperWrapper } from '../collections/superWrapper.js'
+import { Channels } from '../collections/channels'
 
 // import { ChatController } from '../view/chat/chatController.js' // not here
 
@@ -123,51 +124,57 @@ export const Router = Backbone.Router.extend({
 
   pong_view: function (url) {
     if (this.accessPage()) { return }
-    const pongView = new PongView({ model: this.loadWraper() })
+    const pongView = new PongView({ model: this.loadWrapper() })
     pongView.render()
   },
 
   profile_view: function (id, page) {
     if (this.accessPage()) { return }
-    this.profileController.loadView(id, page, this.loadWraper())
+    this.profileController.loadView(id, page, this.loadWrapper())
   },
 
   guilds_view: function () {
     if (this.accessPage()) { return }
-    const guildsView = new GuildsView({ model: this.loadWraper() })
+    const guildsView = new GuildsView({ model: this.loadWrapper() })
   },
 
   guild_view: function (id, page) {
     if (this.accessPage()) { return }
-    this.guildController.loadView(id, page, this.loadWraper())
+    this.guildController.loadView(id, page, this.loadWrapper())
   },
 
   chat_view: function (id, page) {
     if (this.accessPage()) { return }
-    const chatView = new ChatView({ model: this.userLogged })
-    chatView.render()
+    const chatView = new ChatView({ model: this.loadChannelWrapper() })
   },
 
   leaderboard_view: function () {
     if (this.accessPage()) { return }
-    const leaderboardView = new LeaderboardView({ model: this.loadWraper() })
+    const leaderboardView = new LeaderboardView({ model: this.loadWrapper() })
   },
 
   tournaments_view: function () {
     if (this.accessPage()) { return }
-    const tournamentsView = new TournamentsView({ model: this.loadWraper() })
+    const tournamentsView = new TournamentsView({ model: this.loadWrapper() })
   },
 
   test_view: function () {
     if (this.accessPage()) { return }
-    const testView = new TestView({ model: this.loadWraper() })
+    const testView = new TestView({ model: this.loadWrapper() })
   },
 
-  loadWraper: function () {
+  loadWrapper: function () {
     return new SuperWrapper({
       users: new Wrapper({ obj: new Users() }),
       guilds: new Wrapper({ obj: new Guilds() }),
       userLogged: new Wrapper({ obj: this.userLogged })
+    })
+  },
+
+  loadChannelWrapper: function () {
+    return new SuperWrapper({
+      userLogged: new Wrapper({ obj: this.userLogged }),
+      channels: new Wrapper({ obj: new Channels() })
     })
   }
 })
