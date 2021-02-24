@@ -117,9 +117,9 @@ paths:
                   enum: [public, private, protected]
                 password:
                   type: string
-                bans_ids:
+                ban_ids:
                   $ref: '#/components/schemas/integer_list'
-                timeouts_ids:
+                timeout_ids:
                   $ref: '#/components/schemas/integer_list'
                 admin_ids:
                   $ref: '#/components/schemas/integer_list'
