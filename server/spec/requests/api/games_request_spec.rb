@@ -64,5 +64,26 @@ RSpec.describe "Games", type: :request do
         end
       end
     end
+    context "delete" do
+      describe "cancel invitation" do
+        before do
+          create_list(:game, 2)
+          delete "/api/games/#{Game.first.id}", headers: auth.create_new_auth_token
+        end
+        it "returns status code 204" do
+          expect(response).to have_http_status(204)
+        end
+      end
+      describe "is not allowed after game started" do
+        before do
+          game = create(:game)
+          game.update!(started: true)
+          delete "/api/games/#{game.id}", headers: auth.create_new_auth_token
+        end
+        it "returns status code 403" do
+          expect(response).to have_http_status(403)
+        end
+      end
+    end
   end
 end

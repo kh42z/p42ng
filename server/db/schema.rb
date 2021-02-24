@@ -104,6 +104,7 @@ ActiveRecord::Schema.define(version: 2021_02_22_100552) do
     t.bigint "winner_id"
     t.bigint "player_left_id"
     t.bigint "player_right_id"
+    t.boolean "started", default: false
     t.string "game_type"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

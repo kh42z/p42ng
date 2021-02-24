@@ -2,6 +2,8 @@
 
 module Api
   class GamesController < ApiController
+    before_action :set_game, only: %i[destroy]
+
     GameReducer = Rack::Reducer.new(
       Game.all,
       ->(user_id:) { Game.where(player_left: user_id).or(Game.where(player_right: user_id)) },
@@ -24,6 +26,13 @@ module Api
       json_response(create_game)
     end
 
+    def destroy
+      return render_error('gameAlreadyStarted') if @game.started?
+
+      @game.destroy
+      head :no_content
+    end
+
     protected
 
     def send_invites(game)
@@ -41,6 +50,10 @@ module Api
     def create_game
       game = Game.create!(@games_params)
       send_invites(game)
+    end
+
+    def set_game
+      @game = Game.find(params[:id])
     end
   end
 end

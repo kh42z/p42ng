@@ -34,3 +34,4 @@ en:
   notAllowed: "This action is not allowed with your current privileges."
   banned: "Your account is currently banned"
   hasGuildAlready: "You already have a guild"
+  gameAlreadyStarted: "You are not allowed to cancel invitation after the game has started"
