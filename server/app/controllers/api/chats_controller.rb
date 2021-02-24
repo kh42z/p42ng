@@ -2,7 +2,7 @@
 
 module Api
   class ChatsController < ApiController
-    before_action :set_chat, only: %i[show update destroy]
+    before_action :set_chat, only: %i[show update destroy participants]
 
     ChatReducer = Rack::Reducer.new(
       Chat.all.order(:updated_at),
@@ -25,6 +25,15 @@ module Api
         json_response(chat, :created)
       else
         json_response(chat.errors, :unprocessable_entity)
+      end
+    end
+
+    def participants
+      participant = ChatParticipant.new(user_id: current_user.id, chat_id: @chat.id)
+      if participant.save
+        json_response(participant, :created)
+      else
+        json_response(participant.errors, :unprocessable_entity)
       end
     end
 

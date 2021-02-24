@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  get 'chat_admins/index'
   namespace :api do
     resources :ladders
-    resources :chats
     resources :games
-    resources :chats
+    resources :chats do
+      post 'participants', on: :member
+    end
     resources :users do
       post :avatar, on: :member, to: 'users#upload_avatar'
     end
