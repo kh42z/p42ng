@@ -1,12 +1,12 @@
 export const ChatView = Backbone.View.extend({
   initialize: function () {
-		this.channels = this.model.get('channels').get('obj')
-		this.userLogged = this.model.get('userLogged').get('obj')
+    this.channels = this.model.get('channels').get('obj')
+    this.userLogged = this.model.get('userLogged').get('obj')
     console.log(this.model)
 
-		this.listenTo(this.channels, 'sync', function () {
-			this.render()
-		}, this)
+    this.listenTo(this.channels, 'sync', function () {
+      this.render()
+    }, this)
   },
   el: $('#app'),
   render: function () {
@@ -14,7 +14,9 @@ export const ChatView = Backbone.View.extend({
     let array = {}
 
     array = JSON.parse(JSON.stringify(this.model))
-		for (let i = 0; i < )
+    for (let i = 0; i < this.channels.length(); i++) {
+      array.discussions.image_url = ''
+    }
 
     const context = array
     const templateDataChat = this.templateChat(context)
