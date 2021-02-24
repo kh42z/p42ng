@@ -5,7 +5,7 @@ RSpec.describe "Games", type: :request do
 
   describe "requires auth token" do
     before do
-      get '/api/games'
+      get "/api/games"
     end
     it "returns status code 401" do
       expect(response).to have_http_status(401)
@@ -16,8 +16,7 @@ RSpec.describe "Games", type: :request do
     context "search with user_id" do
       before do
         create_list(:game, 2)
-        Game.update_all(game_type_id: GameType.first.id)
-        get "/api/games", headers: auth.create_new_auth_token, params: {user_id: User.last.id, game_type_id: GameType.first.id}
+        get "/api/games", headers: auth.create_new_auth_token, params: {user_id: User.last.id, game_type: "duel"}
       end
       it "returns all games played" do
         expect(json).not_to be_empty
@@ -46,25 +45,56 @@ RSpec.describe "Games", type: :request do
     context "create" do
       describe "a valid duel game" do
         before do
-          state = State.create(name: "Online", id: 2)
-          to = create(:user, state: state)
-          GameType.create(name: "Ladder", id: 1)
-          auth.update(state: state)
-          post "/api/games", headers: auth.create_new_auth_token, params: {game_type_id: 1, opponent_id: to.id}
+          to = create(:user, status: "online")
+          auth.update(status: "online")
+          post "/api/games", headers: auth.create_new_auth_token, params: {game_type: "duel", opponent_id: to.id}
         end
 
         it "returns status code 200" do
           expect(response).to have_http_status(200)
         end
       end
-      describe "an invalid duel game" do
+
+      describe "a duel with an already ingame player" do
         before do
-          GameType.create(name: "Ladder", id: 1)
-          post "/api/games", headers: auth.create_new_auth_token, params: {game_type_id: 1}
+          to = create(:user, status: "ingame")
+          auth.update(status: "online")
+          post "/api/games", headers: auth.create_new_auth_token, params: {game_type: "duel", opponent_id: to.id}
         end
 
         it "returns status code 422" do
           expect(response).to have_http_status(422)
+        end
+      end
+
+      describe "a duel game without opponent_id" do
+        before do
+          post "/api/games", headers: auth.create_new_auth_token, params: {game_type: "duel"}
+        end
+
+        it "returns status code 422" do
+          expect(response).to have_http_status(422)
+        end
+      end
+    end
+    context "delete" do
+      describe "cancel invitation" do
+        before do
+          create_list(:game, 2)
+          delete "/api/games/#{Game.first.id}", headers: auth.create_new_auth_token
+        end
+        it "returns status code 204" do
+          expect(response).to have_http_status(204)
+        end
+      end
+      describe "is not allowed after game started" do
+        before do
+          game = create(:game)
+          game.update!(started: true)
+          delete "/api/games/#{game.id}", headers: auth.create_new_auth_token
+        end
+        it "returns status code 403" do
+          expect(response).to have_http_status(403)
         end
       end
     end

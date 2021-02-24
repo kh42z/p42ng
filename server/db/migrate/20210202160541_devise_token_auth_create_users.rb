@@ -46,7 +46,7 @@ class DeviseTokenAuthCreateUsers < ActiveRecord::Migration[6.0]
       t.integer :ladder_games_lost, default: 0
       t.references :ladder, foreign_key: true
       t.references :guild, foreign_key: true, null: true
-      t.references :state, foreign_key: true, default: 1
+      t.string :status
       t.timestamps
     end
 

@@ -6,28 +6,20 @@ class ChatChannel < ApplicationCable::Channel
 
     return reject if reject_user?
 
-    stream_for @chat if ChatParticipant.create(chat_id: @chat.id, user_id: current_user.id)
+    stream_for @chat
   end
 
   def received(data)
     broadcast_to(@chat, data['message'])
   end
 
-  def unsubscribed
-    ChatParticipant.where(user_id: current_user.id, chat_id: params[:chat_id]).destroy_all
-  end
+  def unsubscribed; end
 
   private
-
-  def protected?
-    @chat.privacy == 'protected'
-  end
 
   def reject_user?
     return true if ChatBan.where(user_id: current_user.id, chat_id: params[:chat_id]).count.positive?
 
-    return true if protected? && (@chat.authenticate(params[:password]) == false)
-
-    false
+    ChatParticipant.where(user_id: current_user.id, chat_id: params[:chat_id]).empty?
   end
 end

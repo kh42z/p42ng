@@ -8,7 +8,6 @@ class User < ApplicationRecord
 
   belongs_to :ladder, optional: true
   belongs_to :guild, optional: true
-  belongs_to :state, optional: true
 
   has_one :guild_officer, dependent: :destroy
   has_one_attached :avatar
@@ -25,6 +24,7 @@ class User < ApplicationRecord
   validates_inclusion_of :first_login, in: [true, false]
   validates_inclusion_of :admin, in: [true, false]
   validates_inclusion_of :banned, in: [true, false]
+  validates_inclusion_of :status, in: %w[offline online ingame]
   validates_presence_of :ladder_games_won
   validates_presence_of :ladder_games_lost
 end

@@ -9,14 +9,6 @@ Ladder.create(name: 'Gold', desc: 'ehm.')
 Ladder.create(name: 'Platine', desc: 'mhe.')
 Ladder.create(name: 'Diamond', desc: 'mhe.')
 
-State.create(name: 'Offline')
-State.create(name: 'Online')
-State.create(name: 'In Game')
-
-GameType.create(name: 'Duel')
-GameType.create(name: 'Ladder')
-GameType.create(name: 'Tournament')
-
 if Rails.env.development?
 
   FactoryBot.create_list(:user, 20)
@@ -36,7 +28,7 @@ if Rails.env.development?
 
   (1..20).each do |id|
     winner = User.find(rand(1..20))
-    FactoryBot.create(:game, winner: winner, player_left: winner, player_right: User.find(rand(1..20)), game_type_id: 1)
+    FactoryBot.create(:game, winner: winner, player_left: winner, player_right: User.find(rand(1..20)), game_type: 'ladder')
   end
 
 end

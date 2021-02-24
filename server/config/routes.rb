@@ -6,7 +6,6 @@ Rails.application.routes.draw do
     resources :ladders
     resources :chats
     resources :games
-    resources :states
     resources :chats
     resources :users do
       post :avatar, on: :member, to: 'users#upload_avatar'

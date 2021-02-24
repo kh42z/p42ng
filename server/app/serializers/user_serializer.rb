@@ -4,7 +4,7 @@ class UserSerializer < ActiveModel::Serializer
   attributes :id,
              :image_url,
              :guild_id,
-             :state_id,
+             :status,
              :ladder_id,
              :two_factor,
              :nickname,
