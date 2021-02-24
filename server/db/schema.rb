@@ -172,7 +172,7 @@ ActiveRecord::Schema.define(version: 2021_02_22_100552) do
     t.integer "ladder_games_lost", default: 0
     t.bigint "ladder_id"
     t.bigint "guild_id"
-    t.string "status"
+    t.string "status", default: "offline"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
