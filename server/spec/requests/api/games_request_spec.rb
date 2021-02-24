@@ -54,7 +54,20 @@ RSpec.describe "Games", type: :request do
           expect(response).to have_http_status(200)
         end
       end
-      describe "an invalid duel game" do
+
+      describe "a duel with an already ingame player" do
+        before do
+          to = create(:user, status: "ingame")
+          auth.update(status: "online")
+          post "/api/games", headers: auth.create_new_auth_token, params: {game_type: "duel", opponent_id: to.id}
+        end
+
+        it "returns status code 422" do
+          expect(response).to have_http_status(422)
+        end
+      end
+
+      describe "a duel game without opponent_id" do
         before do
           post "/api/games", headers: auth.create_new_auth_token, params: {game_type: "duel"}
         end

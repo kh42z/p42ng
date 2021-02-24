@@ -35,3 +35,4 @@ en:
   banned: "Your account is currently banned"
   hasGuildAlready: "You already have a guild"
   gameAlreadyStarted: "You are not allowed to cancel invitation after the game has started"
+  UserNotOnline: "You are not allowed to duel someone who is not Online"

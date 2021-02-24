@@ -42,12 +42,13 @@ module Api
 
     def invite(user_id, game_id)
       user = User.find(user_id)
-      raise ActiveRecord::RecordInvalid if user.status != 'online'
 
       ActionCable.server.broadcast(user, { action: 'invite', game_id: game_id })
     end
 
     def create_game
+      raise ActiveRecord::RecordInvalid if User.find(params['opponent_id']).status != 'online'
+
       game = Game.create!(@games_params)
       send_invites(game)
     end
