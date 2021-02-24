@@ -48,12 +48,16 @@ RSpec.describe "Chats", type: :request do
   end
 
   describe "#post" do
-    before { post api_chats_url, headers: access_token, params: {privacy: "protected", password: "asd"} }
-    it "should return 201 created" do
+    it "should return 201 created & current_user should be chat's owner" do
+      post api_chats_url, headers: access_token, params: {privacy: "protected", password: "asd"}
       expect(response).to have_http_status(201)
-    end
-    it "current_user should be chat's owner" do
       expect(Chat.first.owner_id).to eq(auth.id)
+    end
+    it "should create a new participants" do
+      chat = create(:chat)
+      post participants_api_chat_url(chat.id), headers: access_token, params: {user: auth, chat: chat}
+      expect(response).to have_http_status(201)
+      expect(ChatParticipant.first.chat_id).to eq(chat.id)
     end
   end
 
