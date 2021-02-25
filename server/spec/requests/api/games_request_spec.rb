@@ -90,7 +90,7 @@ RSpec.describe "Games", type: :request do
       describe "is not allowed after game started" do
         before do
           game = create(:game)
-          game.update!(started: true)
+          game.update!(state: 2)
           delete "/api/games/#{game.id}", headers: auth.create_new_auth_token
         end
         it "returns status code 403" do

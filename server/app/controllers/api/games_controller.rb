@@ -27,7 +27,7 @@ module Api
     end
 
     def destroy
-      return render_error('gameAlreadyStarted') if @game.started?
+      return render_error('gameAlreadyStarted') if @game.state > 1
 
       @game.destroy
       head :no_content
@@ -47,6 +47,7 @@ module Api
     end
 
     def create_game
+      # TODO: Custom Exception
       raise ActiveRecord::RecordInvalid if User.find(params['opponent_id']).status != 'online'
 
       game = Game.create!(@games_params)
