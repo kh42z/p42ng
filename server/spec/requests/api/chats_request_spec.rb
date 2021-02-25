@@ -59,12 +59,34 @@ RSpec.describe "Chats", type: :request do
       expect(response).to have_http_status(201)
       expect(ChatParticipant.first.chat_id).to eq(chat.id)
     end
-    it "should return an error" do
+    it "should return status 422" do
       chat = create(:chat)
       post participants_api_chat_url(chat.id), headers: access_token, params: {user: auth, chat: chat}
       post participants_api_chat_url(chat.id), headers: access_token, params: {user: auth, chat: chat}
+      expect(response).to have_http_status(422)
+    end
+  end
+
+  describe "#participants" do
+    it "should return error : passwordRequired" do
+      chat = create(:chat, privacy: 'protected', password: 'password')
+      post participants_api_chat_url(chat.id), headers: access_token, params: {user: auth, chat: chat}
       expect(response).to have_http_status(403)
-      expect(response.body).to match(I18n.t('isChatParticipantAlready'))
+      expect(response.body).to match(I18n.t('passwordRequired'))
+      expect(ChatParticipant.count).to eq(0)
+    end
+    it "should return 201 with correct chat password" do
+      chat = create(:chat, privacy: 'protected', password: 'password')
+      post participants_api_chat_url(chat.id), headers: access_token, params: {user: auth, chat: chat, password: 'password'}
+      expect(response).to have_http_status(201)
+      expect(ChatParticipant.count).to eq(1)
+    end
+    it "should return error : passwordIncorrect" do
+      chat = create(:chat, privacy: 'protected', password: 'password')
+      post participants_api_chat_url(chat.id), headers: access_token, params: {user: auth, chat: chat, password: 'word'}
+      expect(response).to have_http_status(403)
+      expect(response.body).to match(I18n.t('passwordIncorrect'))
+      expect(ChatParticipant.count).to eq(0)
     end
   end
 

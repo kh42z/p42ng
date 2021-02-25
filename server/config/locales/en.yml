@@ -36,4 +36,5 @@ en:
   hasGuildAlready: "You already have a guild"
   gameAlreadyStarted: "You are not allowed to cancel invitation after the game has started"
   UserNotOnline: "You are not allowed to duel someone who is not Online"
-  isChatParticipantAlready: "You are already participant of this chat"
+  passwordRequired: "You need to provide chat's password"
+  passwordIncorrect: "Wrong password"
