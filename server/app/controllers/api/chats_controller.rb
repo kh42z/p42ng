@@ -29,6 +29,9 @@ module Api
     end
 
     def participants
+      return render_error('isChatParticipantAlready') if
+      ChatParticipant.where(user_id: current_user.id, chat_id: @chat.id).any?
+
       participant = ChatParticipant.new(user_id: current_user.id, chat_id: @chat.id)
       if participant.save
         json_response(participant, :created)
