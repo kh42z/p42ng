@@ -59,6 +59,13 @@ RSpec.describe "Chats", type: :request do
       expect(response).to have_http_status(201)
       expect(ChatParticipant.first.chat_id).to eq(chat.id)
     end
+    it "should return an error" do
+      chat = create(:chat)
+      post participants_api_chat_url(chat.id), headers: access_token, params: {user: auth, chat: chat}
+      post participants_api_chat_url(chat.id), headers: access_token, params: {user: auth, chat: chat}
+      expect(response).to have_http_status(403)
+      expect(response.body).to match(I18n.t('isChatParticipantAlready'))
+    end
   end
 
   describe "#destroy" do
