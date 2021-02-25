@@ -36,8 +36,8 @@ export const ChatView = Backbone.View.extend({
     array.anagram = '[24.c]'
     array.slide_show = './icons/slideshow.svg'
 
-    array.messages = Array(10)
-    for (let i = 0; i < 10; i++) {
+    array.messages = Array(30)
+    for (let i = 0; i < 30; i++) {
       array.messages.push({
         anagram: '[24.c]',
         image_url: './images/profile-pic.jpg',
