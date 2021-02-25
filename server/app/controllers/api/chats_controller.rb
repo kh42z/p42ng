@@ -2,7 +2,7 @@
 
 module Api
   class ChatsController < ApiController
-    before_action :set_chat, only: %i[show update destroy participants]
+    before_action :set_chat, only: %i[show update destroy participants chat_password_correct]
 
     ChatReducer = Rack::Reducer.new(
       Chat.all.order(:updated_at),
@@ -29,9 +29,6 @@ module Api
     end
 
     def participants
-      return render_error('isChatParticipantAlready') \
-      if ChatParticipant.where(user_id: current_user.id, chat_id: @chat.id).any?
-
       return unless chat_password?
 
       participant = ChatParticipant.new(user_id: current_user.id, chat_id: @chat.id)
@@ -41,6 +38,10 @@ module Api
         json_response(participant.errors, :unprocessable_entity)
       end
     end
+
+    # def mutes
+
+    # end
 
     def show
       json_response(@chat)
@@ -70,7 +71,7 @@ module Api
     end
 
     def chat_password_correct?
-      if BCrypt::Password.new(@chat.password_digest) == params[:password]
+      if @chat.authenticate(params[:password]) # BCrypt::Password.new(@chat.password_digest) == params[:password]
         true
       else
         render_error('passwordIncorrect')

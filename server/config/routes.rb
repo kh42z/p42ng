@@ -5,7 +5,11 @@ Rails.application.routes.draw do
     resources :ladders
     resources :games
     resources :chats do
-      post 'participants', on: :member
+      member do
+        post 'participants'
+        # post 'mutes'
+        # post 'bans'
+      end
     end
     resources :users do
       post :avatar, on: :member, to: 'users#upload_avatar'
@@ -13,12 +17,6 @@ Rails.application.routes.draw do
     resources :guilds do
       delete :destroy_officer
     end
-#    resources :guilds do
-#      member do
-#        delete 'destroy_officer'
-#        get 'war_records'
-#      end
-#    end
   end
   mount_devise_token_auth_for 'User', at: 'auth', controllers: {
     omniauth_callbacks: 'users/omniauth_callbacks' }
