@@ -10,7 +10,7 @@ class Pong
   end
 
   def self.start
-    # Launch ActiveJob
+    # TODO: Launch ActiveJob
   end
 
   def set_dir(user_id, direction)
@@ -41,6 +41,15 @@ class Pong
   end
 
   def winner(winner_id)
+    notify_winner(winner_id)
     @game.update!(winner_id: winner_id)
+  end
+
+  def notify_winner(user_id)
+    ActionCable.server.broadcast(User.find(user_id), { action: 'game_won', id: @game.id })
+  end
+
+  def notify_looser(user_id)
+    ActionCable.server.broadcast(User.find(user_id), { action: 'game_lost', id: @game.id })
   end
 end

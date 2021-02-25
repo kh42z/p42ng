@@ -39,6 +39,9 @@ module Pong
     config.middleware.use ActionDispatch::Cookies # Required for all session management
     config.middleware.use ActionDispatch::Session::CookieStore, config.session_options
 
+    config.hosts << "pong"
+    config.hosts << "www.example.com"
+
     # CSRF
     config.middleware.use Rack::Cors do
       allow do

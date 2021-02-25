@@ -9,6 +9,8 @@ Ladder.create(name: 'Gold', desc: 'ehm.')
 Ladder.create(name: 'Platine', desc: 'mhe.')
 Ladder.create(name: 'Diamond', desc: 'mhe.')
 
+FactoryBot.create(:user, nickname: "Alfred", email: "9000@student.42.fr", image_url: "https://res.cloudinary.com/practicaldev/image/fetch/s--yjlrbrT6--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://thepracticaldev.s3.amazonaws.com/i/rlyibpr58qk49ci8y1rk.png")
+
 if Rails.env.development?
 
   FactoryBot.create_list(:user, 20)
