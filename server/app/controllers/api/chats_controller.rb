@@ -29,8 +29,10 @@ module Api
     end
 
     def participants
-      return render_error('isChatParticipantAlready') if
-      ChatParticipant.where(user_id: current_user.id, chat_id: @chat.id).any?
+      return render_error('isChatParticipantAlready') \
+      if ChatParticipant.where(user_id: current_user.id, chat_id: @chat.id).any?
+
+      return unless chat_password?
 
       participant = ChatParticipant.new(user_id: current_user.id, chat_id: @chat.id)
       if participant.save
@@ -50,6 +52,31 @@ module Api
     end
 
     private
+
+    def chat_password?
+      return true unless @chat.privacy == 'protected'
+      return false unless chat_password_given?
+
+      chat_password_correct?
+    end
+
+    def chat_password_given?
+      if params.key?(:password)
+        true
+      else
+        render_error('passwordRequired')
+        false
+      end
+    end
+
+    def chat_password_correct?
+      if BCrypt::Password.new(@chat.password_digest) == params[:password]
+        true
+      else
+        render_error('passwordIncorrect')
+        false
+      end
+    end
 
     def chat_params
       params.permit(:privacy, :password)
