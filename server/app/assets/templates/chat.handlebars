@@ -1,23 +1,64 @@
 <div class="chat">
     <div class="discussions">
-        <a><img src="./icons/add_box.svg" class="add_box"></img></a>
+        <div class="title">
+            <h2 class="h2-discussions">Discussions</h2>
+            <img src="./icons/add_box.svg" class="add_box"></img>
+        </div>
+        <div class="discussions-container">
         {{#each discussions}}
-            <a><span>
-                <img src={{image_url}} class="image_url"></img>
-                <label>{{nickname}}</label>
-            </span></a>
+            <div class="clickable-discussions">
+                <div class="image-container">
+                    <img src={{image_url}} id="image_url" class="image_url"></img>
+                </div>
+                <p>{{anagram}} {{nickname}}</p>
+            </div>
         {{/each}}
+        </div>
     </div>
-    <div class="header">
-        <a><span>
-            <img src={{image_url}} class="image_url"></img>
-            <label>{{nickname}}</label>
-            <label>{{status}}</label>
-            <img src="./icons/group_add.svg"></img>
-            <button>Play</button>
-        </span></a>
-    </div>
-    <div class="messages">
-        <input class="input" type="text">
+    <div class="right-side">
+        <div class="header">
+            <div class="left-header">
+                <div class="image-container">
+                    <img src={{image_url}} class="image_url"></img>
+                </div>
+                <div class="info">
+                    <p class="anagram">{{anagram}}</p>
+                    <p class="nickname">{{nickname}}</p>
+                    <div class="pastille"></div>
+                    <p class="status">{{status}}</p>
+                    <div class="slide-show-container">
+                        <img src="{{slide_show}}" class="slide-show"></img>
+                    </div>
+                </div>
+            </div>
+            <div class="right-header">
+                <div class="group_add-container">
+                    <img src="./icons/group_add.svg" class="group_add"></img>
+                </div>
+                <button class="play-button">
+                    <img src="./icons/videogame.svg" height="24">
+                </button>
+            </div>
+        </div>
+        <div class="messages">
+            <div class="scrollable">
+                {{#each messages}}
+                <div class="message">
+                    <div class="info">
+                        <div class="image-container">
+                            <img src={{image_url}} class="image_url"></img>
+                        </div>
+                        <div class="anagram">{{anagram}}</div>
+                        <div class="nickname">{{nickname}}</div>
+                        <div class="time">{{time}}</div>
+                    </div>
+                    <div class="output">{{message}}</div>
+                </div>
+                {{/each}}
+            </div>
+        <div class="input-container">
+            <input class="input" type="text">
+        </div>
+        </div>
     </div>
 </div>

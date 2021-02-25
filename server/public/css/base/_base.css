@@ -1,17 +1,36 @@
 body {
-    background-color: white;
+    background-color: black;
 
     margin: 0;
     padding: 0;
 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 
-    z-index: 0;
+    overflow: hidden;
+}
+
+#header {
+    display: flex;
+    height: 82px;
+}
+
+#app {
+    display: flex;
+}
+
+h2 {
+    font-family: Quantico-Regular;
+    color: var(--secondary-color);
 }
 
 p {
-    color: black;
+    color: var(--secondary-color);
     font-family: Roboto-Regular;
 }
+
 
 label {
     font-family: Roboto-Regular;
@@ -20,9 +39,12 @@ label {
 :root {
     --primary-color:#F2C94C;
     --secondary-color: #fff;
+    --third-color: #C4C4C4;
     --table-color: #1B2534;
     --text-button-color: #333333;
     --error-message-color: #EB5757;
+    --green-color: ##6FCF97;
+
 }
 
 button {

@@ -82,6 +82,7 @@ export const Router = Backbone.Router.extend({
       this.oauth_view()
       return 1
     } else if (performance.navigation.type === 1 || performance.navigation.type === 2) {
+      console.log('reload')
       const fetchUser = async () => {
         this.oauthService = new OauthService()
         this.oauthService.ajaxSetup()
