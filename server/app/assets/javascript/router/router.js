@@ -70,6 +70,7 @@ export const Router = Backbone.Router.extend({
       this.oauthService.setAjaxEnvironnement()
       this.oauthService.ajaxSetup()
       await this.userLogged.fetchUser(window.localStorage.getItem('user_id'))
+      this.userLogged.save({ first_login: true }, { patch: true })
       if (this.userLogged.get('first_login')) { this.navigate('#firstConnexion', { trigger: true }) } else {
         this.navigate('#home', { trigger: true })
       }
