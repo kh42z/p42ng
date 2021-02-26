@@ -38,3 +38,5 @@ en:
   UserNotOnline: "You are not allowed to duel someone who is not Online"
   passwordRequired: "You need to provide chat's password"
   passwordIncorrect: "Wrong password"
+  missingCode: "You need to provide 2FA code"
+  twoFactorRequired: "You need to authenticate with your two_factor_code"
