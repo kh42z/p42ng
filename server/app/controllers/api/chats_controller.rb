@@ -2,7 +2,7 @@
 
 module Api
   class ChatsController < ApiController
-    before_action :set_chat, only: %i[show update destroy participants chat_password_correct mutes]
+    before_action :set_chat, only: %i[show destroy participants chat_password_correct mutes bans]
 
     ChatReducer = Rack::Reducer.new(
       Chat.all.order(:updated_at),
@@ -44,17 +44,19 @@ module Api
       return unless saved?(chat_timeout)
 
       timer = params[:duration].to_i
-      ChatBansCleanupJob.set(wait: timer.seconds).perform_later(chat_timeout)
+      DestroyObjectJob.set(wait: timer.seconds).perform_later(chat_timeout)
       json_response(chat_timeout, 200)
     end
 
-    def saved?(object)
-      if object.save
-        true
-      else
-        json_response(object.errors, :unprocessable_entity)
-        false
-      end
+    def bans
+      return unless params.key?(:user_id) && params.key?(:duration)
+
+      chat_ban = ChatBan.new(user_id: params[:user_id], chat_id: @chat.id)
+      return unless saved?(chat_ban)
+
+      timer = params[:duration].to_i
+      DestroyObjectJob.set(wait: timer.seconds).perform_later(chat_ban)
+      json_response(chat_ban, 200)
     end
 
     def show
@@ -89,6 +91,15 @@ module Api
         true
       else
         render_error('passwordIncorrect')
+        false
+      end
+    end
+
+    def saved?(object)
+      if object.save
+        true
+      else
+        json_response(object.errors, :unprocessable_entity)
         false
       end
     end

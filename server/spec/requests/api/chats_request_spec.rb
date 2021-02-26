@@ -90,7 +90,7 @@ RSpec.describe "Chats", type: :request do
     end
   end
   describe "#mutes" do
-    it "should mute a participant", test: true do
+    it "should mute a participant" do
       chat = create(:chat)
       user = create(:user)
       timer = 2
@@ -98,20 +98,36 @@ RSpec.describe "Chats", type: :request do
       post mutes_api_chat_url(chat.id), headers: access_token, params: {user_id: user.id, duration: timer}
       expect(response).to have_http_status(200)
       expect(ChatTimeout.count).to eq(1)
-      expect { ChatBansCleanupJob.set(wait: timer, queue: "default").perform_later('ChatTimeout') }.to have_enqueued_job
+      expect { DestroyObjectJob.set(wait: timer, queue: "default").perform_later('ChatTimeout') }.to have_enqueued_job
     end
-    it "should return error (bad parameters)", test: true do
+    it "should return an error, due to bad parameters" do
+      user = create(:user)
+      chat = create(:chat)
+      post mutes_api_chat_url(chat.id), headers: access_token, params: {user_id: user, duration: 2}
+      expect(response).to have_http_status(422)
+    end
+  end
+  describe "#bans" do
+    it "should ban a participant", test: true do
       chat = create(:chat)
       user = create(:user)
       timer = 2
       post participants_api_chat_url(chat.id), headers: access_token, params: {user: user, chat: chat}
-      post mutes_api_chat_url(chat.id), headers: access_token, params: {user_id: user, duration: timer}
+      post bans_api_chat_url(chat.id), headers: access_token, params: {user_id: user.id, duration: timer}
+      expect(response).to have_http_status(200)
+      expect(ChatBan.count).to eq(1)
+      expect { DestroyObjectJob.set(wait: timer, queue: "default").perform_later('ChatBan') }.to have_enqueued_job
+    end
+    it "should return an error, due to bad parameters" do
+      user = create(:user)
+      chat = create(:chat)
+      post bans_api_chat_url(chat.id), headers: access_token, params: {user_id: user, duration: 2}
       expect(response).to have_http_status(422)
     end
   end
 
   describe "#destroy" do
-    it "returns status code 204" do
+    it "returns status code 204", test: true do
       chat = create(:chat)
       delete "/api/chats/#{chat.id}", headers: access_token
       expect(response).to have_http_status(204)

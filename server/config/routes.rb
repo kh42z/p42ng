@@ -9,7 +9,7 @@ Rails.application.routes.draw do
       member do
         post 'participants'
         post 'mutes'
-        # post 'bans'
+        post 'bans'
       end
     end
     resources :users do
