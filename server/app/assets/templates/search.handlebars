@@ -1,0 +1,14 @@
+<div class="content">
+	<p>Search result for {{item}}</p>
+	<ul>
+	{{#each result}}
+		<li>
+		{{#if type}}
+			<a href="#guild/{{id}}/"> {{name}} | {{anagram}} | </a>
+		{{else}}
+			<a href="#profile/{{id}}/"> {{name}}
+		{{/if}}
+		</li>
+	{{/each}}
+</ul>
+</div>
