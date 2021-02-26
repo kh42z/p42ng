@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     resources :chats do
       member do
         post 'participants'
-        # post 'mutes'
+        post 'mutes'
         # post 'bans'
       end
     end

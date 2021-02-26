@@ -75,7 +75,6 @@ ActiveRecord::Schema.define(version: 2021_02_22_100552) do
   create_table "chat_timeouts", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "chat_id"
-    t.datetime "timeout"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["chat_id"], name: "index_chat_timeouts_on_chat_id"
