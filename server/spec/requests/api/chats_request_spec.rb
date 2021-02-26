@@ -48,17 +48,86 @@ RSpec.describe "Chats", type: :request do
   end
 
   describe "#post" do
-    before { post api_chats_url, headers: access_token, params: {privacy: "protected", password: "asd"} }
-    it "should return 201 created" do
+    it "should return 201 created & current_user should be chat's owner" do
+      post api_chats_url, headers: access_token, params: {privacy: "protected", password: "asd"}
       expect(response).to have_http_status(201)
-    end
-    it "current_user should be chat's owner" do
       expect(Chat.first.owner_id).to eq(auth.id)
+    end
+    it "should create a new participants" do
+      chat = create(:chat)
+      post participants_api_chat_url(chat.id), headers: access_token, params: {user: auth, chat: chat}
+      expect(response).to have_http_status(200)
+      expect(ChatParticipant.first.chat_id).to eq(chat.id)
+    end
+    it "should return status 422" do
+      chat = create(:chat)
+      post participants_api_chat_url(chat.id), headers: access_token, params: {user: auth, chat: chat}
+      post participants_api_chat_url(chat.id), headers: access_token, params: {user: auth, chat: chat}
+      expect(response).to have_http_status(422)
+    end
+  end
+
+  describe "#participants" do
+    it "should return error : passwordRequired" do
+      chat = create(:chat, privacy: 'protected', password: 'password')
+      post participants_api_chat_url(chat.id), headers: access_token, params: {user: auth, chat: chat}
+      expect(response).to have_http_status(403)
+      expect(response.body).to match(I18n.t('passwordRequired'))
+      expect(ChatParticipant.count).to eq(0)
+    end
+    it "should return 201 with correct chat password" do
+      chat = create(:chat, privacy: 'protected', password: 'password')
+      post participants_api_chat_url(chat.id), headers: access_token, params: {user: auth, chat: chat, password: 'password'}
+      expect(response).to have_http_status(200)
+      expect(ChatParticipant.count).to eq(1)
+    end
+    it "should return error : passwordIncorrect" do
+      chat = create(:chat, privacy: 'protected', password: 'password')
+      post participants_api_chat_url(chat.id), headers: access_token, params: {user: auth, chat: chat, password: 'word'}
+      expect(response).to have_http_status(403)
+      expect(response.body).to match(I18n.t('passwordIncorrect'))
+      expect(ChatParticipant.count).to eq(0)
+    end
+  end
+  describe "#mutes" do
+    it "should mute a participant" do
+      chat = create(:chat)
+      user = create(:user)
+      timer = 2
+      post participants_api_chat_url(chat.id), headers: access_token, params: {user: user, chat: chat}
+      post mutes_api_chat_url(chat.id), headers: access_token, params: {user_id: user.id, duration: timer}
+      expect(response).to have_http_status(200)
+      expect(ChatTimeout.count).to eq(1)
+      expect { DestroyObjectJob.set(wait: timer, queue: "default").perform_later('ChatTimeout') }.to have_enqueued_job
+    end
+    it "should return an error, due to bad parameters" do
+      user = create(:user)
+      chat = create(:chat)
+      post mutes_api_chat_url(chat.id), headers: access_token, params: {user_id: user, duration: 2}
+      expect(response).to have_http_status(422)
+    end
+  end
+  describe "#bans" do
+    it "should ban a participant", test: true do
+      chat = create(:chat)
+      user = create(:user)
+      timer = 2
+      post participants_api_chat_url(chat.id), headers: access_token, params: {user: user, chat: chat}
+      post bans_api_chat_url(chat.id), headers: access_token, params: {user_id: user.id, duration: timer}
+      expect(response).to have_http_status(200)
+      expect(ChatBan.count).to eq(1)
+      expect { DestroyObjectJob.set(wait: timer, queue: "default").perform_later('ChatBan') }.to have_enqueued_job
+    end
+    it "should return an error, due to bad parameters" do
+      user = create(:user)
+      chat = create(:chat)
+      post bans_api_chat_url(chat.id), headers: access_token, params: {user_id: user, duration: 2}
+      expect(response).to have_http_status(422)
     end
   end
 
   describe "#destroy" do
-    it "returns status code 204" do
+    it "returns status code 204", test: true do
       chat = create(:chat)
       delete "/api/chats/#{chat.id}", headers: access_token
       expect(response).to have_http_status(204)

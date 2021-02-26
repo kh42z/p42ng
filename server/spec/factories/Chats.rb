@@ -25,6 +25,5 @@ FactoryBot.define do
   factory :chat_timeout do
     chat
     user
-    timeout { Time.now }
   end
 end

@@ -4,22 +4,32 @@ class GameChannel < ApplicationCable::Channel
   def subscribed
     @game = Game.find(params[:game_id])
 
-    return reject if reject_user?
+    return reject if accept_user? == false
 
     stream_for @game
+    @game.update!(state: @game.state + 1)
+
+    return unless @game.state > 1
+
+    @pong = Pong.new(@game)
+    @pong.start
   end
 
   def received(data)
-    broadcast_to(@game, data['message'])
+    @pong.set_dir(current_user.id, data['direction'])
   end
 
-  def unsubscribed; end
+  def unsubscribed
+    if @pong.nil?
+      @game.update!(state: @game.state - 1)
+    else
+      @pong.forfeit(current_user.id)
+    end
+  end
 
   private
 
-  def reject_user?
-    return false if @game.player_left.id == current_user.id || @game.player_right.id == current_user.id
-
-    true
+  def accept_user?
+    @game.player_left.id == current_user.id || @game.player_right.id == current_user.id
   end
 end

@@ -27,7 +27,7 @@ module Api
     end
 
     def destroy
-      return render_error('gameAlreadyStarted') if @game.started?
+      return render_error('gameAlreadyStarted') if @game.state > 1
 
       @game.destroy
       head :no_content
@@ -41,12 +41,11 @@ module Api
     end
 
     def invite(user_id, game_id)
-      user = User.find(user_id)
-
-      ActionCable.server.broadcast(user, { action: 'invite', game_id: game_id })
+      ActionCable.server.broadcast("user_#{user_id}", { action: 'game_invitation', id: game_id })
     end
 
     def create_game
+      # TODO: Custom Exception
       raise ActiveRecord::RecordInvalid if User.find(params['opponent_id']).status != 'online'
 
       game = Game.create!(@games_params)
