@@ -17,15 +17,11 @@ module Users
                              })
     end
 
-    def handle_new_resource
-      @oauth_registration = true
-      set_random_password
-      set_random_two_factor_code
-    end
-
-    def set_random_two_factor_code
+    def set_random_password
       p = SecureRandom.urlsafe_base64(nil, false)
       @resource.two_factor_code = p
+      @resource.password = p
+      @resource.password_confirmation = p
     end
 
     def create_auth_params
