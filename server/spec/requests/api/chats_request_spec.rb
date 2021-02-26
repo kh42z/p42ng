@@ -90,7 +90,7 @@ RSpec.describe "Chats", type: :request do
     end
   end
   describe "#mutes" do
-    it "should ban a participant", test: true do
+    it "should mute a participant", test: true do
       chat = create(:chat)
       user = create(:user)
       timer = 2
@@ -99,6 +99,14 @@ RSpec.describe "Chats", type: :request do
       expect(response).to have_http_status(200)
       expect(ChatTimeout.count).to eq(1)
       expect { ChatBansCleanupJob.set(wait: timer, queue: "default").perform_later('ChatTimeout') }.to have_enqueued_job
+    end
+    it "should return error (bad parameters)", test: true do
+      chat = create(:chat)
+      user = create(:user)
+      timer = 2
+      post participants_api_chat_url(chat.id), headers: access_token, params: {user: user, chat: chat}
+      post mutes_api_chat_url(chat.id), headers: access_token, params: {user_id: user, duration: timer}
+      expect(response).to have_http_status(422)
     end
   end
 

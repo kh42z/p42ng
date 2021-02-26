@@ -32,27 +32,30 @@ module Api
       return unless chat_password?
 
       participant = ChatParticipant.new(user_id: current_user.id, chat_id: @chat.id)
-      if participant.save
-        json_response(participant, 200)
-      else
-        json_response(participant.errors, :unprocessable_entity)
-      end
+      return unless saved?(participant)
+
+      json_response(participant, 200)
     end
 
-    # rubocop:disable Metrics/AbcSize
     def mutes
       return unless params.key?(:user_id) && params.key?(:duration)
 
       chat_timeout = ChatTimeout.new(user_id: params[:user_id], chat_id: @chat.id)
-      if chat_timeout.save
-        timer = params[:duration].to_i
-        ChatBansCleanupJob.set(wait: timer.seconds).perform_later(chat_timeout)
-        json_response(chat_timeout, 200)
+      return unless saved?(chat_timeout)
+
+      timer = params[:duration].to_i
+      ChatBansCleanupJob.set(wait: timer.seconds).perform_later(chat_timeout)
+      json_response(chat_timeout, 200)
+    end
+
+    def saved?(object)
+      if object.save
+        true
       else
-        json_response(chat_timeout.errors, :unprocessable_entity)
+        json_response(object.errors, :unprocessable_entity)
+        false
       end
     end
-    # rubocop:enable Metrics/AbcSize
 
     def show
       json_response(@chat)
