@@ -52,9 +52,7 @@
     height: 100%;
 
     overflow-y: scroll;
-    scrollbar-width: none;  
-    -ms-overflow-style: none; 
-    direction: ltr;
+
 }
 
 .chat .discussions
@@ -99,7 +97,7 @@
 .chat .discussions .discussions-container .clickable-discussions
 .admin_panel_settings {
     position: absolute;
-    left: 240px;
+    left: 225px;
 }
 
 .chat .discussions .discussions-container .clickable-discussions 

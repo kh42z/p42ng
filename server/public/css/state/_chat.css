@@ -7,14 +7,14 @@
 
 .chat .discussions .discussions-container .clickable-discussions:hover
 .admin_panel_settings {
-    display:inline-block;
+    display: block;
     width: 26px;
     height: 26px;
+    position: sticky;
 }
 
 .chat .discussions .discussions-container .clickable-discussions:hover
 .admin_panel_settings-icon {
-    display:inline-block;
     object-fit: cover;
     width: 100%;
     height: 100%;
@@ -25,11 +25,12 @@
     display:inline-block;
     width: 14px;
     height: 14px;
+    margin-right: 8px;
+    position: sticky;
 }
 
 .chat .discussions .discussions-container .clickable-discussions:hover
 .close-icon {
-    display:inline-block;
     object-fit: cover;
     width: 100%;
     height: 100%;
