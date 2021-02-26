@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :guild_officer do
-    user
+    user { FactoryBot.create(:user, guild: guild) }
     guild
   end
 
@@ -15,6 +15,7 @@ FactoryBot.define do
       after(:create) do |guild, evaluator|
         create_list(:guild_officer, evaluator.officers_count, guild: guild)
         guild.reload
+        User.find(guild.owner_id).update!(guild: guild)
       end
     end
   end

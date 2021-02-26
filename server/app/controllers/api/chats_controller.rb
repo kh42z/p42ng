@@ -51,7 +51,7 @@ module Api
     def bans
       return unless params.key?(:user_id) && params.key?(:duration)
 
-      chat_ban = ChatBan.new(user_id: params[:user_id], chat_id: @chat.id)
+      chat_ban = ChatBan.create!(user_id: params[:user_id], chat_id: @chat.id)
       return unless saved?(chat_ban)
 
       timer = params[:duration].to_i
