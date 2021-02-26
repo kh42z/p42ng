@@ -1,13 +1,27 @@
 <div class="content">
+	<div class="subTopNav">
+		<ul>
+			<li><a href="#profile/{{id}}/match_history">Matches</a></li>
+			<li><a href="#profile/{{id}}/achivements">Achivements</a></li>
+			{{#if guild_id}}
+				<li><a href="#guild/{{guild_id}}/">Guild</a></li>
+			{{else}}
+				<li><a href="#profile/{{id}}/no_guild">Guild</a></li>
+			{{/if}}
+			<li><a href="#profile/{{id}}/friends">friends</a></li>
+		</ul>
+	</div>
 	<p>Match History</p>
 	<a href="#profile/{{id}}/match_history"> {{player}} </a>
 	<a href="#guild/{{guildId}}/members"> {{guild}} </a>
 	<ul>
 		{{#each matchs}}
 		<li>
-			<span>{{result}}  against</span>
-			<a href="#profile/{{opponentId}}/match_history">{{opponentName}}</a> <span>|<a href="#guild/{{opponentGuildId}}">{{opponentGuild}}</a></span>|
-			<span>   {{date}} </span>
+			<span>{{result}}: </span>
+			<a href="#profile/{{player_left_id}}/match_history">{{player_left_nickname}}</a>
+			<span> {{game_type}} </span>
+			<a href="#profile/{{player_right_id}}/match_history">{{player_right_nickname}}</a>
+			<span>date:   {{created_at}} </span>
 			{{/each}}
 	</ul>
 </div>

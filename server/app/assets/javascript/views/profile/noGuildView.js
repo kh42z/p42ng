@@ -1,6 +1,6 @@
-export const FriendsView = Backbone.View.extend({
+export const NoGuildView = Backbone.View.extend({
   initialize: function () {
-    this.template = Handlebars.templates.friends
+    this.template = Handlebars.templates.noGuild
     this.guilds = this.model.get('guilds').get('obj')
     this.users = this.model.get('users').get('obj')
     this.listenTo(this.guilds, 'sync', function () { this.getUsers() }, this)

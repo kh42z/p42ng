@@ -1,7 +1,7 @@
-export const CurrentWarView = Backbone.View.extend({
+export const LastWarsView = Backbone.View.extend({
   el: $('#app'),
   initialize: function () {
-    this.template = Handlebars.templates.currentWar
+    this.template = Handlebars.templates.lastWars
     this.guilds = this.model.get('guilds').get('obj')
     this.listenTo(this.guilds, 'sync', function () { this.render() }, this)
   },

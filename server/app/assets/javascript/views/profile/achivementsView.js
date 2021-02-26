@@ -12,20 +12,19 @@ export const AchivementsView = Backbone.View.extend({
   },
 
   getUsers: function () {
-    console.log('hello')
   },
 
   getLadders: function () {
-    console.log('it me')
     this.listenTo(this.users, 'sync', function () { this.render() }, this)
   },
 
   render: function () {
-    console.log('Achivements View')
     const context =	{
       name: this.users.get(this.id).get('nickname'),
       ladder_id: this.users.get(this.id).get('ladder_id'),
-      ladder_name: this.ladders.get(this.users.get(this.id).get('ladder_id')).get('name')
+      ladder_name: this.ladders.get(this.users.get(this.id).get('ladder_id')).get('name'),
+      guild_id: this.users.get(this.id).get('guild_id'),
+      id: this.id
     }
     const template = Handlebars.templates.achivements
 
