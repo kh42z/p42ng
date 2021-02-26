@@ -10,7 +10,15 @@
                 <div class="image-container">
                     <img src={{image_url}} id="image_url" class="image_url"></img>
                 </div>
-                <p>{{anagram}} {{nickname}}</p>
+                <p class="anagram_nickname">{{anagram}} {{nickname}}</p>
+                {{#if admin}}
+                <div class="admin_panel_settings">
+                    <img src='./icons/admin_panel_settings.svg' class="admin_panel_settings-icon"></img>
+                </div>
+                {{/if}}
+                <div class="close">
+                    <img src='./icons/close.svg' class="close-icon"></img>
+                </div>
             </div>
         {{/each}}
         </div>

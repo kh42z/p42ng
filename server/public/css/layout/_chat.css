@@ -50,18 +50,56 @@
     margin-left: 16px; 
     margin-right: 32px;
     height: 100%;
+
+    overflow-y: scroll;
+    scrollbar-width: none;  
+    -ms-overflow-style: none; 
+    direction: ltr;
 }
+
+.chat .discussions
+.discussions-container::-webkit-scrollbar-track {
+    width: 0px;
+    background-color: transparent;
+}
+
+.chat .discussions
+.discussions-container::-webkit-scrollbar {
+    width: 0px;
+    background-color: transparent;
+}
+
+.chat .discussions
+.discussions-container::-webkit-scrollbar-thumb {
+    width: 0px;
+    background-color: transparent;
+}
+
 
 .chat .discussions .discussions-container
 .clickable-discussions {
     display: flex;
     flex-direction: row;
     align-items: center;
+    
 
     width: 300px;
     height: 58px;
 
     margin-bottom: 16px;
+}
+
+
+.chat .discussions .discussions-container .clickable-discussions
+.close {
+    position: absolute;
+    left: 275px;
+}
+
+.chat .discussions .discussions-container .clickable-discussions
+.admin_panel_settings {
+    position: absolute;
+    left: 240px;
 }
 
 .chat .discussions .discussions-container .clickable-discussions 
@@ -79,6 +117,16 @@
     object-fit: cover;
     width: 100%;
     height: 100%;
+}
+
+.chat .discussions .discussions-container .clickable-discussions
+.close {
+    display: none;
+}
+
+.chat .discussions .discussions-container .clickable-discussions
+.admin_panel_settings {
+    display: none;
 }
 
 .chat .right-side {
@@ -149,7 +197,6 @@
 
 .chat .right-side .header .left-header .info
 .nickname {
-    padding-right: 64px;
 }
 
 .chat .right-side .header .left-header .info
@@ -168,6 +215,7 @@
     background: #6FCF97;
 
     margin-right: 6px;
+    margin-left: 32px;
 }
 
 .chat .right-side .header .right-header
@@ -213,7 +261,6 @@
 .chat .right-side
 .messages {
     background: rgba(15, 24, 37, 0.37);
-    /* flex-grow: 1; */
     height: 100vh;
 
     display: flex;
@@ -332,3 +379,4 @@
 
     padding-left: 64px;
 }
+

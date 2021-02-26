@@ -13,26 +13,24 @@ export const ChatView = Backbone.View.extend({
   },
   el: $('#app'),
   render: function () {
-    console.log('chat render')
-    console.log(this.channels)
     this.templateChat = Handlebars.templates.chat
     let array = {}
 
     array = JSON.parse(JSON.stringify(this.userLogged))
-    console.log(array)
-    array.discussions = Array(2) // this.channels.length
-    // for (let i = 0; i < 1; i++) {
-    array.discussions.push({
-      anagram: '[24.c]',
-      image_url: './images/profile-pic.jpg',
-      nickname: 'pganglof'
-    })
-    array.discussions.push({
-      anagram: '[24.c]',
-      image_url: './images/jdurand.png',
-      nickname: 'jdurand'
-    })
-    // }
+    array.discussions = Array(16) // this.channels.length
+    for (let i = 0; i < 16; i++) {
+      array.discussions.push({
+        admin: true,
+        anagram: '[24.c+]',
+        image_url: './images/profile-pic.jpg',
+        nickname: 'pganglof-with-very-long-name'
+      })
+      const length = array.discussions[array.discussions.length - 1].anagram.length + array.discussions[array.discussions.length - 1].nickname.length
+      if (length > 17) {
+        const size = 16 - array.discussions[array.discussions.length - 1].anagram.length
+        array.discussions[array.discussions.length - 1].nickname = array.discussions[array.discussions.length - 1].nickname.substr(0, size) + '.'
+      }
+    }
     array.anagram = '[24.c]'
     array.slide_show = './icons/slideshow.svg'
 
@@ -41,7 +39,7 @@ export const ChatView = Backbone.View.extend({
       array.messages.push({
         anagram: '[24.c]',
         image_url: './images/profile-pic.jpg',
-        nickname: 'pganglof',
+        nickname: 'pganglof-with-very-long-name',
         time: i,
         message: 'ptite game?'
       })
@@ -51,6 +49,7 @@ export const ChatView = Backbone.View.extend({
     this.$el.html(templateDataChat)
     return this
   },
+
   createChannel: function () {
     const adminIds = Array()
     adminIds.push(this.userLogged.get('id'))
