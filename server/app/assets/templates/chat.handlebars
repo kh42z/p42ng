@@ -71,50 +71,60 @@
     </div>
     <div class="right-side">
         <div class="privacy">{{privacy}} channel</div>
-        <div class="online">
+        <div class="title online">
             <div class="pastille"></div>
-            <div class="ONLINE">ONLINE-{{nbOnline}}</div>
+            <div class="status ONLINE">ONLINE-{{nbOnline}}</div>
         </div>
-        <div class="usersOnline">
+        <div class="users usersOnline">
             {{#each usersOnline}}
-                <div class="image-container">
-                    <img src={{image_url}} class="image_url"></img>
+                <div class="user">
+                    <div class="name">
+                        <div class="image-container">
+                            <img src={{image_url}} class="image_url"></img>
+                        </div>
+                        <div class="name anagram">{{anagram}}</div>
+                        <div class="name nickname">{{nickname}}</div>
+                    </div>
+                    {{#if others}}
+                    <div class="play-button-container">
+                        <button class="play-button">Play</button>         
+                    </div>
+                    {{/if}}
                 </div>
-                <div class="anagram">{{anagram}}</div>
-                <div class="nickname">{{nickname}}</div>
-                {{#if others}}
-                <button class="play-button">Play</button>         
-                {{/if}}
             {{/each}}
         </div>
-        <div class="inGame">
+        <div class="title inGame">
             <div class="pastille"></div>
-            <div class="IN_GAME">IN GAME-{{nbInGame}}</div>
+            <div class="status IN_GAME">IN GAME-{{nbInGame}}</div>
         </div>
-        <div class="usersInGame">
+        <div class="users usersInGame">
             {{#each usersInGame}}
-                <div class="image-container">
-                    <img src={{image_url}} class="image_url"></img>
-                </div>
-                <div class="anagram">{{anagram}}</div>
-                <div class="nickname">{{nickname}}</div>
-                <div class="slide-show-container">
-                    <img src="./icons/slide-show-ingame.svg" class="slide-show-ingame"></img>
+                <div class="user">
+                    <div class="image-container">
+                        <img src={{image_url}} class="image_url"></img>
+                    </div>
+                    <div class="name anagram">{{anagram}}</div>
+                    <div class="name nickname">{{nickname}}</div>
+                    <div class="slide-show-container">
+                        <img src="./icons/slide-show-ingame.svg" class="slide-show-ingame"></img>
+                    </div>
                 </div>
             {{/each}}
         </div>
-        <div class="usersOffline">
+        <div class="title offline">
             <div class="pastille"></div>
-            <div class="OFFLINE">IN GAME-{{nbInGame}}</div>
+            <div class="status OFFLINE">OFFLINE-{{nbOffline}}</div>
         </div>
-        <div class="usersInGame">
-            {{#each usersInGame}}
+        <div class="users usersOffline">
+            {{#each usersOffline}}
+                <div class="user">
                 <div class="image-container">
                     <img src={{image_url}} class="image_url"></img>
                 </div>
-                <div class="anagram">{{anagram}}</div>
-                <div class="nickname">{{nickname}}</div>
+                <div class="name anagram">{{anagram}}</div>
+                <div class="name nickname">{{nickname}}</div>
             {{/each}}
+            </div>
         </div>
     </div>
 </div>

@@ -48,6 +48,8 @@ export const ChatView = Backbone.View.extend({
     array.privacy = 'Public'
     array.usersOnline = Array(2) // nb usersOnline
     array.nbOnline = '2'
+    array.nbInGame = '0'
+    array.nbOffline = '0'
     for (let i = 0; i < 1; i++) {
       array.usersOnline.push({
         anagram: '[txt]',
@@ -59,7 +61,7 @@ export const ChatView = Backbone.View.extend({
         anagram: '[txt]',
         image_url: './images/profile-pic.jpg',
         nickname: 'pganglof',
-        others: false
+        others: true
       })
     }
 
