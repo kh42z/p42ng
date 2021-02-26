@@ -17,6 +17,8 @@ export const ChatView = Backbone.View.extend({
     let array = {}
 
     array = JSON.parse(JSON.stringify(this.userLogged))
+
+    array.multipleParticipants = true
     array.discussions = Array(16) // this.channels.length
     for (let i = 0; i < 16; i++) {
       array.discussions.push({

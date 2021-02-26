@@ -1,7 +1,7 @@
 .chat {
     background: url('../../images/background.jpg');
     width: 100vw;
-    height: 100vh;
+    height: calc(100vh - 82px);
 
     background-position: 50% 0;
     background-position: 0 0;
@@ -9,6 +9,9 @@
 
     display: flex; 
     flex-direction: row;
+    
+    overflow: hidden;
+    overflow-x: auto;
 }
 
 .chat
