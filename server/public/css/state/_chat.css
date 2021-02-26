@@ -37,7 +37,7 @@
 }
 
 
-.chat .right-side .messages .input-container
+.chat .center .messages .input-container
 .input:focus {
     outline: none;
 }

@@ -1,6 +1,7 @@
 export const ChatView = Backbone.View.extend({
   events: {
-    'click .add_box': 'createChannel'
+    'click .add_box': 'createChannel',
+    'keyup .input': 'sendMessage'
   },
   initialize: function () {
     this.channels = this.model.get('channels').get('obj')
@@ -77,5 +78,9 @@ export const ChatView = Backbone.View.extend({
     const adminIds = Array()
     adminIds.push(this.userLogged.get('id'))
     this.channels.createChannel(adminIds)
+  },
+
+  sendMessage: function (e) {
+    if (e.keyCode === 13) { console.log('send message') } else { console.log('not enter') }
   }
 })
