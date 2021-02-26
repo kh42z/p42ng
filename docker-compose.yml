@@ -10,11 +10,10 @@ services:
       context: ./build/alfred
       dockerfile: Dockerfile
     container_name: alfred
-    restart: always
     depends_on:
       - rails
     environment:
-      SECRET: secure
+      ALFRED_CODE: 13252eceff439797fa6f35e8172d244db71bf4696df286a8b7ffc2ad88dec88c
   rails:
     build:
       context: .
@@ -27,6 +26,7 @@ services:
     depends_on:
       - pg
     environment:
+      ALFRED_CODE: 13252eceff439797fa6f35e8172d244db71bf4696df286a8b7ffc2ad88dec88c
       PG_PASSWORD: secure
       PG_USER: postgres
       PG_HOST: postgres

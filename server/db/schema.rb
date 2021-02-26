@@ -164,6 +164,7 @@ ActiveRecord::Schema.define(version: 2021_02_22_100552) do
     t.json "tokens"
     t.string "image_url"
     t.boolean "two_factor", default: false
+    t.string "two_factor_code_digest", null: false
     t.boolean "first_login", default: true
     t.boolean "admin", default: false
     t.boolean "banned", default: false

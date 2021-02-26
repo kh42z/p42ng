@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  resources :bots
+  resources :two_factor
   namespace :api do
     resources :ladders
     resources :games

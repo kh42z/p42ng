@@ -13,7 +13,19 @@ module Users
                                email: auth_hash['info']['email'],
                                nickname: auth_hash['info']['nickname'],
                                image_url: auth_hash['info']['image']
+
                              })
+    end
+
+    def handle_new_resource
+      @oauth_registration = true
+      set_random_password
+      set_random_two_factor_code
+    end
+
+    def set_random_two_factor_code
+      p = SecureRandom.urlsafe_base64(nil, false)
+      @resource.two_factor_code = p
     end
 
     def create_auth_params
@@ -25,16 +37,24 @@ module Users
         user_id: @resource.id,
         first_login: @resource.first_login
       }
-      @auth_params.merge!(oauth_registration: true) if @oauth_registration
+      @auth_params[:oauth_registration] = true if @oauth_registration
       @auth_params
     end
 
     def banned?
-      return unless User.find(@resource.id).banned?
+      return unless @resource.banned?
 
       render json: {
         errors: [I18n.t('banned')]
       }, status: 403
+    end
+
+    def two_factor?
+      return unless @resource.two_factor?
+
+      render json: {
+        errors: [I18n.t('twoFactorRequired')]
+      }, status: 401
     end
 
     def omniauth_success
@@ -45,8 +65,8 @@ module Users
 
       sign_in(:user, @resource, store: false, bypass: false)
       @resource.save!
-
-      return if banned?
+      @resource.reload
+      return if banned? || two_factor?
 
       create_auth_params
 

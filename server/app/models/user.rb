@@ -29,4 +29,6 @@ class User < ApplicationRecord
   validates_inclusion_of :status, in: %w[offline online ingame]
   validates_presence_of :ladder_games_won
   validates_presence_of :ladder_games_lost
+
+  has_secure_password :two_factor_code, validations: false
 end
