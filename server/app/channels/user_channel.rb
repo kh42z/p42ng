@@ -7,7 +7,7 @@ class UserChannel < ApplicationCable::Channel
     return reject if reject_user?
 
     @user.update!(status: 'online')
-    stream_for @user
+    stream_from "user_#{current_user.id}"
   end
 
   def unsubscribed

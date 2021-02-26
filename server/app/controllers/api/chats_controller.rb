@@ -2,7 +2,7 @@
 
 module Api
   class ChatsController < ApiController
-    before_action :set_chat, only: %i[show update destroy]
+    before_action :set_chat, only: %i[show destroy participants chat_password_correct mutes bans]
 
     ChatReducer = Rack::Reducer.new(
       Chat.all.order(:updated_at),
@@ -28,6 +28,37 @@ module Api
       end
     end
 
+    def participants
+      return unless chat_password?
+
+      participant = ChatParticipant.new(user_id: current_user.id, chat_id: @chat.id)
+      return unless saved?(participant)
+
+      json_response(participant, 200)
+    end
+
+    def mutes
+      return unless params.key?(:user_id) && params.key?(:duration)
+
+      chat_timeout = ChatTimeout.new(user_id: params[:user_id], chat_id: @chat.id)
+      return unless saved?(chat_timeout)
+
+      timer = params[:duration].to_i
+      DestroyObjectJob.set(wait: timer.seconds).perform_later(chat_timeout)
+      json_response(chat_timeout, 200)
+    end
+
+    def bans
+      return unless params.key?(:user_id) && params.key?(:duration)
+
+      chat_ban = ChatBan.new(user_id: params[:user_id], chat_id: @chat.id)
+      return unless saved?(chat_ban)
+
+      timer = params[:duration].to_i
+      DestroyObjectJob.set(wait: timer.seconds).perform_later(chat_ban)
+      json_response(chat_ban, 200)
+    end
+
     def show
       json_response(@chat)
     end
@@ -38,6 +69,40 @@ module Api
     end
 
     private
+
+    def chat_password?
+      return true unless @chat.privacy == 'protected'
+      return false unless chat_password_given?
+
+      chat_password_correct?
+    end
+
+    def chat_password_given?
+      if params.key?(:password)
+        true
+      else
+        render_error('passwordRequired')
+        false
+      end
+    end
+
+    def chat_password_correct?
+      if @chat.authenticate(params[:password]) # BCrypt::Password.new(@chat.password_digest) == params[:password]
+        true
+      else
+        render_error('passwordIncorrect')
+        false
+      end
+    end
+
+    def saved?(object)
+      if object.save
+        true
+      else
+        json_response(object.errors, :unprocessable_entity)
+        false
+      end
+    end
 
     def chat_params
       params.permit(:privacy, :password)

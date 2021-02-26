@@ -89,6 +89,7 @@ paths:
           $ref: '#/components/responses/500'
     patch:
       summary: Modifies a chat
+      description: Allows an chat_admin to modify chatroom settings
       tags:
         - Chats
       responses:
@@ -117,13 +118,7 @@ paths:
                   enum: [public, private, protected]
                 password:
                   type: string
-                ban_ids:
-                  $ref: '#/components/schemas/integer_list'
-                timeout_ids:
-                  $ref: '#/components/schemas/integer_list'
                 admin_ids:
-                  $ref: '#/components/schemas/integer_list'
-                participant_ids:
                   $ref: '#/components/schemas/integer_list'
     delete:
       summary: Deletes a chat
@@ -141,6 +136,129 @@ paths:
           $ref: '#/components/responses/403'
         '500':
           $ref: '#/components/responses/500'
+  "/api/chats/{id}/mutes":
+    post:
+      summary: Mutes an user
+      description: Allows moderators to mute an user for a specified duration (in seconds)
+      tags:
+        - Chats
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Chat ID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ban"
+      responses:
+        '200':
+          description: user muted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mute_ids:
+                    $ref: '#/components/schemas/integer_list'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
+  "/api/chats/{id}/bans":
+    post:
+      summary: Bans an user
+      description: Allows moderators to ban an user for a specified duration (in seconds)
+      tags:
+        - Chats
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Chat ID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ban"
+      responses:
+        '200':
+          description: user banned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ban_ids:
+                    $ref: '#/components/schemas/integer_list'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
+  "/api/chats/{id}/participants":
+    post:
+      summary: Joins a chatroom
+      description: Allows current_user to joins a chatroom
+      tags:
+        - Chats
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Chat ID
+        - in: query
+          name: password
+          schema:
+            type: string
+          description: Required password if privacy is set to protected
+      responses:
+        '200':
+          description: chat joined
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  participant_ids:
+                    $ref: '#/components/schemas/integer_list'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      summary: Leaves a chatroom
+      description: Allows current_user to leaves a chatroom
+      tags:
+        - Chats
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: chat left
+
   "/api/games":
     get:
       summary: Retrieves all games played
@@ -667,6 +785,14 @@ components:
           $ref: '#/components/schemas/integer_list'
         war_records:
           $ref: '#/components/schemas/integer_list'
+    ban:
+      type: object
+      properties:
+        user_id:
+          type: integer
+        duration:
+          type: integer
+          description: Duration in seconds
     chat:
       type: object
       properties:

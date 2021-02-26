@@ -15,6 +15,9 @@ RSpec.describe User, type: :model do
   it { should belong_to(:ladder) }
   it { should belong_to(:guild) }
   it { should have_one(:guild_officer).dependent(:destroy) }
+  it { should have_many(:chat_participant).dependent(:destroy) }
+  it { should have_many(:chats).dependent(:destroy) }
+  it { should have_many(:chat_admin).dependent(:destroy) }
 
   it "validates uniqueness of nickname" do
     create(:user, nickname: 'unique name')

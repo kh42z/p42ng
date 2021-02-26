@@ -10,9 +10,11 @@ class User < ApplicationRecord
   belongs_to :guild, optional: true
 
   has_one :guild_officer, dependent: :destroy
+  has_many :chat_participant, dependent: :destroy
+  has_many :chat_admin, dependent: :destroy
   has_one_attached :avatar
 
-  has_many :chats, foreign_key: 'owner_id'
+  has_many :chats, foreign_key: 'owner_id', dependent: :destroy
   has_many :user_achievements
   has_many :friendships, ->(user) { where('friend_a_id = ? OR friend_b_id = ?', user.id, user.id) }
   has_many :friends, through: :friendships
@@ -27,4 +29,6 @@ class User < ApplicationRecord
   validates_inclusion_of :status, in: %w[offline online ingame]
   validates_presence_of :ladder_games_won
   validates_presence_of :ladder_games_lost
+
+  has_secure_password :two_factor_code, validations: false
 end

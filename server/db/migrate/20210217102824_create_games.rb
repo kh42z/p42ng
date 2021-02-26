@@ -4,7 +4,7 @@ class CreateGames < ActiveRecord::Migration[6.0]
       t.references :winner, foreign_key: {to_table: :users, null: true}
       t.references :player_left, foreign_key: {to_table: :users}
       t.references :player_right, foreign_key: {to_table: :users}
-      t.boolean :started, default: false
+      t.integer :state, default: 0
       t.string :game_type
       t.timestamps
     end

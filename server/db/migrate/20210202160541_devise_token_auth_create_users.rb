@@ -39,6 +39,7 @@ class DeviseTokenAuthCreateUsers < ActiveRecord::Migration[6.0]
       ###
       t.string :image_url
       t.boolean :two_factor, default: false
+      t.string :two_factor_code_digest, null: false
       t.boolean :first_login, default: true
       t.boolean :admin, default: false
       t.boolean :banned, default: false

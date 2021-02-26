@@ -75,7 +75,6 @@ ActiveRecord::Schema.define(version: 2021_02_22_100552) do
   create_table "chat_timeouts", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "chat_id"
-    t.datetime "timeout"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["chat_id"], name: "index_chat_timeouts_on_chat_id"
@@ -104,7 +103,7 @@ ActiveRecord::Schema.define(version: 2021_02_22_100552) do
     t.bigint "winner_id"
     t.bigint "player_left_id"
     t.bigint "player_right_id"
-    t.boolean "started", default: false
+    t.integer "state", default: 0
     t.string "game_type"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -165,6 +164,7 @@ ActiveRecord::Schema.define(version: 2021_02_22_100552) do
     t.json "tokens"
     t.string "image_url"
     t.boolean "two_factor", default: false
+    t.string "two_factor_code_digest", null: false
     t.boolean "first_login", default: true
     t.boolean "admin", default: false
     t.boolean "banned", default: false
