@@ -2,7 +2,7 @@
 
 module Api
   class ChatsController < ApiController
-    before_action :set_chat, only: %i[show update destroy participants chat_password_correct]
+    before_action :set_chat, only: %i[show update destroy participants chat_password_correct mutes]
 
     ChatReducer = Rack::Reducer.new(
       Chat.all.order(:updated_at),
@@ -33,15 +33,26 @@ module Api
 
       participant = ChatParticipant.new(user_id: current_user.id, chat_id: @chat.id)
       if participant.save
-        json_response(participant, :created)
+        json_response(participant, 200)
       else
         json_response(participant.errors, :unprocessable_entity)
       end
     end
 
-    # def mutes
+    # rubocop:disable Metrics/AbcSize
+    def mutes
+      return unless params.key?(:user_id) && params.key?(:duration)
 
-    # end
+      chat_timeout = ChatTimeout.new(user_id: params[:user_id], chat_id: @chat.id)
+      if chat_timeout.save
+        timer = params[:duration].to_i
+        ChatBansCleanupJob.set(wait: timer.seconds).perform_later(chat_timeout)
+        json_response(chat_timeout, 200)
+      else
+        json_response(chat_timeout.errors, :unprocessable_entity)
+      end
+    end
+    # rubocop:enable Metrics/AbcSize
 
     def show
       json_response(@chat)
