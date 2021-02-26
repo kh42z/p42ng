@@ -4,9 +4,8 @@ require 'mini_magick'
 
 module Api
   class UsersController < ApiController
-    before_action :set_user, only: %i[show update destroy upload_avatar]
-    before_action :allowed?, only: %i[update destroy upload_avatar]
-    skip_after_action :update_auth_header, only: [:destroy]
+    before_action :set_user, only: %i[show update upload_avatar]
+    before_action :allowed?, only: %i[update upload_avatar]
 
     UserReducer = Rack::Reducer.new(
       User.all,
@@ -29,11 +28,6 @@ module Api
 
     def show
       json_response(@user)
-    end
-
-    def destroy
-      @user.destroy
-      head :no_content
     end
 
     def upload_avatar

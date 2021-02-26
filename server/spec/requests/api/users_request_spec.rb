@@ -118,15 +118,15 @@ RSpec.describe "Users", type: :request do
     end
   end
 
-  describe "delete one user" do
-    before do
-      @last = users.last
-      delete "/api/users/#{@last.id}", headers: @last.create_new_auth_token
-    end
-    it "returns status code 204" do
-      expect(response).to have_http_status(204)
-    end
-  end
+  #describe "delete one user" do
+  #  before do
+  #    @last = users.last
+  #    delete "/api/users/#{@last.id}", headers: @last.create_new_auth_token
+  #  end
+  #  it "returns status code 204" do
+  #    expect(response).to have_http_status(204)
+  #  end
+  #end
 
   # describe 'create one user avatar' do
   #  before {
