@@ -62,8 +62,8 @@ RSpec.describe "Games", type: :request do
           post "/api/games", headers: auth.create_new_auth_token, params: {game_type: "duel", opponent_id: to.id}
         end
 
-        it "returns status code 422" do
-          expect(response).to have_http_status(422)
+        it "returns status code 403" do
+          expect(response).to have_http_status(403)
         end
       end
 

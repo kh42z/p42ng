@@ -17,12 +17,10 @@ module Api
 
     def create
       @games_params = params.permit(:game_type)
-      if @games_params[:game_type] == 'duel'
-        raise ActiveRecord::RecordInvalid if params.key?(:opponent_id) == false
+      set_duel if @games_params[:game_type] == 'duel'
 
-        @games_params[:player_left_id], @games_params[:player_right_id] = [current_user.id,
-                                                                           params[:opponent_id].to_i].shuffle
-      end
+      return render_error('opponentNotAvailable') unless opponent_available?
+
       json_response(create_game)
     end
 
@@ -35,6 +33,13 @@ module Api
 
     protected
 
+    def set_duel
+      raise ActiveRecord::RecordInvalid if params.key?(:opponent_id) == false
+
+      @games_params[:player_left_id], @games_params[:player_right_id] = [current_user.id,
+                                                                         params[:opponent_id].to_i].shuffle
+    end
+
     def send_invites(game)
       invite(game.player_left.id, game.id)
       invite(game.player_right.id, game.id)
@@ -44,12 +49,14 @@ module Api
       ActionCable.server.broadcast("user_#{user_id}", { action: 'game_invitation', id: game_id })
     end
 
-    def create_game
-      # TODO: Custom Exception
-      raise ActiveRecord::RecordInvalid if User.find(params['opponent_id']).status != 'online'
+    def opponent_available?
+      User.find(params['opponent_id']).status == 'online'
+    end
 
+    def create_game
       game = Game.create!(@games_params)
       send_invites(game)
+      game
     end
 
     def set_game

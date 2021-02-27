@@ -40,3 +40,4 @@ en:
   passwordIncorrect: "Wrong password"
   missingCode: "You need to provide 2FA code"
   twoFactorRequired: "You need to authenticate with your two_factor_code"
+  opponentNotAvailable: "Your opponent is not available"
