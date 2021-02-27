@@ -2,15 +2,14 @@
 
 class ChatChannel < ApplicationCable::Channel
   def subscribed
-    @chat = Chat.find(params[:chat_id])
-
+    @chat_id = params[:id]
     return reject if reject_user?
 
-    stream_for @chat
+    stream_from "chat_#{@chat_id}"
   end
 
   def received(data)
-    broadcast_to(@chat, data['message'])
+    broadcast_to("chat_#{@chat_id}", data['message'])
   end
 
   def unsubscribed; end
@@ -18,8 +17,8 @@ class ChatChannel < ApplicationCable::Channel
   private
 
   def reject_user?
-    return true if ChatBan.where(user_id: current_user.id, chat_id: params[:chat_id]).count.positive?
+    return true if ChatBan.where(user_id: current_user.id, chat_id: @chat_id).count.positive?
 
-    ChatParticipant.where(user_id: current_user.id, chat_id: params[:chat_id]).empty?
+    ChatParticipant.where(user_id: current_user.id, chat_id: @chat_id).empty?
   end
 end

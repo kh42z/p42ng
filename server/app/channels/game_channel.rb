@@ -2,11 +2,11 @@
 
 class GameChannel < ApplicationCable::Channel
   def subscribed
-    @game = Game.find(params[:game_id])
+    @game = Game.find(params[:id])
 
     return reject if accept_user? == false
 
-    stream_for @game
+    stream_from "game_#{@game.id}"
     @game.update!(state: @game.state + 1)
 
     return unless @game.state > 1

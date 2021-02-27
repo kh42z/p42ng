@@ -2,12 +2,12 @@
 
 class UserChannel < ApplicationCable::Channel
   def subscribed
-    @user = User.find(params[:user_id])
+    @user = User.find(params[:id])
 
     return reject if reject_user?
 
     @user.update!(status: 'online')
-    stream_from "user_#{current_user.id}"
+    stream_from "user_#{@user.id}"
   end
 
   def unsubscribed

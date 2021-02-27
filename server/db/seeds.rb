@@ -9,7 +9,9 @@ Ladder.create(name: 'Gold', desc: 'ehm.')
 Ladder.create(name: 'Platine', desc: 'mhe.')
 Ladder.create(name: 'Diamond', desc: 'mhe.')
 
-FactoryBot.create(:user, two_factor: true, two_factor_code: ENV["ALFRED_CODE"], nickname: "Alfred", email: "9000@student.42.fr", image_url: "https://res.cloudinary.com/practicaldev/image/fetch/s--yjlrbrT6--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://thepracticaldev.s3.amazonaws.com/i/rlyibpr58qk49ci8y1rk.png")
+alfred = FactoryBot.create(:user, nickname: "Alfred", email: "9000@student.42.fr", image_url: "https://res.cloudinary.com/practicaldev/image/fetch/s--yjlrbrT6--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://thepracticaldev.s3.amazonaws.com/i/rlyibpr58qk49ci8y1rk.png", two_factor: true, two_factor_code: ENV["ALFRED_CODE"])
+general_chat_room = Chat.create(privacy: 'public')
+ChatParticipant.create(user: alfred, chat: general_chat_room)
 
 if Rails.env.development?
 
