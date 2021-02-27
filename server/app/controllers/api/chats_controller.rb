@@ -21,42 +21,26 @@ module Api
     def create
       chat = Chat.new(chat_params)
       chat.owner = current_user
-      if chat.save
-        json_response(chat, :created)
-      else
-        json_response(chat.errors, :unprocessable_entity)
-      end
+      chat.save
+      json_response(chat, 201)
+      # create ChatAdmin.user_id = current_user.id
+      # ChatAdmin.chat_id = chat.id
+      # create ChatParticipants if provided
     end
 
     def participants
-      return unless chat_password?
+      raise WrongPasswordError if @chat.privacy == 'protected' && !@chat.authenticate(params.fetch(:password))
 
-      participant = ChatParticipant.new(user_id: current_user.id, chat_id: @chat.id)
-      return unless saved?(participant)
-
+      participant = ChatParticipant.create!(user_id: current_user.id, chat_id: @chat.id)
       json_response(participant, 200)
     end
 
     def mutes
-      return unless params.key?(:user_id) && params.key?(:duration)
-
-      chat_timeout = ChatTimeout.new(user_id: params[:user_id], chat_id: @chat.id)
-      return unless saved?(chat_timeout)
-
-      timer = params[:duration].to_i
-      DestroyObjectJob.set(wait: timer.seconds).perform_later(chat_timeout)
-      json_response(chat_timeout, 200)
+      destroy_job(ChatTimeout.create!(user_id: params.fetch(:user_id), chat_id: @chat.id))
     end
 
     def bans
-      return unless params.key?(:user_id) && params.key?(:duration)
-
-      chat_ban = ChatBan.create!(user_id: params[:user_id], chat_id: @chat.id)
-      return unless saved?(chat_ban)
-
-      timer = params[:duration].to_i
-      DestroyObjectJob.set(wait: timer.seconds).perform_later(chat_ban)
-      json_response(chat_ban, 200)
+      destroy_job(ChatBan.create!(user_id: params.fetch(:user_id), chat_id: @chat.id))
     end
 
     def show
@@ -70,38 +54,10 @@ module Api
 
     private
 
-    def chat_password?
-      return true unless @chat.privacy == 'protected'
-      return false unless chat_password_given?
-
-      chat_password_correct?
-    end
-
-    def chat_password_given?
-      if params.key?(:password)
-        true
-      else
-        render_error('passwordRequired')
-        false
-      end
-    end
-
-    def chat_password_correct?
-      if @chat.authenticate(params[:password]) # BCrypt::Password.new(@chat.password_digest) == params[:password]
-        true
-      else
-        render_error('passwordIncorrect')
-        false
-      end
-    end
-
-    def saved?(object)
-      if object.save
-        true
-      else
-        json_response(object.errors, :unprocessable_entity)
-        false
-      end
+    def destroy_job(object)
+      timer = params.fetch(:duration).to_i
+      DestroyObjectJob.set(wait: timer.seconds).perform_later(object)
+      json_response(object, 200)
     end
 
     def chat_params

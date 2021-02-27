@@ -53,12 +53,6 @@ RSpec.describe "Chats", type: :request do
       expect(response).to have_http_status(201)
       expect(Chat.first.owner_id).to eq(auth.id)
     end
-    it "should create a new participants" do
-      chat = create(:chat)
-      post participants_api_chat_url(chat.id), headers: access_token, params: {user: auth, chat: chat}
-      expect(response).to have_http_status(200)
-      expect(ChatParticipant.first.chat_id).to eq(chat.id)
-    end
     it "should return status 422" do
       chat = create(:chat)
       post participants_api_chat_url(chat.id), headers: access_token, params: {user: auth, chat: chat}
@@ -68,11 +62,17 @@ RSpec.describe "Chats", type: :request do
   end
 
   describe "#participants" do
-    it "should return error : passwordRequired" do
+    it "should create a new participants" do
+      chat = create(:chat)
+      post participants_api_chat_url(chat.id), headers: access_token, params: {user: auth, chat: chat}
+      expect(response).to have_http_status(200)
+      expect(ChatParticipant.first.chat_id).to eq(chat.id)
+    end
+    it "should return error : passwordRequired", test: true do
       chat = create(:chat, privacy: 'protected', password: 'password')
       post participants_api_chat_url(chat.id), headers: access_token, params: {user: auth, chat: chat}
-      expect(response).to have_http_status(403)
-      expect(response.body).to match(I18n.t('passwordRequired'))
+      expect(response).to have_http_status(422)
+      # expect this ActionController::ParameterMissing
       expect(ChatParticipant.count).to eq(0)
     end
     it "should return 201 with correct chat password" do
@@ -84,7 +84,7 @@ RSpec.describe "Chats", type: :request do
     it "should return error : passwordIncorrect" do
       chat = create(:chat, privacy: 'protected', password: 'password')
       post participants_api_chat_url(chat.id), headers: access_token, params: {user: auth, chat: chat, password: 'word'}
-      expect(response).to have_http_status(403)
+      expect(response).to have_http_status(422)
       expect(response.body).to match(I18n.t('passwordIncorrect'))
       expect(ChatParticipant.count).to eq(0)
     end
@@ -103,12 +103,12 @@ RSpec.describe "Chats", type: :request do
     it "should return an error, due to bad parameters" do
       user = create(:user)
       chat = create(:chat)
-      post mutes_api_chat_url(chat.id), headers: access_token, params: {user_id: user, duration: 2}
+      post mutes_api_chat_url(chat.id), headers: access_token, params: {useP: user, duration: 2}
       expect(response).to have_http_status(422)
     end
   end
   describe "#bans" do
-    it "should ban a participant", test: true do
+    it "should ban a participant" do
       chat = create(:chat)
       user = create(:user)
       timer = 2
@@ -121,13 +121,13 @@ RSpec.describe "Chats", type: :request do
     it "should return an error, due to bad parameters" do
       user = create(:user)
       chat = create(:chat)
-      post bans_api_chat_url(chat.id), headers: access_token, params: {user_id: user, duration: 2}
+      post bans_api_chat_url(chat.id), headers: access_token, params: {userP: user, duration: 2}
       expect(response).to have_http_status(422)
     end
   end
 
   describe "#destroy" do
-    it "returns status code 204", test: true do
+    it "returns status code 204" do
       chat = create(:chat)
       delete "/api/chats/#{chat.id}", headers: access_token
       expect(response).to have_http_status(204)
