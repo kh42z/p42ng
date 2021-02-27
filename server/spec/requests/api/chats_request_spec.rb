@@ -52,6 +52,7 @@ RSpec.describe "Chats", type: :request do
       post api_chats_url, headers: access_token, params: {privacy: "protected", password: "asd"}
       expect(response).to have_http_status(201)
       expect(Chat.first.owner_id).to eq(auth.id)
+      expect(Chat.first.name).to eq("#{auth.nickname}'s chat")
     end
     it "should return status 422" do
       chat = create(:chat)
@@ -68,7 +69,7 @@ RSpec.describe "Chats", type: :request do
       expect(response).to have_http_status(200)
       expect(ChatParticipant.first.chat_id).to eq(chat.id)
     end
-    it "should return error : passwordRequired", test: true do
+    it "should return error : passwordRequired" do
       chat = create(:chat, privacy: 'protected', password: 'password')
       post participants_api_chat_url(chat.id), headers: access_token, params: {user: auth, chat: chat}
       expect(response).to have_http_status(422)
@@ -123,6 +124,15 @@ RSpec.describe "Chats", type: :request do
       chat = create(:chat)
       post bans_api_chat_url(chat.id), headers: access_token, params: {userP: user, duration: 2}
       expect(response).to have_http_status(422)
+    end
+  end
+
+  describe "#patch" do
+    it "should change chat's name and privacy", test: true do
+      chat = create(:chat)
+      put api_chat_url(chat.id), headers: access_token, params: { name: 'Custom Name', privacy: 'private'}
+      expect(Chat.first.name).to eq("Custom Name")
+      expect(Chat.first.privacy).to eq("private")
     end
   end
 

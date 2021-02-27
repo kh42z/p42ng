@@ -2,7 +2,7 @@
 
 module Api
   class ChatsController < ApiController
-    before_action :set_chat, only: %i[show destroy participants chat_password_correct mutes bans]
+    before_action :set_chat, only: %i[update show destroy participants chat_password_correct mutes bans]
 
     ChatReducer = Rack::Reducer.new(
       Chat.all.order(:updated_at),
@@ -15,12 +15,13 @@ module Api
     end
 
     def update
-      json_response(chat.update(chat_params))
+      json_response(@chat.update!(chat_params))
     end
 
     def create
       chat = Chat.new(chat_params)
       chat.owner = current_user
+      chat.name = "#{current_user.nickname}'s chat"
       chat.save
       json_response(chat, 201)
       # create ChatAdmin.user_id = current_user.id
@@ -61,7 +62,7 @@ module Api
     end
 
     def chat_params
-      params.permit(:privacy, :password)
+      params.permit(:privacy, :password, :name)
     end
 
     def set_chat

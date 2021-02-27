@@ -98,8 +98,7 @@ paths:
           content:
             application/json:
               schema:
-                oneOf:
-                  - "$ref": "#/components/schemas/chat_response"
+                $ref: "#/components/schemas/chat_response"
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -113,6 +112,8 @@ paths:
           application/json:
             schema:
               properties:
+                name:
+                  type: string
                 privacy:
                   type: string
                   enum: [public, private, protected]
@@ -776,6 +777,8 @@ components:
       properties:
         id:
           type: integer
+        name:
+          type: string
         privacy:
           type: string
           enum: [public, private, protected]

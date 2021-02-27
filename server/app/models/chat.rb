@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 class Chat < ApplicationRecord
-  #  validates_presence_of :name
-  #  uniqueness
+  validates_presence_of :name
   validates_presence_of :privacy
   validates_inclusion_of :privacy, in: %w[public private protected]
   has_secure_password validations: false

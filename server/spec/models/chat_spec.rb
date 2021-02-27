@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Chat, type: :model do
+  it { should validate_presence_of(:name) }
   it { should validate_presence_of(:privacy) }
   it { should allow_values('public', 'private', 'protected').for(:privacy) }
   it { should have_secure_password }

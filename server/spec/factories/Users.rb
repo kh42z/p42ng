@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :user, aliases: [:owner] do
-    nickname { Faker::Name.unique.name }
+    nickname { Faker::Name.unique.first_name }
     image_url { Faker::Internet.url }
     two_factor { Faker::Boolean.boolean }
     first_login { Faker::Boolean.boolean }
