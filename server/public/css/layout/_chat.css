@@ -19,7 +19,7 @@
     display: flex;
     flex-direction: column;
 
-    width: 330px;
+    width: 340px;
 
     border: 1px solid #313236;
     background: rgba(0, 0, 0, 0.37);
@@ -33,7 +33,7 @@
     justify-content: space-around;
     align-content: flex-start;
 
-    padding-left: 22px; 
+    padding-left: 16px; 
 }
 
 .chat .discussions .title
@@ -55,6 +55,7 @@
     height: 26px;
     margin-right: 4px;
     padding-left: 16px;
+    cursor: pointer;
 }
 
 .chat .discussions .title
@@ -68,7 +69,7 @@
     display: flex;
     flex-direction: column;
     margin-left: 16px; 
-    margin-right: 32px;
+    /* margin-right: 32px; */
     height: 100%;
 
     overflow-y: scroll;
@@ -121,8 +122,8 @@
 .chat .discussions .discussions-container .clickable-discussions 
 .image-container {
     position: relative;
-    height: 40px;
     width: 51px;
+    height: 40px;
 
     padding-right: 16px;
     padding-left: 32px;
@@ -157,7 +158,26 @@
 .right-side {
     width: 400px;
     border: 1px solid #313236;
+    overflow-y: scroll;
 
+}
+
+.chat
+.right-side::-webkit-scrollbar-track {
+    width: 0px;
+    background-color: transparent;
+}
+
+.chat
+.right-side::-webkit-scrollbar {
+    width: 0px;
+    background-color: transparent;
+}
+
+.chat
+.right-side::-webkit-scrollbar-thumb {
+    width: 0px;
+    background-color: transparent;
 }
 
 .chat .center
@@ -219,10 +239,6 @@
 }
 
 .chat .center .header .left-header .info
-.nickname {
-}
-
-.chat .center .header .left-header .info
 .status {
     text-transform: uppercase;
     color: var(--third-color);
@@ -235,7 +251,7 @@
     width: 8px;
     height: 8px;
     border-radius: 20px;
-    background: #6FCF97;
+    background: var(--green-color);
 
     margin-right: 6px;
     margin-left: 32px;
@@ -245,6 +261,7 @@
 .group_add-container {
     width: 33px;
     height: 33px;
+    margin-right: 32px;
 }
 
 .chat .center .header .left-header .info
@@ -268,7 +285,7 @@
     color: black;
     font-size: 16px;
     margin-right: 32px;
-    margin-left: 32px;
+    margin-left: 16px;
 
     display: flex;
     justify-content: center;
@@ -336,15 +353,6 @@
     padding-right: 32px;
 }
 
-.chat .center .messages .input-container
-.input {
-    width: 100%;
-    border-radius: 10px;
-    background: #E0E0E0;
-    padding-left: 16px;
-    font-family: Roboto-Regular;
-}
-
 .chat .center .messages .scrollable
 .message {
     display: flex;
@@ -391,7 +399,6 @@
     object-fit: cover;
     width: 100%;
     height: 100%;
-
 }
 
 .chat .center .messages .scrollable .message
@@ -463,20 +470,7 @@
     font-size: 14px;
 }
 
-.chat .right-side
-.usersOnline {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-
-.chat .right-side .usersOnline
-.image-container {
-    width: 36px;
-    height: 28px;
-}
-
-.chat .right-side .usersOnline .image-container
+.chat .right-side .users .image-container
 .image_url {
     object-fit: cover;
     width: 100%;
@@ -488,6 +482,9 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    justify-content: space-between;
+
+    width: 100%
 }
 
 .chat .right-side .users
@@ -500,7 +497,7 @@
     margin-top: 8px;
     margin-bottom: 8px;
 
-    width: 190px;
+    width: 213px;
 }
 
 .chat .right-side .users .user
@@ -510,7 +507,7 @@
     align-items: center;
 }
 
-.chat .right-side
+.chat .right-side .users .user
 .name {
     color: var(--secondary-color);
     font-size: 14px;
@@ -519,8 +516,10 @@
     margin-right: 4px;
 }
 
-.chat .right-side .users
+.chat .right-side .users .user
 .image-container {
+    width: 36px;
+    height: 28px;
     margin-right: 8px;
 }
 
@@ -537,3 +536,4 @@
 
     font-size: 14px;
 }
+

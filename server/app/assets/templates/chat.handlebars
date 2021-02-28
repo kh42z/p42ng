@@ -14,10 +14,12 @@
                     <img src={{image_url}} id="image_url" class="image_url"></img>
                 </div>
                 <p class="anagram_nickname">{{anagram}} {{nickname}}</p>
-                {{#if admin}}
-                <div class="admin_panel_settings">
-                    <img src='./icons/admin_panel_settings.svg' class="admin_panel_settings-icon"></img>
-                </div>
+                {{#if multipleParticipants}}
+                    {{#if admin}}
+                    <div class="admin_panel_settings">
+                        <img src='./icons/admin_panel_settings.svg' class="admin_panel_settings-icon"></img>
+                    </div>
+                    {{/if}}
                 {{/if}}
                 <div class="close">
                     <img src='./icons/close.svg' class="close-icon"></img>
@@ -46,9 +48,11 @@
                 <div class="group_add-container">
                     <img src="./icons/group_add.svg" class="group_add"></img>
                 </div>
+                {{#unless multipleParticipants}}
                 <button class="play-button">
                     <img src="./icons/videogame.svg" height="24">
                 </button>
+                {{/unless}}
             </div>
         </div>
         <div class="messages">
@@ -68,7 +72,7 @@
                 {{/each}}
             </div>
         <div class="input-container">
-            <input class="input" type="text">
+            <input class="textInput input" type="text">
         </div>
         </div>
     </div>
@@ -104,13 +108,15 @@
         <div class="users usersInGame">
             {{#each usersInGame}}
                 <div class="user">
-                    <div class="image-container">
-                        <img src={{image_url}} class="image_url"></img>
+                    <div class="name">
+                        <div class="image-container">
+                            <img src={{image_url}} class="image_url"></img>
+                        </div>
+                        <div class="name anagram">{{anagram}}</div>
+                        <div class="name nickname">{{nickname}}</div>
                     </div>
-                    <div class="name anagram">{{anagram}}</div>
-                    <div class="name nickname">{{nickname}}</div>
                     <div class="slide-show-container">
-                        <img src="./icons/slide-show-ingame.svg" class="slide-show-ingame"></img>
+                        <img src="./icons/slideshow-ingame.svg" class="slide-show-ingame"></img>
                     </div>
                 </div>
             {{/each}}
@@ -122,14 +128,50 @@
         <div class="users usersOffline">
             {{#each usersOffline}}
                 <div class="user">
-                <div class="image-container">
-                    <img src={{image_url}} class="image_url"></img>
+                    <div class="name">
+                        <div class="image-container">
+                            <img src={{image_url}} class="image_url"></img>
+                        </div>
+                        <div class="name anagram">{{anagram}}</div>
+                        <div class="name nickname">{{nickname}}</div>
+                    </div>
                 </div>
-                <div class="name anagram">{{anagram}}</div>
-                <div class="name nickname">{{nickname}}</div>
             {{/each}}
-            </div>
         </div>
     </div>
     {{/if}}
+    <div class="modal modalCreateChannel" id="modalCreateChannel">
+        <div class="background"></div>
+        <div class="modalOpen">
+            <div class="close">
+                <img src="./icons/close.svg" id="close"></img>
+            </div>
+            <label class="label labelChannelName" for="channelName">Channel name</label>
+            <input class="textInput channelName" type="text" id="channelName" placeholder="New channel"></input>
+            {{#if error_message}}
+                <p class="error-message">{{error_message}}</p>
+            {{/if}}
+            <label class="label labelSelectFriends" for="search">Select friends</label>
+            <input class="textInput search" type="text" id="search" placeholder="Research"></input>
+            <div class="friends">
+                {{#each friends}}
+                <div class="eachFriend" name="{{checkboxId}}">
+                    <div class="left">
+                        <div class="image-container">
+                            <img src={{image_url}} id="image_url" class="image_url"></img>
+                        </div>
+                        <p class="anagram_nickname">{{anagram}} {{nickname}}</p>
+                    </div>
+                    <div class="right">
+                        <label class="checkboxlabel" for="{{checkboxId}}"></label>
+                        <input type="checkbox" class="checkbox" id="{{checkboxId}}" name="{{checkboxId}}"></input>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+            <div class="button-container">
+                <button class="createChannel">Create channel</button>
+            </div>
+        </div>
+    </div>
 </div>

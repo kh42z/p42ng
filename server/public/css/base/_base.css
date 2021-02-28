@@ -43,7 +43,8 @@ label {
     --table-color: #1B2534;
     --text-button-color: #333333;
     --error-message-color: #EB5757;
-    --green-color: ##6FCF97;
+    --green-color: #6FCF97;
+    --modal-background-color: #202732;
 
 }
 
@@ -54,4 +55,8 @@ button {
     font-family: Roboto-Regular;
     font-size: 1vw;
     cursor: pointer;
+}
+
+.error-message {
+    color: var(--error-message-color);
 }

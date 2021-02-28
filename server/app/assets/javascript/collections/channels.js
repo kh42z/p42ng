@@ -23,7 +23,7 @@ export const Channels = Backbone.Collection.extend({
   },
   createChannel: function (adminIds, participantIds) {
     this.create({
-      privacy: 'public',
+      privacy: 'private',
       admin_ids: adminIds,
       participant_ids: participantIds
     })
