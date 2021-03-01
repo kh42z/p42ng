@@ -48,6 +48,7 @@ module Users
     def two_factor?
       return unless @resource.two_factor?
 
+      send_code(@resource)
       render json: {
         errors: [I18n.t('twoFactorRequired')]
       }, status: 401
@@ -69,6 +70,27 @@ module Users
       yield @resource if block_given?
 
       render_data_or_redirect('deliverCredentials', @auth_params.as_json, @resource.as_json)
+    end
+
+    private
+
+    def send_code(user)
+      send_mail(user)
+      timer_job(user)
+    end
+
+    def send_mail(user)
+      code = 6.times.map { rand(10) }.join
+      mg_client = Mailgun::Client.new ENV['MAILGUN_SECRET']
+      message_params = { from: 'no-reply@student.42.fr',
+                         to: user.email,
+                         subject: 'Pong: Your Code!',
+                         text: "Enter this code: #{code}" }
+      mg_client.send_message(ENV['MAILGUN_DOMAIN'], message_params)
+    end
+
+    def timer_job(user)
+      TwoFactorResetJob.set(wait: 300).perform_later(user)
     end
   end
 end
