@@ -54,11 +54,26 @@ RSpec.describe "Chats", type: :request do
       expect(Chat.first.owner_id).to eq(auth.id)
       expect(Chat.first.name).to eq("#{auth.nickname}'s chat")
     end
-    it "should return status 422" do
-      chat = create(:chat)
-      post participants_api_chat_url(chat.id), headers: access_token, params: {user: auth, chat: chat}
-      post participants_api_chat_url(chat.id), headers: access_token, params: {user: auth, chat: chat}
+    it "should not create a protected chat without password" do
+      post api_chats_url, headers: access_token, params: {privacy: "protected"}
       expect(response).to have_http_status(422)
+      expect(response.body).to match("Validation failed: Password can't be blank")
+    end
+    it "should create a chat with two admins" do
+      user = create(:user)
+      user_2 = create(:user)
+      post api_chats_url, headers: access_token, params: {admin_ids: [user.id, user_2.id] }
+      expect(response).to have_http_status(201)
+      expect(ChatAdmin.first.user_id).to eq(user.id)
+      expect(ChatAdmin.last.user_id).to eq(user_2.id)
+    end
+    it "should create a chat with two participants", test: true do
+      user = create(:user)
+      user_2 = create(:user)
+      post api_chats_url, headers: access_token, params: {privacy: "private", participant_ids: [user.id, user_2.id] }
+      expect(response).to have_http_status(201)
+      expect(ChatParticipant.first.user_id).to eq(user.id)
+      expect(ChatParticipant.last.user_id).to eq(user_2.id)
     end
   end
 
@@ -88,6 +103,12 @@ RSpec.describe "Chats", type: :request do
       expect(response).to have_http_status(422)
       expect(response.body).to match(I18n.t('passwordIncorrect'))
       expect(ChatParticipant.count).to eq(0)
+    end
+    it "add same participants twice, should return status 422" do
+      chat = create(:chat)
+      post participants_api_chat_url(chat.id), headers: access_token, params: {user: auth, chat: chat}
+      post participants_api_chat_url(chat.id), headers: access_token, params: {user: auth, chat: chat}
+      expect(response).to have_http_status(422)
     end
   end
   describe "#mutes" do
@@ -127,12 +148,34 @@ RSpec.describe "Chats", type: :request do
     end
   end
 
-  describe "#patch" do
-    it "should change chat's name and privacy", test: true do
+  describe "#update" do
+    it "should change chat's name and privacy" do
       chat = create(:chat)
       put api_chat_url(chat.id), headers: access_token, params: { name: 'Custom Name', privacy: 'private'}
       expect(Chat.first.name).to eq("Custom Name")
       expect(Chat.first.privacy).to eq("private")
+    end
+    it "should add two chat admins", test: true do
+      user = create(:user)
+      user_2 = create(:user)
+      chat = create(:chat)
+      put api_chat_url(chat.id), headers: access_token, params: { admin_ids: [user.id, user_2.id] }
+      expect(ChatAdmin.count).to eq(2)
+      expect(ChatAdmin.first.user_id).to eq(user.id)
+      expect(ChatAdmin.first.chat_id).to eq(chat.id)
+      expect(ChatAdmin.last.user_id).to eq(user_2.id)
+      expect(ChatAdmin.last.chat_id).to eq(chat.id)
+    end
+    it "should add two chat participants", test: true do
+      user = create(:user)
+      user_2 = create(:user)
+      chat = create(:chat)
+      put api_chat_url(chat.id), headers: access_token, params: { participant_ids: [user.id, user_2.id] }
+      expect(ChatParticipant.count).to eq(2)
+      expect(ChatParticipant.first.user_id).to eq(user.id)
+      expect(ChatParticipant.first.chat_id).to eq(chat.id)
+      expect(ChatParticipant.last.user_id).to eq(user_2.id)
+      expect(ChatParticipant.last.chat_id).to eq(chat.id)
     end
   end
 

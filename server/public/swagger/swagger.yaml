@@ -736,8 +736,6 @@ components:
           properties:
             id:
               type: string
-            privacy:
-              type: integer
         - $ref: "#/components/schemas/chat"
     ladder:
       type: object
@@ -775,8 +773,6 @@ components:
     chat:
       type: object
       properties:
-        id:
-          type: integer
         name:
           type: string
         privacy:
