@@ -122,17 +122,6 @@ templates['chat'] = template({"1":function(container,depth0,helpers,partials,dat
     + alias4(((helper = (helper = lookupProperty(helpers,"nickname") || (depth0 != null ? lookupProperty(depth0,"nickname") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"nickname","hash":{},"data":data,"loc":{"start":{"line":136,"column":51},"end":{"line":136,"column":63}}}) : helper)))
     + "</div>\n                    </div>\n                </div>\n";
 },"17":function(container,depth0,helpers,partials,data) {
-    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "                <p class=\"error-message\">"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"error_message") || (depth0 != null ? lookupProperty(depth0,"error_message") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"error_message","hash":{},"data":data,"loc":{"start":{"line":152,"column":41},"end":{"line":152,"column":58}}}) : helper)))
-    + "</p>\n";
-},"19":function(container,depth0,helpers,partials,data) {
     var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function", alias4=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -181,10 +170,8 @@ templates['chat'] = template({"1":function(container,depth0,helpers,partials,dat
     + ((stack1 = lookupProperty(helpers,"each").call(alias1,(depth0 != null ? lookupProperty(depth0,"messages") : depth0),{"name":"each","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":60,"column":16},"end":{"line":72,"column":25}}})) != null ? stack1 : "")
     + "            </div>\n        <div class=\"input-container\">\n            <input class=\"textInput input\" type=\"text\">\n        </div>\n        </div>\n    </div>\n"
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"multipleParticipants") : depth0),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":79,"column":4},"end":{"line":142,"column":11}}})) != null ? stack1 : "")
-    + "    <div class=\"modal modalCreateChannel\" id=\"modalCreateChannel\">\n        <div class=\"background\"></div>\n        <div class=\"modalOpen\">\n            <div class=\"close\">\n                <img src=\"./icons/close.svg\" id=\"close\"></img>\n            </div>\n            <label class=\"label labelChannelName\" for=\"channelName\">Channel name</label>\n            <input class=\"textInput channelName\" type=\"text\" id=\"channelName\" placeholder=\"New channel\"></input>\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"error_message") : depth0),{"name":"if","hash":{},"fn":container.program(17, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":151,"column":12},"end":{"line":153,"column":19}}})) != null ? stack1 : "")
-    + "            <label class=\"label labelSelectFriends\" for=\"search\">Select friends</label>\n            <input class=\"textInput search modalSearch\" type=\"text\" id=\"modalSearch\" placeholder=\"Research\"></input>\n            <div class=\"friends\" id=\"friends\">\n"
-    + ((stack1 = lookupProperty(helpers,"each").call(alias1,(depth0 != null ? lookupProperty(depth0,"friends") : depth0),{"name":"each","hash":{},"fn":container.program(19, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":157,"column":16},"end":{"line":170,"column":25}}})) != null ? stack1 : "")
+    + "    <div class=\"modal modalCreateChannel\" id=\"modalCreateChannel\">\n        <div class=\"background\"></div>\n        <div class=\"modalOpen\">\n            <div class=\"close\">\n                <img src=\"./icons/close.svg\" id=\"close\"></img>\n            </div>\n            <label class=\"label labelChannelName\" for=\"channelName\">Channel name</label>\n            <input class=\"textInput channelName\" type=\"text\" id=\"channelName\" placeholder=\"New channel\"></input>\n                <p class=\"error-message\" id=\"error-message\"></p>\n            <label class=\"label labelSelectFriends\" for=\"search\">Select friends</label>\n            <input class=\"textInput search modalSearch\" type=\"text\" id=\"modalSearch\" placeholder=\"Research\"></input>\n            <div class=\"friends\" id=\"friends\">\n"
+    + ((stack1 = lookupProperty(helpers,"each").call(alias1,(depth0 != null ? lookupProperty(depth0,"friends") : depth0),{"name":"each","hash":{},"fn":container.program(17, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":157,"column":16},"end":{"line":170,"column":25}}})) != null ? stack1 : "")
     + "            </div>\n            <div class=\"button-container\">\n                <button class=\"createChannel\">Create channel</button>\n            </div>\n        </div>\n    </div>\n</div>";
 },"useData":true});
 })();

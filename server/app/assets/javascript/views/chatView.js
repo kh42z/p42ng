@@ -1,3 +1,5 @@
+import { ChatModel } from '../models/chatModel'
+
 export const ChatView = Backbone.View.extend({
   events: {
     'click .add_box': 'modalCreateChannel',
@@ -130,7 +132,7 @@ export const ChatView = Backbone.View.extend({
     // }
 
     // error message
-    array.error_message = 'Validation failed: Can\'t be blank'
+    // array.error_message = 'Validation failed: Can\'t be blank'
     // array.error_message = false
 
     // checkbox
@@ -158,6 +160,7 @@ export const ChatView = Backbone.View.extend({
     const friendsDiv = document.getElementById('friends')
     friendsDiv.innerHTML = found
     document.getElementById('modalSearch').value = ''
+    document.getElementById('channelName').value = ''
     const checkboxes = document.getElementsByClassName('checkbox')
     for (const el of checkboxes) {
       el.checked = false
@@ -170,11 +173,19 @@ export const ChatView = Backbone.View.extend({
     const selectedCboxes = Array.prototype.slice.call(checkboxes).filter(ch => ch.checked === true)
     const participantsIds = Array.from(selectedCboxes, x => x.value)
     const adminIds = [this.userLogged.id]
-    this.channels.createChannel(adminIds, participantsIds)
-
-    // const adminIds = Array()
-    // adminIds.push(this.userLogged.get('id'))
-    // this.channels.createChannel(adminIds)
+    const name = document.getElementById('channelName').value
+    const newChannel = new ChatModel()
+    const createChannel = async () => {
+      try {
+        console.log('create channel')
+        const response = await newChannel.createChannel(name, participantsIds)
+        this.channels.add(newChannel)
+      } catch (error) {
+        document.getElementById('error-message').innerHTML = error.responseJSON.message
+        document.getElementById('error-message').style.display = 'block'
+      }
+    }
+    createChannel()
   },
 
   sendMessage: function (e) {

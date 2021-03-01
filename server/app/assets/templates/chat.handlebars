@@ -148,9 +148,9 @@
             </div>
             <label class="label labelChannelName" for="channelName">Channel name</label>
             <input class="textInput channelName" type="text" id="channelName" placeholder="New channel"></input>
-            {{#if error_message}}
-                <p class="error-message">{{error_message}}</p>
-            {{/if}}
+            {{!-- {{#if error_message}} --}}
+                <p class="error-message" id="error-message"></p>
+            {{!-- {{/if}} --}}
             <label class="label labelSelectFriends" for="search">Select friends</label>
             <input class="textInput search modalSearch" type="text" id="modalSearch" placeholder="Research"></input>
             <div class="friends" id="friends">

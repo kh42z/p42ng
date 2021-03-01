@@ -21,11 +21,16 @@ export const Channels = Backbone.Collection.extend({
       }
     })
   },
-  createChannel: function (adminIds, participantIds) {
-    this.create({
-      privacy: 'private',
-      admin_ids: adminIds,
-      participant_ids: participantIds
+  createChannel: function (name, participantIds) {
+    return this.create({
+      name: name,
+      participant_ids: participantIds,
+      success: function (response) {
+      },
+      error: function (response) {
+        console.log('error')
+        console.log(response)
+      }
     })
   }
 })

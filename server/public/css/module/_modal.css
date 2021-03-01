@@ -36,3 +36,8 @@
     font-size: 16px;
     margin-left: 3px;
 }
+
+.modal
+.error-message {
+    display: none;
+}
