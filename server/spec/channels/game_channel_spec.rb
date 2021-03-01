@@ -8,20 +8,20 @@ RSpec.describe GameChannel, type: :channel do
   describe 'Players' do
     it "should subscribe" do
       stub_connection current_user: player_left
-      subscribe(game_id: game.id)
+      subscribe(id: game.id)
       expect(subscription).to be_confirmed
       unsubscribe
     end
     it "should subscribe" do
       stub_connection current_user: player_right
-      subscribe(game_id: game.id)
+      subscribe(id: game.id)
       expect(subscription).to be_confirmed
       unsubscribe
     end
 
     it "shouldnt subscribe" do
       stub_connection current_user: unknow
-      subscribe(game_id: game.id)
+      subscribe(id: game.id)
       expect(subscription).to be_rejected
     end
   end

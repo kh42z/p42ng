@@ -52,13 +52,13 @@ paths:
             schema:
               type: object
               properties:
+                name:
+                  type: string
                 privacy:
                   type: string
                   enum: [public, private, protected]
                 password:
                   type: string
-                admin_ids:
-                  $ref: '#/components/schemas/integer_list'
                 participant_ids:
                   $ref: '#/components/schemas/integer_list'
   "/api/chats/{id}":
@@ -98,8 +98,7 @@ paths:
           content:
             application/json:
               schema:
-                oneOf:
-                  - "$ref": "#/components/schemas/chat_response"
+                $ref: "#/components/schemas/chat_response"
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -113,6 +112,8 @@ paths:
           application/json:
             schema:
               properties:
+                name:
+                  type: string
                 privacy:
                   type: string
                   enum: [public, private, protected]
@@ -595,28 +596,6 @@ paths:
           $ref: '#/components/responses/403'
         '500':
           $ref: '#/components/responses/500'
-    delete:
-      summary: Deletes an user
-      tags:
-        - Users
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        '204':
-          description: user deleted
-          content: { }
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '500':
-          $ref: '#/components/responses/500'
   "/api/users/{id}/avatar":
     post:
       summary: Upload an user avatar
@@ -757,8 +736,6 @@ components:
           properties:
             id:
               type: string
-            privacy:
-              type: integer
         - $ref: "#/components/schemas/chat"
     ladder:
       type: object
@@ -796,8 +773,8 @@ components:
     chat:
       type: object
       properties:
-        id:
-          type: integer
+        name:
+          type: string
         privacy:
           type: string
           enum: [public, private, protected]

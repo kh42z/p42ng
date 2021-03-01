@@ -2,12 +2,12 @@
 
 FactoryBot.define do
   factory :user, aliases: [:owner] do
-    nickname { Faker::Name.unique.name }
+    nickname { Faker::Name.unique.first_name }
     image_url { Faker::Internet.url }
     two_factor { Faker::Boolean.boolean }
     first_login { Faker::Boolean.boolean }
-    password { Faker::Internet.password(min_length: 8, max_length: 10, mix_case: true) }
-    two_factor_code { Faker::Internet.password(min_length: 8, max_length: 10, mix_case: true) }
+    password { "secure" }
+    two_factor_code { "0123456" }
     email { Faker::Internet.email }
     ladder_games_won { Faker::Number.number(digits: 3) }
     ladder_games_lost { Faker::Number.number(digits: 3) }

@@ -2,7 +2,7 @@
 
 module Api
   class ChatsController < ApiController
-    before_action :set_chat, only: %i[show destroy participants chat_password_correct mutes bans]
+    before_action :set_chat, only: %i[update show destroy participants chat_password_correct mutes bans]
 
     ChatReducer = Rack::Reducer.new(
       Chat.all.order(:updated_at),
@@ -15,48 +15,32 @@ module Api
     end
 
     def update
-      json_response(chat.update(chat_params))
+      add_admins(@chat, params[:admin_ids]) if params[:admin_ids] && params[:admins_ids] != 0
+      add_participants(@chat) if params[:participant_ids] && params[:participant_ids] != 0
+      @chat.update!(chat_params_update)
+      json_response(@chat)
     end
 
     def create
-      chat = Chat.new(chat_params)
-      chat.owner = current_user
-      if chat.save
-        json_response(chat, :created)
-      else
-        json_response(chat.errors, :unprocessable_entity)
-      end
+      chat = Chat.create!(chat_params_create)
+      add_admins(chat, [current_user.id])
+      add_participants(chat) if params[:participant_ids] && params[:participant_ids] != 0
+      json_response(chat, 201)
     end
 
     def participants
-      return unless chat_password?
+      raise WrongPasswordError if @chat.privacy == 'protected' && !@chat.authenticate(params.fetch(:password))
 
-      participant = ChatParticipant.new(user_id: current_user.id, chat_id: @chat.id)
-      return unless saved?(participant)
-
+      participant = ChatParticipant.create!(user_id: current_user.id, chat_id: @chat.id)
       json_response(participant, 200)
     end
 
     def mutes
-      return unless params.key?(:user_id) && params.key?(:duration)
-
-      chat_timeout = ChatTimeout.new(user_id: params[:user_id], chat_id: @chat.id)
-      return unless saved?(chat_timeout)
-
-      timer = params[:duration].to_i
-      DestroyObjectJob.set(wait: timer.seconds).perform_later(chat_timeout)
-      json_response(chat_timeout, 200)
+      destroy_job(ChatTimeout.create!(user_id: params.fetch(:user_id), chat_id: @chat.id))
     end
 
     def bans
-      return unless params.key?(:user_id) && params.key?(:duration)
-
-      chat_ban = ChatBan.create!(user_id: params[:user_id], chat_id: @chat.id)
-      return unless saved?(chat_ban)
-
-      timer = params[:duration].to_i
-      DestroyObjectJob.set(wait: timer.seconds).perform_later(chat_ban)
-      json_response(chat_ban, 200)
+      destroy_job(ChatBan.create!(user_id: params.fetch(:user_id), chat_id: @chat.id))
     end
 
     def show
@@ -70,42 +54,28 @@ module Api
 
     private
 
-    def chat_password?
-      return true unless @chat.privacy == 'protected'
-      return false unless chat_password_given?
-
-      chat_password_correct?
+    def add_admins(chat, admins)
+      admins.each { |t| ChatAdmin.create!(user_id: t, chat_id: chat.id) }
     end
 
-    def chat_password_given?
-      if params.key?(:password)
-        true
-      else
-        render_error('passwordRequired')
-        false
-      end
+    def add_participants(chat)
+      params[:participant_ids].each { |t| ChatParticipant.create!(user_id: t, chat_id: chat.id) }
     end
 
-    def chat_password_correct?
-      if @chat.authenticate(params[:password]) # BCrypt::Password.new(@chat.password_digest) == params[:password]
-        true
-      else
-        render_error('passwordIncorrect')
-        false
-      end
+    def destroy_job(object)
+      timer = params.fetch(:duration).to_i
+      DestroyObjectJob.set(wait: timer.seconds).perform_later(object)
+      json_response(object, 200)
     end
 
-    def saved?(object)
-      if object.save
-        true
-      else
-        json_response(object.errors, :unprocessable_entity)
-        false
-      end
+    def chat_params_update
+      params.permit(:privacy, :password, :name)
     end
 
-    def chat_params
-      params.permit(:privacy, :password)
+    def chat_params_create
+      filtered_params = params.permit(:privacy, :password, :name)
+      owner_and_name = { owner: current_user }
+      filtered_params.merge!(owner_and_name)
     end
 
     def set_chat

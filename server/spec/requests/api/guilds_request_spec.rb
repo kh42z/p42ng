@@ -65,7 +65,7 @@ describe "Guild", type: :request do
     end
   end
 
-  describe "#update" do
+  describe "#update", test: true do
     it "should be updated" do
       guild = create(:guild)
       valid_attributes = { name: "Updated", anagram: "upd4t" }

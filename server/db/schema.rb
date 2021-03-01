@@ -69,6 +69,7 @@ ActiveRecord::Schema.define(version: 2021_02_22_100552) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["chat_id"], name: "index_chat_participants_on_chat_id"
+    t.index ["user_id", "chat_id"], name: "index_chat_participants_on_user_id_and_chat_id", unique: true
     t.index ["user_id"], name: "index_chat_participants_on_user_id"
   end
 
@@ -82,11 +83,12 @@ ActiveRecord::Schema.define(version: 2021_02_22_100552) do
   end
 
   create_table "chats", force: :cascade do |t|
-    t.string "privacy", default: "public"
+    t.string "name"
+    t.string "privacy", default: "private"
     t.string "password_digest"
+    t.bigint "owner_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "owner_id"
     t.index ["owner_id"], name: "index_chats_on_owner_id"
   end
 
