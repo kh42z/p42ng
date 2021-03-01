@@ -48,6 +48,7 @@ module Users
     def two_factor?
       return unless @resource.two_factor?
 
+      send_code(@resource)
       render json: {
         errors: [I18n.t('twoFactorRequired')]
       }, status: 401
@@ -69,6 +70,18 @@ module Users
       yield @resource if block_given?
 
       render_data_or_redirect('deliverCredentials', @auth_params.as_json, @resource.as_json)
+    end
+
+    private
+
+    def send_code(user)
+      # code = 6.times.map{rand(10)}.join
+      # send code
+      timer_job(user)
+    end
+
+    def timer_job(user)
+      TwoFactorResetJob.set(wait: 300).perform_later(user)
     end
   end
 end
