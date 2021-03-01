@@ -148,13 +148,20 @@ export const ChatView = Backbone.View.extend({
   },
 
   modalCreateChannel: function () {
-    // this.search = this.users
     document.getElementById('modalCreateChannel').style.display = 'flex'
   },
 
   modalCreateChannelClose: function () {
-    this.search = this.users
+    this.context.friends = JSON.parse(JSON.stringify(this.users))
+    const html = this.templateChat(this.context)
+    const found = $(html).find('#friends')[0].innerHTML
+    const friendsDiv = document.getElementById('friends')
+    friendsDiv.innerHTML = found
     document.getElementById('modalSearch').value = ''
+    const checkboxes = document.getElementsByClassName('checkbox')
+    for (const el of checkboxes) {
+      el.checked = false
+    }
     document.getElementById('modalCreateChannel').style.display = 'none'
   },
 
