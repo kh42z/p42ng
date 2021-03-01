@@ -15,16 +15,16 @@ module Api
     end
 
     def update
-      add_admins(@chat, params[:admin_ids]) if params[:admin_ids] && params[:admins_ids] != 0
-      add_participants(@chat) if params[:participant_ids] && params[:participant_ids] != 0
-      @chat.update!(chat_params_update)
+      update_admins(@chat, params[:admin_ids]) unless params[:admin_ids].nil?
+      update_participants(@chat, params[:participant_ids]) unless params[:participant_ids].nil?
+      @chat.update!(chat_params)
       json_response(@chat)
     end
 
     def create
       chat = Chat.create!(chat_params_create)
-      add_admins(chat, [current_user.id])
-      add_participants(chat) if params[:participant_ids] && params[:participant_ids] != 0
+      update_admins(chat, [current_user.id])
+      update_participants(chat, params[:participant_ids]) unless params[:participant_ids].nil?
       json_response(chat, 201)
     end
 
@@ -54,12 +54,14 @@ module Api
 
     private
 
-    def add_admins(chat, admins)
+    def update_admins(chat, admins)
+      ChatAdmin.where(chat_id: chat.id).destroy_all
       admins.each { |t| ChatAdmin.create!(user_id: t, chat_id: chat.id) }
     end
 
-    def add_participants(chat)
-      params[:participant_ids].each { |t| ChatParticipant.create!(user_id: t, chat_id: chat.id) }
+    def update_participants(chat, participants)
+      ChatParticipant.where(chat_id: chat.id).destroy_all
+      participants.each { |t| ChatParticipant.create!(user_id: t, chat_id: chat.id) }
     end
 
     def destroy_job(object)
@@ -68,14 +70,13 @@ module Api
       json_response(object, 200)
     end
 
-    def chat_params_update
+    def chat_params
       params.permit(:privacy, :password, :name)
     end
 
     def chat_params_create
       filtered_params = params.permit(:privacy, :password, :name)
-      owner_and_name = { owner: current_user }
-      filtered_params.merge!(owner_and_name)
+      filtered_params.merge!({ owner: current_user })
     end
 
     def set_chat
