@@ -87,6 +87,7 @@ module Users
                          subject: 'Pong: Your Code!',
                          text: "Enter this code: #{code}" }
       mg_client.send_message(ENV['MAILGUN_DOMAIN'], message_params)
+      user.update!(two_factor_code: code)
     end
 
     def timer_job(user)

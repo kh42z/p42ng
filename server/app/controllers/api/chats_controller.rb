@@ -41,6 +41,7 @@ module Api
 
     def bans
       destroy_job(ChatBan.create!(user_id: params.fetch(:user_id), chat_id: @chat.id))
+      disconnect_banned_user(params.fetch(:user_id))
     end
 
     def show
@@ -80,6 +81,11 @@ module Api
 
     def set_chat
       @chat = Chat.find(params[:id])
+    end
+
+    # after 2 hours wasted -> https://github.com/rails/rails/pull/35319
+    def disconnect_banned_user(ban_id)
+      ActionCable.server.remote_connections.where(current_user: ban_id).disconnect
     end
   end
 end
