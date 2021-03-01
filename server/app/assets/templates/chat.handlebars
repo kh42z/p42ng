@@ -152,10 +152,10 @@
                 <p class="error-message">{{error_message}}</p>
             {{/if}}
             <label class="label labelSelectFriends" for="search">Select friends</label>
-            <input class="textInput search" type="text" id="search" placeholder="Research"></input>
-            <div class="friends">
+            <input class="textInput search modalSearch" type="text" id="modalSearch" placeholder="Research"></input>
+            <div class="friends" id="friends">
                 {{#each friends}}
-                <div class="eachFriend" name="{{checkboxId}}">
+                <div class="eachFriend" for="{{id}}">
                     <div class="left">
                         <div class="image-container">
                             <img src={{image_url}} id="image_url" class="image_url"></img>
@@ -164,7 +164,7 @@
                     </div>
                     <div class="right">
                         <label class="checkboxlabel" for="{{checkboxId}}"></label>
-                        <input type="checkbox" class="checkbox" id="{{checkboxId}}" name="{{checkboxId}}"></input>
+                        <input type="checkbox" class="checkbox" id="{{id}}" value="{{id}}"></input>
                     </div>
                 </div>
                 {{/each}}

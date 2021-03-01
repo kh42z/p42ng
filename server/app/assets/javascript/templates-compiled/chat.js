@@ -140,8 +140,8 @@ templates['chat'] = template({"1":function(container,depth0,helpers,partials,dat
         return undefined
     };
 
-  return "                <div class=\"eachFriend\" name=\""
-    + alias4(((helper = (helper = lookupProperty(helpers,"checkboxId") || (depth0 != null ? lookupProperty(depth0,"checkboxId") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"checkboxId","hash":{},"data":data,"loc":{"start":{"line":158,"column":46},"end":{"line":158,"column":60}}}) : helper)))
+  return "                <div class=\"eachFriend\" for=\""
+    + alias4(((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":158,"column":45},"end":{"line":158,"column":51}}}) : helper)))
     + "\">\n                    <div class=\"left\">\n                        <div class=\"image-container\">\n                            <img src="
     + alias4(((helper = (helper = lookupProperty(helpers,"image_url") || (depth0 != null ? lookupProperty(depth0,"image_url") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"image_url","hash":{},"data":data,"loc":{"start":{"line":161,"column":37},"end":{"line":161,"column":50}}}) : helper)))
     + " id=\"image_url\" class=\"image_url\"></img>\n                        </div>\n                        <p class=\"anagram_nickname\">"
@@ -151,9 +151,9 @@ templates['chat'] = template({"1":function(container,depth0,helpers,partials,dat
     + "</p>\n                    </div>\n                    <div class=\"right\">\n                        <label class=\"checkboxlabel\" for=\""
     + alias4(((helper = (helper = lookupProperty(helpers,"checkboxId") || (depth0 != null ? lookupProperty(depth0,"checkboxId") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"checkboxId","hash":{},"data":data,"loc":{"start":{"line":166,"column":58},"end":{"line":166,"column":72}}}) : helper)))
     + "\"></label>\n                        <input type=\"checkbox\" class=\"checkbox\" id=\""
-    + alias4(((helper = (helper = lookupProperty(helpers,"checkboxId") || (depth0 != null ? lookupProperty(depth0,"checkboxId") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"checkboxId","hash":{},"data":data,"loc":{"start":{"line":167,"column":68},"end":{"line":167,"column":82}}}) : helper)))
-    + "\" name=\""
-    + alias4(((helper = (helper = lookupProperty(helpers,"checkboxId") || (depth0 != null ? lookupProperty(depth0,"checkboxId") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"checkboxId","hash":{},"data":data,"loc":{"start":{"line":167,"column":90},"end":{"line":167,"column":104}}}) : helper)))
+    + alias4(((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":167,"column":68},"end":{"line":167,"column":74}}}) : helper)))
+    + "\" value=\""
+    + alias4(((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":167,"column":83},"end":{"line":167,"column":89}}}) : helper)))
     + "\"></input>\n                    </div>\n                </div>\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function", alias4=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -183,7 +183,7 @@ templates['chat'] = template({"1":function(container,depth0,helpers,partials,dat
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"multipleParticipants") : depth0),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":79,"column":4},"end":{"line":142,"column":11}}})) != null ? stack1 : "")
     + "    <div class=\"modal modalCreateChannel\" id=\"modalCreateChannel\">\n        <div class=\"background\"></div>\n        <div class=\"modalOpen\">\n            <div class=\"close\">\n                <img src=\"./icons/close.svg\" id=\"close\"></img>\n            </div>\n            <label class=\"label labelChannelName\" for=\"channelName\">Channel name</label>\n            <input class=\"textInput channelName\" type=\"text\" id=\"channelName\" placeholder=\"New channel\"></input>\n"
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"error_message") : depth0),{"name":"if","hash":{},"fn":container.program(17, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":151,"column":12},"end":{"line":153,"column":19}}})) != null ? stack1 : "")
-    + "            <label class=\"label labelSelectFriends\" for=\"search\">Select friends</label>\n            <input class=\"textInput search\" type=\"text\" id=\"search\" placeholder=\"Research\"></input>\n            <div class=\"friends\">\n"
+    + "            <label class=\"label labelSelectFriends\" for=\"search\">Select friends</label>\n            <input class=\"textInput search modalSearch\" type=\"text\" id=\"modalSearch\" placeholder=\"Research\"></input>\n            <div class=\"friends\" id=\"friends\">\n"
     + ((stack1 = lookupProperty(helpers,"each").call(alias1,(depth0 != null ? lookupProperty(depth0,"friends") : depth0),{"name":"each","hash":{},"fn":container.program(19, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":157,"column":16},"end":{"line":170,"column":25}}})) != null ? stack1 : "")
     + "            </div>\n            <div class=\"button-container\">\n                <button class=\"createChannel\">Create channel</button>\n            </div>\n        </div>\n    </div>\n</div>";
 },"useData":true});

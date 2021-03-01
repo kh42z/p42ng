@@ -1,18 +1,26 @@
 export const ChatView = Backbone.View.extend({
   events: {
     'click .add_box': 'modalCreateChannel',
+    'click .createChannel': 'createChannel',
     'click .close': 'modalCreateChannelClose',
     'keyup .input': 'sendMessage',
-    'click .eachFriend': 'selectCheckbox'
+    'click .eachFriend': 'selectCheckbox',
+    'keyup .modalSearch': 'modalSearch'
   },
   initialize: function () {
     this.channels = this.model.get('channels').get('obj')
     this.userLogged = this.model.get('userLogged').get('obj')
-    console.log(this.model)
+    this.users = this.model.get('users').get('obj')
 
     this.listenTo(this.channels, 'sync', function () {
-      this.render()
+      this.listenTo(this.users, 'sync', function () {
+        this.search = this.users
+        this.render()
+      }, this)
     }, this)
+  },
+  defaults: {
+    search: undefined
   },
   el: $('#app'),
   render: function () {
@@ -74,7 +82,6 @@ export const ChatView = Backbone.View.extend({
       if (length > 17) {
         const size = 16 - array.usersOnline[i].anagram.length
         array.usersOnline[i].nickname = array.usersOnline[i].nickname.substr(0, size) + '.'
-        console.log(array.usersOnline[i].nickname)
       }
     }
 
@@ -90,7 +97,6 @@ export const ChatView = Backbone.View.extend({
       if (length > 17) {
         const size = 16 - array.usersInGame[i].anagram.length
         array.usersInGame[i].nickname = array.usersInGame[i].nickname.substr(0, size) + '.'
-        console.log(array.usersInGame[i].nickname)
       }
     }
 
@@ -106,56 +112,75 @@ export const ChatView = Backbone.View.extend({
       if (length > 17) {
         const size = 16 - array.usersOffline[i].anagram.length
         array.usersOffline[i].nickname = array.usersOffline[i].nickname.substr(0, size) + '.'
-        console.log(array.usersOffline[i].nickname)
       }
     }
 
     // modal create channel
-    array.friends = Array() // nb users
-    for (let i = 0; i < 2; i++) {
-      array.friends.push({
-        anagram: '[txt]',
-        image_url: './images/jdurand.png',
-        nickname: 'jdurand',
-        checkboxId: i
-      })
-    }
+    array.friends = this.search
+    array.friends = JSON.parse(JSON.stringify(array.friends))
+    // array.friends = Array() // nb users
+    // for (let i = 0; i < this.users.length; i++) {
+    //   array.friends.push(this.users[i])
+    //   // array.friends.push({
+    //   //   anagram: '[txt]',
+    //   //   image_url: './images/jdurand.png',
+    //   //   nickname: 'jdurand',
+    //   //   id: i
+    //   // })
+    // }
 
     // error message
-    array.error_message = 'Validation failed: Can\'t be blanck'
+    array.error_message = 'Validation failed: Can\'t be blank'
     // array.error_message = false
 
     // checkbox
 
-    const context = array
-    const templateDataChat = this.templateChat(context)
+    this.context = array
+    const templateDataChat = this.templateChat(this.context)
     this.$el.html(templateDataChat)
     return this
   },
 
-  selectCheckbox: function () {
-    let htmlFor = document.getElementsByClassName('eachFriend')
-    console.log(htmlFor)
-    console.log(htmlFor[0].getAttribute('.name'))
-    htmlFor = document.getElementsByClassName('checkbox')
-    if (htmlFor.checked === true) { htmlFor.checked = false } else { htmlFor.checked = true }
+  selectCheckbox: function (e) {
+    const id = e.currentTarget.getAttribute('for')
+    const checkbox = document.getElementById(id)
+    if (checkbox.checked === true) { checkbox.checked = false } else { checkbox.checked = true }
   },
 
   modalCreateChannel: function () {
+    // this.search = this.users
     document.getElementById('modalCreateChannel').style.display = 'flex'
   },
 
   modalCreateChannelClose: function () {
+    this.search = this.users
+    document.getElementById('modalSearch').value = ''
     document.getElementById('modalCreateChannel').style.display = 'none'
   },
 
   createChannel: function () {
-    const adminIds = Array()
-    adminIds.push(this.userLogged.get('id'))
-    this.channels.createChannel(adminIds)
+    const checkboxes = document.getElementsByClassName('checkbox')
+    const selectedCboxes = Array.prototype.slice.call(checkboxes).filter(ch => ch.checked === true)
+    const participantsIds = Array.from(selectedCboxes, x => x.value)
+    const adminIds = [this.userLogged.id]
+    this.channels.createChannel(adminIds, participantsIds)
+
+    // const adminIds = Array()
+    // adminIds.push(this.userLogged.get('id'))
+    // this.channels.createChannel(adminIds)
   },
 
   sendMessage: function (e) {
     if (e.keyCode === 13) { console.log('send message') } else { console.log('not enter') }
+  },
+
+  modalSearch: function (e) {
+    const value = document.getElementById('modalSearch').value
+    this.search = this.users.slice().filter(el => el.get('nickname').startsWith(value) === true)
+    this.context.friends = JSON.parse(JSON.stringify(this.search))
+    const html = this.templateChat(this.context)
+    const found = $(html).find('#friends')[0].innerHTML
+    const friendsDiv = document.getElementById('friends')
+    friendsDiv.innerHTML = found
   }
 })

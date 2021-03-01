@@ -177,6 +177,7 @@ export const Router = Backbone.Router.extend({
     const userId = this.userLogged.get('id')
     const superWrapper = new SuperWrapper({
       userLogged: new Wrapper({ obj: this.userLogged }),
+      users: new Wrapper({ obj: new Users() }),
       channels: new Wrapper({ obj: new Channels() })
     })
     superWrapper.get('channels').get('obj').fetchByUserId(this.userLogged.get('id'))
