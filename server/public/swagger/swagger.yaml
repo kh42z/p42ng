@@ -428,22 +428,6 @@ paths:
           $ref: '#/components/responses/403'
         '500':
           $ref: '#/components/responses/500'
-    delete:
-      summary: Deletes a guild
-      tags:
-        - Guilds
-      responses:
-        '204':
-          description: guild deleted
-          content: { }
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '500':
-          $ref: '#/components/responses/500'
 
   "/api/ladders/{id}":
     get:

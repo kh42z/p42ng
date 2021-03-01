@@ -3,6 +3,7 @@
 Rails.application.routes.draw do
   resources :two_factor
   namespace :api do
+    resources :guilds
     resources :ladders
     resources :games
     resources :chats do
@@ -14,9 +15,6 @@ Rails.application.routes.draw do
     end
     resources :users do
       post :avatar, on: :member, to: 'users#upload_avatar'
-    end
-    resources :guilds do
-      delete :destroy_officer
     end
   end
   mount_devise_token_auth_for 'User', at: 'auth', controllers: {
