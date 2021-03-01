@@ -49,31 +49,38 @@ RSpec.describe "Chats", type: :request do
 
   describe "#post" do
     it "should return 201 created & current_user should be chat's owner" do
-      post api_chats_url, headers: access_token, params: {privacy: "protected", password: "asd"}
+      post api_chats_url, headers: access_token, params: {name: "Hop", privacy: "protected", password: "asd"}
       expect(response).to have_http_status(201)
       expect(Chat.first.owner_id).to eq(auth.id)
-      expect(Chat.first.name).to eq("#{auth.nickname}'s chat")
+      expect(Chat.first.name).to eq("Hop")
     end
     it "should not create a protected chat without password" do
-      post api_chats_url, headers: access_token, params: {privacy: "protected"}
+      post api_chats_url, headers: access_token, params: {name: "Hop", privacy: "protected"}
       expect(response).to have_http_status(422)
       expect(response.body).to match("Validation failed: Password can't be blank")
     end
-    it "should create a chat with two admins" do
-      user = create(:user)
-      user_2 = create(:user)
-      post api_chats_url, headers: access_token, params: {admin_ids: [user.id, user_2.id] }
+    it "should create a chat with owner as admin" do
+      post api_chats_url, headers: access_token, params: {name: "Hop"}
       expect(response).to have_http_status(201)
-      expect(ChatAdmin.first.user_id).to eq(user.id)
-      expect(ChatAdmin.last.user_id).to eq(user_2.id)
+      expect(ChatAdmin.first.user_id).to eq(auth.id)
     end
-    it "should create a chat with two participants", test: true do
+    it "should create a chat with two participants" do
       user = create(:user)
       user_2 = create(:user)
-      post api_chats_url, headers: access_token, params: {privacy: "private", participant_ids: [user.id, user_2.id] }
+      post api_chats_url, headers: access_token, params: {name: "Hop", privacy: "private", participant_ids: [user.id, user_2.id]}
       expect(response).to have_http_status(201)
       expect(ChatParticipant.first.user_id).to eq(user.id)
       expect(ChatParticipant.last.user_id).to eq(user_2.id)
+    end
+    it "should create a chat with a name", test: true do
+      post api_chats_url, headers: access_token, params: {name: 'DISCUSSION'}
+      expect(response).to have_http_status(201)
+      expect(Chat.first.name).to eq('DISCUSSION')
+    end
+    it "should not create a chat without a name", test: true do
+      post api_chats_url, headers: access_token
+      expect(response).to have_http_status(422)
+      expect(response.body).to match("Validation failed: Name can't be blank")
     end
   end
 
@@ -155,7 +162,7 @@ RSpec.describe "Chats", type: :request do
       expect(Chat.first.name).to eq("Custom Name")
       expect(Chat.first.privacy).to eq("private")
     end
-    it "should add two chat admins", test: true do
+    it "should add two chat admins" do
       user = create(:user)
       user_2 = create(:user)
       chat = create(:chat)
@@ -166,7 +173,7 @@ RSpec.describe "Chats", type: :request do
       expect(ChatAdmin.last.user_id).to eq(user_2.id)
       expect(ChatAdmin.last.chat_id).to eq(chat.id)
     end
-    it "should add two chat participants", test: true do
+    it "should add two chat participants" do
       user = create(:user)
       user_2 = create(:user)
       chat = create(:chat)

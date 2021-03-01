@@ -83,8 +83,8 @@ ActiveRecord::Schema.define(version: 2021_02_22_100552) do
   end
 
   create_table "chats", force: :cascade do |t|
-    t.string "name", default: "Discussion"
-    t.string "privacy", default: "public"
+    t.string "name"
+    t.string "privacy", default: "private"
     t.string "password_digest"
     t.bigint "owner_id"
     t.datetime "created_at", precision: 6, null: false

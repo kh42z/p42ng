@@ -15,7 +15,7 @@ module Api
     end
 
     def update
-      add_admins(@chat) if params[:admin_ids] && params[:admins_ids] != 0
+      add_admins(@chat, params[:admin_ids]) if params[:admin_ids] && params[:admins_ids] != 0
       add_participants(@chat) if params[:participant_ids] && params[:participant_ids] != 0
       @chat.update!(chat_params_update)
       json_response(@chat)
@@ -23,7 +23,7 @@ module Api
 
     def create
       chat = Chat.create!(chat_params_create)
-      add_admins(chat) if params[:admin_ids] && params[:admins_ids] != 0
+      add_admins(chat, [current_user.id])
       add_participants(chat) if params[:participant_ids] && params[:participant_ids] != 0
       json_response(chat, 201)
     end
@@ -54,8 +54,8 @@ module Api
 
     private
 
-    def add_admins(chat)
-      params[:admin_ids].each { |t| ChatAdmin.create!(user_id: t, chat_id: chat.id) }
+    def add_admins(chat, admins)
+      admins.each { |t| ChatAdmin.create!(user_id: t, chat_id: chat.id) }
     end
 
     def add_participants(chat)
@@ -74,7 +74,7 @@ module Api
 
     def chat_params_create
       filtered_params = params.permit(:privacy, :password, :name)
-      owner_and_name = { owner: current_user, name: "#{current_user.nickname}'s chat" }
+      owner_and_name = { owner: current_user }
       filtered_params.merge!(owner_and_name)
     end
 

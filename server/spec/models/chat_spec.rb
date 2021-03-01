@@ -11,10 +11,9 @@ RSpec.describe Chat, type: :model do
     expect(Chat.new).to_not be_valid
   end
 
-  it "is valid with valid attributes" do
-    chat = create(:chat, privacy: 'public')
-    chat.owner = create(:user)
-    expect(chat).to be_valid
+  it "validates uniqueness of name" do
+    create(:chat, name: 'unique')
+    should validate_uniqueness_of(:name)
   end
 
   it "is not valid when set to protected without password" do
@@ -23,6 +22,7 @@ RSpec.describe Chat, type: :model do
 
   it "is valid when set to protected and a password" do
     subject { described_class.new }
+    subject.name = 'Hop'
     subject.privacy = 'protected'
     subject.password = "asd"
     subject.owner = create(:user)

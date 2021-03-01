@@ -52,13 +52,13 @@ paths:
             schema:
               type: object
               properties:
+                name:
+                  type: string
                 privacy:
                   type: string
                   enum: [public, private, protected]
                 password:
                   type: string
-                admin_ids:
-                  $ref: '#/components/schemas/integer_list'
                 participant_ids:
                   $ref: '#/components/schemas/integer_list'
   "/api/chats/{id}":
