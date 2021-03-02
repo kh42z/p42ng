@@ -13,7 +13,7 @@ RUN git clone  https://github.com/kh42z/omniauth-marvin.git && cd omniauth-marvi
 COPY server/ /app
 RUN bundle install
 RUN yarn install
-ADD build/rails/docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod 0755 /docker-entrypoint.sh
+ADD build/rails/heroku-entrypoint.sh /heroku-entrypoint.sh
+RUN chmod 0755 /heroku-entrypoint.sh
 EXPOSE 3000
-ENTRYPOINT ["/bin/bash","-c", "/docker-entrypoint.sh"]
+ENTRYPOINT ["/bin/bash","-c", "/heroku-entrypoint.sh"]

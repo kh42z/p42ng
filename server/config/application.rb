@@ -40,6 +40,7 @@ module Pong
 
     config.hosts << "pong"
     config.hosts << "www.example.com"
+    config.hosts << "p42ng.herokuapp.com"
 
     # CSRF
     config.middleware.use Rack::Cors do
