@@ -87,7 +87,11 @@ export const Router = Backbone.Router.extend({
       const fetchUser = async () => {
         this.oauthService = new OauthService()
         this.oauthService.ajaxSetup()
-        await this.userLogged.fetchUser(window.localStorage.getItem('user_id'))
+        // console.log(this.userLogged)
+        // console.log(this.userLogged.get('id'))
+        // await this.userLogged.fetchUser(window.localStorage.getItem('user_id'))
+        // console.log(this.userLogged)
+        // console.log(this.userLogged.get('id'))
         if (url !== 'firstConnexion') { this.headerView.render() }
       }
       fetchUser()
@@ -146,7 +150,10 @@ export const Router = Backbone.Router.extend({
 
   chat_view: function (id, page) {
     if (this.accessPage()) { return }
-    const chatView = new ChatView({ model: this.loadChannelWrapper() })
+    console.log(this.userLogged.get('id'))
+    // const chatView = new ChatView({ model: this.loadChannelWrapper(userLogged) })
+    const chatView = new ChatView({ model: this.userLogged })
+    // chatView.render()
   },
 
   leaderboard_view: function () {
@@ -173,14 +180,12 @@ export const Router = Backbone.Router.extend({
   },
 
   loadChannelWrapper: function () {
-    console.log(this.userLogged.get('id'))
-    const userId = this.userLogged.get('id')
     const superWrapper = new SuperWrapper({
       userLogged: new Wrapper({ obj: this.userLogged }),
       users: new Wrapper({ obj: new Users() }),
       channels: new Wrapper({ obj: new Channels() })
     })
-    superWrapper.get('channels').get('obj').fetchByUserId(this.userLogged.get('id'))
+    // superWrapper.get('channels').get('obj').fetchByUserId(this.userLogged.get('id'))
     return superWrapper
   }
 })

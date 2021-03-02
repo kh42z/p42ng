@@ -13,13 +13,11 @@
                 <div class="image-container">
                     <img src={{image_url}} id="image_url" class="image_url"></img>
                 </div>
-                <p class="anagram_nickname">{{anagram}} {{nickname}}</p>
-                {{#if multipleParticipants}}
-                    {{#if admin}}
-                    <div class="admin_panel_settings">
-                        <img src='./icons/admin_panel_settings.svg' class="admin_panel_settings-icon"></img>
-                    </div>
-                    {{/if}}
+                <p class="anagram_nickname">{{name}}</p>
+                {{#if admin}}
+                <div class="admin_panel_settings">
+                    <img src='./icons/admin_panel_settings.svg' class="admin_panel_settings-icon"></img>
+                </div>
                 {{/if}}
                 <div class="close">
                     <img src='./icons/close.svg' class="close-icon"></img>
@@ -148,9 +146,7 @@
             </div>
             <label class="label labelChannelName" for="channelName">Channel name</label>
             <input class="textInput channelName" type="text" id="channelName" placeholder="New channel"></input>
-            {{!-- {{#if error_message}} --}}
-                <p class="error-message" id="error-message"></p>
-            {{!-- {{/if}} --}}
+            <p class="error-message" id="error-message"></p>
             <label class="label labelSelectFriends" for="search">Select friends</label>
             <input class="textInput search modalSearch" type="text" id="modalSearch" placeholder="Research"></input>
             <div class="friends" id="friends">

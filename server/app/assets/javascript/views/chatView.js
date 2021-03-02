@@ -1,4 +1,7 @@
+import { Users } from '../collections/users_collection'
 import { ChatModel } from '../models/chatModel'
+import { User } from '../models/user_model'
+import { Channels } from '../collections/channels'
 
 export const ChatView = Backbone.View.extend({
   events: {
@@ -10,43 +13,62 @@ export const ChatView = Backbone.View.extend({
     'keyup .modalSearch': 'modalSearch'
   },
   initialize: function () {
-    this.channels = this.model.get('channels').get('obj')
-    this.userLogged = this.model.get('userLogged').get('obj')
-    this.users = this.model.get('users').get('obj')
+    // this.channels = this.model.get('channels').get('obj')
+    // this.userLogged = this.model.get('userLogged').get('obj')
+    // this.users = this.model.get('users').get('obj')
 
-    this.listenTo(this.channels, 'sync', function () {
-      this.listenTo(this.users, 'sync', function () {
-        this.search = this.users
-        this.render()
-      }, this)
-    }, this)
+    const fetchModels = async () => {
+      await this.model.fetchUser(window.localStorage.getItem('user_id'))
+      this.userLogged = this.model
+      this.channels = new Channels()
+      await this.channels.fetchByUserId(this.userLogged.get('id'))
+      this.users = await new Users()
+      this.search = this.users
+      this.render()
+    }
+    fetchModels()
   },
   defaults: {
-    search: undefined
+    search: undefined,
+    channels: undefined,
+    userLogged: undefined,
+    users: undefined
   },
   el: $('#app'),
   render: function () {
     this.templateChat = Handlebars.templates.chat
-    let array = {}
+    const array = {}
 
-    array = JSON.parse(JSON.stringify(this.userLogged))
+    // array = JSON.parse(JSON.stringify(this.userLogged))
 
     // if multiple participants right side open
     array.multipleParticipants = true
 
+    // console.log(this.channels.length)
+
     // discussions
     array.discussions = Array() // this.channels.length
-    for (let i = 0; i < 16; i++) {
+    for (let i = 0; i < this.channels.length; i++) {
+      // console.log(this.channels.at(i))
+      // console.log(JSON.parse(JSON.stringify(this.channels.at(i))))
+      // console.log(this.channels.at(i).get('name'))
+      // // array.discussions.push(JSON.parse(JSON.stringify(this.channels.at(i))))
+      // array.discussions.push({
+      //   admin: this.channels.at(i).adminIds.find(el => el === this.userLogged.get('id')),
+      //   name: this.channels.at(i).get('name'),
+      //   image_url: './images/profile-pic.jpg'
+      // })
+      // array.discussions[i].admin = this.channels.at(i).adminIds.find(el => el === this.userLogged.get('id'))
+      console.log(array.discussions[i])
       array.discussions.push({
-        multipleParticipants: array.multipleParticipants,
         admin: true,
         anagram: '[24.c+]',
         image_url: './images/profile-pic.jpg',
         nickname: 'pganglof-with-very-long-name'
       })
-      const length = array.discussions[i].anagram.length + array.discussions[i].nickname.length
+      const length = array.discussions[i].name.length
       if (length > 17) {
-        const size = 16 - array.discussions[i].anagram.length
+        const size = 16
         array.discussions[i].nickname = array.discussions[i].nickname.substr(0, size) + '.'
       }
     }
@@ -118,8 +140,14 @@ export const ChatView = Backbone.View.extend({
     }
 
     // modal create channel
-    array.friends = this.search
-    array.friends = JSON.parse(JSON.stringify(array.friends))
+    // array.friends = this.search
+    array.friends = Array() // nb users
+    for (let i = 0; i < this.users.length; i++) {
+      array.friends.push(JSON.parse(JSON.stringify(this.search.get(i))))
+    }
+    console.log(this.search.at(0))
+    console.log(JSON.parse(JSON.stringify(this.search)))
+    // array.friends = JSON.parse(JSON.stringify(this.search))
     // array.friends = Array() // nb users
     // for (let i = 0; i < this.users.length; i++) {
     //   array.friends.push(this.users[i])
@@ -165,6 +193,7 @@ export const ChatView = Backbone.View.extend({
     for (const el of checkboxes) {
       el.checked = false
     }
+    document.getElementById('error-message').style.display = 'none'
     document.getElementById('modalCreateChannel').style.display = 'none'
   },
 
@@ -180,6 +209,8 @@ export const ChatView = Backbone.View.extend({
         console.log('create channel')
         const response = await newChannel.createChannel(name, participantsIds)
         this.channels.add(newChannel)
+        this.modalCreateChannelClose()
+        this.render()
       } catch (error) {
         document.getElementById('error-message').innerHTML = error.responseJSON.message
         document.getElementById('error-message').style.display = 'block'

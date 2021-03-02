@@ -4,12 +4,12 @@ export const Channels = Backbone.Collection.extend({
   initialize: function () {
   },
   model: ChatModel,
-  urlRoot: 'api/chats',
+  urlRoot: '/api/chats',
   url: function () {
     return this.urlRoot
   },
   fetchByUserId: function (id) {
-    this.fetch({
+    return this.fetch({
       url: this.urlRoot + '?participant_id=' + id,
       success: function (response) {
         console.log('success')
