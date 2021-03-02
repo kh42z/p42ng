@@ -180,6 +180,7 @@ export const ChatView = Backbone.View.extend({
         console.log('create channel')
         const response = await newChannel.createChannel(name, participantsIds)
         this.channels.add(newChannel)
+        this.modelCreateChannelClose()
       } catch (error) {
         document.getElementById('error-message').innerHTML = error.responseJSON.message
         document.getElementById('error-message').style.display = 'block'
