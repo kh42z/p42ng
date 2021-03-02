@@ -174,19 +174,17 @@ export const Router = Backbone.Router.extend({
   },
 
   search_view: function (item) {
-    if (this.accessPage()) { return }
+    if (this.accessPage()) { }
     // let searchView
-    const searchView = new SearchView({ model: this.loadWraper(item) })
+    // const searchView = new SearchView({ model: this.loadWraper(item) })
     // console.log(searchView.item)
   },
 
-  loadWraper: function (item) {
+  loadWrapper: function () {
     return new SuperWrapper({
       users: new Wrapper({ obj: new Users() }),
       guilds: new Wrapper({ obj: new Guilds() }),
-      userLogged: new Wrapper({ obj: this.userLogged }),
-      userLoggedId: window.localStorage.getItem('user_id'),
-      item: item
+      userLoggedId: window.localStorage.getItem('user_id')
     })
   },
 
