@@ -1,6 +1,6 @@
 export const Wrapper = Backbone.Model.extend({
-	default:
+  default:
 	{
-		obj: undefined
+	  obj: undefined
 	}
 })
