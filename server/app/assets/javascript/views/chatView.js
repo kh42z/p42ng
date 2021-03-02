@@ -56,11 +56,12 @@ export const ChatView = Backbone.View.extend({
 
     // direct messages
     const directMessages = this.channels.slice().filter(el => el.get('privacy') === 'direct_message')
-    console.log(channels)
     array.directMessages = Array()
     for (let i = 0; i < directMessages.length; i++) {
       console.log(directMessages[i])
       array.directMessages.push(JSON.parse(JSON.stringify(directMessages[i])))
+      const id = directMessages[i].get('participant_ids').find(el => el !== this.userLogged.get('id'))
+      array.directMessages[i].nickname = this.users.get(id).get('nickname')
     }
 
     // header center
@@ -218,19 +219,17 @@ export const ChatView = Backbone.View.extend({
     const newChannel = new ChatModel()
     const participantsIds = new Array()
     participantsIds.push(id)
-    console.log(participantsIds)
-  //   const createChannel = async () => {
-  //     try {
-  //       console.log('create channel')
-  //       const response = await newChannel.createChannel(name, participantsIds)
-  //       this.channels.add(newChannel)
-  //       this.modalCreateChannelClose()
-  //       this.render()
-  //     } catch (error) {
-  //       document.getElementById('error-message').innerHTML = error.responseJSON.message
-  //       document.getElementById('error-message').style.display = 'block'
-  //     }
-  //   }
-  //   createChannel()
-  // }
+    const name = this.users.get(id).get('nickname') + this.userLogged.get('nickname')
+    const createChannel = async () => {
+      try {
+        const response = await newChannel.createChannel(name, participantsIds, 'direct_message')
+        this.channels.add(newChannel)
+        this.modalCreateChannelClose()
+        this.render()
+      } catch (error) {
+        console.log(error.responseJSON.message)
+      }
+    }
+    createChannel()
+  }
 })

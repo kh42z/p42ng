@@ -18,9 +18,10 @@ export const ChatModel = Backbone.Model.extend({
     }
     return this.urlRoot
   },
-  createChannel: function (name, participantIds) {
+  createChannel: function (name, participantIds, privacy = 'private') {
     return this.save({
       name: name,
+      privacy: privacy,
       participant_ids: participantIds,
       success: function (response) {
       },
