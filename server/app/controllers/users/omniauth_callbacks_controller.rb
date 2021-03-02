@@ -2,6 +2,8 @@
 
 module Users
   class OmniauthCallbacksController < DeviseTokenAuth::OmniauthCallbacksController
+    include LetterAvatar::AvatarHelper
+
     def default_devise_mapping
       raise NotImplementedError('Marvin not found')
     end
@@ -9,11 +11,11 @@ module Users
     def assign_provider_attrs(user, auth_hash)
       return unless @resource.new_record?
 
+      LetterAvatar.generate(auth_hash['info']['nickname'], 500)
       user.assign_attributes({
                                email: auth_hash['info']['email'],
                                nickname: auth_hash['info']['nickname'],
-                               image_url: auth_hash['info']['image']
-
+                               image_url: letter_avatar_url(auth_hash['info']['nickname'], 500)
                              })
     end
 
