@@ -58,9 +58,9 @@ export const ChatView = Backbone.View.extend({
     const directMessages = this.channels.slice().filter(el => el.get('privacy') === 'direct_message')
     array.directMessages = Array()
     for (let i = 0; i < directMessages.length; i++) {
-      console.log(directMessages[i])
       array.directMessages.push(JSON.parse(JSON.stringify(directMessages[i])))
       const id = directMessages[i].get('participant_ids').find(el => el !== this.userLogged.get('id'))
+      array.directMessages[i].image_url = this.users.get(id).get('image_url')
       array.directMessages[i].nickname = this.users.get(id).get('nickname')
     }
 
