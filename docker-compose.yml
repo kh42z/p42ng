@@ -17,7 +17,7 @@ services:
   rails:
     build:
       context: .
-      dockerfile: ./build/rails/Dockerfile
+      dockerfile: Dockerfile
     container_name: pong
     volumes:
       - ./server/:/app
