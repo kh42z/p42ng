@@ -48,7 +48,7 @@ RSpec.describe "Chats", type: :request do
   end
 
   describe "#post" do
-    it "should return 201 & current_user should be chat's owner/participant/admin", test: true do
+    it "should return 201 & current_user should be chat's owner/participant/admin" do
       post api_chats_url, headers: access_token, params: {name: "Hop", privacy: "protected", password: "asd"}
       expect(response).to have_http_status(201)
       expect(Chat.first.owner_id).to eq(auth.id)
@@ -156,18 +156,25 @@ RSpec.describe "Chats", type: :request do
     end
   end
 
-  describe "#update" do
+  describe "#update", test: true do
     let(:user) { create(:user) }
-    let(:chat) { create(:chat) }
+    let(:access) { user.create_new_auth_token }
     it "should change chat's name and privacy" do
-      put api_chat_url(chat.id), headers: access_token, params: { name: 'Custom Name', privacy: 'private'}
+      post api_chats_url, headers: access_token, params: { name: 'Hop' }
+      put api_chat_url(Chat.first.id), headers: access_token, params: { name: 'Custom Name', privacy: 'private'}
       expect(Chat.first.name).to eq("Custom Name")
       expect(Chat.first.privacy).to eq("private")
     end
     it "should add two chat admins" do
       post api_chats_url, headers: access_token, params: { name: 'Hop' }
-      put api_chat_url(chat.id), headers: access_token, params: { admin_ids: [user.id] }
+      put api_chat_url(Chat.first.id), headers: access_token, params: { admin_ids: [user.id] }
       expect(ChatAdmin.count).to eq(2)
+    end
+    it "should return 'not_allowed'" do
+      post api_chats_url, headers: access_token, params: { name: 'Hop' }
+      put api_chat_url(Chat.first.id), headers: access, params: { admin_ids: [user.id] }
+      expect(response).to have_http_status(401)
+      expect(response.body).to match(I18n.t('notAllowed'))
     end
   end
 
