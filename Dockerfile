@@ -16,4 +16,4 @@ RUN yarn install
 ADD build/rails/docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod 0755 /docker-entrypoint.sh
 EXPOSE 3000
-ENTRYPOINT ["/bin/bash","-c", "/docker-entrypoint.sh"]
+ENTRYPOINT ["/bin/bash","-c", "/heroku-entrypoint.sh"]
