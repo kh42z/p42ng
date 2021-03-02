@@ -27,8 +27,8 @@ jobs:
           heroku_app_name: "p42ng"
           heroku_email: "tterrail@student.42.fr"
           appdir: "server"
-          env:
-            RAILS_ENV: production
+        env:
+          RAILS_ENV: production
   rubocop-test:
     name: Rubocop
     runs-on: ubuntu-18.04
