@@ -16,7 +16,6 @@ export const ChatView = Backbone.View.extend({
     this.channels = this.model.get('channels').get('obj')
     this.userLogged = this.model.get('userLogged').get('obj')
     this.users = this.model.get('users').get('obj')
-    this.search = this.users
 
     // const fetchModels = async () => {
     //   await this.model.fetchUser(window.localStorage.getItem('user_id'))
@@ -30,6 +29,18 @@ export const ChatView = Backbone.View.extend({
     //   this.render()
     // }
     // fetchModels()
+    this.search = this.users
+    this.render()
+
+    // this.listenTo(this.users, 'sync', function () {
+    //   this.listenTo(this.channels, 'sync', function () {
+    //     this.listenTo(this.userLogged, 'sync', function () {
+    //       this.search = this.users
+    //       console.log('render')
+    //       this.render()
+    //     }, this)
+    //   }, this)
+    // }, this)
   },
   defaults: {
     search: undefined,
