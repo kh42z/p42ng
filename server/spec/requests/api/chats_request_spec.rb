@@ -157,7 +157,7 @@ RSpec.describe "Chats", type: :request do
   describe "#update" do
     let(:user) { create(:user) }
     let(:chat) { create(:chat) }
-    it "should change chat's name and privacy", test: true do
+    it "should change chat's name and privacy" do
       put api_chat_url(chat.id), headers: access_token, params: { name: 'Custom Name', privacy: 'private'}
       expect(Chat.first.name).to eq("Custom Name")
       expect(Chat.first.privacy).to eq("private")
@@ -193,6 +193,15 @@ RSpec.describe "Chats", type: :request do
       delete participants_api_chat_url(Chat.first.id), headers: access
       expect(ChatParticipant.count).to eq(1)
       expect(ChatAdmin.count).to eq(1)
+      expect(response).to have_http_status(204)
+    end
+    it "should destroy last ChatAdmin and set another one", test: true do
+      post api_chats_url, headers: access_token, params: { name: 'Hop', participant_ids: [user.id] }
+      delete participants_api_chat_url(Chat.first.id), headers: access_token
+      expect(ChatParticipant.count).to eq(1)
+      expect(ChatAdmin.count).to eq(1)
+      expect(ChatParticipant.first.user_id).to eq(user.id)
+      expect(ChatAdmin.first.user_id).to eq(user.id)
       expect(response).to have_http_status(204)
     end
   end
