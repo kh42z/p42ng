@@ -16,6 +16,8 @@ module Api
     end
 
     def update
+      return render_not_allowed if @chat.owner != current_user
+
       add_admins(@chat, params[:admin_ids]) if params[:admin_ids]
       @chat.update!(chat_params)
       json_response(@chat)
