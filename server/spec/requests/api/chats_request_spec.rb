@@ -48,13 +48,15 @@ RSpec.describe "Chats", type: :request do
   end
 
   describe "#post" do
-    it "should return 201 & current_user should be chat's owner/participant/admin" do
+    it "should return 201 & current_user should be chat's owner/participant/admin", test: true do
       post api_chats_url, headers: access_token, params: {name: "Hop", privacy: "protected", password: "asd"}
       expect(response).to have_http_status(201)
       expect(Chat.first.owner_id).to eq(auth.id)
       expect(ChatParticipant.first.user_id).to eq(auth.id)
       expect(ChatAdmin.first.user_id).to eq(auth.id)
       expect(Chat.first.name).to eq("Hop")
+      expect(json).to include("name" => "Hop")
+
     end
     it "should not create a protected chat without password" do
       post api_chats_url, headers: access_token, params: {name: "Hop", privacy: "protected"}
@@ -195,7 +197,7 @@ RSpec.describe "Chats", type: :request do
       expect(ChatAdmin.count).to eq(1)
       expect(response).to have_http_status(204)
     end
-    it "should destroy last ChatAdmin and set other participant admin/owner", test: true do
+    it "should destroy last ChatAdmin and set other participant admin/owner" do
       post api_chats_url, headers: access_token, params: { name: 'Hop', participant_ids: [user.id] }
       delete participants_api_chat_url(Chat.first.id), headers: access_token
       expect(ChatParticipant.count).to eq(1)
@@ -205,7 +207,7 @@ RSpec.describe "Chats", type: :request do
       expect(Chat.first.owner_id).to eq(user.id)
       expect(response).to have_http_status(204)
     end
-    it "should destroy last ChatAdmin and destroy chat", test: true do
+    it "should destroy last ChatAdmin and destroy chat" do
       post api_chats_url, headers: access_token, params: { name: 'Hop' }
       delete participants_api_chat_url(Chat.first.id), headers: access_token
       expect(ChatParticipant.count).to eq(0)
