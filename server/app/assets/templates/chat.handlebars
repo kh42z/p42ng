@@ -2,28 +2,47 @@
     <div class="discussions">
         <div class="title">
             <h2 class="h2-discussions">Discussions</h2>
-            <div class="button">
-                <img src="./icons/add_box.svg" class="add_box"></img>
-                <img src="./icons/search-chat.svg" class="search"></img>
-            </div>
         </div>
         <div class="discussions-container">
-        {{#each discussions}}
-            <div class="clickable-discussions">
-                <div class="image-container">
-                    <img src={{image_url}} id="image_url" class="image_url"></img>
+            <div class="channels">
+                <div class="first-line">
+                    <div class="sub-title">CHANNELS</div>
+                    <img src="./icons/add_box.svg" class="add_box" id="add_channel"></img>
                 </div>
-                <p class="anagram_nickname">{{name}}</p>
-                {{#if admin}}
-                <div class="admin_panel_settings">
-                    <img src='./icons/admin_panel_settings.svg' class="admin_panel_settings-icon"></img>
-                </div>
-                {{/if}}
-                <div class="close">
-                    <img src='./icons/close.svg' class="close-icon"></img>
-                </div>
+                {{#each discussions}}
+                    <div class="clickable-discussions">
+                        <div class="image-container">
+                            <img src={{image_url}} id="image_url" class="image_url"></img>
+                        </div>
+                        <p class="anagram_nickname">{{name}}</p>
+                        {{#if admin}}
+                        <div class="admin_panel_settings">
+                            <img src='./icons/admin_panel_settings.svg' class="admin_panel_settings-icon"></img>
+                        </div>
+                        {{/if}}
+                        <div class="close">
+                            <img src='./icons/close.svg' class="close-icon"></img>
+                        </div>
+                    </div>
+                {{/each}}
             </div>
-        {{/each}}
+            <div class="direct-messages">
+                <div class="first-line">
+                    <div class="sub-title">DIRECT MESSAGES</div>
+                    <img src="./icons/add_box.svg" class="add_box" id="add_direct_messages"></img>
+                </div>
+                {{#each discussions}}
+                    <div class="clickable-discussions">
+                        <div class="image-container">
+                            <img src={{image_url}} id="image_url" class="image_url"></img>
+                        </div>
+                        <p class="anagram_nickname">{{name}}</p>
+                        <div class="close">
+                            <img src='./icons/close.svg' class="close-icon"></img>
+                        </div>
+                    </div>
+                {{/each}}
+            </div>
         </div>
     </div>
     <div class="center">

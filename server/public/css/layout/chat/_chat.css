@@ -27,13 +27,7 @@
 
 .chat .discussions
 .title {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-around;
-    align-content: flex-start;
-
-    padding-left: 16px; 
+    margin-left: 16px; 
 }
 
 .chat .discussions .title
@@ -69,11 +63,24 @@
     display: flex;
     flex-direction: column;
     margin-left: 16px; 
-    /* margin-right: 32px; */
+    margin-right: 16px;
     height: 100%;
-
     overflow-y: scroll;
+}
 
+.chat .discussions .discussions-container
+.first-line {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.chat .discussions .discussions-container .first-line
+.sub-title {
+    font-size: 14px;
+    color: #C4C4C4;
+    font-family: Roboto-Regular;
 }
 
 .chat .discussions

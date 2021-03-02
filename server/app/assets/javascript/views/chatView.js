@@ -5,7 +5,7 @@ import { Channels } from '../collections/channels'
 
 export const ChatView = Backbone.View.extend({
   events: {
-    'click .add_box': 'modalCreateChannel',
+    'click .add_chanel': 'modalCreateChannel',
     'click .createChannel': 'createChannel',
     'click .close': 'modalCreateChannelClose',
     'keyup .input': 'sendMessage',
@@ -14,15 +14,15 @@ export const ChatView = Backbone.View.extend({
   },
   initialize: function () {
     this.channels = this.model.get('channels').get('obj')
-    this.userLogged = this.model.get('userLogged').get('obj')
     this.users = this.model.get('users').get('obj')
 
     this.listenTo(this.channels, 'sync', function () {
-      this.listenTo(this.userLogged, 'sync', function () {
-        this.listenTo(this.users, 'sync', function () {
-          this.search = this.users
-          this.render()
-        }, this)
+      this.listenTo(this.users, 'sync', function () {
+        console.log(this.users)
+        this.userLogged = this.users.get(window.localStorage.getItem('user_id'))
+        console.log(this.userLogged)
+        this.search = this.users
+        this.render()
       }, this)
     }, this)
   },
@@ -74,7 +74,9 @@ export const ChatView = Backbone.View.extend({
     }
 
     // header center
+    array.image_url = './images/profile-pic.jpg'
     array.anagram = '[24.c]'
+    array.nickname = 'pganglof'
     array.slide_show = './icons/slideshow.svg'
 
     // history messages
