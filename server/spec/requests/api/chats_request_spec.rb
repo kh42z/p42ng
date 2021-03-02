@@ -195,13 +195,22 @@ RSpec.describe "Chats", type: :request do
       expect(ChatAdmin.count).to eq(1)
       expect(response).to have_http_status(204)
     end
-    it "should destroy last ChatAdmin and set another one", test: true do
+    it "should destroy last ChatAdmin and set other participant admin/owner", test: true do
       post api_chats_url, headers: access_token, params: { name: 'Hop', participant_ids: [user.id] }
       delete participants_api_chat_url(Chat.first.id), headers: access_token
       expect(ChatParticipant.count).to eq(1)
       expect(ChatAdmin.count).to eq(1)
       expect(ChatParticipant.first.user_id).to eq(user.id)
       expect(ChatAdmin.first.user_id).to eq(user.id)
+      expect(Chat.first.owner_id).to eq(user.id)
+      expect(response).to have_http_status(204)
+    end
+    it "should destroy last ChatAdmin and destroy chat", test: true do
+      post api_chats_url, headers: access_token, params: { name: 'Hop' }
+      delete participants_api_chat_url(Chat.first.id), headers: access_token
+      expect(ChatParticipant.count).to eq(0)
+      expect(ChatAdmin.count).to eq(0)
+      expect(Chat.count).to eq(0)
       expect(response).to have_http_status(204)
     end
   end

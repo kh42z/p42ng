@@ -65,9 +65,9 @@ module Api
 
     def manage_admin
       if ChatAdmin.first
-        @chat.owner = ChatAdmin.first.user_id
+        @chat.update!(owner: ChatAdmin.first.user)
       elsif ChatParticipant.first
-        @chat.owner = ChatParticipant.first.user
+        @chat.update!(owner: ChatParticipant.first.user)
         ChatAdmin.create!(user_id: @chat.owner_id, chat_id: @chat.id)
       else
         destroy
