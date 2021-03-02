@@ -9,6 +9,7 @@ import { OauthView } from '../views/oauth/oauthView.js'
 import { GuildsView } from '../views/guild/guildsView.js'
 import { FirstConnexionView } from '../views/oauth/firstConnexionView.js'
 import { SearchView } from '../views/search/searchView.js'
+import { ChatView } from '../views/chatView'
 
 // models
 import { User } from '../models/user_model'
@@ -24,6 +25,7 @@ import { Users } from '../collections/users_collection.js'
 import { Ladders } from '../collections/laddersCollection.js'
 import { Wrapper } from '../models/wrapper.js'
 import { SuperWrapper } from '../collections/superWrapper.js'
+import { Channels } from '../collections/channels'
 
 // import { ChatController } from '../view/chat/chatController.js' // not here
 
@@ -55,6 +57,7 @@ export const Router = Backbone.Router.extend({
     'guild/:id(/:page)': 'guild_view',
     'guild/:id(/:page)/': 'guild_view',
     'chat/:id(/:page)': 'chat_view',
+    chat: 'chat_view',
     leaderboard: 'leaderboard_view',
     tournaments: 'tournaments_view',
     connexion: 'connexion',
@@ -83,10 +86,15 @@ export const Router = Backbone.Router.extend({
       this.oauth_view()
       return 1
     } else if (performance.navigation.type === 1 || performance.navigation.type === 2) {
+      console.log('reload')
       const fetchUser = async () => {
         this.oauthService = new OauthService()
         this.oauthService.ajaxSetup()
-        await this.userLogged.fetchUser(window.localStorage.getItem('user_id'))
+        // console.log(this.userLogged)
+        // console.log(this.userLogged.get('id'))
+        // await this.userLogged.fetchUser(window.localStorage.getItem('user_id'))
+        // console.log(this.userLogged)
+        // console.log(this.userLogged.get('id'))
         if (url !== 'firstConnexion') { this.headerView.render() }
       }
       fetchUser()
@@ -129,41 +137,44 @@ export const Router = Backbone.Router.extend({
 
   profile_view: function (id, page) {
     if (this.accessPage()) { return }
-    this.profileController.loadView(id, page, this.loadWraper())
+    this.profileController.loadView(id, page, this.loadWrapper())
   },
 
   guilds_view: function () {
     if (this.accessPage()) { return }
-    const guildsView = new GuildsView({ model: this.loadWraper() })
+    const guildsView = new GuildsView({ model: this.loadWrapper() })
   },
 
   guild_view: function (id, page) {
     if (this.accessPage()) { return }
-    this.guildController.loadView(id, page, this.loadWraper())
+    this.guildController.loadView(id, page, this.loadWrapper())
   },
 
   chat_view: function (id, page) {
-    if (this.accessPage()) { }
+    if (this.accessPage()) { return }
+    console.log(this.userLogged.get('id'))
+    // const chatView = new ChatView({ model: this.loadChannelWrapper(userLogged) })
+    const chatView = new ChatView({ model: this.loadChannelWrapper() })
+    // chatView.render()
   },
 
   leaderboard_view: function () {
     if (this.accessPage()) { return }
-    const leaderboardView = new LeaderboardView({ model: this.loadWraper() })
+    const leaderboardView = new LeaderboardView({ model: this.loadWrapper() })
   },
 
   tournaments_view: function () {
     if (this.accessPage()) { return }
-    const tournamentsView = new TournamentsView({ model: this.loadWraper() })
+    const tournamentsView = new TournamentsView({ model: this.loadWrapper() })
   },
 
   test_view: function () {
     if (this.accessPage()) { return }
-    const testView = new TestView({ model: this.loadWraper() })
+    const testView = new TestView({ model: this.loadWrapper() })
   },
 
   search_view: function (item) {
     if (this.accessPage()) { return }
-    console.log(item)
     // let searchView
     const searchView = new SearchView({ model: this.loadWraper(item) })
     // console.log(searchView.item)
@@ -177,5 +188,18 @@ export const Router = Backbone.Router.extend({
       userLoggedId: window.localStorage.getItem('user_id'),
       item: item
     })
+  },
+
+  loadChannelWrapper: function () {
+    // console.log(this.userLogged.get('id'))
+    const userId = window.localStorage.getItem('user_id')
+    const superWrapper = new SuperWrapper({
+      userLogged: new Wrapper({ obj: new User() }),
+      users: new Wrapper({ obj: new Users() }),
+      channels: new Wrapper({ obj: new Channels() })
+    })
+    superWrapper.get('userLogged').get('obj').fetchUser(userId)
+    superWrapper.get('channels').get('obj').fetchByUserId(userId)
+    return superWrapper
   }
 })

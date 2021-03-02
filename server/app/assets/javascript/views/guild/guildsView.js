@@ -18,8 +18,8 @@ export const GuildsView = Backbone.View.extend({
   render: function () {
     const row = Array.of(this.guilds.length)
 
-    	for (let i = 1; i <= this.guilds.length; i++) {
-      const	guilds = JSON.parse(JSON.stringify(this.guilds.get(i)))
+    for (let i = 1; i <= this.guilds.length; i++) {
+      const guilds = JSON.parse(JSON.stringify(this.guilds.get(i)))
 
       guilds.owner_nickname = this.users.get(guilds.owner_id).get('nickname')
       guilds.officers = Array()
@@ -30,7 +30,7 @@ export const GuildsView = Backbone.View.extend({
           id: this.users.get(this.guilds.get(i).get('officer_ids')[j]).get('id')
         })
       }
-    		row.push(guilds)
+      row.push(guilds)
     }
 
     const context = { row: row }

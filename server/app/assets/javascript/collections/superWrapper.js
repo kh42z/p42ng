@@ -25,6 +25,7 @@ export const SuperWrapper = Backbone.Model.extend({
 	  users: undefined,
 	  guilds: undefined,
 	  ladders: undefined,
-	  userLogged: undefined
+	  userLogged: undefined,
+	  channels: undefined
 	}
 })

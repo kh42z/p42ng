@@ -22,6 +22,7 @@ module Api
     def update
       return render_not_allowed if user_params.key?(:banned) && current_user.admin? == false
 
+      disconnect_banned_user(@user.id) if user_params.key?(:banned) && user_params.fetch(:banned) == true
       @user.update!(user_params)
       json_response(@user)
     end
