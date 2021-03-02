@@ -17,6 +17,8 @@ export const NoGuildView = Backbone.View.extend({
       id: this.id
     }
     this.$el.html(this.template(context))
+    this.$el.find('#profilePannel').html(Handlebars.templates.profilePannel(context))
+    this.$el.find('#profileSubNavBar').html(Handlebars.templates.profileSubNavBar(context))
     return this
   }
 })

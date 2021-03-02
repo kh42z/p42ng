@@ -3,6 +3,7 @@ import { Ladders } from '../../collections/laddersCollection.js'
 export const AchivementsView = Backbone.View.extend({
   el: $('#app'),
   initialize: function () {
+    this.template = Handlebars.templates.achivements
     this.ladders = new Ladders()
     this.users = this.model.get('users').get('obj')
    	// this.guilds = this.model.get('guilds').get('obj')
@@ -26,9 +27,10 @@ export const AchivementsView = Backbone.View.extend({
       guild_id: this.users.get(this.id).get('guild_id'),
       id: this.id
     }
-    const template = Handlebars.templates.achivements
 
-    this.$el.html(template(context))
+    this.$el.html(this.template(context))
+    this.$el.find('#profilePannel').html(Handlebars.templates.profilePannel(context))
+    this.$el.find('#profileSubNavBar').html(Handlebars.templates.profileSubNavBar(context))
     return this
   }
 })

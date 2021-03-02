@@ -3,6 +3,7 @@ import { GameRecords } from '../../collections/gameRecords.js'
 export const MatchHistoryView = Backbone.View.extend({
   el: $('#app'),
   initialize: function () {
+    this.template = Handlebars.templates.matchHistory
     this.users = this.model.get('users').get('obj')
     this.guilds = this.model.get('guilds').get('obj')
     this.listenTo(this.guilds, 'sync', function () { this.getUsers() }, this)
@@ -49,8 +50,9 @@ export const MatchHistoryView = Backbone.View.extend({
 
     // console.log(this.gameRecords)
 
-    console.log(template(context))
-    this.$el.html(template(context))
+    this.$el.html(this.template(context))
+    this.$el.find('#profilePannel').html(Handlebars.templates.profilePannel(context))
+    this.$el.find('#profileSubNavBar').html(Handlebars.templates.profileSubNavBar(context))
     return this
   }
 })

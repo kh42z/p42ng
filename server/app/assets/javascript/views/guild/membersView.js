@@ -1,5 +1,8 @@
 export const MembersView = Backbone.View.extend({
   initialize: function () {
+    this.guildSubNavBar = Handlebars.templates.guildSubNavBar
+    this.guildPannel = Handlebars.templates.guildPannel
+    this.template = Handlebars.templates.guildMembers
     this.users = this.model.get('users').get('obj')
     this.guilds = this.model.get('guilds').get('obj')
     this.listenTo(this.guilds, 'sync', function () { this.getUsers() }, this)
@@ -12,7 +15,6 @@ export const MembersView = Backbone.View.extend({
   },
 
   render: function () {
-    const template = Handlebars.templates.guildMembers
     const members = Array()
     const officers = Array()
 
@@ -40,12 +42,10 @@ export const MembersView = Backbone.View.extend({
       members: members,
       officers: officers
     }
-    // console.log(templateData)
-    const templateData = template(context)
-    console.log(this.guilds.get(this.id).get('name'))
-    console.log(templateData)
 
-    this.$el.html(templateData)
+    this.$el.html(this.template(context))
+    this.$el.find('#guildPannel').html(this.guildPannel(context))
+    this.$el.find('#guildSubNavBar').html(this.guildSubNavBar(context))
     return this
   }
 

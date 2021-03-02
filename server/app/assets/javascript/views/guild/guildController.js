@@ -5,7 +5,6 @@ import { MembersView } from './membersView.js'
 export class GuildController {
   loadView (id, page, wrapper) {
     let view
-    console.log(page)
     if (page === 'current_war' || page == null || page == '/' || page == '') {
       view = new CurrentWarView({ model: wrapper, id: id })
       // view.render()

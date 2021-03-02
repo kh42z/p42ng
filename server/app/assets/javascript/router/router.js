@@ -8,6 +8,7 @@ import { TournamentsView } from '../views/tournaments/tournamentsView.js'
 import { OauthView } from '../views/oauth/oauthView.js'
 import { GuildsView } from '../views/guild/guildsView.js'
 import { FirstConnexionView } from '../views/oauth/firstConnexionView.js'
+import { SearchView } from '../views/search/searchView.js'
 
 // models
 import { User } from '../models/user_model'
@@ -59,6 +60,8 @@ export const Router = Backbone.Router.extend({
     connexion: 'connexion',
     exit: 'exit',
     firstConnexion: 'firstConnexion_view',
+    'search(/:item)': 'search_view',
+    'search(/:item)/': 'search_view',
     '': 'oauth_view'
   },
 
@@ -121,8 +124,7 @@ export const Router = Backbone.Router.extend({
 
   pong_view: function (url) {
     if (this.accessPage()) { return }
-    const pongView = new PongView({ model: this.loadWraper() })
-    pongView.render()
+    const pongView = new PongView()
   },
 
   profile_view: function (id, page) {
@@ -159,11 +161,21 @@ export const Router = Backbone.Router.extend({
     const testView = new TestView({ model: this.loadWraper() })
   },
 
-  loadWraper: function () {
+  search_view: function (item) {
+    if (this.accessPage()) { return }
+    console.log(item)
+    // let searchView
+    const searchView = new SearchView({ model: this.loadWraper(item) })
+    // console.log(searchView.item)
+  },
+
+  loadWraper: function (item) {
     return new SuperWrapper({
       users: new Wrapper({ obj: new Users() }),
       guilds: new Wrapper({ obj: new Guilds() }),
-      userLogged: new Wrapper({ obj: this.userLogged })
+      userLogged: new Wrapper({ obj: this.userLogged }),
+      userLoggedId: window.localStorage.getItem('user_id'),
+      item: item
     })
   }
 })
