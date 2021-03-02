@@ -2,8 +2,8 @@
 
 module Api
   class ChatsController < ApiController
-    before_action :set_chat,
-                  only: %i[update show destroy create_participant chat_password_correct mutes bans destroy_participant]
+    before_action :set_chat
+    skip_before_action :set_chat, only: %i[index create]
 
     ChatReducer = Rack::Reducer.new(
       Chat.all.order(:updated_at),
@@ -16,6 +16,8 @@ module Api
     end
 
     def update
+      return render_not_allowed if @chat.owner != current_user
+
       add_admins(@chat, params[:admin_ids]) if params[:admin_ids]
       @chat.update!(chat_params)
       json_response(@chat)
@@ -39,6 +41,7 @@ module Api
     def destroy_participant
       ChatParticipant.where(chat: @chat).destroy_by(user: current_user)
       ChatAdmin.where(chat: @chat).destroy_by(user: current_user)
+      manage_admin if @chat.owner == current_user
       head :no_content
     end
 
@@ -61,6 +64,17 @@ module Api
     end
 
     private
+
+    def manage_admin
+      if ChatAdmin.first
+        @chat.update!(owner: ChatAdmin.first.user)
+      elsif ChatParticipant.first
+        @chat.update!(owner: ChatParticipant.first.user)
+        ChatAdmin.create!(user_id: @chat.owner_id, chat_id: @chat.id)
+      else
+        destroy
+      end
+    end
 
     def add_admins(chat, admins)
       admins.each { |t| ChatAdmin.create!(user_id: t, chat_id: chat.id) }

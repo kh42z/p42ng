@@ -16,19 +16,26 @@ on:
       - master
 jobs:
   heroku-deploy:
-    name: Deploy
+    name: Heroku
     runs-on: ubuntu-18.04
-    needs: rspec-test
+    needs: [rspec-test]
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "p42ng"
-          heroku_email: "tterrail@student.42.fr"
-          appdir: "server"
+          heroku_email: ${{secrets.HEROKU_EMAIL }}
+          usedocker: true
+          region: "eu"
         env:
           RAILS_ENV: production
+          ALFRED_CODE: 13252eceff439797fa6f35e8172d244db71bf4696df286a8b7ffc2ad88dec88c
+          MARVIN_APP_ID: 54aaca883a80bf7f0590646dab1e4596485789f577ff3d6ab766c85d1d30914e
+          MARVIN_APP_SECRET: c320a88988be18b3b61e0fa75361e6e710f35d4bfa068ae6534cd97bb43b9821
+          MARVIN_PROVIDER_CALLBACK: "https://api.intra.42.fr"
+          MAILGUN_SECRET: 9425db56741dfb1ce3070c9a36225be4-e49cc42c-5a708301
+          MAILGUN_DOMAIN: sandbox718829b193c64c62971d9b885fa1d507.mailgun.org
   rubocop-test:
     name: Rubocop
     runs-on: ubuntu-18.04
@@ -44,6 +51,7 @@ jobs:
   rspec-test:
     name: RSpec
     runs-on: ubuntu-18.04
+    needs: [rubocop-test]
     services:
       postgres:
         image: postgres:12.1

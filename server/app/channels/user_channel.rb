@@ -18,8 +18,6 @@ class UserChannel < ApplicationCable::Channel
   private
 
   def reject_user?
-    return true if @user.id != current_user.id
-
-    false
+    @user.id != current_user.id
   end
 end

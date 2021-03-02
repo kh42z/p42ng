@@ -9,4 +9,4 @@
 
 ### OpenAPI Documentation
 
-http://localhost:3000/api-docs/index.html
+http://p42ng.herokuapp.com/api-docs

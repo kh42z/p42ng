@@ -55,6 +55,8 @@ RSpec.describe "Chats", type: :request do
       expect(ChatParticipant.first.user_id).to eq(auth.id)
       expect(ChatAdmin.first.user_id).to eq(auth.id)
       expect(Chat.first.name).to eq("Hop")
+      expect(json).to include("name" => "Hop")
+
     end
     it "should not create a protected chat without password" do
       post api_chats_url, headers: access_token, params: {name: "Hop", privacy: "protected"}
@@ -154,18 +156,25 @@ RSpec.describe "Chats", type: :request do
     end
   end
 
-  describe "#update" do
+  describe "#update", test: true do
     let(:user) { create(:user) }
-    let(:chat) { create(:chat) }
-    it "should change chat's name and privacy", test: true do
-      put api_chat_url(chat.id), headers: access_token, params: { name: 'Custom Name', privacy: 'private'}
+    let(:access) { user.create_new_auth_token }
+    it "should change chat's name and privacy" do
+      post api_chats_url, headers: access_token, params: { name: 'Hop' }
+      put api_chat_url(Chat.first.id), headers: access_token, params: { name: 'Custom Name', privacy: 'private'}
       expect(Chat.first.name).to eq("Custom Name")
       expect(Chat.first.privacy).to eq("private")
     end
     it "should add two chat admins" do
       post api_chats_url, headers: access_token, params: { name: 'Hop' }
-      put api_chat_url(chat.id), headers: access_token, params: { admin_ids: [user.id] }
+      put api_chat_url(Chat.first.id), headers: access_token, params: { admin_ids: [user.id] }
       expect(ChatAdmin.count).to eq(2)
+    end
+    it "should return 'not_allowed'" do
+      post api_chats_url, headers: access_token, params: { name: 'Hop' }
+      put api_chat_url(Chat.first.id), headers: access, params: { admin_ids: [user.id] }
+      expect(response).to have_http_status(401)
+      expect(response.body).to match(I18n.t('notAllowed'))
     end
   end
 
@@ -193,6 +202,24 @@ RSpec.describe "Chats", type: :request do
       delete participants_api_chat_url(Chat.first.id), headers: access
       expect(ChatParticipant.count).to eq(1)
       expect(ChatAdmin.count).to eq(1)
+      expect(response).to have_http_status(204)
+    end
+    it "should destroy last ChatAdmin and set other participant admin/owner" do
+      post api_chats_url, headers: access_token, params: { name: 'Hop', participant_ids: [user.id] }
+      delete participants_api_chat_url(Chat.first.id), headers: access_token
+      expect(ChatParticipant.count).to eq(1)
+      expect(ChatAdmin.count).to eq(1)
+      expect(ChatParticipant.first.user_id).to eq(user.id)
+      expect(ChatAdmin.first.user_id).to eq(user.id)
+      expect(Chat.first.owner_id).to eq(user.id)
+      expect(response).to have_http_status(204)
+    end
+    it "should destroy last ChatAdmin and destroy chat" do
+      post api_chats_url, headers: access_token, params: { name: 'Hop' }
+      delete participants_api_chat_url(Chat.first.id), headers: access_token
+      expect(ChatParticipant.count).to eq(0)
+      expect(ChatAdmin.count).to eq(0)
+      expect(Chat.count).to eq(0)
       expect(response).to have_http_status(204)
     end
   end
