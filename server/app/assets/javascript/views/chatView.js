@@ -13,20 +13,23 @@ export const ChatView = Backbone.View.extend({
     'keyup .modalSearch': 'modalSearch'
   },
   initialize: function () {
-    // this.channels = this.model.get('channels').get('obj')
-    // this.userLogged = this.model.get('userLogged').get('obj')
-    // this.users = this.model.get('users').get('obj')
+    this.channels = this.model.get('channels').get('obj')
+    this.userLogged = this.model.get('userLogged').get('obj')
+    this.users = this.model.get('users').get('obj')
+    this.search = this.users
 
-    const fetchModels = async () => {
-      await this.model.fetchUser(window.localStorage.getItem('user_id'))
-      this.userLogged = this.model
-      this.channels = new Channels()
-      await this.channels.fetchByUserId(this.userLogged.get('id'))
-      this.users = await new Users()
-      this.search = this.users
-      this.render()
-    }
-    fetchModels()
+    // const fetchModels = async () => {
+    //   await this.model.fetchUser(window.localStorage.getItem('user_id'))
+    //   this.userLogged = this.model
+    //   this.channels = new Channels()
+    //   await this.channels.fetchByUserId(this.userLogged.get('id'))
+    //   this.users = await new Users()
+    //   console.log(this.users[0])
+    //   console.log(this.users.get(42))
+    //   this.search = this.users
+    //   this.render()
+    // }
+    // fetchModels()
   },
   defaults: {
     search: undefined,
@@ -141,12 +144,16 @@ export const ChatView = Backbone.View.extend({
 
     // modal create channel
     // array.friends = this.search
-    array.friends = Array() // nb users
-    for (let i = 0; i < this.users.length; i++) {
-      array.friends.push(JSON.parse(JSON.stringify(this.search.get(i))))
-    }
+    array.friends = this.search
     console.log(this.search.at(0))
-    console.log(JSON.parse(JSON.stringify(this.search)))
+    console.log(this.users.at(0))
+    array.friends = JSON.parse(JSON.stringify(array.friends))
+    // array.friends = Array() // nb users
+    // for (let i = 0; i < this.users.length; i++) {
+    //   array.friends.push(JSON.parse(JSON.stringify(this.search.get(i))))
+    // }
+    // console.log(this.search.at(0))
+    // console.log(JSON.parse(JSON.stringify(this.search)))
     // array.friends = JSON.parse(JSON.stringify(this.search))
     // array.friends = Array() // nb users
     // for (let i = 0; i < this.users.length; i++) {
