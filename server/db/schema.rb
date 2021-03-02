@@ -84,6 +84,7 @@ ActiveRecord::Schema.define(version: 2021_02_22_100552) do
 
   create_table "chats", force: :cascade do |t|
     t.string "name"
+    t.string "mode", default: "channel"
     t.string "privacy", default: "private"
     t.string "password_digest"
     t.bigint "owner_id"

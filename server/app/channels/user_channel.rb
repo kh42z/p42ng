@@ -22,4 +22,9 @@ class UserChannel < ApplicationCable::Channel
 
     false
   end
+
+  # Cette syntaxe a le meme effet :)
+  #  def reject_user?
+  #    @user.id != current_user.id
+  #  end
 end
