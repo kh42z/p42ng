@@ -5,7 +5,8 @@
 @import url(layout/_topnav.css);
 @import url(layout/_oauth.css);
 @import url(layout/_firstConnexion.css);
-@import url(layout/_chat.css);
+@import url(layout/chat/_chat.css);
+@import url(layout/chat/_params.css);
 
 @import url(module/_table.css);
 @import url(module/_modalCreateChannel.css);

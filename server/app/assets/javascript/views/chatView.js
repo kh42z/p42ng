@@ -17,30 +17,14 @@ export const ChatView = Backbone.View.extend({
     this.userLogged = this.model.get('userLogged').get('obj')
     this.users = this.model.get('users').get('obj')
 
-    // const fetchModels = async () => {
-    //   await this.model.fetchUser(window.localStorage.getItem('user_id'))
-    //   this.userLogged = this.model
-    //   this.channels = new Channels()
-    //   await this.channels.fetchByUserId(this.userLogged.get('id'))
-    //   this.users = await new Users()
-    //   console.log(this.users[0])
-    //   console.log(this.users.get(42))
-    //   this.search = this.users
-    //   this.render()
-    // }
-    // fetchModels()
-    this.search = this.users
-    this.render()
-
-    // this.listenTo(this.users, 'sync', function () {
-    //   this.listenTo(this.channels, 'sync', function () {
-    //     this.listenTo(this.userLogged, 'sync', function () {
-    //       this.search = this.users
-    //       console.log('render')
-    //       this.render()
-    //     }, this)
-    //   }, this)
-    // }, this)
+    this.listenTo(this.channels, 'sync', function () {
+      this.listenTo(this.userLogged, 'sync', function () {
+        this.listenTo(this.users, 'sync', function () {
+          this.search = this.users
+          this.render()
+        }, this)
+      }, this)
+    }, this)
   },
   defaults: {
     search: undefined,
@@ -58,7 +42,13 @@ export const ChatView = Backbone.View.extend({
     // if multiple participants right side open
     array.multipleParticipants = true
 
+<<<<<<< HEAD
     // console.log(this.channels.length)
+=======
+    console.log(this.userLogged)
+    console.log(this.channels.length)
+    console.log(this.channels.at(0))
+>>>>>>> goback
 
     // discussions
     array.discussions = Array() // this.channels.length

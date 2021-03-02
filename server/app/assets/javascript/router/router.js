@@ -180,25 +180,15 @@ export const Router = Backbone.Router.extend({
   },
 
   loadChannelWrapper: function () {
+    // console.log(this.userLogged.get('id'))
     const userId = window.localStorage.getItem('user_id')
-    const fetchSuperWrapper = async () => {
-      const userLogged = new User()
-      const channels = new Channels()
-      const users = await new Users()
-      await userLogged.fetchUser(userId)
-      await channels.fetchByUserId(userId)
-
-      new SuperWrapper({
-        userLogged: new Wrapper({ obj: userLogged }),
-        users: new Wrapper({ obj: users }),
-        channels: new Wrapper({ obj: channels })
-      })
-      // await superWrapper.get('userLogged').get('obj').fetchUser(userId)
-      // await superWrapper.get('channels').get('obj').fetchByUserId(userId)
-      // return superWrapper
-    }
-
-    const test = fetchSuperWrapper()
-    return test
+    const superWrapper = new SuperWrapper({
+      userLogged: new Wrapper({ obj: new User() }),
+      users: new Wrapper({ obj: new Users() }),
+      channels: new Wrapper({ obj: new Channels() })
+    })
+    superWrapper.get('userLogged').get('obj').fetchUser(userId)
+    superWrapper.get('channels').get('obj').fetchByUserId(userId)
+    return superWrapper
   }
 })

@@ -170,4 +170,88 @@
             </div>
         </div>
     </div>
+    <div class="parameters">
+        <div class="left-menu">
+            <div class="menu">
+                <div class="overview-menu" id="overview-menu">Overview</div>
+                <div class="permissions-menu"  id="permissions-menu">Permissions</div>
+                <div class="members-menu" id="members-menu">Members</div>
+            </div>
+            <div class="delete">Delete channel</div>
+        </div>
+        <div class="right-menu">
+            <div class="close">
+                <img src="./icons/esc.sgv" class="close">
+            </div>
+            <div class="overview">
+                <div class="title">OVERVIEW</div>
+                <div class="sub-title">CHANNEL NAME</div>
+                <input type="text" class="name" disabled>{{channelName}}</input>
+            </div>
+            <div class="permissions">
+                <div class="title">PERMISSIONS</div>
+                <div class="sub-title">CONFIDENTIALITY</div>
+                <div class="radio-button">
+                    <input type="radio" id="private" name="privacy" value="private" checked>
+                    <label for="private">Private</label> 
+                </div>
+                <div class="radio-button">
+                    <input type="radio" id="public" name="privacy" value="public">
+                    <label for="public">Public</label> 
+                </div>
+                <div class="radio-button">
+                    <input type="radio" id="protected" name="privacy" value="protected">
+                    <label for="protected">Protected</label> 
+                </div>
+                <div class="password">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password">
+                    <button class="save">Save</button>
+                </div>
+            </div>
+            <div class="members">
+                <div class="title">MEMBERS</div>
+                <div class="sub-title">ADMINISTRATORS</div>
+                <div class="admins">
+                    {{#each admins}}
+                        <div class="admin">
+                            <div class="image-container">
+                                <img src={{image_url}} class="image_url"></img>
+                            </div>
+                            <div class="anagram">
+                                <p class="text">{{anagram}}</p>
+                            </div>
+                            <div class="nickname">
+                                <p class="text">{{nickname}}</p>
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
+                <div class="sub-title">OTHER MEMBERS</div>
+                <div class="admins">
+                    {{#each admins}}
+                        <div class="admin">
+                            <div class="image-container">
+                                <img src={{image_url}} class="image_url"></img>
+                            </div>
+                            <div class="anagram">
+                                <p class="text">{{anagram}}</p>
+                            </div>
+                            <div class="nickname">
+                                <p class="text">{{nickname}}</p>
+                            </div>
+                            <div class="dots-container">
+                                <img src='./icons/dots.svg' class="dots"></img>
+                            </div>
+                            <div class="params">
+                                <div class="appoint-as-admin" id="appointAsAdministrator">Appoint as administrator</div>
+                                <div class="mute" id="mute">Mute</div>
+                                <div class="ban" id="ban">Ban</div>
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
