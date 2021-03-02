@@ -8,7 +8,8 @@ Rails.application.routes.draw do
     resources :games
     resources :chats do
       member do
-        post 'participants'
+        post 'participants', to: 'chats#create_participant'
+        delete 'participants', to: 'chats#destroy_participant'
         post 'mutes'
         post 'bans'
       end

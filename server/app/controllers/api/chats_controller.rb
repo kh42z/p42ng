@@ -2,7 +2,8 @@
 
 module Api
   class ChatsController < ApiController
-    before_action :set_chat, only: %i[update show destroy participants chat_password_correct mutes bans]
+    before_action :set_chat,
+                  only: %i[update show destroy create_participant chat_password_correct mutes bans destroy_participant]
 
     ChatReducer = Rack::Reducer.new(
       Chat.all.order(:updated_at),
@@ -15,24 +16,30 @@ module Api
     end
 
     def update
-      update_admins(@chat, params[:admin_ids]) unless params[:admin_ids].nil?
-      update_participants(@chat, params[:participant_ids]) unless params[:participant_ids].nil?
+      add_admins(@chat, params[:admin_ids]) if params[:admin_ids]
       @chat.update!(chat_params)
       json_response(@chat)
     end
 
     def create
       chat = Chat.create!(chat_params_create)
-      update_admins(chat, [current_user.id])
-      update_participants(chat, params[:participant_ids]) unless params[:participant_ids].nil?
+      add_admins(chat, [current_user.id])
+      add_participants(chat, [current_user.id])
+      add_participants(chat, params[:participant_ids]) if params[:participant_ids]
       json_response(chat, 201)
     end
 
-    def participants
+    def create_participant
       raise WrongPasswordError if @chat.privacy == 'protected' && !@chat.authenticate(params.fetch(:password))
 
       participant = ChatParticipant.create!(user_id: current_user.id, chat_id: @chat.id)
       json_response(participant, 200)
+    end
+
+    def destroy_participant
+      ChatParticipant.where(chat: @chat).destroy_by(user: current_user)
+      ChatAdmin.where(chat: @chat).destroy_by(user: current_user)
+      head :no_content
     end
 
     def mutes
@@ -55,13 +62,11 @@ module Api
 
     private
 
-    def update_admins(chat, admins)
-      ChatAdmin.where(chat_id: chat.id).destroy_all
+    def add_admins(chat, admins)
       admins.each { |t| ChatAdmin.create!(user_id: t, chat_id: chat.id) }
     end
 
-    def update_participants(chat, participants)
-      ChatParticipant.where(chat_id: chat.id).destroy_all
+    def add_participants(chat, participants)
       participants.each { |t| ChatParticipant.create!(user_id: t, chat_id: chat.id) }
     end
 
