@@ -5,12 +5,14 @@ import { Channels } from '../collections/channels'
 
 export const ChatView = Backbone.View.extend({
   events: {
-    'click .add_chanel': 'modalCreateChannel',
+    'click .add_channel': 'modalCreateChannel',
     'click .createChannel': 'createChannel',
     'click .close': 'modalCreateChannelClose',
     'keyup .input': 'sendMessage',
-    'click .eachFriend': 'selectCheckbox',
-    'keyup .modalSearch': 'modalSearch'
+    'click .eachFriendModalCreateChannel': 'selectCheckbox',
+    'click .eachFriendModalCreateDirectMessages': 'createDirectMessages',
+    'keyup .modalSearch': 'modalSearch',
+    'click .add_direct_messages': 'openModalCreateDirectMessages'
   },
   initialize: function () {
     this.channels = this.model.get('channels').get('obj')
@@ -40,37 +42,25 @@ export const ChatView = Backbone.View.extend({
     // array = JSON.parse(JSON.stringify(this.userLogged))
 
     // if multiple participants right side open
-    array.multipleParticipants = true
+    array.channel = true
 
-    console.log(this.userLogged)
-    console.log(this.channels.length)
-    console.log(this.channels.at(0))
+    // channels
+    const channels = this.channels.slice().filter(el => el.get('privacy') !== 'direct_message')
+    console.log(channels)
+    array.channels = Array()
+    for (let i = 0; i < channels.length; i++) {
+      console.log(channels[i])
+      array.channels.push(JSON.parse(JSON.stringify(channels[i])))
+      array.channels[i].admin = channels[i].get('admin_ids').find(el => el === this.userLogged.get('id'))
+    }
 
-    // discussions
-    array.discussions = Array() // this.channels.length
-    for (let i = 0; i < this.channels.length; i++) {
-      // console.log(this.channels.at(i))
-      // console.log(JSON.parse(JSON.stringify(this.channels.at(i))))
-      // console.log(this.channels.at(i).get('name'))
-      // // array.discussions.push(JSON.parse(JSON.stringify(this.channels.at(i))))
-      // array.discussions.push({
-      //   admin: this.channels.at(i).adminIds.find(el => el === this.userLogged.get('id')),
-      //   name: this.channels.at(i).get('name'),
-      //   image_url: './images/profile-pic.jpg'
-      // })
-      // array.discussions[i].admin = this.channels.at(i).adminIds.find(el => el === this.userLogged.get('id'))
-      console.log(array.discussions[i])
-      array.discussions.push({
-        admin: true,
-        anagram: '[24.c+]',
-        image_url: './images/profile-pic.jpg',
-        nickname: 'pganglof-with-very-long-name'
-      })
-      const length = array.discussions[i].name.length
-      if (length > 17) {
-        const size = 16
-        array.discussions[i].nickname = array.discussions[i].nickname.substr(0, size) + '.'
-      }
+    // direct messages
+    const directMessages = this.channels.slice().filter(el => el.get('privacy') === 'direct_message')
+    console.log(channels)
+    array.directMessages = Array()
+    for (let i = 0; i < directMessages.length; i++) {
+      console.log(directMessages[i])
+      array.directMessages.push(JSON.parse(JSON.stringify(directMessages[i])))
     }
 
     // header center
@@ -141,35 +131,8 @@ export const ChatView = Backbone.View.extend({
       }
     }
 
-    // modal create channel
-    // array.friends = this.search
     array.friends = this.search
-    console.log(this.search.at(0))
-    console.log(this.users.at(0))
     array.friends = JSON.parse(JSON.stringify(array.friends))
-    // array.friends = Array() // nb users
-    // for (let i = 0; i < this.users.length; i++) {
-    //   array.friends.push(JSON.parse(JSON.stringify(this.search.get(i))))
-    // }
-    // console.log(this.search.at(0))
-    // console.log(JSON.parse(JSON.stringify(this.search)))
-    // array.friends = JSON.parse(JSON.stringify(this.search))
-    // array.friends = Array() // nb users
-    // for (let i = 0; i < this.users.length; i++) {
-    //   array.friends.push(this.users[i])
-    //   // array.friends.push({
-    //   //   anagram: '[txt]',
-    //   //   image_url: './images/jdurand.png',
-    //   //   nickname: 'jdurand',
-    //   //   id: i
-    //   // })
-    // }
-
-    // error message
-    // array.error_message = 'Validation failed: Can\'t be blank'
-    // array.error_message = false
-
-    // checkbox
 
     this.context = array
     const templateDataChat = this.templateChat(this.context)
@@ -193,7 +156,8 @@ export const ChatView = Backbone.View.extend({
     const found = $(html).find('#friends')[0].innerHTML
     const friendsDiv = document.getElementById('friends')
     friendsDiv.innerHTML = found
-    document.getElementById('modalSearch').value = ''
+    document.getElementById('modalSearchChannels').value = ''
+    document.getElementById('modalSearchDirectMessages').value = ''
     document.getElementById('channelName').value = ''
     const checkboxes = document.getElementsByClassName('checkbox')
     for (const el of checkboxes) {
@@ -201,6 +165,7 @@ export const ChatView = Backbone.View.extend({
     }
     document.getElementById('error-message').style.display = 'none'
     document.getElementById('modalCreateChannel').style.display = 'none'
+    document.getElementById('modalCreateDirectMessages').style.display = 'none'
   },
 
   createChannel: function () {
@@ -231,12 +196,41 @@ export const ChatView = Backbone.View.extend({
 
   modalSearch: function (e) {
     const value = document.getElementById('modalSearch').value
-    // tolowercase value andz
-    this.search = this.users.slice().filter(el => el.get('nickname').startsWith(value) === true)
+    this.search = this.users.slice().filter(function (el) {
+      if (el.get('nickname').toLowerCase().startsWith(value.toLowerCase()) === true) { return true }
+      if (el.get('anagram') !== undefined && el.get('anagram').toLowerCase().startsWith(value.toLowerCase()) === true) { return true }
+      return false
+    }
+    )
     this.context.friends = JSON.parse(JSON.stringify(this.search))
     const html = this.templateChat(this.context)
     const found = $(html).find('#friends')[0].innerHTML
     const friendsDiv = document.getElementById('friends')
     friendsDiv.innerHTML = found
-  }
+  },
+
+  openModalCreateDirectMessages: function () {
+    document.getElementById('modalCreateDirectMessages').style.display = 'flex'
+  },
+
+  createDirectMessages: function (e) {
+    const id = e.currentTarget.getAttribute('for')
+    const newChannel = new ChatModel()
+    const participantsIds = new Array()
+    participantsIds.push(id)
+    console.log(participantsIds)
+  //   const createChannel = async () => {
+  //     try {
+  //       console.log('create channel')
+  //       const response = await newChannel.createChannel(name, participantsIds)
+  //       this.channels.add(newChannel)
+  //       this.modalCreateChannelClose()
+  //       this.render()
+  //     } catch (error) {
+  //       document.getElementById('error-message').innerHTML = error.responseJSON.message
+  //       document.getElementById('error-message').style.display = 'block'
+  //     }
+  //   }
+  //   createChannel()
+  // }
 })

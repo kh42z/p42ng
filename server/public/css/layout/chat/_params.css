@@ -2,8 +2,3 @@
 .parameters {
     display: none;
 }
-
-.chat
-.parameters.open {
-    display: 'flex'
-}

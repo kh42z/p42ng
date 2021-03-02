@@ -7,14 +7,14 @@
             <div class="channels">
                 <div class="first-line">
                     <div class="sub-title">CHANNELS</div>
-                    <img src="./icons/add_box.svg" class="add_box" id="add_channel"></img>
+                    <img src="./icons/add_box.svg" class="add_box add_channel"></img>
                 </div>
-                {{#each discussions}}
-                    <div class="clickable-discussions">
-                        <div class="image-container">
-                            <img src={{image_url}} id="image_url" class="image_url"></img>
-                        </div>
-                        <p class="anagram_nickname">{{name}}</p>
+                {{#each channels}}
+                    <div class="clickable-discussions clikable-discussions{{id}}">
+                        {{!-- <div class="image-container"> --}}
+                            {{!-- <img src={{image_url}} id="image_url" class="image_url"></img> --}}
+                        {{!-- </div> --}}
+                        <p class="channelName">#{{name}}</p>
                         {{#if admin}}
                         <div class="admin_panel_settings">
                             <img src='./icons/admin_panel_settings.svg' class="admin_panel_settings-icon"></img>
@@ -29,9 +29,9 @@
             <div class="direct-messages">
                 <div class="first-line">
                     <div class="sub-title">DIRECT MESSAGES</div>
-                    <img src="./icons/add_box.svg" class="add_box" id="add_direct_messages"></img>
+                    <img src="./icons/add_box.svg" class="add_box add_direct_messages"></img>
                 </div>
-                {{#each discussions}}
+                {{#each directMessages}}
                     <div class="clickable-discussions">
                         <div class="image-container">
                             <img src={{image_url}} id="image_url" class="image_url"></img>
@@ -65,7 +65,7 @@
                 <div class="group_add-container">
                     <img src="./icons/group_add.svg" class="group_add"></img>
                 </div>
-                {{#unless multipleParticipants}}
+                {{#unless channel}}
                 <button class="play-button">
                     <img src="./icons/videogame.svg" height="24">
                 </button>
@@ -93,7 +93,7 @@
         </div>
         </div>
     </div>
-    {{#if multipleParticipants}}
+    {{#if channel}}
     <div class="right-side">
         <div class="privacy">{{privacy}} channel</div>
         <div class="title online">
@@ -167,10 +167,10 @@
             <input class="textInput channelName" type="text" id="channelName" placeholder="New channel"></input>
             <p class="error-message" id="error-message"></p>
             <label class="label labelSelectFriends" for="search">Select friends</label>
-            <input class="textInput search modalSearch" type="text" id="modalSearch" placeholder="Research"></input>
+            <input class="textInput search modalSearch" type="text" id="modalSearchChannels" placeholder="Research"></input>
             <div class="friends" id="friends">
                 {{#each friends}}
-                <div class="eachFriend" for="{{id}}">
+                <div class="eachFriend eachFriendModalCreateChannel" for="{{id}}">
                     <div class="left">
                         <div class="image-container">
                             <img src={{image_url}} id="image_url" class="image_url"></img>
@@ -189,7 +189,29 @@
             </div>
         </div>
     </div>
-    {{!-- <div class="parameters">
+    <div class="modal modalCreateDirectMessages" id="modalCreateDirectMessages">
+        <div class="background"></div>
+        <div class="modalOpen">
+            <div class="close">
+                <img src="./icons/close.svg" id="close"></img>
+            </div>
+            <label class="label labelSelectFriends" for="search">Select friends</label>
+            <input class="textInput search modalSearch" type="text" id="modalSearchDirectMessages" placeholder="Research"></input>
+            <div class="friends" id="friends">
+                {{#each friends}}
+                <div class="eachFriend eachFriendModalCreateDirectMessages" for="{{id}}">
+                    <div class="left">
+                        <div class="image-container">
+                            <img src={{image_url}} id="image_url" class="image_url"></img>
+                        </div>
+                        <p class="anagram_nickname">{{anagram}} {{nickname}}</p>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+    <div class="parameters">
         <div class="left-menu">
             <div class="menu">
                 <div class="overview-menu" id="overview-menu">Overview</div>
@@ -272,5 +294,5 @@
                 </div>
             </div>
         </div>
-    </div> --}}
+    </div>
 </div>

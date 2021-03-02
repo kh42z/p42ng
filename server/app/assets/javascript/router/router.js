@@ -90,11 +90,7 @@ export const Router = Backbone.Router.extend({
       const fetchUser = async () => {
         this.oauthService = new OauthService()
         this.oauthService.ajaxSetup()
-        // console.log(this.userLogged)
-        // console.log(this.userLogged.get('id'))
-        // await this.userLogged.fetchUser(window.localStorage.getItem('user_id'))
-        // console.log(this.userLogged)
-        // console.log(this.userLogged.get('id'))
+        await this.userLogged.fetchUser(window.localStorage.getItem('user_id'))
         if (url !== 'firstConnexion') { this.headerView.render() }
       }
       fetchUser()

@@ -1,6 +1,7 @@
 export const ChatModel = Backbone.Model.extend({
   defaults: {
     id: undefined,
+    name: undefined,
     privacy: undefined,
     owner_id: undefined,
     admin_ids: undefined,
