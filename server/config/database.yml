@@ -17,12 +17,10 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  # For details on connection pooling, see Rails configuration guide
-  # https://guides.rubyonrails.org/configuring.html#database-pooling
   timeout: 5000
-  host: <%= ENV.fetch("PG_HOST") %>
-  username: <%= ENV.fetch("PG_USER") %>
-  password: <%= ENV.fetch("PG_PASSWORD") %>
+  host: <%= ENV["PG_HOST"] %>
+  username: <%= ENV["PG_USER"] %>
+  password: <%= ENV["PG_PASSWORD"] %>
 
 
 development:
@@ -84,7 +82,10 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-  <<: *default
+  adapter: postgresql
+  encoding: unicode
+  timeout: 5000
   database: pong_production
+  url: <%= ENV['DATABASE_URL'] %>
   #username: pong
   #password: <%= ENV['PONG_DATABASE_PASSWORD'] %>
