@@ -34,11 +34,6 @@ module Api
       end
     end
 
-    def destroy
-      @guild.destroy!
-      head :no_content
-    end
-
     def create_officers(id)
       return unless params.key?(:officer_ids)
 
@@ -52,12 +47,6 @@ module Api
 
       Guild.find(params[:id]).guild_officers.destroy_all
       create_officers(params[:id])
-    end
-
-    def destroy_officer
-      guild = Guild.find(params[:guild_id])
-      guild.guild_officers.find(params[:officer_id]).destroy!
-      head :no_content
     end
 
     def show

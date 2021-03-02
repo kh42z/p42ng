@@ -7,7 +7,8 @@ class Player
     @score = 0
     @position = 0
     @side = side
-    @direction = ''
+    @speed = 0
+    @direction = nil
   end
 
   def move

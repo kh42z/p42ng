@@ -9,6 +9,8 @@ class ChatChannel < ApplicationCable::Channel
   end
 
   def received(data)
+    return unless ChatTimeout.where(user_id: current_user.id, chat_id: @chat_id).count.positive?
+
     broadcast_to("chat_#{@chat_id}", data['message'])
   end
 

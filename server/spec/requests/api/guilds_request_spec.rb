@@ -75,21 +75,4 @@ describe "Guild", type: :request do
       expect(response).to have_http_status(200)
     end
   end
-
-  describe "#destroy" do
-    it "should delete guild" do
-      guild = create(:guild)
-      delete api_guild_url(guild.id), headers: access_token
-      expect(Guild.count).to eq(0)
-      expect(response).to have_http_status(204)
-    end
-
-    it 'should delete one officer' do
-      guild = create(:guild_with_officers)
-      delete api_guild_destroy_officer_url(guild),
-             params: { officer_id: guild.guild_officers.first.id }, headers: access_token
-      expect(GuildOfficer.all.count).to eq(1)
-      expect(response).to have_http_status(204)
-    end
-  end
 end

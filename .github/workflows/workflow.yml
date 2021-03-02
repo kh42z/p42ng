@@ -1,3 +1,5 @@
+
+
 defaults:
   run:
     working-directory: server
@@ -8,8 +10,25 @@ env:
   PG_HOST: localhost
 
 name: Rails tests
-on: [push,pull_request]
+on:
+  push:
+    branches:
+      - master
 jobs:
+  heroku-deploy:
+    name: Deploy
+    runs-on: ubuntu-18.04
+    needs: rspec-test
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "p42ng"
+          heroku_email: "tterrail@student.42.fr"
+          appdir: "server"
+        env:
+          RAILS_ENV: production
   rubocop-test:
     name: Rubocop
     runs-on: ubuntu-18.04
