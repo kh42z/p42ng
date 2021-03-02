@@ -15,9 +15,11 @@ export const ChatView = Backbone.View.extend({
     this.users = this.model.get('users').get('obj')
 
     this.listenTo(this.channels, 'sync', function () {
-      this.listenTo(this.users, 'sync', function () {
-        this.search = this.users
-        this.render()
+      this.listenTo(this.userLogged, 'sync', function () {
+        this.listenTo(this.users, 'sync', function () {
+          this.search = this.users
+          this.render()
+        }, this)
       }, this)
     }, this)
   },
@@ -34,11 +36,14 @@ export const ChatView = Backbone.View.extend({
     // if multiple participants right side open
     array.multipleParticipants = true
 
+    console.log(this.userLogged)
+    console.log(this.channels.length)
+    console.log(this.channels.at(0))
+
     // discussions
     array.discussions = Array() // this.channels.length
     for (let i = 0; i < 16; i++) {
       array.discussions.push({
-        multipleParticipants: array.multipleParticipants,
         admin: true,
         anagram: '[24.c+]',
         image_url: './images/profile-pic.jpg',
@@ -165,6 +170,7 @@ export const ChatView = Backbone.View.extend({
     for (const el of checkboxes) {
       el.checked = false
     }
+    document.getElementById('error-message').style.display = 'none'
     document.getElementById('modalCreateChannel').style.display = 'none'
   },
 
@@ -180,7 +186,8 @@ export const ChatView = Backbone.View.extend({
         console.log('create channel')
         const response = await newChannel.createChannel(name, participantsIds)
         this.channels.add(newChannel)
-        this.modelCreateChannelClose()
+        this.modalCreateChannelClose()
+        this.render()
       } catch (error) {
         document.getElementById('error-message').innerHTML = error.responseJSON.message
         document.getElementById('error-message').style.display = 'block'
