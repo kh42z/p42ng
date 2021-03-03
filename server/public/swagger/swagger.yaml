@@ -611,6 +611,44 @@ paths:
                 properties:
                   image_url:
                     type: string
+  "/api/users/{id}/ignores":
+    post:
+      summary: Ignores a user
+      description: Allows current_user to ignore messages from a user
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: User ID
+      responses:
+        '200':
+          description: user ignored
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    $ref: '#/components/schemas/integer_list'
+    delete:
+      summary: Stop ignoring a user
+      description: Allows current_user to stop ignoring user's messages
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: User ID
+      responses:
+        '204':
+          description: user no more ignored
 servers:
   - url: http://{defaultHost}:3000
     variables:
@@ -638,7 +676,7 @@ components:
     arrayOfGames:
       type: array
       items:
-        $ref:  '#/components/schemas/game_response'
+        $ref: '#/components/schemas/game_response'
     game_response:
       type: object
       properties:
@@ -754,6 +792,7 @@ components:
         duration:
           type: integer
           description: Duration in seconds
+
     chat:
       type: object
       properties:

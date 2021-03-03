@@ -118,6 +118,25 @@ RSpec.describe "Users", type: :request do
     end
   end
 
+  describe "#ignores", test: true do
+    let(:user) { create(:user) }
+    let(:auth) { create(:user) }
+    let(:access_token) { auth.create_new_auth_token }
+    it "should ignore a user" do
+      post ignores_api_user_url(user.id), headers: access_token
+      expect(response).to have_http_status(200)
+      expect(UserIgnore.count).to eq(1)
+      expect(UserIgnore.first.user_ignored_id).to eq(user.id)
+    end
+    it "should stop ignoring a user" do
+      post ignores_api_user_url(user.id), headers: access_token
+      expect(UserIgnore.count).to eq(1)
+      delete ignores_api_user_url(user.id), headers: access_token
+      expect(response).to have_http_status(204)
+      expect(UserIgnore.count).to eq(0)
+    end
+  end
+
   #describe "delete one user" do
   #  before do
   #    @last = users.last

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_22_100552) do
+ActiveRecord::Schema.define(version: 2021_03_03_084016) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -147,6 +147,15 @@ ActiveRecord::Schema.define(version: 2021_02_22_100552) do
     t.index ["user_id"], name: "index_user_achievements_on_user_id"
   end
 
+  create_table "user_ignores", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "user_ignored_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_user_ignores_on_user_id"
+    t.index ["user_ignored_id"], name: "index_user_ignores_on_user_ignored_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "provider", default: "email", null: false
     t.string "uid", default: "", null: false
@@ -246,6 +255,8 @@ ActiveRecord::Schema.define(version: 2021_02_22_100552) do
   add_foreign_key "guild_officers", "guilds"
   add_foreign_key "guild_officers", "users"
   add_foreign_key "guilds", "users", column: "owner_id"
+  add_foreign_key "user_ignores", "users"
+  add_foreign_key "user_ignores", "users", column: "user_ignored_id"
   add_foreign_key "users", "guilds"
   add_foreign_key "users", "ladders"
   add_foreign_key "wars", "guilds"

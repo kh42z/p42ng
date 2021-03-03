@@ -4,7 +4,7 @@ require 'mini_magick'
 
 module Api
   class UsersController < ApiController
-    before_action :set_user, only: %i[show update upload_avatar]
+    before_action :set_user, only: %i[show update upload_avatar ignores]
     before_action :allowed?, only: %i[update upload_avatar]
 
     UserReducer = Rack::Reducer.new(
@@ -41,6 +41,16 @@ module Api
       url = url_for(@user.avatar)
       @user.update(image_url: url)
       json_response({ image_url: url })
+    end
+
+    def ignores
+      if request.post?
+        ignore = UserIgnore.create!(user: current_user, user_ignored: @user)
+        json_response(ignore, 200)
+      elsif request.delete?
+        UserIgnore.where(user: current_user).destroy_by(user_ignored: @user)
+        head :no_content
+      end
     end
 
     private

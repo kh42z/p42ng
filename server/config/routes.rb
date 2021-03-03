@@ -15,7 +15,11 @@ Rails.application.routes.draw do
       end
     end
     resources :users do
-      post :avatar, on: :member, to: 'users#upload_avatar'
+      member do
+      post :avatar, to: 'users#upload_avatar'
+      post 'ignores'
+      delete 'ignores'
+      end
     end
   end
   mount_devise_token_auth_for 'User', at: 'auth', controllers: {
