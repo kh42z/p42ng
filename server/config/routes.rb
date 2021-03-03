@@ -3,7 +3,11 @@
 Rails.application.routes.draw do
   resources :two_factor
   namespace :api do
-    resources :guilds
+    resources :guilds do
+      member do
+        post 'wars'
+      end
+    end
     resources :ladders
     resources :games
     resources :chats do

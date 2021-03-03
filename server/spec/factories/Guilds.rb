@@ -5,7 +5,7 @@ FactoryBot.define do
   end
 
   factory :guild do
-    name { Faker::Name.unique.name }
+    name { Faker::Games::ElderScrolls.unique.creature }
     anagram { Faker::Name.initials(number: 5) }
     owner_id { FactoryBot.create(:user).id }
     factory :guild_with_officers do
