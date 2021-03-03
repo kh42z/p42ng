@@ -21,7 +21,7 @@
                         </div>
                         {{/if}}
                         <div class="close">
-                            <img src='./icons/close.svg' class="close-icon"></img>
+                            <img src='./icons/close.svg' class="close-icon" for={{id}}></img>
                         </div>
                     </div>
                 {{/each}}
@@ -38,7 +38,7 @@
                         </div>
                         <p class="anagram_nickname">{{nickname}}</p>
                         <div class="close">
-                            <img src='./icons/close.svg' class="close-icon"></img>
+                            <img src='./icons/close.svg' class="close-icon" for={{id}}></img>
                         </div>
                     </div>
                 {{/each}}
@@ -167,8 +167,8 @@
             <input class="textInput channelName" type="text" id="channelName" placeholder="New channel"></input>
             <p class="error-message" id="error-message"></p>
             <label class="label labelSelectFriends" for="search">Select friends</label>
-            <input class="textInput search modalSearch" type="text" id="modalSearchChannels" placeholder="Research"></input>
-            <div class="friends" id="friends">
+            <input class="textInput search modalSearchChannels" type="text" id="modalSearchChannels" placeholder="Research"></input>
+            <div class="friends0" id="friends0">
                 {{#each friends}}
                 <div class="eachFriend eachFriendModalCreateChannel" for="{{id}}">
                     <div class="left">
@@ -196,8 +196,8 @@
                 <img src="./icons/close.svg" id="close"></img>
             </div>
             <label class="label labelSelectFriends" for="search">Select friends</label>
-            <input class="textInput search modalSearch" type="text" id="modalSearchDirectMessages" placeholder="Research"></input>
-            <div class="friends" id="friends">
+            <input class="textInput search modalSearchDirectMessages" type="text" id="modalSearchDirectMessages" placeholder="Research"></input>
+            <div class="friends1" id="friends1">
                 {{#each friends}}
                 <div class="eachFriend eachFriendModalCreateDirectMessages" for="{{id}}">
                     <div class="left">

@@ -1,3 +1,5 @@
+import { SuperHeaders } from '../services/headers'
+
 export const ChatModel = Backbone.Model.extend({
   defaults: {
     id: undefined,
@@ -29,6 +31,17 @@ export const ChatModel = Backbone.Model.extend({
         console.log('error')
         console.log(response)
       }
+    })
+  },
+
+  leaveRoom: function () {
+    const superHeaders = new SuperHeaders()
+    const headers = superHeaders.getHeaders()
+
+    const url = '/api/chats/' + this.id + '/participants'
+    fetch(url, {
+      method: 'DELETE',
+      headers: headers
     })
   }
 })

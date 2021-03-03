@@ -10,9 +10,10 @@ export const ChatView = Backbone.View.extend({
     'click .close': 'modalCreateChannelClose',
     'keyup .input': 'sendMessage',
     'click .eachFriendModalCreateChannel': 'selectCheckbox',
-    'click .eachFriendModalCreateDirectMessages': 'createDirectMessages',
-    'keyup .modalSearch': 'modalSearch',
-    'click .add_direct_messages': 'openModalCreateDirectMessages'
+    'click .eachFriendModalCreateDirectMessages': 'createDM',
+    'keyup .search': 'modalSearchFriends',
+    'click .add_direct_messages': 'openModalCreateDM',
+    'click .close-icon': 'deleteChannel'
   },
   initialize: function () {
     this.channels = this.model.get('channels').get('obj')
@@ -154,8 +155,11 @@ export const ChatView = Backbone.View.extend({
   modalCreateChannelClose: function () {
     this.context.friends = JSON.parse(JSON.stringify(this.users))
     const html = this.templateChat(this.context)
-    const found = $(html).find('#friends')[0].innerHTML
-    const friendsDiv = document.getElementById('friends')
+    let found = $(html).find('#friends0')[0].innerHTML
+    found = $(html).find('#friends1')[0].innerHTML
+    let friendsDiv = document.getElementById('friends0')
+    friendsDiv.innerHTML = found
+    friendsDiv = document.getElementById('friends1')
     friendsDiv.innerHTML = found
     document.getElementById('modalSearchChannels').value = ''
     document.getElementById('modalSearchDirectMessages').value = ''
@@ -195,8 +199,17 @@ export const ChatView = Backbone.View.extend({
     if (e.keyCode === 13) { console.log('send message') } else { console.log('not enter') }
   },
 
-  modalSearch: function (e) {
-    const value = document.getElementById('modalSearch').value
+  modalSearchFriends: function (e) {
+    let value
+    let index
+    console.log(document.getElementById('modalSearchChannels').value)
+    if (document.getElementById('modalSearchChannels').value !== '') {
+      value = document.getElementById('modalSearchChannels').value
+      index = 0
+    } else {
+      value = document.getElementById('modalSearchDirectMessages').value
+      index = 1
+    }
     this.search = this.users.slice().filter(function (el) {
       if (el.get('nickname').toLowerCase().startsWith(value.toLowerCase()) === true) { return true }
       if (el.get('anagram') !== undefined && el.get('anagram').toLowerCase().startsWith(value.toLowerCase()) === true) { return true }
@@ -205,16 +218,17 @@ export const ChatView = Backbone.View.extend({
     )
     this.context.friends = JSON.parse(JSON.stringify(this.search))
     const html = this.templateChat(this.context)
-    const found = $(html).find('#friends')[0].innerHTML
-    const friendsDiv = document.getElementById('friends')
+    console.log($(html).find('#friends0')[0])
+    const found = $(html).find('#friends' + index)[0].innerHTML
+    const friendsDiv = document.getElementById('friends' + index)
     friendsDiv.innerHTML = found
   },
 
-  openModalCreateDirectMessages: function () {
+  openModalCreateDM: function () {
     document.getElementById('modalCreateDirectMessages').style.display = 'flex'
   },
 
-  createDirectMessages: function (e) {
+  createDM: function (e) {
     const id = e.currentTarget.getAttribute('for')
     const newChannel = new ChatModel()
     const participantsIds = new Array()
@@ -231,5 +245,13 @@ export const ChatView = Backbone.View.extend({
       }
     }
     createChannel()
+  },
+
+  deleteChannel: function (e) {
+    const id = e.currentTarget.getAttribute('for')
+    if (this.channels.get(id).get('privacy') !== 'direct_message') { this.channels.get(id).leaveRoom() }
+    this.channels.remove(id)
+    this.render()
   }
+
 })
