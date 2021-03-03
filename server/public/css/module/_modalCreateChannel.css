@@ -78,7 +78,7 @@
 
 .chat .modalCreateChannel .modalOpen
 .friends {
-    height: 150px;
+    height: 100%;
     overflow-y: scroll;
 }
 
