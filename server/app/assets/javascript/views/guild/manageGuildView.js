@@ -22,7 +22,7 @@ export const ManageGuildView = Backbone.View.extend({
   },
 
   chooseView: function () {
-    if (this.users.get(this.userId).get('guildId') == undefined) {
+    if (this.users.get(this.userId).get('guild_id') == undefined) {
       this.createGuildView()
     } else {
       this.manageGuildView()
@@ -48,11 +48,18 @@ export const ManageGuildView = Backbone.View.extend({
 	        const response = await guild.create(name, anagram)
           console.log(response)
           console.log('Guild creation success')
-          this.preload()
+          this.users.fetch()
+          // this.guilds.fetch()
+          this.preload() // marche pas
         } catch (error) {
           this.$el.html(Handlebars.templates.createGuild({}))
+          console.log(error)
           console.log(error.statusText)
-          this.$el.find('#errorField').html('Error: ' + error.status + ': ' + error.statusText)
+          this.$el.find('#errorField').html(Handlebars.templates.guildError({
+            status: error.status,
+            statusText: error.statusText,
+            body: JSON.stringify(error.responseJSON)
+          }))
         }
       }
       createAGuild()
