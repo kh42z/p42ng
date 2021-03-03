@@ -26,6 +26,7 @@ import { Ladders } from '../collections/laddersCollection.js'
 import { Wrapper } from '../models/wrapper.js'
 import { SuperWrapper } from '../collections/superWrapper.js'
 import { Channels } from '../collections/channels'
+import { GameRecords } from '../collections/gameRecords.js'
 
 // import { ChatController } from '../view/chat/chatController.js' // not here
 
@@ -184,6 +185,8 @@ export const Router = Backbone.Router.extend({
     return new SuperWrapper({
       users: new Wrapper({ obj: new Users() }),
       guilds: new Wrapper({ obj: new Guilds() }),
+      ladders: new Wrapper({ obj: new Ladders() }),
+      gameRecords: new Wrapper({ obj: new GameRecords() }),
       userLoggedId: window.localStorage.getItem('user_id')
     })
   },
