@@ -7,16 +7,18 @@ export const ChatView = Backbone.View.extend({
   events: {
     'click .add_channel': 'modalCreateChannel',
     'click .createChannel': 'createChannel',
-    'click .close': 'modalClose',
+    'click .closeModal': 'modalClose',
     'keyup .input': 'sendMessage',
     'click .eachFriendModalCreateChannel': 'selectCheckbox',
     'click .eachFriendModalCreateDirectMessages': 'createDM',
     'keyup .search': 'modalSearchFriends',
     'keyup .inputModalSearchAllChannels': 'inputModalSearchAllChannels',
     'click .add_direct_messages': 'openModalCreateDM',
-    'click .close-icon': 'deleteChannel',
+    'click .close-icon': 'deleteChannelConfirmation',
     'click .search_channel': 'openModalSearchChannel',
-    'click .eachChannel': 'subscribeChannel'
+    'click .eachChannel': 'subscribeChannel',
+    'click .yes': 'deleteChannel',
+    'click .no': 'modalClose'
   },
   initialize: function () {
     this.myChannels = this.model.get('myChannels').get('obj')
@@ -45,8 +47,6 @@ export const ChatView = Backbone.View.extend({
   render: function () {
     this.templateChat = Handlebars.templates.chat
     const array = {}
-
-    // array = JSON.parse(JSON.stringify(this.userLogged))
 
     // if multiple participants right side open
     array.channel = true
@@ -242,12 +242,12 @@ export const ChatView = Backbone.View.extend({
   },
 
   openModalCreateDM: function () {
-    document.getElementById('modalCreateDirectMessages').style.display = 'flex'
     this.context.friends = JSON.parse(JSON.stringify(this.users))
     const html = this.templateChat(this.context)
     const found = $(html).find('#modalCreateDirectMessages')[0].innerHTML
     const friendsDiv = document.getElementById('modalCreateDirectMessages')
     friendsDiv.innerHTML = found
+    document.getElementById('modalCreateDirectMessages').style.display = 'flex'
   },
 
   createDM: function (e) {
@@ -269,13 +269,27 @@ export const ChatView = Backbone.View.extend({
     createChannel()
   },
 
-  deleteChannel: function (e) {
+  deleteChannel: function () {
+    const id = document.getElementById('modalValidationDeleteChannel').getAttribute('for')
+    console.log(id)
+    this.myChannels.get(id).leaveRoom()
+    this.myChannels.remove(id)
+    const disc = document.getElementById('channel' + id)
+    disc.remove()
+  },
+
+  deleteChannelConfirmation: function (e) {
     const id = e.currentTarget.getAttribute('for')
     if (this.myChannels.get(id).get('privacy') !== 'direct_message') {
-      this.myChannels.get(id).leaveRoom()
-      this.myChannels.remove(id)
-      const disc = document.getElementById('channel' + id)
-      disc.remove()
+      if (this.myChannels.get(id).get('admin_ids').find(el => el === this.userLogged.get('id'))) {
+        document.getElementById('modalValidationDeleteChannel').style.display = 'flex'
+        document.getElementById('modalValidationDeleteChannel').setAttribute('for', id)
+      } else {
+        this.myChannels.get(id).leaveRoom()
+        this.myChannels.remove(id)
+        const disc = document.getElementById('channel' + id)
+        disc.remove()
+      }
     }
   },
 

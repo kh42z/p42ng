@@ -10,6 +10,15 @@
     display: none;
 }
 
+.chat .validationModal {
+    display: none;
+}
+
+.chat .validationModalOpen {
+    display: flex;
+}
+
+
 .chat .modal
 .modalOpen {
     padding: 16px;
@@ -78,7 +87,6 @@
 .labelSelectFriends {
     margin-top: 8px;
 }
-
 
 .chat .modalCreateChannel .modalOpen
 .friends {

@@ -23,7 +23,7 @@
                             <img src='./icons/admin_panel_settings.svg' class="admin_panel_settings-icon"></img>
                         </div>
                         {{/if}}
-                        <div class="close">
+                        <div class="close delete">
                             <img src='./icons/close.svg' class="close-icon" for={{id}}></img>
                         </div>
                     </div>
@@ -162,10 +162,10 @@
         </div>
     </div>
     {{/if}}
-    <div class="modal modalCreateChannel" id="modalCreateChannel">
+    <div class="modal modalCreateChannel" id="modalCreateChannel" >
         <div class="background"></div>
         <div class="modalOpen">
-            <div class="close">
+            <div class="close closeModal">
                 <img src="./icons/close.svg" id="close"></img>
             </div>
             <label class="label labelChannelName" for="channelName">Channel name</label>
@@ -239,6 +239,21 @@
                     </div> --}}
                 </div>
                 {{/each}}
+            </div>
+        </div>
+    </div>
+    <div class="modal validationModal" id="modalValidationDeleteChannel">
+        <div class="background"></div>
+        <div class="modalOpen">
+            <p class="sure">Are you sure to want to leave this channel?</p>
+            <p class="adminRights">You will lose your administrator rights</p>
+            <div class="buttons">
+                <div class="button-container yes">
+                    <button class="yes">Yes</button>
+                </div>
+                <div class="button-container no">
+                    <button class="yes">no</button>
+                </div>
             </div>
         </div>
     </div>

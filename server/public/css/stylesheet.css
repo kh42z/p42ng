@@ -9,7 +9,7 @@
 @import url(layout/chat/_params.css);
 
 @import url(module/_table.css);
-@import url(module/_modalCreateChannel.css);
+@import url(module/_modals.css);
 @import url(module/_modal.css);
 @import url(module/_textInput.css);
 

@@ -189,10 +189,10 @@
 
 .chat
 .right-side {
-    width: 400px;
+    width: 250px;
+    min-width: 250px;
     border: 1px solid #313236;
     overflow-y: scroll;
-
 }
 
 .chat
