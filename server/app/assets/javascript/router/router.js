@@ -10,6 +10,7 @@ import { GuildsView } from '../views/guild/guildsView.js'
 import { FirstConnexionView } from '../views/oauth/firstConnexionView.js'
 import { SearchView } from '../views/search/searchView.js'
 import { ChatView } from '../views/chatView'
+import { ManageGuildView } from '../views/guild/manageGuildView.js'
 
 // models
 import { User } from '../models/user_model'
@@ -61,6 +62,7 @@ export const Router = Backbone.Router.extend({
     chat: 'chat_view',
     leaderboard: 'leaderboard_view',
     tournaments: 'tournaments_view',
+    manage_guild: 'manage_guild_view',
     connexion: 'connexion',
     exit: 'exit',
     firstConnexion: 'firstConnexion_view',
@@ -181,13 +183,19 @@ export const Router = Backbone.Router.extend({
     // console.log(searchView.item)
   },
 
+  manage_guild_view: function () {
+    if (this.accessPage()) { }
+    const manageGuildView = new ManageGuildView({ model: this.loadWrapper() })
+  },
+
   loadWrapper: function () {
     return new SuperWrapper({
       users: new Wrapper({ obj: new Users() }),
       guilds: new Wrapper({ obj: new Guilds() }),
       ladders: new Wrapper({ obj: new Ladders() }),
       gameRecords: new Wrapper({ obj: new GameRecords() }),
-      userLoggedId: window.localStorage.getItem('user_id')
+      userLoggedId: window.localStorage.getItem('user_id'),
+      router: this
     })
   },
 
