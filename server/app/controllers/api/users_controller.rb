@@ -49,12 +49,16 @@ module Api
     private
 
     def update_ignores
-      return unless params[:ignore_ids].present?
+      return unless params.key?(:ignore_ids)
 
       @user.user_ignores.destroy_all
-      return unless params[:ignore_ids][0].empty? == false
 
-      params[:ignore_ids].each { |t| UserIgnore.create!(user: current_user, user_ignored_id: t) }
+      return unless params[:ignore_ids][0] != ''
+
+      params[:ignore_ids].each do |t|
+        UserIgnore.create!(user: current_user, user_ignored_id: t)
+      end
+      @user.reload
     end
 
     def allowed?

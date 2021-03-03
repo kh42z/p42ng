@@ -137,13 +137,13 @@ RSpec.describe "Users", type: :request do
     let(:auth) { create(:user) }
     let(:access_token) { auth.create_new_auth_token }
     it "should ignore a user" do
-      patch "/api/users/#{auth.id}", params: {ignore_ids: [ user.id ]}, headers: access_token
+      patch "/api/users/#{auth.id}", params: {ignore_ids: [ user.id.to_i ]}, headers: access_token
       expect(response).to have_http_status(200)
       expect(UserIgnore.count).to eq(1)
-      expect(UserIgnore.first.user_ignored_id).to eq(user.id)
+      expect(json['ignore_ids'][0]).to eq(user.id)
     end
     it "should stop ignoring a user" do
-      patch "/api/users/#{auth.id}", params: {ignore_ids: [ user.id ]}, headers: access_token
+      patch "/api/users/#{auth.id}", params: {ignore_ids: [ user.id.to_i ]}, headers: access_token
       expect(UserIgnore.count).to eq(1)
       patch "/api/users/#{auth.id}", params: {ignore_ids: []}, headers: access_token
       expect(response).to have_http_status(200)

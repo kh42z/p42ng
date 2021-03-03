@@ -583,6 +583,8 @@ paths:
                   type: boolean
                 guild_id:
                   type: integer
+                ignore_ids:
+                  $ref: '#/components/schemas/integer_list'
     get:
       summary: Retrieves an user
       tags:

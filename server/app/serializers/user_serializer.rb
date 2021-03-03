@@ -22,6 +22,6 @@ class UserSerializer < ActiveModel::Serializer
   end
 
   def ignore_ids
-    object.user_ignores.pluck(:id)
+    object.user_ignores.pluck(:user_ignored_id)
   end
 end
