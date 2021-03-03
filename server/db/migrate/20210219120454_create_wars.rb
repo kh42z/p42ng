@@ -1,8 +1,7 @@
 class CreateWars < ActiveRecord::Migration[6.0]
   def change
     create_table :wars do |t|
-      t.integer :from
-      t.integer :on
+      t.integer :versus
       t.datetime :war_start
       t.datetime :war_end
       t.integer :prize, unsigned: true

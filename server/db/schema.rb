@@ -126,7 +126,7 @@ ActiveRecord::Schema.define(version: 2021_03_03_084016) do
   create_table "guilds", force: :cascade do |t|
     t.string "name"
     t.string "anagram", limit: 5, null: false
-    t.integer "score"
+    t.integer "score", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "owner_id"
@@ -223,8 +223,7 @@ ActiveRecord::Schema.define(version: 2021_03_03_084016) do
   end
 
   create_table "wars", force: :cascade do |t|
-    t.integer "from"
-    t.integer "on"
+    t.integer "versus"
     t.datetime "war_start"
     t.datetime "war_end"
     t.integer "prize"
@@ -237,6 +236,7 @@ ActiveRecord::Schema.define(version: 2021_03_03_084016) do
     t.index ["guild_id"], name: "index_wars_on_guild_id"
   end
 
+  add_foreign_key "achievements", "user_achievements"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "chat_admins", "chats"
   add_foreign_key "chat_admins", "users"
@@ -255,9 +255,13 @@ ActiveRecord::Schema.define(version: 2021_03_03_084016) do
   add_foreign_key "guild_officers", "guilds"
   add_foreign_key "guild_officers", "users"
   add_foreign_key "guilds", "users", column: "owner_id"
+  add_foreign_key "user_achievements", "users"
   add_foreign_key "user_ignores", "users"
   add_foreign_key "user_ignores", "users", column: "user_ignored_id"
   add_foreign_key "users", "guilds"
   add_foreign_key "users", "ladders"
+  add_foreign_key "war_addons", "war_terms"
+  add_foreign_key "war_terms", "wars"
+  add_foreign_key "war_times", "wars"
   add_foreign_key "wars", "guilds"
 end

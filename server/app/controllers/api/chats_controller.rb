@@ -18,7 +18,7 @@ module Api
     def update
       return render_not_allowed if @chat.owner != current_user
 
-      add_admins(@chat, params[:admin_ids]) if params[:admin_ids]
+      add_admins(@chat, params[:admin_ids])
       @chat.update!(chat_params)
       json_response(@chat)
     end
@@ -27,7 +27,7 @@ module Api
       chat = Chat.create!(chat_params_create)
       add_admins(chat, [current_user.id])
       add_participants(chat, [current_user.id])
-      add_participants(chat, params[:participant_ids]) if params[:participant_ids]
+      add_participants(chat, params[:participant_ids])
       json_response(chat, 201)
     end
 
@@ -77,10 +77,14 @@ module Api
     end
 
     def add_admins(chat, admins)
+      return unless admins
+
       admins.each { |t| ChatAdmin.create!(user_id: t, chat_id: chat.id) }
     end
 
     def add_participants(chat, participants)
+      return unless participants
+
       participants.each { |t| ChatParticipant.create!(user_id: t, chat_id: chat.id) }
     end
 

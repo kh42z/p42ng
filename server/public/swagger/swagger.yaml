@@ -428,7 +428,34 @@ paths:
           $ref: '#/components/responses/403'
         '500':
           $ref: '#/components/responses/500'
+  "/api/guilds/{id}/wars":
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Guild ID
+    post:
+      summary: Declares war
+      tags:
+        - Guilds
+      responses:
+        '200':
+          description: war declared
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/war"
 
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
   "/api/ladders/{id}":
     get:
       summary: Retrieves a ladder
@@ -635,7 +662,7 @@ paths:
                   user_id:
                     $ref: '#/components/schemas/integer_list'
     delete:
-      summary: Stop ignoring a user
+      summary: Stop ignoring user
       description: Allows current_user to stop ignoring user's messages
       tags:
         - Users
@@ -792,7 +819,6 @@ components:
         duration:
           type: integer
           description: Duration in seconds
-
     chat:
       type: object
       properties:
@@ -813,6 +839,39 @@ components:
           $ref: '#/components/schemas/integer_list'
         ban_ids:
           $ref: '#/components/schemas/integer_list'
+    war:
+      type: object
+      properties:
+        from:
+          type: integer
+        on:
+          type: integer
+        prize:
+          type: integer
+        from_score:
+          type: integer
+        on_score:
+          type: integer
+        war_term_ids:
+          $ref: '#/components/schemas/war_terms_list'
+        war_time_id:
+          type: integer
+
+    war_terms_list:
+      type: array
+      items:
+        type: object
+        properties:
+          start:
+            type: string
+            format: date-time
+          end:
+            type: string
+            format: date-time
+          ladder:
+            type: boolean
+          agreed:
+            type: boolean
 
     integer_list:
       type: array
