@@ -86,7 +86,6 @@ export const Router = Backbone.Router.extend({
       this.oauth_view()
       return 1
     } else if (performance.navigation.type === 1 || performance.navigation.type === 2) {
-      console.log('reload')
       const fetchUser = async () => {
         this.oauthService = new OauthService()
         this.oauthService.ajaxSetup()
@@ -148,7 +147,6 @@ export const Router = Backbone.Router.extend({
 
   chat_view: function (id, page) {
     if (this.accessPage()) { return }
-    console.log(this.userLogged.get('id'))
     // const chatView = new ChatView({ model: this.loadChannelWrapper(userLogged) })
     const chatView = new ChatView({ model: this.loadChannelWrapper() })
     // chatView.render()
@@ -188,9 +186,11 @@ export const Router = Backbone.Router.extend({
     const userId = window.localStorage.getItem('user_id')
     const superWrapper = new SuperWrapper({
       users: new Wrapper({ obj: new Users() }),
+      myChannels: new Wrapper({ obj: new Channels() }),
       channels: new Wrapper({ obj: new Channels() })
     })
-    superWrapper.get('channels').get('obj').fetchByUserId(userId)
+    superWrapper.get('myChannels').get('obj').fetchByUserId(userId)
+    superWrapper.get('channels').get('obj').fetchAllChannels()
     return superWrapper
   }
 })

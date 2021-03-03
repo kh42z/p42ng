@@ -7,10 +7,13 @@
             <div class="channels">
                 <div class="first-line">
                     <div class="sub-title">CHANNELS</div>
-                    <img src="./icons/add_box.svg" class="add_box add_channel"></img>
+                    <div class="icons">
+                        <img src="./icons/search-chat.svg" class="search_channel"></img>
+                        <img src="./icons/add_box.svg" class="add_box add_channel"></img>
+                    </div>
                 </div>
-                {{#each channels}}
-                    <div class="clickable-discussions clikable-discussions{{id}}">
+                {{#each myChannels}}
+                    <div class="clickable-discussions clikable-discussions{{id}}" id="channel{{id}}">
                         {{!-- <div class="image-container"> --}}
                             {{!-- <img src={{image_url}} id="image_url" class="image_url"></img> --}}
                         {{!-- </div> --}}
@@ -31,8 +34,9 @@
                     <div class="sub-title">DIRECT MESSAGES</div>
                     <img src="./icons/add_box.svg" class="add_box add_direct_messages"></img>
                 </div>
-                {{#each directMessages}}
-                    <div class="clickable-discussions">
+                <div class="DM" id="DM">
+                {{#each DM}}
+                    <div class="clickable-discussions" id="discussions{{id}}">
                         <div class="image-container">
                             <img src={{image_url}} id="image_url" class="image_url"></img>
                         </div>
@@ -42,6 +46,7 @@
                         </div>
                     </div>
                 {{/each}}
+                </div>
             </div>
         </div>
     </div>
@@ -168,7 +173,7 @@
             <p class="error-message" id="error-message"></p>
             <label class="label labelSelectFriends" for="search">Select friends</label>
             <input class="textInput search modalSearchChannels" type="text" id="modalSearchChannels" placeholder="Research"></input>
-            <div class="friends friends0" id="friends0">
+            <div class="friends modalSearchChannels" id="friendsmodalSearchChannels">
                 {{#each friends}}
                 <div class="eachFriend eachFriendModalCreateChannel" for="{{id}}">
                     <div class="left">
@@ -197,7 +202,7 @@
             </div>
             <label class="label labelSelectFriends" for="search">Select friends</label>
             <input class="textInput search modalSearchDirectMessages" type="text" id="modalSearchDirectMessages" placeholder="Research"></input>
-            <div class="friends friends1" id="friends1">
+            <div class="friends friendsmodalSearchDirectMessages" id="friendsmodalSearchDirectMessages">
                 {{#each friends}}
                 <div class="eachFriend eachFriendModalCreateDirectMessages" for="{{id}}">
                     <div class="left">
@@ -206,6 +211,32 @@
                         </div>
                         <p class="anagram_nickname">{{anagram}} {{nickname}}</p>
                     </div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+    <div class="modal modalSearchChannel" id="modalSearchAllChannels">
+        <div class="background"></div>
+        <div class="modalOpen">
+            <div class="close">
+                <img src="./icons/close.svg" id="close"></img>
+            </div>
+            <label class="label labelSelectChannel" for="search">Channels</label>
+            <input class="textInput inputModalSearchAllChannels" type="text" id="inputModalSearchAllChannels" placeholder="Research"></input>
+            <div class="friends searchAllChannel" id="searchAllChannel">
+                {{#each channels}}
+                <div class="eachFriend eachChannel" for="{{id}}">
+                    {{!-- <div class="left"> --}}
+                        {{!-- <div class="image-container">
+                            <img src={{image_url}} id="image_url" class="image_url"></img>
+                        </div> --}}
+                        <p class="channel anagram_nickname">#{{name}}</p>
+                    {{!-- </div> --}}
+                    {{!-- <div class="right">
+                        <label class="checkboxlabel" for="{{checkboxId}}"></label>
+                        <input type="checkbox" class="checkbox" id="{{id}}" value="{{id}}"></input>
+                    </div> --}}
                 </div>
                 {{/each}}
             </div>
@@ -222,7 +253,7 @@
         </div>
         <div class="right-menu">
             <div class="close">
-                <img src="./icons/esc.sgv" class="close">
+                <img src="./icons/esc.svg" class="close">
             </div>
             <div class="overview">
                 <div class="title">OVERVIEW</div>

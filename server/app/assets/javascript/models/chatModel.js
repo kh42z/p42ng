@@ -12,6 +12,7 @@ export const ChatModel = Backbone.Model.extend({
     ban_ids: undefined
   },
   initialize: function () {
+    this.superHeaders = new SuperHeaders()
   },
   urlRoot: '/api/chats/',
   url: function () {
@@ -33,14 +34,21 @@ export const ChatModel = Backbone.Model.extend({
       }
     })
   },
-
   leaveRoom: function () {
-    const superHeaders = new SuperHeaders()
-    const headers = superHeaders.getHeaders()
+    const headers = this.superHeaders.getHeaders()
 
     const url = '/api/chats/' + this.id + '/participants'
     fetch(url, {
       method: 'DELETE',
+      headers: headers
+    })
+  },
+  subscribeChannel: function () {
+    const headers = this.superHeaders.getHeaders()
+
+    const url = '/api/chats/' + this.id + '/participants'
+    fetch(url, {
+      method: 'POST',
       headers: headers
     })
   }

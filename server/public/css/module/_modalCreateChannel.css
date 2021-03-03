@@ -6,6 +6,10 @@
     display: none;
 }
 
+.chat .modalSearchChannel {
+    display: none;
+}
+
 .chat .modal
 .modalOpen {
     padding: 16px;
@@ -44,7 +48,7 @@
 
 .chat .modal .modalOpen
 .textInput {
-    height: 38px;
+    height: 64px;
     border-radius: 9px;
 }
 
@@ -88,7 +92,6 @@
     width: 50vw;
     overflow-y: scroll;
 }
-
 
 .chat .modal .modalOpen
 .friends::-webkit-scrollbar-track {

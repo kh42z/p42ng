@@ -1,5 +1,5 @@
 .chat {
-    background: url('../../images/background.jpg');
+    background: url('../../../images/background.jpg');
     width: 100vw;
     height: calc(100vh - 82px);
 
@@ -76,6 +76,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 16px;
 }
 
 .chat .discussions .discussions-container .first-line
@@ -86,7 +87,15 @@
 
     padding-left:32px;
     margin-top: 8px;
-    margin-bottom: 16px;
+}
+
+.chat .discussions .discussions-container .first-line
+.icons {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+
+    cursor: pointer;
 }
 
 .chat .discussions
