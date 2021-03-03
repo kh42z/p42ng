@@ -4,8 +4,8 @@ require 'mini_magick'
 
 module Api
   class UsersController < ApiController
-    before_action :set_user, only: %i[show update upload_avatar ignores]
-    before_action :allowed?, only: %i[update upload_avatar]
+    before_action :set_user, only: %i[show update upload_avatar create_ignore delete_ignore]
+    before_action :allowed?, only: %i[update upload_avatar create_ignore delete_ignore]
 
     UserReducer = Rack::Reducer.new(
       User.all,
@@ -23,6 +23,7 @@ module Api
       return render_not_allowed if user_params.key?(:banned) && current_user.admin? == false
 
       disconnect_banned_user(@user.id) if user_params.key?(:banned) && user_params.fetch(:banned) == true
+
       @user.update!(user_params)
       json_response(@user)
     end
@@ -43,14 +44,15 @@ module Api
       json_response({ image_url: url })
     end
 
-    def ignores
-      if request.post?
-        ignore = UserIgnore.create!(user: current_user, user_ignored: @user)
-        json_response(ignore, 200)
-      elsif request.delete?
-        UserIgnore.where(user: current_user).destroy_by(user_ignored: @user)
-        head :no_content
-      end
+    # tldr: what the hell.
+    def create_ignore
+      ignore = UserIgnore.create!(user: current_user, user_ignored: @user)
+      json_response(ignore, 200)
+    end
+
+    def delete_ignore
+      UserIgnore.where(user: current_user).destroy_by(user_ignored: @user)
+      head :no_content
     end
 
     private
@@ -62,7 +64,7 @@ module Api
     end
 
     def user_params
-      params.permit(:two_factor, :nickname, :first_login, :banned)
+      params.require(:user).permit(:two_factor, :nickname, :first_login, :banned, :guild_id)
     end
 
     def set_user

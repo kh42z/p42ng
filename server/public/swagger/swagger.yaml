@@ -554,6 +554,8 @@ paths:
                   type: string
                 banned:
                   type: boolean
+                guild_id:
+                  type: integer
     get:
       summary: Retrieves an user
       tags:
