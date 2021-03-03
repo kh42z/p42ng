@@ -60,7 +60,7 @@ RSpec.describe "Users", type: :request do
   describe "modifies one user" do
     context "when the request is valid" do
       before do
-        patch "/api/users/#{user_id}", params: { user: {"nickname" => "Michel"}}, headers: users.last.create_new_auth_token
+        patch "/api/users/#{user_id}", params: {"nickname" => "Michel"}, headers: users.last.create_new_auth_token
       end
       it "update user" do
         expect(json).not_to be_empty
@@ -73,7 +73,7 @@ RSpec.describe "Users", type: :request do
     context "when the user is not unique" do
       before do
         User.first.update(nickname: "Gertrude")
-        patch "/api/users/#{user_id}", params: { user:  {"nickname" => "Gertrude"}}, headers: users.last.create_new_auth_token
+        patch "/api/users/#{user_id}", params: {"nickname" => "Gertrude"}, headers: users.last.create_new_auth_token
       end
       it "returns status code 422" do
         expect(response).to have_http_status(422)
@@ -84,7 +84,7 @@ RSpec.describe "Users", type: :request do
       before do
         guild = FactoryBot.create(:guild, owner: users.last)
         users.last.update!(guild: guild)
-        patch "/api/users/#{user_id}", params: { user: {"guild_id" => nil }}, headers: users.last.create_new_auth_token
+        patch "/api/users/#{user_id}", params: {"guild_id" => nil }, headers: users.last.create_new_auth_token
       end
       it "returns 200" do
         expect(response).to have_http_status(200)
@@ -104,7 +104,7 @@ RSpec.describe "Users", type: :request do
 
     context "when the user is trying to ban himself" do
       before do
-        patch "/api/users/#{first.id}", params: { user: {banned: true}}, headers: users.last.create_new_auth_token
+        patch "/api/users/#{first.id}", params: {banned: true}, headers: users.last.create_new_auth_token
       end
       it "returns status code 403" do
         expect(response).to have_http_status(401)
@@ -114,7 +114,7 @@ RSpec.describe "Users", type: :request do
     context "when admins bans an user" do
       before do
         users.last.update(admin: true)
-        patch "/api/users/#{first.id}", params: { user: {banned: true}}, headers: users.last.create_new_auth_token
+        patch "/api/users/#{first.id}", params: {banned: true}, headers: users.last.create_new_auth_token
       end
       it "returns status code 200" do
         expect(response).to have_http_status(200)
@@ -124,7 +124,7 @@ RSpec.describe "Users", type: :request do
     context "when admin modifies someone else" do
       before do
         users.last.update(admin: true)
-        patch "/api/users/#{first.id}", params: { user: {"nickname" => "George"}}, headers: users.last.create_new_auth_token
+        patch "/api/users/#{first.id}", params: {"nickname" => "George"}, headers: users.last.create_new_auth_token
       end
       it "returns status code 200" do
         expect(response).to have_http_status(200)
@@ -137,16 +137,16 @@ RSpec.describe "Users", type: :request do
     let(:auth) { create(:user) }
     let(:access_token) { auth.create_new_auth_token }
     it "should ignore a user" do
-      post "/api/users/#{auth.id}/ignores", headers: access_token
+      patch "/api/users/#{auth.id}", params: {ignore_ids: [ user.id ]}, headers: access_token
       expect(response).to have_http_status(200)
       expect(UserIgnore.count).to eq(1)
-      expect(UserIgnore.first.user_ignored_id).to eq(auth.id)
+      expect(UserIgnore.first.user_ignored_id).to eq(user.id)
     end
     it "should stop ignoring a user" do
-      post "/api/users/#{auth.id}/ignores", headers: access_token
+      patch "/api/users/#{auth.id}", params: {ignore_ids: [ user.id ]}, headers: access_token
       expect(UserIgnore.count).to eq(1)
-      delete "/api/users/#{auth.id}/ignores", headers: access_token
-      expect(response).to have_http_status(204)
+      patch "/api/users/#{auth.id}", params: {ignore_ids: []}, headers: access_token
+      expect(response).to have_http_status(200)
       expect(UserIgnore.count).to eq(0)
     end
   end
