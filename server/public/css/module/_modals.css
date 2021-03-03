@@ -14,15 +14,65 @@
     display: none;
 }
 
-.chat .validationModalOpen {
-    display: flex;
-}
-
-
 .chat .modal
 .modalOpen {
     padding: 16px;
     width: 523px;
+}
+
+.chat .validationModal
+.modalOpen {
+    padding: 32px;
+    width: auto;
+    height: auto;
+
+    width: auto;
+    height: auto;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.chat .validationModal .modalOpen
+.buttons {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.chat .validationModal .modalOpen
+.buttons .validation-buttons {
+    width: 98px;
+    height: 42px;
+
+    margin: 8px;
+}
+
+.chat .validationModal .modalOpen 
+.sure {
+    margin: 0px;
+    font-size: 18px;
+}
+
+.chat .validationModal .modalOpen 
+.adminRights {
+    margin: 16px;
+    font-size: 14px;
+}
+
+.chat .validationModal .modalOpen
+.buttons .button {
+    width: 98px;
+    height: 42px;
+    border-radius: 7px;
+    font-size: 14px;
+    font-family: Roboto-Regular;
+}
+
+.chat .validationModal .modalOpen
+.buttons .validation-buttons .no {
+    background-color: #E0E0E0;
 }
 
 .chat .modal .eachFriend

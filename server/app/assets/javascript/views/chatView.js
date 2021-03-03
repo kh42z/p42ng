@@ -271,11 +271,12 @@ export const ChatView = Backbone.View.extend({
 
   deleteChannel: function () {
     const id = document.getElementById('modalValidationDeleteChannel').getAttribute('for')
-    console.log(id)
     this.myChannels.get(id).leaveRoom()
     this.myChannels.remove(id)
     const disc = document.getElementById('channel' + id)
     disc.remove()
+    document.getElementById('modalValidationDeleteChannel').style.display = 'none'
+    document.getElementById('modalValidationDeleteChannel').setAttribute('for', '')
   },
 
   deleteChannelConfirmation: function (e) {
