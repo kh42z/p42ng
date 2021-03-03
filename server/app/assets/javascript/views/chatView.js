@@ -26,17 +26,17 @@ export const ChatView = Backbone.View.extend({
 
     this.userLogged.fetchUser(window.localStorage.getItem('user_id'))
 
+    this.myChannels.on('remove', function () {
+      this.channels.fetchAllChannels()
+    }, this)
+
     this.listenTo(this.myChannels, 'sync', function () {
-      this.listenTo(this.channels, 'sync', function () {
-        this.listenTo(this.users, 'sync', function () {
-          // this.search = this.users
-          this.render()
-        }, this)
+      this.listenTo(this.users, 'sync', function () {
+        this.render()
       }, this)
     }, this)
   },
   defaults: {
-    // search: undefined,
     channels: undefined,
     userLogged: undefined,
     users: undefined
@@ -156,10 +156,6 @@ export const ChatView = Backbone.View.extend({
     const found = $(html).find('#modalCreateChannel')[0].innerHTML
     const friendsDiv = document.getElementById('modalCreateChannel')
     friendsDiv.innerHTML = found
-  },
-
-  modalSubscribeChannel: function () {
-
   },
 
   modalClose: function () {
@@ -300,12 +296,10 @@ export const ChatView = Backbone.View.extend({
 
   subscribeChannel: function (e) {
     const id = e.currentTarget.getAttribute('for')
-    console.log(id)
     const channel = this.channels.get(id)
-    console.log(channel)
-    console.log(this.myChannels)
     channel.subscribeChannel()
-    this.myChannels.add(this.channels.get(id))
+    this.myChannels.add(channel)
+    this.modalClose()
     this.render()
   }
 })
