@@ -73,25 +73,32 @@ export const ChatView = Backbone.View.extend({
     }
 
     // header center
+    let userChat
     if (this.myChannels.length > 0) {
       const currentChannel = this.myChannels.at(0)
       array.privacy = currentChannel.get('privacy')[0].toUpperCase() + currentChannel.get('privacy').slice(1)
       if (currentChannel.get('privacy') === 'direct_message') {
         const id = currentChannel.get('participant_ids').find(el => el !== this.userLogged.get('id'))
-        const userChat = this.users.get(id)
+        userChat = this.users.get(id)
         array.channel = false
         array.image_url = userChat.get('image_url')
         array.anagram = userChat.get('anagram')
         array.nickname = userChat.get('nickname')
-        array.status = userChat.get('status')
-        array.slide_show = './icons/slideshow.svg'
+        const status = userChat.get('status')
+        array.status = status
+        if (status === 'ingame') {
+          array.slide_show = './icons/slideshow-ingame.svg'
+        } else {
+          array.slide_show = './icons/slideshow.svg'
+        }
       } else {
         array.channel = true
         array.name = currentChannel.get('name')
       }
     }
+
     // history messages
-    array.messages = Array(30) // size of nb history messages
+    array.messages = Array() // size of nb history messages
     for (let i = 0; i < 30; i++) {
       array.messages.push({
         anagram: '[24.c]',
@@ -161,15 +168,16 @@ export const ChatView = Backbone.View.extend({
     }
     if (this.myChannels.length > 0) {
       const currentChannel = this.myChannels.at(0)
+      const id = currentChannel.get('id')
       if (currentChannel.get('privacy') === 'direct_message') {
         document.getElementById('right-side').style.display = 'none'
         document.getElementById('pastille').classList.add(userChat.get('status'))
+        document.getElementById('DM' + id).classList.add('open')
       } else {
         console.log(currentChannel.get('privacy'))
         document.getElementById('right-side').style.display = 'flex'
+        document.getElementById('channel' + id).classList.add('open')
       }
-      const id = currentChannel.get('id')
-      document.getElementsByClassName('clickable-discussions')[0].classList.add('open')
     }
     return this
   },
@@ -188,14 +196,21 @@ export const ChatView = Backbone.View.extend({
       document.getElementById('right-side').style.display = 'flex'
     }
     document.getElementById('center').style.display = 'flex'
+    let status
     if (currentChannel.get('privacy') === 'direct_message') {
       const id = currentChannel.get('participant_ids').find(el => el !== this.userLogged.get('id'))
+      const user = this.users.get(id)
       this.context.channel = false
-      this.context.image_url = this.users.get(id).get('image_url')
-      this.context.anagram = this.users.get(id).get('anagram')
-      this.context.nickname = this.users.get(id).get('nickname')
-      this.context.status = 'online'
-      this.context.slide_show = './icons/slideshow.svg'
+      this.context.image_url = user.get('image_url')
+      this.context.anagram = user.get('anagram')
+      this.context.nickname = user.get('nickname')
+      status = user.get('status')
+      this.context.status = status
+      if (status === 'ingame') {
+        this.context.slide_show = './icons/slideshow-ingame.svg'
+      } else {
+        this.context.slide_show = './icons/slideshow.svg'
+      }
     } else {
       this.context.privacy = currentChannel.get('privacy')[0].toUpperCase() + currentChannel.get('privacy').slice(1)
       this.context.channel = true
@@ -203,6 +218,9 @@ export const ChatView = Backbone.View.extend({
     }
     this.updateHTML('center')
     this.updateHTML('right-side')
+    const el = document.getElementById('pastille')
+    el.classList.remove('offline')
+    el.classList.add(status)
   },
 
   selectCheckbox: function (e) {
