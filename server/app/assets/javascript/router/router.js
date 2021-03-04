@@ -8,6 +8,7 @@ import { TournamentsView } from '../views/tournaments/tournamentsView.js'
 import { OauthView } from '../views/oauth/oauthView.js'
 import { GuildsView } from '../views/guild/guildsView.js'
 import { FirstConnexionView } from '../views/oauth/firstConnexionView.js'
+import { TwoFactorView } from '../views/oauth/twoFactorView.js'
 import { SearchView } from '../views/search/searchView.js'
 import { ChatView } from '../views/chatView'
 
@@ -63,6 +64,7 @@ export const Router = Backbone.Router.extend({
     connexion: 'connexion',
     exit: 'exit',
     firstConnexion: 'firstConnexion_view',
+    twoFactor: 'twoFactor_view',
     'search(/:item)': 'search_view',
     'search(/:item)/': 'search_view',
     '': 'oauth_view'
@@ -99,6 +101,11 @@ export const Router = Backbone.Router.extend({
   firstConnexion_view: function () {
     if (this.accessPage('firstConnexion')) { return }
     const firstConnexionView = new FirstConnexionView({ model: this.userLogged })
+  },
+
+  twoFactor_view: function () {
+    this.headerView.remove()
+    const twoFactorView = new TwoFactorView()
   },
 
   exit: function () {
