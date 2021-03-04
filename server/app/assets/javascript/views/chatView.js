@@ -246,28 +246,42 @@ export const ChatView = Backbone.View.extend({
 
   createDM: function (e) {
     const id = e.currentTarget.getAttribute('for')
-    const newChannel = new ChatModel()
-    const participantsIds = new Array()
-    participantsIds.push(id)
-    const name = this.users.get(id).get('nickname') + this.userLogged.get('nickname')
-    const createChannel = async () => {
-      try {
-        const response = await newChannel.createChannel(name, participantsIds, 'direct_message')
-        this.myChannels.add(newChannel)
-        const DM = this.myChannels.slice().filter(el => el.get('privacy') === 'direct_message')
-        this.context.DM.push(JSON.parse(JSON.stringify(newChannel)))
-        this.context.DM[this.context.DM.length - 1].image_url = this.users.get(id).get('image_url')
-        this.context.DM[this.context.DM.length - 1].anagram = this.users.get(id).get('anagram')
-        this.context.DM[this.context.DM.length - 1].nickname = this.users.get(id).get('nickname')
-        console.log(id)
-        this.updateHTML('DM')
-        document.getElementById('DM' + id).classList.add('open')
+    console.log(id)
+    const DM = this.myChannels.slice().filter(el => el.get('privacy') === 'direct_message')
+    let i = 0
+    for (; i < DM.length; i++) {
+      if (DM[i].get('participant_ids').find(function (el) {
+        if (el == id) { return true }
+        return false
+      })) {
         this.modalClose()
-      } catch (error) {
+        document.getElementById('DM' + DM[i].get('id')).classList.add('open')
         this.modalClose()
+        break
       }
     }
-    createChannel()
+    if (i === DM.length) {
+      const newChannel = new ChatModel()
+      const participantsIds = new Array()
+      participantsIds.push(id)
+      const createChannel = async () => {
+        try {
+          const response = await newChannel.createChannel(undefined, participantsIds, 'direct_message')
+          this.myChannels.add(newChannel)
+          this.context.DM.push(JSON.parse(JSON.stringify(newChannel)))
+          this.context.DM[this.context.DM.length - 1].image_url = this.users.get(id).get('image_url')
+          this.context.DM[this.context.DM.length - 1].anagram = this.users.get(id).get('anagram')
+          this.context.DM[this.context.DM.length - 1].nickname = this.users.get(id).get('nickname')
+          this.updateHTML('DM')
+          this.modalClose()
+          document.getElementById('DM' + newChannel.get('id')).classList.add('open')
+        } catch (error) {
+          console.log(error.responseJSON.message)
+          this.modalClose()
+        }
+      }
+      createChannel()
+    }
   },
 
   deleteChannel: function () {
