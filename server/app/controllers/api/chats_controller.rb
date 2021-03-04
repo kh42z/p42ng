@@ -46,12 +46,16 @@ module Api
     end
 
     def mutes
-      destroy_job(ChatTimeout.create!(user_id: params.fetch(:user_id), chat_id: @chat.id))
+      Rails.cache.write("timeout_chat_#{@chat.id}_#{params.fetch(:user_id)}", 0,
+                        expires_in: params.fetch(:duration).to_i.seconds)
+      head :no_content
     end
 
     def bans
-      destroy_job(ChatBan.create!(user_id: params.fetch(:user_id), chat_id: @chat.id))
+      Rails.cache.write("ban_chat_#{@chat.id}_#{params.fetch(:user_id)}", 0,
+                        expires_in: params.fetch(:duration).to_i.seconds)
       disconnect_banned_user(params.fetch(:user_id))
+      head :no_content
     end
 
     def show

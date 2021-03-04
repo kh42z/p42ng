@@ -19,10 +19,18 @@ class ChatSerializer < ActiveModel::Serializer
   end
 
   def timeout_ids
-    object.chat_timeouts.pluck(:user_id)
+    arr = []
+    object.chat_participants.each do |e|
+      arr << e if Rails.cache.exist?("timeout_chat_#{object.id}_#{e}")
+    end
+    arr
   end
 
   def ban_ids
-    object.chat_bans.pluck(:user_id)
+    arr = []
+    object.chat_participants.each do |e|
+      arr << e if Rails.cache.exist?("ban_chat_#{object.id}_#{e}")
+    end
+    arr
   end
 end
