@@ -64,7 +64,7 @@
                     {{#unless channel}}
                     <p class="anagram">{{anagram}}</p>
                     <p class="nickname">{{nickname}}</p>
-                    <div class="pastille"></div>
+                    <div class="pastille" id="pastille"></div>
                     <p class="status">{{status}}</p>
                     <div class="slide-show-container">
                         <img src="{{slide_show}}" class="slide-show"></img>
@@ -76,9 +76,11 @@
                 </div>
             </div>
             <div class="right-header">
+                {{#if channel}}
                 <div class="group_add-container">
                     <img src="./icons/group_add.svg" class="group_add"></img>
                 </div>
+                {{/if}}
                 {{#unless channel}}
                 <button class="play-button">
                     <img src="./icons/videogame.svg" height="24">

@@ -296,6 +296,21 @@
     margin-left: 32px;
 }
 
+.chat .center .header .left-header .info 
+.online {
+    background: var(--green-color);
+}
+
+.chat .center .header .left-header .info 
+.offline {
+    background: #EB5757;
+}
+
+.chat .center .header .left-header .info 
+.inGame {
+    background: var(--primary-color);
+}
+
 .chat .center .header .right-header
 .group_add-container {
     width: 33px;
@@ -489,7 +504,7 @@
 
 .chat .right-side .online
 .pastille {
-    background: #6FCF97;
+    background: var(--green-color);
 }
 
 .chat .right-side .offline

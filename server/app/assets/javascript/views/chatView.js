@@ -75,13 +75,15 @@ export const ChatView = Backbone.View.extend({
     // header center
     if (this.myChannels.length > 0) {
       const currentChannel = this.myChannels.at(0)
+      array.privacy = currentChannel.get('privacy')[0].toUpperCase() + currentChannel.get('privacy').slice(1)
       if (currentChannel.get('privacy') === 'direct_message') {
         const id = currentChannel.get('participant_ids').find(el => el !== this.userLogged.get('id'))
+        const userChat = this.users.get(id)
         array.channel = false
-        array.image_url = this.users.get(id).get('image_url')
-        array.anagram = this.users.get(id).get('anagram')
-        array.nickname = this.users.get(id).get('nickname')
-        array.status = 'online'
+        array.image_url = userChat.get('image_url')
+        array.anagram = userChat.get('anagram')
+        array.nickname = userChat.get('nickname')
+        array.status = userChat.get('status')
         array.slide_show = './icons/slideshow.svg'
       } else {
         array.channel = true
@@ -101,7 +103,6 @@ export const ChatView = Backbone.View.extend({
     }
 
     // right side
-    array.privacy = 'Public'
     array.usersOnline = Array() // nb usersOnline
     array.nbOnline = '4'
     array.nbInGame = '1'
@@ -162,7 +163,9 @@ export const ChatView = Backbone.View.extend({
       const currentChannel = this.myChannels.at(0)
       if (currentChannel.get('privacy') === 'direct_message') {
         document.getElementById('right-side').style.display = 'none'
+        document.getElementById('pastille').classList.add(userChat.get('status'))
       } else {
+        console.log(currentChannel.get('privacy'))
         document.getElementById('right-side').style.display = 'flex'
       }
       const id = currentChannel.get('id')
@@ -194,6 +197,7 @@ export const ChatView = Backbone.View.extend({
       this.context.status = 'online'
       this.context.slide_show = './icons/slideshow.svg'
     } else {
+      this.context.privacy = currentChannel.get('privacy')[0].toUpperCase() + currentChannel.get('privacy').slice(1)
       this.context.channel = true
       this.context.name = currentChannel.get('name')
     }
@@ -228,7 +232,7 @@ export const ChatView = Backbone.View.extend({
       })
   },
 
-  createChannel: function () {
+  createChannel: function (e) {
     console.log('createChannel')
     const checkboxes = document.getElementsByClassName('checkbox')
     const selectedCboxes = Array.prototype.slice.call(checkboxes).filter(ch => ch.checked === true)
@@ -237,15 +241,18 @@ export const ChatView = Backbone.View.extend({
     const newChannel = new ChatModel()
     const createChannel = async () => {
       try {
-        const response = await newChannel.createChannel(name, participantsIds, 'public')
+        const response = await newChannel.createChannel(name, participantsIds)
         this.myChannels.add(newChannel)
         this.channels.add(newChannel)
         this.modalClose()
         const myChannels = this.myChannels.slice().filter(el => el.get('privacy') !== 'direct_message')
-        this.context.myChannels = JSON.parse(JSON.stringify(myChannels))
+        this.context.myChannels.push(JSON.parse(JSON.stringify(newChannel)))
+        this.context.myChannels[this.context.myChannels.length - 1].admin = true
         this.updateHTML('myChannels')
         this.closeOpenDiscussion()
         document.getElementById('channel' + newChannel.get('id')).classList.add('open')
+        e.currentTarget = document.getElementById('channel' + newChannel.get('id'))
+        this.openChat(e)
       } catch (error) {
         document.getElementById('error-message').innerHTML = error.responseJSON.message
         document.getElementById('error-message').style.display = 'block'
@@ -320,7 +327,8 @@ export const ChatView = Backbone.View.extend({
         this.modalClose()
         this.closeOpenDiscussion()
         document.getElementById('DM' + DM[i].get('id')).classList.add('open')
-        this.modalClose()
+        e.currentTarget = document.getElementById('DM' + DM[i].get('id'))
+        this.openChat(e)
         break
       }
     }
@@ -340,6 +348,8 @@ export const ChatView = Backbone.View.extend({
           this.modalClose()
           this.closeOpenDiscussion()
           document.getElementById('DM' + newChannel.get('id')).classList.add('open')
+          e.currentTarget = document.getElementById('DM' + newChannel.get('id'))
+          this.openChat(e)
         } catch (error) {
           this.modalClose()
         }
