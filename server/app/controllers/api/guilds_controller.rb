@@ -9,6 +9,8 @@ module Api
     end
 
     def update
+      return unless @guild.owner == current_user
+
       @guild.update!(guild_params)
       update_officers
       json_response(@guild)
@@ -27,14 +29,6 @@ module Api
       json_response(@guild)
     end
 
-    def wars
-      return if @guild.officers.where(user_id: current_user.id).nil?
-
-      war = War.create!(war_params_create)
-      #    add_war_terms(war)
-      json_response(war, :created)
-    end
-
     private
 
     def add_officers(guild)
@@ -42,12 +36,6 @@ module Api
 
       params[:officer_ids].each { |t| GuildOfficer.create!(user_id: t, guild_id: guild.id) }
     end
-
-    #  def add_war_terms(war)
-    #    return unless params[:war_term_ids]
-
-    #    params[:war_term_ids].each { |t| WarTerm.create!(user_id: t, guild_id: guild.id) }
-    #  end
 
     def update_officers
       return unless params.key?(:officer_ids)
@@ -61,13 +49,8 @@ module Api
     end
 
     def guild_params_create
-      filtered_params = params.permit(:name, :anagram, :owner_id)
+      filtered_params = params.permit(:name, :anagram)
       filtered_params.merge!({ owner: current_user })
-    end
-
-    def war_params_create
-      tmp = params.permit(:versus, :war_start, :war_end, :prize, :max_unanswered)
-      tmp.merge!(guild_id: @guild.id)
     end
 
     def set_guild

@@ -223,7 +223,8 @@ ActiveRecord::Schema.define(version: 2021_03_03_084016) do
   end
 
   create_table "wars", force: :cascade do |t|
-    t.integer "versus"
+    t.integer "from"
+    t.integer "on"
     t.datetime "war_start"
     t.datetime "war_end"
     t.integer "prize"

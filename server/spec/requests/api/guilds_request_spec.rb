@@ -55,9 +55,9 @@ describe "Guild", type: :request do
       end
     end
 
-    describe "#update" do
+    describe "#update", test:true do
       it "should be updated" do
-        guild = create(:guild)
+        guild = create(:guild, owner: auth)
         valid_attributes = { name: "Updated", anagram: "upd4t" }
         put api_guild_url(guild.id), headers: access_token, params: valid_attributes
         expect(Guild.first.name).to eq("Updated")
@@ -65,23 +65,5 @@ describe "Guild", type: :request do
         expect(response).to have_http_status(200)
       end
     end
-  end
-end
-
-describe "War", type: :request do
-  let(:auth) { create(:user, nickname: "Tom") }
-  let(:access_token) { auth.create_new_auth_token }
-  let(:user) { create(:user, nickname: "Matt") }
-  let(:access_token_2) { user.create_new_auth_token }
-  describe "#war" do
-    it 'should declare a war', test: true do
-      post api_guilds_url, headers: access_token, params: { name: "NoShroud", anagram: "NOSDO" }
-      post api_guilds_url, headers: access_token_2, params: { name: "BANG", anagram: "ABCDE" }
-      valid_attributes = { versus: Guild.last.id, war_start: DateTime.now, war_end: DateTime.new(2021, 03, 10, 11, 11, 0), prize: 1000, max_unanswered: 10 }
-      post wars_api_guild_url(Guild.first.id), headers: access_token, params: valid_attributes
-      expect(response).to have_http_status(201)
-      expect(War.count).to eq(1)
-    end
-
   end
 end
