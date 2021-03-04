@@ -1,4 +1,4 @@
-<div class="chat">
+<div class="chat" id="chat">
     <div class="discussions">
         <div class="title">
             <h2 class="h2-discussions">Discussions</h2>
@@ -14,7 +14,7 @@
                 </div>
                 <div class="myChannels" id="myChannels">
                 {{#each myChannels}}
-                    <div class="clickable-discussions clikable-discussions{{id}}" id="channel{{id}}">
+                    <div class="clickable-discussions clikable-discussions{{id}}" for={{id}} id="channel{{id}}">
                         {{!-- <div class="image-container"> --}}
                             {{!-- <img src={{image_url}} id="image_url" class="image_url"></img> --}}
                         {{!-- </div> --}}
@@ -38,7 +38,7 @@
                 </div>
                 <div class="DM" id="DM">
                 {{#each DM}}
-                    <div class="clickable-discussions" id="DM{{id}}">
+                    <div class="clickable-discussions" for={{id}} id="DM{{id}}">
                         <div class="image-container">
                             <img src={{image_url}} id="image_url" class="image_url"></img>
                         </div>
@@ -52,7 +52,7 @@
             </div>
         </div>
     </div>
-    <div class="center">
+    <div class="center" id="center">
         <div class="header">
             <div class="left-header">
                 {{#unless channel}}
@@ -107,8 +107,7 @@
         </div>
         </div>
     </div>
-    {{#if channel}}
-    <div class="right-side">
+    <div class="right-side" id="right-side">
         <div class="privacy">{{privacy}} channel</div>
         <div class="title online">
             <div class="pastille"></div>
@@ -170,7 +169,6 @@
             {{/each}}
         </div>
     </div>
-    {{/if}}
     <div class="modal modalCreateChannel" id="modalCreateChannel" >
         <div class="background"></div>
         <div class="modalOpen">
