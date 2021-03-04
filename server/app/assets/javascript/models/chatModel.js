@@ -34,6 +34,18 @@ export const ChatModel = Backbone.Model.extend({
       }
     })
   },
+  createDM: function (participantIds, privacy = 'private') {
+    return this.save({
+      privacy: privacy,
+      participant_ids: participantIds,
+      success: function (response) {
+      },
+      error: function (response) {
+        console.log('error')
+        console.log(response)
+      }
+    })
+  },
   leaveRoom: function () {
     const headers = this.superHeaders.getHeaders()
 

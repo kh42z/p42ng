@@ -151,8 +151,10 @@ export const ChatView = Backbone.View.extend({
     const templateDataChat = this.templateChat(this.context)
     this.$el.html(templateDataChat)
 
-    const id = currentChannel.get('id')
-    document.getElementById('channel' + id).classList.add('open')
+    if (this.myChannels.length > 0) {
+      const id = currentChannel.get('id')
+      document.getElementById('channel' + id).classList.add('open')
+    }
     return this
   },
 
@@ -258,11 +260,11 @@ export const ChatView = Backbone.View.extend({
         this.context.DM[this.context.DM.length - 1].anagram = this.users.get(id).get('anagram')
         this.context.DM[this.context.DM.length - 1].nickname = this.users.get(id).get('nickname')
         console.log(id)
-        document.getElementById('DM' + id).classList.add('open')
         this.updateHTML('DM')
+        document.getElementById('DM' + id).classList.add('open')
         this.modalClose()
       } catch (error) {
-        console.log(error.responseJSON.message)
+        this.modalClose()
       }
     }
     createChannel()
