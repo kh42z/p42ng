@@ -14,9 +14,14 @@ class UserSerializer < ActiveModel::Serializer
              :admin,
              :banned,
              :first_login,
-             :chat_ids
+             :chat_ids,
+             :ignore_ids
 
   def chat_ids
     object.chats.pluck(:id)
+  end
+
+  def ignore_ids
+    object.user_ignores.pluck(:user_ignored_id)
   end
 end

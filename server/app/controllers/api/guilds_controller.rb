@@ -2,13 +2,15 @@
 
 module Api
   class GuildsController < ApiController
-    before_action :set_guild, only: %i[show update destroy]
+    before_action :set_guild, only: %i[show update destroy update_officers wars war_params_create]
 
     def index
       json_response(Guild.all.order(:score))
     end
 
     def update
+      return unless @guild.owner == current_user
+
       @guild.update!(guild_params)
       update_officers
       json_response(@guild)
@@ -17,36 +19,10 @@ module Api
     def create
       return render_error('hasGuildAlready') if current_user.guild
 
-      guild = Guild.new(guild_params)
-      guild.score = 0
-      guild.owner = current_user
-      save_and_return(guild)
-    end
-
-    def save_and_return(obj)
-      if obj.save
-        create_officers(obj.id)
-        current_user.guild = obj
-        current_user.save
-        json_response(obj, :created)
-      else
-        json_response(obj.errors, :unprocessable_entity)
-      end
-    end
-
-    def create_officers(id)
-      return unless params.key?(:officer_ids)
-
-      params[:officer_ids].each do |officer|
-        GuildOfficer.create(user_id: officer, guild_id: id)
-      end
-    end
-
-    def update_officers
-      return unless params.key?(:officer_ids)
-
-      Guild.find(params[:id]).guild_officers.destroy_all
-      create_officers(params[:id])
+      guild = Guild.create!(guild_params_create)
+      add_officers(guild)
+      current_user.update!(guild: guild)
+      json_response(guild, :created)
     end
 
     def show
@@ -55,8 +31,26 @@ module Api
 
     private
 
+    def add_officers(guild)
+      return unless params[:officer_ids]
+
+      params[:officer_ids].each { |t| GuildOfficer.create!(user_id: t, guild_id: guild.id) }
+    end
+
+    def update_officers
+      return unless params.key?(:officer_ids)
+
+      @guild.officers.destroy_all
+      add_officers(@guild)
+    end
+
     def guild_params
       params.permit(:name, :anagram, :owner_id)
+    end
+
+    def guild_params_create
+      filtered_params = params.permit(:name, :anagram)
+      filtered_params.merge!({ owner: current_user })
     end
 
     def set_guild

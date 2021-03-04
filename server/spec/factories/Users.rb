@@ -14,4 +14,9 @@ FactoryBot.define do
     status { "offline" }
     association :ladder
   end
+
+  factory :ignore do
+    user { create(:user) }
+    user_ignored { create(:user) }
+  end
 end

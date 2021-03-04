@@ -8,13 +8,9 @@ describe Guild, type: :model do
   it { should belong_to(:owner) }
   it { should validate_length_of(:anagram).is_equal_to(5) }
 
-  it "validates uniqueness of name" do
-    create(:guild, name: 'unique')
+  it "should validate uniqueness" do
+    create(:guild)
     should validate_uniqueness_of(:name)
-  end
-
-  it "validates uniqueness of anagram" do
-    create(:guild, anagram: 'uniqu')
     should validate_uniqueness_of(:anagram)
   end
 end

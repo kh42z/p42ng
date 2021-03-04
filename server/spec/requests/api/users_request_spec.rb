@@ -79,6 +79,20 @@ RSpec.describe "Users", type: :request do
         expect(response).to have_http_status(422)
       end
     end
+
+    context "when he leaves a guild" do
+      before do
+        guild = FactoryBot.create(:guild, owner: users.last)
+        users.last.update!(guild: guild)
+        patch "/api/users/#{user_id}", params: {"guild_id" => nil }, headers: users.last.create_new_auth_token
+      end
+      it "returns 200" do
+        expect(response).to have_http_status(200)
+        users.last.reload
+        expect(users.last.guild).to be_nil
+      end
+    end
+
     context "when the user is trying to modify someone else" do
       before do
         patch "/api/users/#{first.id}", params: {"nickname" => "Michel"}, headers: users.last.create_new_auth_token
@@ -115,6 +129,25 @@ RSpec.describe "Users", type: :request do
       it "returns status code 200" do
         expect(response).to have_http_status(200)
       end
+    end
+  end
+
+  describe "#ignores", test: true do
+    let(:user) { create(:user) }
+    let(:auth) { create(:user) }
+    let(:access_token) { auth.create_new_auth_token }
+    it "should ignore a user" do
+      patch "/api/users/#{auth.id}", params: {ignore_ids: [ user.id.to_i ]}, headers: access_token
+      expect(response).to have_http_status(200)
+      expect(UserIgnore.count).to eq(1)
+      expect(json['ignore_ids'][0]).to eq(user.id)
+    end
+    it "should stop ignoring a user" do
+      patch "/api/users/#{auth.id}", params: {ignore_ids: [ user.id.to_i ]}, headers: access_token
+      expect(UserIgnore.count).to eq(1)
+      patch "/api/users/#{auth.id}", params: {ignore_ids: []}, headers: access_token
+      expect(response).to have_http_status(200)
+      expect(UserIgnore.count).to eq(0)
     end
   end
 
