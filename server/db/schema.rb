@@ -54,15 +54,6 @@ ActiveRecord::Schema.define(version: 2021_03_03_084016) do
     t.index ["user_id"], name: "index_chat_admins_on_user_id"
   end
 
-  create_table "chat_bans", force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "chat_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["chat_id"], name: "index_chat_bans_on_chat_id"
-    t.index ["user_id"], name: "index_chat_bans_on_user_id"
-  end
-
   create_table "chat_participants", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "chat_id"
@@ -71,15 +62,6 @@ ActiveRecord::Schema.define(version: 2021_03_03_084016) do
     t.index ["chat_id"], name: "index_chat_participants_on_chat_id"
     t.index ["user_id", "chat_id"], name: "index_chat_participants_on_user_id_and_chat_id", unique: true
     t.index ["user_id"], name: "index_chat_participants_on_user_id"
-  end
-
-  create_table "chat_timeouts", force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "chat_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["chat_id"], name: "index_chat_timeouts_on_chat_id"
-    t.index ["user_id"], name: "index_chat_timeouts_on_user_id"
   end
 
   create_table "chats", force: :cascade do |t|
@@ -241,12 +223,8 @@ ActiveRecord::Schema.define(version: 2021_03_03_084016) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "chat_admins", "chats"
   add_foreign_key "chat_admins", "users"
-  add_foreign_key "chat_bans", "chats"
-  add_foreign_key "chat_bans", "users"
   add_foreign_key "chat_participants", "chats"
   add_foreign_key "chat_participants", "users"
-  add_foreign_key "chat_timeouts", "chats"
-  add_foreign_key "chat_timeouts", "users"
   add_foreign_key "chats", "users", column: "owner_id"
   add_foreign_key "friendships", "users", column: "friend_a_id"
   add_foreign_key "friendships", "users", column: "friend_b_id"
