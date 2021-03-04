@@ -364,7 +364,12 @@ export const ChatView = Backbone.View.extend({
     this.myChannels.get(id).leaveRoom()
     this.myChannels.remove(id)
     const myChannels = this.myChannels.slice().filter(el => el.get('privacy') !== 'direct_message')
-    this.context.myChannels = JSON.parse(JSON.stringify(myChannels))
+    const array = Array()
+    for (let i = 0; i < myChannels.length; i++) {
+      array.push(JSON.parse(JSON.stringify(myChannels[i])))
+      array[i].admin = myChannels[i].get('admin_ids').find(el => el === this.userLogged.get('id'))
+    }
+    this.context.myChannels = JSON.parse(JSON.stringify(array))
     this.updateHTML('myChannels')
     document.getElementById('modalValidationDeleteChannel').style.display = 'none'
     document.getElementById('modalValidationDeleteChannel').setAttribute('for', '')
