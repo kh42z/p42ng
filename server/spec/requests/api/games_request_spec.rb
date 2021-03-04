@@ -9,6 +9,7 @@ RSpec.describe "Games", type: :request do
     end
     it "returns status code 401" do
       expect(response).to have_http_status(401)
+      expect(json).to_not be_empty
     end
   end
 
@@ -24,6 +25,7 @@ RSpec.describe "Games", type: :request do
       end
       it "returns status code 200" do
         expect(response).to have_http_status(200)
+        expect(json).to_not be_empty
       end
     end
 
@@ -33,7 +35,6 @@ RSpec.describe "Games", type: :request do
         get "/api/games", headers: auth.create_new_auth_token
       end
       it "returns all played matchs" do
-        expect(json).not_to be_empty
         expect(json.size).to eq(2)
       end
 
@@ -52,6 +53,7 @@ RSpec.describe "Games", type: :request do
 
         it "returns status code 200" do
           expect(response).to have_http_status(200)
+          expect(json).not_to be_empty
         end
       end
 
@@ -64,6 +66,7 @@ RSpec.describe "Games", type: :request do
 
         it "returns status code 403" do
           expect(response).to have_http_status(403)
+          expect(json).not_to be_empty
         end
       end
 
@@ -74,6 +77,7 @@ RSpec.describe "Games", type: :request do
 
         it "returns status code 422" do
           expect(response).to have_http_status(422)
+          expect(json).not_to be_empty
         end
       end
     end
@@ -95,6 +99,7 @@ RSpec.describe "Games", type: :request do
         end
         it "returns status code 403" do
           expect(response).to have_http_status(403)
+          expect(json).not_to be_empty
         end
       end
     end

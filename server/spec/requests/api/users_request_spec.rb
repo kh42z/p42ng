@@ -13,6 +13,7 @@ RSpec.describe "Users", type: :request do
     end
     it "returns status code 401" do
       expect(response).to have_http_status(401)
+      expect(json).not_to be_empty
     end
   end
 
@@ -22,10 +23,7 @@ RSpec.describe "Users", type: :request do
         get "/api/users", headers: first.create_new_auth_token
       end
       it "returns users" do
-        expect(json).not_to be_empty
         expect(json.size).to eq(5)
-      end
-      it "returns status code 200" do
         expect(response).to have_http_status(200)
       end
     end
@@ -35,10 +33,7 @@ RSpec.describe "Users", type: :request do
         get "/api/users", headers: first.create_new_auth_token, params: {status: 'online'}
       end
       it "returns users" do
-        expect(json).not_to be_empty
         expect(json.size).to eq(1)
-      end
-      it "returns status code 200" do
         expect(response).to have_http_status(200)
       end
     end
@@ -50,9 +45,6 @@ RSpec.describe "Users", type: :request do
     end
     it "returns user" do
       expect(json).not_to be_empty
-    end
-
-    it "returns status code 200" do
       expect(response).to have_http_status(200)
     end
   end
@@ -64,11 +56,9 @@ RSpec.describe "Users", type: :request do
       end
       it "update user" do
         expect(json).not_to be_empty
-      end
-
-      it "returns status code 200" do
         expect(response).to have_http_status(200)
       end
+
     end
     context "when the user is not unique" do
       before do
@@ -77,6 +67,7 @@ RSpec.describe "Users", type: :request do
       end
       it "returns status code 422" do
         expect(response).to have_http_status(422)
+        expect(json).not_to be_empty
       end
     end
 
@@ -118,6 +109,7 @@ RSpec.describe "Users", type: :request do
       end
       it "returns status code 200" do
         expect(response).to have_http_status(200)
+        expect(json).not_to be_empty
       end
     end
 
@@ -128,6 +120,7 @@ RSpec.describe "Users", type: :request do
       end
       it "returns status code 200" do
         expect(response).to have_http_status(200)
+        expect(json).not_to be_empty
       end
     end
   end
@@ -147,6 +140,7 @@ RSpec.describe "Users", type: :request do
       expect(UserIgnore.count).to eq(1)
       patch "/api/users/#{auth.id}", params: {ignore_ids: []}, headers: access_token
       expect(response).to have_http_status(200)
+      expect(json).not_to be_empty
       expect(UserIgnore.count).to eq(0)
     end
   end
