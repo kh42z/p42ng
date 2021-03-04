@@ -44,3 +44,13 @@
     border-radius: 5px;
     width: 507px;
 }
+
+.chat .discussions .discussions-container
+.clickable-discussions.open {
+    background: rgba(39, 48, 62, 0.7);
+
+    border-radius: 5px;
+
+    width: 100%;
+    z-index: 1;
+}

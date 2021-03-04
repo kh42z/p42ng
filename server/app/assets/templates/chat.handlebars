@@ -12,6 +12,7 @@
                         <img src="./icons/add_box.svg" class="add_box add_channel"></img>
                     </div>
                 </div>
+                <div class="myChannels" id="myChannels">
                 {{#each myChannels}}
                     <div class="clickable-discussions clikable-discussions{{id}}" id="channel{{id}}">
                         {{!-- <div class="image-container"> --}}
@@ -28,6 +29,7 @@
                         </div>
                     </div>
                 {{/each}}
+                </div>
             </div>
             <div class="direct-messages">
                 <div class="first-line">
@@ -36,7 +38,7 @@
                 </div>
                 <div class="DM" id="DM">
                 {{#each DM}}
-                    <div class="clickable-discussions" id="discussions{{id}}">
+                    <div class="clickable-discussions" id="DM{{id}}">
                         <div class="image-container">
                             <img src={{image_url}} id="image_url" class="image_url"></img>
                         </div>
@@ -53,10 +55,13 @@
     <div class="center">
         <div class="header">
             <div class="left-header">
+                {{#unless channel}}
                 <div class="image-container">
                     <img src={{image_url}} class="image_url"></img>
                 </div>
+                {{/unless}}
                 <div class="info">
+                    {{#unless channel}}
                     <p class="anagram">{{anagram}}</p>
                     <p class="nickname">{{nickname}}</p>
                     <div class="pastille"></div>
@@ -64,6 +69,10 @@
                     <div class="slide-show-container">
                         <img src="{{slide_show}}" class="slide-show"></img>
                     </div>
+                    {{/unless}}
+                    {{#if channel}}
+                    <p class="name">#{{name}}</p>
+                    {{/if}}
                 </div>
             </div>
             <div class="right-header">
@@ -197,7 +206,7 @@
     <div class="modal modalCreateDirectMessages" id="modalCreateDirectMessages">
         <div class="background"></div>
         <div class="modalOpen">
-            <div class="close">
+            <div class="close closeModal">
                 <img src="./icons/close.svg" id="close"></img>
             </div>
             <label class="label labelSelectFriends" for="search">Select friends</label>
@@ -219,7 +228,7 @@
     <div class="modal modalSearchChannel" id="modalSearchAllChannels">
         <div class="background"></div>
         <div class="modalOpen">
-            <div class="close">
+            <div class="close closeModal">
                 <img src="./icons/close.svg" id="close"></img>
             </div>
             <label class="label labelSelectChannel" for="search">Channels</label>

@@ -29,7 +29,7 @@
 
 .chat .discussions
 .title {
-    padding-left: 48px; 
+    padding-left: 38px; 
 }
 
 .chat .discussions .title
@@ -64,7 +64,7 @@
 .discussions-container {
     display: flex;
     flex-direction: column;
-    margin-left: 16px; 
+    margin-left: 8px; 
     margin-right: 16px;
     height: 100%;
     overflow-y: scroll;
@@ -270,6 +270,12 @@
 .anagram {
     padding-right: 8px;
 }
+
+.chat .center .header .left-header .info
+.name {
+    padding-left: 42px;
+}
+
 
 .chat .center .header .left-header .info
 .status {

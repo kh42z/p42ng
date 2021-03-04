@@ -5,7 +5,7 @@ import { Channels } from '../collections/channels'
 
 export const ChatView = Backbone.View.extend({
   events: {
-    'click .add_channel': 'modalCreateChannel',
+    'click .add_channel': 'openModalCreateChannel',
     'click .createChannel': 'createChannel',
     'click .closeModal': 'modalClose',
     'keyup .input': 'sendMessage',
@@ -39,6 +39,7 @@ export const ChatView = Backbone.View.extend({
     }, this)
   },
   defaults: {
+    myChannels: undefined,
     channels: undefined,
     userLogged: undefined,
     users: undefined
@@ -49,7 +50,6 @@ export const ChatView = Backbone.View.extend({
     const array = {}
 
     // if multiple participants right side open
-    array.channel = true
 
     // my channels
     const channels = this.myChannels.slice().filter(el => el.get('privacy') !== 'direct_message')
@@ -66,14 +66,24 @@ export const ChatView = Backbone.View.extend({
       array.DM.push(JSON.parse(JSON.stringify(DM[i])))
       const id = DM[i].get('participant_ids').find(el => el !== this.userLogged.get('id'))
       array.DM[i].image_url = this.users.get(id).get('image_url')
+      array.DM[i].anagram = this.users.get(id).get('anagram')
       array.DM[i].nickname = this.users.get(id).get('nickname')
     }
 
     // header center
-    array.image_url = './images/profile-pic.jpg'
-    array.anagram = '[24.c]'
-    array.nickname = 'pganglof'
-    array.slide_show = './icons/slideshow.svg'
+    const currentChannel = this.channels.at(0)
+    if (currentChannel.get('privacy') === 'direct_message') {
+      const id = currentChannel.get('participant_ids').find(el => el !== this.userLogged.get('id'))
+      array.channel = false
+      array.image_url = this.users.get(id).get('image_url')
+      array.anagram.anagram = this.users.get(id).get('anagram')
+      array.nickname.nickname = this.users.get(id).get('nickname')
+      array.status = 'online'
+      array.slide_show = './icons/slideshow.svg'
+    } else {
+      array.channel = true
+      array.name = currentChannel.get('name')
+    }
 
     // history messages
     array.messages = Array(30) // size of nb history messages
@@ -140,6 +150,9 @@ export const ChatView = Backbone.View.extend({
     this.context = array
     const templateDataChat = this.templateChat(this.context)
     this.$el.html(templateDataChat)
+
+    const id = currentChannel.get('id')
+    document.getElementById('channel' + id).classList.add('open')
     return this
   },
 
@@ -149,13 +162,10 @@ export const ChatView = Backbone.View.extend({
     if (checkbox.checked === true) { checkbox.checked = false } else { checkbox.checked = true }
   },
 
-  modalCreateChannel: function () {
-    document.getElementById('modalCreateChannel').style.display = 'flex'
+  openModalCreateChannel: function () {
     this.context.friends = JSON.parse(JSON.stringify(this.users))
-    const html = this.templateChat(this.context)
-    const found = $(html).find('#modalCreateChannel')[0].innerHTML
-    const friendsDiv = document.getElementById('modalCreateChannel')
-    friendsDiv.innerHTML = found
+    this.updateHTML('modalCreateChannel')
+    document.getElementById('modalCreateChannel').style.display = 'flex'
   },
 
   modalClose: function () {
@@ -183,7 +193,7 @@ export const ChatView = Backbone.View.extend({
         this.myChannels.add(newChannel)
         this.channels.add(newChannel)
         this.modalClose()
-        this.render()
+        // this.render()
       } catch (error) {
         document.getElementById('error-message').innerHTML = error.responseJSON.message
         document.getElementById('error-message').style.display = 'block'
@@ -196,6 +206,13 @@ export const ChatView = Backbone.View.extend({
     if (e.keyCode === 13) { console.log('send message') } else { console.log('not enter') }
   },
 
+  updateHTML: function (div) {
+    const html = this.templateChat(this.context)
+    const found = $(html).find('#' + div)[0].innerHTML
+    const currentDiv = document.getElementById(div)
+    currentDiv.innerHTML = found
+  },
+
   modalSearchFriends: function (e) {
     const value = document.getElementById(e.currentTarget.getAttribute('id')).value
     const search = this.users.slice().filter(function (el) {
@@ -203,28 +220,9 @@ export const ChatView = Backbone.View.extend({
       if (el.get('anagram') !== undefined && el.get('anagram').toLowerCase().startsWith(value.toLowerCase()) === true) { return true }
       return false
     })
-    this.context.friends = JSON.parse(JSON.stringify(search))
-    const html = this.templateChat(this.context)
     const find = 'friends' + e.currentTarget.getAttribute('id')
-    const found = $(html).find('#' + find)[0].innerHTML
-    const friendsDiv = document.getElementById(find)
-    friendsDiv.innerHTML = found
-  },
-
-  modalSearchChannels: function () {
-    const value = document.getElementById(e.currentTarget.getAttribute('id')).value
-    const search = this.channels.slice().filter(function (el) {
-      if ((el.get('privacy') === 'public' || el.get('privacy') === 'protected') &&
-        el.get('name').toLowerCase().startsWith(value.toLowerCase()) === true) {
-        return true
-      }
-      return false
-    })
-    this.context.channels = JSON.parse(JSON.stringify(search))
-    const html = this.templateChat(this.context)
-    const found = $(html).find('#searchAllChannel')[0].innerHTML
-    const searchAllChannelDiv = document.getElementById('searchAllChannel')
-    searchAllChannelDiv.innerHTML = found
+    this.context.friends = JSON.parse(JSON.stringify(search))
+    this.updateHTML(find)
   },
 
   inputModalSearchAllChannels: function (e) {
@@ -235,18 +233,12 @@ export const ChatView = Backbone.View.extend({
       return false
     })
     this.context.channels = JSON.parse(JSON.stringify(search))
-    const html = this.templateChat(this.context)
-    const found = $(html).find('#searchAllChannel')[0].innerHTML
-    const friendsDiv = document.getElementById('searchAllChannel')
-    friendsDiv.innerHTML = found
+    this.updateHTML('searchAllChannel')
   },
 
   openModalCreateDM: function () {
     this.context.friends = JSON.parse(JSON.stringify(this.users))
-    const html = this.templateChat(this.context)
-    const found = $(html).find('#modalCreateDirectMessages')[0].innerHTML
-    const friendsDiv = document.getElementById('modalCreateDirectMessages')
-    friendsDiv.innerHTML = found
+    this.updateHTML('modalCreateDirectMessages')
     document.getElementById('modalCreateDirectMessages').style.display = 'flex'
   },
 
@@ -260,8 +252,15 @@ export const ChatView = Backbone.View.extend({
       try {
         const response = await newChannel.createChannel(name, participantsIds, 'direct_message')
         this.myChannels.add(newChannel)
+        const DM = this.myChannels.slice().filter(el => el.get('privacy') === 'direct_message')
+        this.context.DM.push(JSON.parse(JSON.stringify(newChannel)))
+        this.context.DM[this.context.DM.length - 1].image_url = this.users.get(id).get('image_url')
+        this.context.DM[this.context.DM.length - 1].anagram = this.users.get(id).get('anagram')
+        this.context.DM[this.context.DM.length - 1].nickname = this.users.get(id).get('nickname')
+        console.log(id)
+        document.getElementById('DM' + id).classList.add('open')
+        this.updateHTML('DM')
         this.modalClose()
-        this.render()
       } catch (error) {
         console.log(error.responseJSON.message)
       }
@@ -302,10 +301,7 @@ export const ChatView = Backbone.View.extend({
       return false
     })
     this.context.channels = JSON.parse(JSON.stringify(channels))
-    const html = this.templateChat(this.context)
-    const found = $(html).find('#searchAllChannel')[0].innerHTML
-    const friendsDiv = document.getElementById('searchAllChannel')
-    friendsDiv.innerHTML = found
+    this.updateHTML('searchAllChannel')
     document.getElementById('modalSearchAllChannels').style.display = 'flex'
   },
 
