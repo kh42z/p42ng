@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 class War < ApplicationRecord
-  validates_presence_of :versus
-  validates_uniqueness_of :versus, scope: :guild
+  validates_presence_of :from
+  validates_presence_of :on
+  validates_uniqueness_of :on, scope: :guild
   validates_presence_of :war_start
   validates_presence_of :war_end
   validates_presence_of :prize

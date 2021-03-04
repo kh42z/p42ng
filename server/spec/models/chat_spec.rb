@@ -28,4 +28,18 @@ RSpec.describe Chat, type: :model do
     subject.owner = create(:user)
     expect(subject).to be_valid
   end
+  it 'is valid without name if privacy == direct_message' do
+    subject { described_class.new }
+    subject.name = ''
+    subject.privacy = 'direct_message'
+    subject.owner = create(:user)
+    expect(subject).to be_valid
+  end
+  it 'is not valid without name if privacy == public' do
+    subject { described_class.new }
+    subject.name = ''
+    subject.privacy = 'public'
+    subject.owner = create(:user)
+    expect(subject).to_not be_valid
+  end
 end

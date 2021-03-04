@@ -364,12 +364,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                anagram:
-                  type: string
+              $ref: "#/components/schemas/guild"
 
   "/api/guilds/{id}":
     parameters:
@@ -428,18 +423,28 @@ paths:
           $ref: '#/components/responses/403'
         '500':
           $ref: '#/components/responses/500'
-  "/api/guilds/{id}/wars":
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-        description: Guild ID
-    post:
-      summary: Declares war
+  "/api/wars":
+    get:
+      summary: Retrieves wars
       tags:
-        - Guilds
+        - Wars
+      parameters:
+        - in: query
+          name: guild_id
+          schema:
+            type: integer
+          description: filter by guild_id
+      responses:
+        '200':
+          description: wars found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/war"
+    post:
+      summary: Declares a war
+      tags:
+        - Wars
       responses:
         '200':
           description: war declared
@@ -447,6 +452,27 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/war"
+    patch:
+      summary: Modifies a war
+      tags:
+        - Wars
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                war_term_ids:
+                  $ref: '#/components/schemas/war_terms_list'
+                war_time_id:
+                  $ref: '#/components/schemas/integer_list'
+      responses:
+        '200':
+          description: guild found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/guild_response"
 
         '400':
           $ref: '#/components/responses/400'
@@ -739,7 +765,10 @@ components:
               type: string
             score:
               type: integer
+            war_records:
+              $ref: '#/components/schemas/integer_list'
         - $ref: "#/components/schemas/guild"
+
     user_response:
       allOf:
         - type: object
@@ -766,6 +795,7 @@ components:
           nullable: true
       required:
         - name
+
     guild:
       type: object
       properties:
@@ -777,8 +807,7 @@ components:
           type: integer
         officer_ids:
           $ref: '#/components/schemas/integer_list'
-        war_records:
-          $ref: '#/components/schemas/integer_list'
+
     ban:
       type: object
       properties:
