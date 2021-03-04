@@ -2,7 +2,7 @@
 
 class Chat < ApplicationRecord
   validates_presence_of :name, if: :name_required?
-  validates_uniqueness_of :name
+  validates_uniqueness_of :name, if: :name_required?
   validates_presence_of :privacy
   validates_inclusion_of :privacy, in: %w[public private protected direct_message]
   has_secure_password validations: false
