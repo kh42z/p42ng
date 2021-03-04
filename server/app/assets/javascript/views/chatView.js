@@ -255,6 +255,10 @@ export const ChatView = Backbone.View.extend({
         return false
       })) {
         this.modalClose()
+        Array.prototype.forEach.call(document.getElementsByClassName('open'),
+          function (el) {
+            el.classList.remove('open')
+          })
         document.getElementById('DM' + DM[i].get('id')).classList.add('open')
         this.modalClose()
         break
