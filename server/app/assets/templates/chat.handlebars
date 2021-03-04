@@ -1,0 +1,353 @@
+<div class="chat">
+    <div class="discussions">
+        <div class="title">
+            <h2 class="h2-discussions">Discussions</h2>
+        </div>
+        <div class="discussions-container">
+            <div class="channels">
+                <div class="first-line">
+                    <div class="sub-title">CHANNELS</div>
+                    <div class="icons">
+                        <img src="./icons/search-chat.svg" class="search_channel"></img>
+                        <img src="./icons/add_box.svg" class="add_box add_channel"></img>
+                    </div>
+                </div>
+                <div class="myChannels" id="myChannels">
+                {{#each myChannels}}
+                    <div class="clickable-discussions clikable-discussions{{id}}" id="channel{{id}}">
+                        {{!-- <div class="image-container"> --}}
+                            {{!-- <img src={{image_url}} id="image_url" class="image_url"></img> --}}
+                        {{!-- </div> --}}
+                        <p class="channelName">#{{name}}</p>
+                        {{#if admin}}
+                        <div class="admin_panel_settings">
+                            <img src='./icons/admin_panel_settings.svg' class="admin_panel_settings-icon"></img>
+                        </div>
+                        {{/if}}
+                        <div class="close delete">
+                            <img src='./icons/close.svg' class="close-icon" for={{id}}></img>
+                        </div>
+                    </div>
+                {{/each}}
+                </div>
+            </div>
+            <div class="direct-messages">
+                <div class="first-line">
+                    <div class="sub-title">DIRECT MESSAGES</div>
+                    <img src="./icons/add_box.svg" class="add_box add_direct_messages"></img>
+                </div>
+                <div class="DM" id="DM">
+                {{#each DM}}
+                    <div class="clickable-discussions" id="DM{{id}}">
+                        <div class="image-container">
+                            <img src={{image_url}} id="image_url" class="image_url"></img>
+                        </div>
+                        <p class="anagram_nickname">{{nickname}}</p>
+                        <div class="close">
+                            <img src='./icons/close.svg' class="close-icon" for={{id}}></img>
+                        </div>
+                    </div>
+                {{/each}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="center">
+        <div class="header">
+            <div class="left-header">
+                {{#unless channel}}
+                <div class="image-container">
+                    <img src={{image_url}} class="image_url"></img>
+                </div>
+                {{/unless}}
+                <div class="info">
+                    {{#unless channel}}
+                    <p class="anagram">{{anagram}}</p>
+                    <p class="nickname">{{nickname}}</p>
+                    <div class="pastille"></div>
+                    <p class="status">{{status}}</p>
+                    <div class="slide-show-container">
+                        <img src="{{slide_show}}" class="slide-show"></img>
+                    </div>
+                    {{/unless}}
+                    {{#if channel}}
+                    <p class="name">#{{name}}</p>
+                    {{/if}}
+                </div>
+            </div>
+            <div class="right-header">
+                <div class="group_add-container">
+                    <img src="./icons/group_add.svg" class="group_add"></img>
+                </div>
+                {{#unless channel}}
+                <button class="play-button">
+                    <img src="./icons/videogame.svg" height="24">
+                </button>
+                {{/unless}}
+            </div>
+        </div>
+        <div class="messages">
+            <div class="scrollable">
+                {{#each messages}}
+                <div class="message">
+                    <div class="info">
+                        <div class="image-container">
+                            <img src={{image_url}} class="image_url"></img>
+                        </div>
+                        <div class="anagram">{{anagram}}</div>
+                        <div class="nickname">{{nickname}}</div>
+                        <div class="time">{{time}}</div>
+                    </div>
+                    <div class="output">{{message}}</div>
+                </div>
+                {{/each}}
+            </div>
+        <div class="input-container">
+            <input class="textInput input" type="text">
+        </div>
+        </div>
+    </div>
+    {{#if channel}}
+    <div class="right-side">
+        <div class="privacy">{{privacy}} channel</div>
+        <div class="title online">
+            <div class="pastille"></div>
+            <div class="status ONLINE">ONLINE-{{nbOnline}}</div>
+        </div>
+        <div class="users usersOnline">
+            {{#each usersOnline}}
+                <div class="user">
+                    <div class="name">
+                        <div class="image-container">
+                            <img src={{image_url}} class="image_url"></img>
+                        </div>
+                        <div class="name anagram">{{anagram}}</div>
+                        <div class="name nickname">{{nickname}}</div>
+                    </div>
+                    {{#if others}}
+                    <div class="play-button-container">
+                        <button class="play-button">Play</button>         
+                    </div>
+                    {{/if}}
+                </div>
+            {{/each}}
+        </div>
+        <div class="title inGame">
+            <div class="pastille"></div>
+            <div class="status IN_GAME">IN GAME-{{nbInGame}}</div>
+        </div>
+        <div class="users usersInGame">
+            {{#each usersInGame}}
+                <div class="user">
+                    <div class="name">
+                        <div class="image-container">
+                            <img src={{image_url}} class="image_url"></img>
+                        </div>
+                        <div class="name anagram">{{anagram}}</div>
+                        <div class="name nickname">{{nickname}}</div>
+                    </div>
+                    <div class="slide-show-container">
+                        <img src="./icons/slideshow-ingame.svg" class="slide-show-ingame"></img>
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+        <div class="title offline">
+            <div class="pastille"></div>
+            <div class="status OFFLINE">OFFLINE-{{nbOffline}}</div>
+        </div>
+        <div class="users usersOffline">
+            {{#each usersOffline}}
+                <div class="user">
+                    <div class="name">
+                        <div class="image-container">
+                            <img src={{image_url}} class="image_url"></img>
+                        </div>
+                        <div class="name anagram">{{anagram}}</div>
+                        <div class="name nickname">{{nickname}}</div>
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+    </div>
+    {{/if}}
+    <div class="modal modalCreateChannel" id="modalCreateChannel" >
+        <div class="background"></div>
+        <div class="modalOpen">
+            <div class="close closeModal">
+                <img src="./icons/close.svg" id="close"></img>
+            </div>
+            <label class="label labelChannelName" for="channelName">Channel name</label>
+            <input class="textInput channelName" type="text" id="channelName" placeholder="New channel"></input>
+            <p class="error-message" id="error-message"></p>
+            <label class="label labelSelectFriends" for="search">Select friends</label>
+            <input class="textInput search modalSearchChannels" type="text" id="modalSearchChannels" placeholder="Research"></input>
+            <div class="friends modalSearchChannels" id="friendsmodalSearchChannels">
+                {{#each friends}}
+                <div class="eachFriend eachFriendModalCreateChannel" for="{{id}}">
+                    <div class="left">
+                        <div class="image-container">
+                            <img src={{image_url}} id="image_url" class="image_url"></img>
+                        </div>
+                        <p class="anagram_nickname">{{anagram}} {{nickname}}</p>
+                    </div>
+                    <div class="right">
+                        <label class="checkboxlabel" for="{{checkboxId}}"></label>
+                        <input type="checkbox" class="checkbox" id="{{id}}" value="{{id}}"></input>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+            <div class="button-container">
+                <button class="createChannel">Create channel</button>
+            </div>
+        </div>
+    </div>
+    <div class="modal modalCreateDirectMessages" id="modalCreateDirectMessages">
+        <div class="background"></div>
+        <div class="modalOpen">
+            <div class="close closeModal">
+                <img src="./icons/close.svg" id="close"></img>
+            </div>
+            <label class="label labelSelectFriends" for="search">Select friends</label>
+            <input class="textInput search modalSearchDirectMessages" type="text" id="modalSearchDirectMessages" placeholder="Research"></input>
+            <div class="friends friendsmodalSearchDirectMessages" id="friendsmodalSearchDirectMessages">
+                {{#each friends}}
+                <div class="eachFriend eachFriendModalCreateDirectMessages" for="{{id}}">
+                    <div class="left">
+                        <div class="image-container">
+                            <img src={{image_url}} id="image_url" class="image_url"></img>
+                        </div>
+                        <p class="anagram_nickname">{{anagram}} {{nickname}}</p>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+    <div class="modal modalSearchChannel" id="modalSearchAllChannels">
+        <div class="background"></div>
+        <div class="modalOpen">
+            <div class="close closeModal">
+                <img src="./icons/close.svg" id="close"></img>
+            </div>
+            <label class="label labelSelectChannel" for="search">Channels</label>
+            <input class="textInput inputModalSearchAllChannels" type="text" id="inputModalSearchAllChannels" placeholder="Research"></input>
+            <div class="friends searchAllChannel" id="searchAllChannel">
+                {{#each channels}}
+                <div class="eachFriend eachChannel" for="{{id}}">
+                    {{!-- <div class="left"> --}}
+                        {{!-- <div class="image-container">
+                            <img src={{image_url}} id="image_url" class="image_url"></img>
+                        </div> --}}
+                        <p class="channel anagram_nickname">#{{name}}</p>
+                    {{!-- </div> --}}
+                    {{!-- <div class="right">
+                        <label class="checkboxlabel" for="{{checkboxId}}"></label>
+                        <input type="checkbox" class="checkbox" id="{{id}}" value="{{id}}"></input>
+                    </div> --}}
+                </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+    <div class="modal validationModal" id="modalValidationDeleteChannel">
+        <div class="background"></div>
+        <div class="modalOpen">
+            <p class="sure">Are you sure to want to leave this channel?</p>
+            <p class="adminRights">You will lose your administrator rights</p>
+            <div class="buttons">
+                <div class="validation-buttons button-container-yes">
+                    <button class="button yes">Yes</button>
+                </div>
+                <div class="validation-buttons button-container-no">
+                    <button class="button no">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="parameters">
+        <div class="left-menu">
+            <div class="menu">
+                <div class="overview-menu" id="overview-menu">Overview</div>
+                <div class="permissions-menu"  id="permissions-menu">Permissions</div>
+                <div class="members-menu" id="members-menu">Members</div>
+            </div>
+            <div class="delete">Delete channel</div>
+        </div>
+        <div class="right-menu">
+            <div class="close">
+                <img src="./icons/esc.svg" class="close">
+            </div>
+            <div class="overview">
+                <div class="title">OVERVIEW</div>
+                <div class="sub-title">CHANNEL NAME</div>
+                <input type="text" class="name" disabled>{{channelName}}</input>
+            </div>
+            <div class="permissions">
+                <div class="title">PERMISSIONS</div>
+                <div class="sub-title">CONFIDENTIALITY</div>
+                <div class="radio-button">
+                    <input type="radio" id="private" name="privacy" value="private" checked>
+                    <label for="private">Private</label> 
+                </div>
+                <div class="radio-button">
+                    <input type="radio" id="public" name="privacy" value="public">
+                    <label for="public">Public</label> 
+                </div>
+                <div class="radio-button">
+                    <input type="radio" id="protected" name="privacy" value="protected">
+                    <label for="protected">Protected</label> 
+                </div>
+                <div class="password">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password">
+                    <button class="save">Save</button>
+                </div>
+            </div>
+            <div class="members">
+                <div class="title">MEMBERS</div>
+                <div class="sub-title">ADMINISTRATORS</div>
+                <div class="admins">
+                    {{#each admins}}
+                        <div class="admin">
+                            <div class="image-container">
+                                <img src={{image_url}} class="image_url"></img>
+                            </div>
+                            <div class="anagram">
+                                <p class="text">{{anagram}}</p>
+                            </div>
+                            <div class="nickname">
+                                <p class="text">{{nickname}}</p>
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
+                <div class="sub-title">OTHER MEMBERS</div>
+                <div class="admins">
+                    {{#each admins}}
+                        <div class="admin">
+                            <div class="image-container">
+                                <img src={{image_url}} class="image_url"></img>
+                            </div>
+                            <div class="anagram">
+                                <p class="text">{{anagram}}</p>
+                            </div>
+                            <div class="nickname">
+                                <p class="text">{{nickname}}</p>
+                            </div>
+                            <div class="dots-container">
+                                <img src='./icons/dots.svg' class="dots"></img>
+                            </div>
+                            <div class="params">
+                                <div class="appoint-as-admin" id="appointAsAdministrator">Appoint as administrator</div>
+                                <div class="mute" id="mute">Mute</div>
+                                <div class="ban" id="ban">Ban</div>
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

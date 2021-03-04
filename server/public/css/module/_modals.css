@@ -1,0 +1,228 @@
+.chat .modalCreateChannel {
+    display: none;
+}
+
+.chat .modalCreateDirectMessages {
+    display: none;
+}
+
+.chat .modalSearchChannel {
+    display: none;
+}
+
+.chat .validationModal {
+    display: none;
+}
+
+.chat .modal
+.modalOpen {
+    padding: 16px;
+    width: 523px;
+}
+
+.chat .validationModal
+.modalOpen {
+    padding: 32px;
+    width: auto;
+    height: auto;
+
+    width: auto;
+    height: auto;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.chat .validationModal .modalOpen
+.buttons {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.chat .validationModal .modalOpen
+.buttons .validation-buttons {
+    width: 98px;
+    height: 42px;
+
+    margin: 8px;
+}
+
+.chat .validationModal .modalOpen 
+.sure {
+    margin: 0px;
+    font-size: 18px;
+}
+
+.chat .validationModal .modalOpen 
+.adminRights {
+    margin: 16px;
+    font-size: 14px;
+}
+
+.chat .validationModal .modalOpen
+.buttons .button {
+    width: 98px;
+    height: 42px;
+    border-radius: 7px;
+    font-size: 14px;
+    font-family: Roboto-Regular;
+}
+
+.chat .validationModal .modalOpen
+.buttons .validation-buttons .no {
+    background-color: #E0E0E0;
+}
+
+.chat .modal .eachFriend
+.image-container {
+    width: 42px;
+    height: 33px;
+}
+
+.chat .modal .eachFriend .image-container
+.image_url {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+.chat .modal
+.button-container {
+    align-self: center;
+    width: 323px;
+    height: 46px;
+
+    margin-top: 8px;
+}
+
+.chat .modal .modalOpen .button-container
+.createChannel {
+    width: 100%;
+    height: 100%;
+    border-radius: 7px;
+    font-size: 18px;
+}
+
+.chat .modal .modalOpen
+.textInput {
+    height: 64px;
+    border-radius: 9px;
+}
+
+.chat .modalCreateChannel .modalOpen
+.error-message {
+    font-size: 14px;
+    margin: 0;
+    margin-bottom: 16px;
+}
+
+.chat .modalCreateChannel .modalOpen
+.channelName {
+    margin-bottom: 8px;
+}
+
+.chat .modal .modalOpen
+.search {
+    margin-bottom: 8px;
+}
+
+.chat .modal .modalOpen
+.label {
+    margin-bottom: 8px;
+}
+
+.chat .modal .modalOpen
+.labelSelectFriends {
+    margin-top: 8px;
+}
+
+.chat .modalCreateChannel .modalOpen
+.friends {
+    height: 100%;
+    overflow-y: scroll;
+}
+
+.chat .modalSearchChannel .modalOpen
+.friends {
+    height: 100%;
+    overflow-y: scroll;
+}
+
+.chat .modalCreateDirectMessages .modalOpen
+.friends {
+    height: 50vh;
+    width: 50vw;
+    overflow-y: scroll;
+}
+
+.chat .modal .modalOpen
+.friends::-webkit-scrollbar-track {
+    width: 0px;
+    background-color: transparent;
+}
+
+.chat .modal .modalOpen
+.friends::-webkit-scrollbar {
+    width: 0px;
+    background-color: transparent;
+}
+
+.chat .modal .modalOpen
+.friends::-webkit-scrollbar-thumb {
+    width: 0px;
+    background-color: transparent;
+}
+
+.chat .modal .modalOpen
+.eachFriend {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content: flex-start;
+
+    cursor: pointer;
+
+    margin-top: 4px;
+    margin-bottom: 4px;
+
+    padding-left: 8px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-right: 8px;
+}
+
+.chat .modal .modalOpen .eachFriend
+.left {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+
+.chat .modal .modalOpen .eachFriend
+.image-container {
+    margin-right: 8px;
+}
+
+.chat .modal .modalOpen
+.close {
+    align-self: flex-end;
+    cursor: pointer;
+}
+
+input.checkbox[type="checkbox"] {
+    cursor: pointer;
+
+    position: relative;
+    display: block;
+    box-sizing: border-box;
+    border-radius: 5px;
+    width: 22px;
+    height: 22px;
+
+    background-color: #c4c4c4;
+    background: transparent;
+}
+

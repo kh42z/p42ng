@@ -1,0 +1,28 @@
+<div class="content">
+	<div id="guildPannel"></div>
+	<div id="guildSubNavBar"></div>
+<div>
+	<span> {{this.name}}   |{{this.anagram}}| </span>
+	<ul>
+	<p> OWNER: </p>
+	<ul>
+		<li><a href="#profile/{{owner_id}}/">{{owner_nickname}}</a></li>
+	</ul>
+	<p> OFFICERS: </p>
+	<ul>
+	{{#each officers}}
+		<li>
+			<a href="#profile/{{id}}/">{{nickname}}</a>
+		</li>
+	{{/each}}
+	</ul>
+	<p> MEMBERS: </p>
+	<ul>
+	{{#each members}}
+		<li>
+			<a href="#profile/{{id}}/">{{nickname}}</a>
+		</li>
+	{{/each}}
+	</ul>
+</div>
+</div>

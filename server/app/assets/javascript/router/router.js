@@ -8,6 +8,8 @@ import { TournamentsView } from '../views/tournaments/tournamentsView.js'
 import { OauthView } from '../views/oauth/oauthView.js'
 import { GuildsView } from '../views/guild/guildsView.js'
 import { FirstConnexionView } from '../views/oauth/firstConnexionView.js'
+import { SearchView } from '../views/search/searchView.js'
+import { ChatView } from '../views/chatView'
 
 // models
 import { User } from '../models/user_model'
@@ -23,6 +25,7 @@ import { Users } from '../collections/users_collection.js'
 import { Ladders } from '../collections/laddersCollection.js'
 import { Wrapper } from '../models/wrapper.js'
 import { SuperWrapper } from '../collections/superWrapper.js'
+import { Channels } from '../collections/channels'
 
 // import { ChatController } from '../view/chat/chatController.js' // not here
 
@@ -31,6 +34,7 @@ import { OauthService } from '../services/oauthService.js'
 
 // Views for test only
 import { TestView } from '../views/testView.js'
+import { FetchAPI } from '../services/fetchAPI.js'
 
 export const Router = Backbone.Router.extend({
   initialize: function () {
@@ -53,11 +57,14 @@ export const Router = Backbone.Router.extend({
     'guild/:id(/:page)': 'guild_view',
     'guild/:id(/:page)/': 'guild_view',
     'chat/:id(/:page)': 'chat_view',
+    chat: 'chat_view',
     leaderboard: 'leaderboard_view',
     tournaments: 'tournaments_view',
     connexion: 'connexion',
-    exit: 'oauth_view',
+    exit: 'exit',
     firstConnexion: 'firstConnexion_view',
+    'search(/:item)': 'search_view',
+    'search(/:item)/': 'search_view',
     '': 'oauth_view'
   },
 
@@ -94,9 +101,15 @@ export const Router = Backbone.Router.extend({
     const firstConnexionView = new FirstConnexionView({ model: this.userLogged })
   },
 
+  exit: function () {
+    const fetchAPI = new FetchAPI()
+    fetchAPI.exit()
+    window.localStorage.clear()
+    this.oauth_view()
+  },
+
   oauth_view: function (url) {
     if (this.headerView !== undefined) { this.headerView.remove() }
-    window.localStorage.clear()
     history.replaceState({}, null, '/')
     const oauthView = new OauthView()
   },
@@ -114,49 +127,70 @@ export const Router = Backbone.Router.extend({
 
   pong_view: function (url) {
     if (this.accessPage()) { return }
-    const pongView = new PongView({ model: this.loadWraper() })
-    pongView.render()
+    const pongView = new PongView()
   },
 
   profile_view: function (id, page) {
     if (this.accessPage()) { return }
-    this.profileController.loadView(id, page, this.loadWraper())
+    this.profileController.loadView(id, page, this.loadWrapper())
   },
 
   guilds_view: function () {
     if (this.accessPage()) { return }
-    const guildsView = new GuildsView({ model: this.loadWraper() })
+    const guildsView = new GuildsView({ model: this.loadWrapper() })
   },
 
   guild_view: function (id, page) {
     if (this.accessPage()) { return }
-    this.guildController.loadView(id, page, this.loadWraper())
+    this.guildController.loadView(id, page, this.loadWrapper())
   },
 
   chat_view: function (id, page) {
-    if (this.accessPage()) { }
+    if (this.accessPage()) { return }
+    // const chatView = new ChatView({ model: this.loadChannelWrapper(userLogged) })
+    const chatView = new ChatView({ model: this.loadChannelWrapper() })
+    // chatView.render()
   },
 
   leaderboard_view: function () {
     if (this.accessPage()) { return }
-    const leaderboardView = new LeaderboardView({ model: this.loadWraper() })
+    const leaderboardView = new LeaderboardView({ model: this.loadWrapper() })
   },
 
   tournaments_view: function () {
     if (this.accessPage()) { return }
-    const tournamentsView = new TournamentsView({ model: this.loadWraper() })
+    const tournamentsView = new TournamentsView({ model: this.loadWrapper() })
   },
 
   test_view: function () {
     if (this.accessPage()) { return }
-    const testView = new TestView({ model: this.loadWraper() })
+    const testView = new TestView({ model: this.loadWrapper() })
   },
 
-  loadWraper: function () {
+  search_view: function (item) {
+    if (this.accessPage()) { }
+    // let searchView
+    // const searchView = new SearchView({ model: this.loadWraper(item) })
+    // console.log(searchView.item)
+  },
+
+  loadWrapper: function () {
     return new SuperWrapper({
       users: new Wrapper({ obj: new Users() }),
       guilds: new Wrapper({ obj: new Guilds() }),
-      userLogged: new Wrapper({ obj: this.userLogged })
+      userLoggedId: window.localStorage.getItem('user_id')
     })
+  },
+
+  loadChannelWrapper: function () {
+    const userId = window.localStorage.getItem('user_id')
+    const superWrapper = new SuperWrapper({
+      users: new Wrapper({ obj: new Users() }),
+      myChannels: new Wrapper({ obj: new Channels() }),
+      channels: new Wrapper({ obj: new Channels() })
+    })
+    superWrapper.get('myChannels').get('obj').fetchByUserId(userId)
+    superWrapper.get('channels').get('obj').fetchAllChannels()
+    return superWrapper
   }
 })
