@@ -156,8 +156,15 @@ paths:
             schema:
               $ref: "#/components/schemas/ban"
       responses:
-        '204':
+        '200':
           description: user muted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mute_ids:
+                    $ref: '#/components/schemas/integer_list'
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -185,8 +192,15 @@ paths:
             schema:
               $ref: "#/components/schemas/ban"
       responses:
-        '204':
+        '200':
           description: user banned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ban_ids:
+                    $ref: '#/components/schemas/integer_list'
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -245,6 +259,38 @@ paths:
       responses:
         '204':
           description: chat left
+
+  "/api/chats/{id}/invites":
+    post:
+      summary: Adds participants to the chatroom
+      description: Allows current_user to add participants to the chatroom
+      tags:
+        - Chats
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Chat ID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                participant_ids:
+                  $ref: '#/components/schemas/integer_list'
+      responses:
+        '200':
+          description: participants added
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  participant_ids:
+                    $ref: '#/components/schemas/integer_list'
 
   "/api/games":
     get:
@@ -350,7 +396,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/guild"
+              type: object
+              properties:
+                name:
+                  type: string
+                anagram:
+                  type: string
+                officer_ids:
+                  $ref: '#/components/schemas/integer_list'
 
   "/api/guilds/{id}":
     parameters:
@@ -396,7 +449,7 @@ paths:
                   $ref: '#/components/schemas/integer_list'
       responses:
         '200':
-          description: guild found
+          description: guild modified
           content:
             application/json:
               schema:
@@ -409,6 +462,29 @@ paths:
           $ref: '#/components/responses/403'
         '500':
           $ref: '#/components/responses/500'
+  "/api/guilds/{id}/members":
+    post:
+      summary: Add guild member
+      description: Allows current_user to add a member to the guild
+      tags:
+        - Guilds
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Guild ID
+      responses:
+        '200':
+          description: chat joined
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  participant_ids:
+                    $ref: '#/components/schemas/integer_list'
   "/api/wars":
     get:
       summary: Retrieves wars
@@ -748,7 +824,7 @@ components:
         - type: object
           properties:
             id:
-              type: string
+              type: integer
             score:
               type: integer
             war_records:

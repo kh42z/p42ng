@@ -13,6 +13,7 @@ Rails.application.routes.draw do
         delete 'participants', to: 'chats#destroy_participant'
         post 'mutes'
         post 'bans'
+        post 'invites'
       end
     end
     resources :users do

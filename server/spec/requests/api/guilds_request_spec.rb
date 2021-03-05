@@ -53,10 +53,17 @@ describe "Guild", type: :request do
         expect(response.body).to match(I18n.t('hasGuildAlready'))
         expect(response).to have_http_status(403)
       end
+      it 'should create a guild even with bad officers ID' do
+        attributes = { name: "NoShroud", anagram: "NOSDO", officer_ids: [auth.id, 0] }
+        post api_guilds_url, headers: access_token, params: attributes
+        expect(response.status).to eq 201
+        expect(GuildOfficer.count).to eq 1
+        expect(GuildOfficer.first.user_id).to eq auth.id
+      end
     end
 
-    describe "#update", test:true do
-      it "should be updated" do
+    describe "#update" do
+      it "should be updated", test:true do
         guild = create(:guild, owner: auth)
         valid_attributes = { name: "Updated", anagram: "upd4t" }
         put api_guild_url(guild.id), headers: access_token, params: valid_attributes

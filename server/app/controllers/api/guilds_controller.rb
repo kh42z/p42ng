@@ -9,7 +9,7 @@ module Api
     end
 
     def update
-      return unless @guild.owner == current_user
+      return render_not_allowed if @guild.owner != current_user
 
       @guild.update!(guild_params)
       update_officers
@@ -32,9 +32,9 @@ module Api
     private
 
     def add_officers(guild)
-      return unless params[:officer_ids]
+      return unless params.key?(:officer_ids)
 
-      params[:officer_ids].each { |t| GuildOfficer.create!(user_id: t, guild_id: guild.id) }
+      params[:officer_ids].each { |t| GuildOfficer.create(user_id: t, guild_id: guild.id) }
     end
 
     def update_officers

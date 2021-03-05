@@ -89,10 +89,9 @@ RSpec.describe "Chats", type: :request do
       expect(response).to have_http_status(422)
       expect(response.body).to match("Validation failed: Name can't be blank")
     end
-    it "should create a chat without bad participant ID" do
+    it "should create a chat with bad participant ID" do
       post api_chats_url, headers: access_token, params: { name: 'Hop', participant_ids: [0]}
-      expect(response).to have_http_status(422)
-      expect(response.body).to match("Validation failed: User can't be blank, User must exist")
+      expect(response).to have_http_status(201)
     end
   end
 
@@ -160,7 +159,7 @@ RSpec.describe "Chats", type: :request do
     end
   end
 
-  describe "#update", test: true do
+  describe "#update" do
     let(:user) { create(:user) }
     let(:access) { user.create_new_auth_token }
     it "should change chat's name and privacy" do
@@ -233,6 +232,16 @@ RSpec.describe "Chats", type: :request do
       chat = create(:chat)
       delete "/api/chats/#{chat.id}", headers: access_token
       expect(response).to have_http_status(204)
+    end
+  end
+
+  describe '#invites', test:true do
+    it 'should invite participants' do
+      user_1, user_2 = create_list(:user, 2)
+      post api_chats_url, headers: access_token, params: { name: 'Hop' }
+      post invites_api_chat_url(Chat.first), headers: access_token, params: { participant_ids: [user_1.id, user_2.id] }
+      expect(response.status).to eq 200
+      expect(Chat.first.chat_participants.count).to eq 3
     end
   end
 end

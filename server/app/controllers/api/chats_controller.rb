@@ -58,6 +58,13 @@ module Api
       head :no_content
     end
 
+    def invites
+      return render_not_allowed if current_user != @chat.owner
+
+      add_participants(@chat, params[:participant_ids])
+      json_response(@chat)
+    end
+
     def show
       json_response(@chat)
     end
@@ -83,13 +90,13 @@ module Api
     def add_admins(chat, admins)
       return unless admins
 
-      admins.each { |t| ChatAdmin.create!(user_id: t, chat_id: chat.id) }
+      admins.each { |t| ChatAdmin.create(user_id: t, chat_id: chat.id) }
     end
 
     def add_participants(chat, participants)
       return unless participants
 
-      participants.each { |t| ChatParticipant.create!(user_id: t, chat_id: chat.id) }
+      participants.each { |t| ChatParticipant.create(user_id: t, chat_id: chat.id) }
     end
 
     def destroy_job(object)
