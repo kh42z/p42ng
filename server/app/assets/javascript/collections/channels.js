@@ -12,12 +12,16 @@ export const Channels = Backbone.Collection.extend({
     return this.fetch({
       url: this.urlRoot + '?participant_id=' + id,
       success: function (response) {
-        console.log('success')
-        console.log(response)
       },
       error: function (response) {
-        console.log('error')
-        console.log(response)
+      }
+    })
+  },
+  fetchAllChannels: function () {
+    return this.fetch({
+      success: function (response) {
+      },
+      error: function (response) {
       }
     })
   },
@@ -28,8 +32,6 @@ export const Channels = Backbone.Collection.extend({
       success: function (response) {
       },
       error: function (response) {
-        console.log('error')
-        console.log(response)
       }
     })
   }

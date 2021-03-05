@@ -48,12 +48,8 @@ export const User = Backbone.Model.extend({
     return this.fetch({
       url: this.urlRoot + url,
       success: function (response) {
-        console.log('response')
-        console.log(response)
       },
       error: function (errorResponse) {
-        // console.log('error')
-        // console.log(errorResponse)
       }
     })
   },

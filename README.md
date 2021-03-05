@@ -1,5 +1,8 @@
 # Pong ![](https://github.com/kh42z/pong/workflows/Rails%20tests/badge.svg)
 
+### Heroku:
+https://p42ng.herokuapp.com/
+
 ### Run:
 `docker-compose up --build`
 
@@ -9,4 +12,4 @@
 
 ### OpenAPI Documentation
 
-http://p42ng.herokuapp.com/api-docs
+https://localhost:3000/api-docs

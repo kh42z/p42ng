@@ -1,5 +1,5 @@
 .chat {
-    background: url('../../images/background.jpg');
+    background: url('../../../images/background.jpg');
     width: 100vw;
     height: calc(100vh - 82px);
 
@@ -20,6 +20,8 @@
     flex-direction: column;
 
     width: 340px;
+    min-width: 340px;
+    max-width: 340px;
 
     border: 1px solid #313236;
     background: rgba(0, 0, 0, 0.37);
@@ -27,13 +29,7 @@
 
 .chat .discussions
 .title {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-around;
-    align-content: flex-start;
-
-    padding-left: 16px; 
+    padding-left: 38px; 
 }
 
 .chat .discussions .title
@@ -49,7 +45,7 @@
     font-size: 24px;
 }
 
-.chat .discussions .title
+.chat .discussions .discussions-container
 .add_box {
     width: 26px;
     height: 26px;
@@ -68,12 +64,38 @@
 .discussions-container {
     display: flex;
     flex-direction: column;
-    margin-left: 16px; 
-    /* margin-right: 32px; */
+    margin-left: 8px; 
+    margin-right: 16px;
     height: 100%;
-
     overflow-y: scroll;
+}
 
+.chat .discussions .discussions-container
+.first-line {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.chat .discussions .discussions-container .first-line
+.sub-title {
+    font-size: 14px;
+    color: #C4C4C4;
+    font-family: Roboto-Regular;
+
+    padding-left:32px;
+    margin-top: 8px;
+}
+
+.chat .discussions .discussions-container .first-line
+.icons {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+
+    cursor: pointer;
 }
 
 .chat .discussions
@@ -100,10 +122,17 @@
     flex-direction: row;
     align-items: center;
     
-    width: 300px;
+    width: 332px;
     height: 58px;
 
     margin-bottom: 16px;
+
+    cursor: pointer;
+}
+
+.chat .discussions .discussions-container
+.clickable-discussions.open {
+    background: rgba(39, 48, 62, 0.7);
 }
 
 .chat .discussions .discussions-container .clickable-discussions
@@ -135,6 +164,11 @@
     height: 100%;
 }
 
+.chat .discussions .discussions-container .clickable-discussions 
+.channelName {
+    padding-left: 32px;
+}
+
 .chat .discussions .discussions-container .clickable-discussions
 .close {
     display: none;
@@ -155,10 +189,10 @@
 
 .chat
 .right-side {
-    width: 400px;
+    width: 250px;
+    min-width: 250px;
     border: 1px solid #313236;
     overflow-y: scroll;
-
 }
 
 .chat
@@ -236,6 +270,12 @@
 .anagram {
     padding-right: 8px;
 }
+
+.chat .center .header .left-header .info
+.name {
+    padding-left: 42px;
+}
+
 
 .chat .center .header .left-header .info
 .status {

@@ -6,6 +6,7 @@ module Api
   class UsersController < ApiController
     before_action :set_user, only: %i[show update upload_avatar]
     before_action :allowed?, only: %i[update upload_avatar]
+    # before_action :update_ignores, only: %i[update]
 
     UserReducer = Rack::Reducer.new(
       User.all,
@@ -23,6 +24,8 @@ module Api
       return render_not_allowed if user_params.key?(:banned) && current_user.admin? == false
 
       disconnect_banned_user(@user.id) if user_params.key?(:banned) && user_params.fetch(:banned) == true
+
+      update_ignores
       @user.update!(user_params)
       json_response(@user)
     end
@@ -45,6 +48,19 @@ module Api
 
     private
 
+    def update_ignores
+      return unless params.key?(:ignore_ids)
+
+      @user.user_ignores.destroy_all
+
+      return unless params[:ignore_ids][0] != ''
+
+      params[:ignore_ids].each do |t|
+        UserIgnore.create!(user: current_user, user_ignored_id: t)
+      end
+      @user.reload
+    end
+
     def allowed?
       return unless current_user.id != @user.id && current_user.admin? == false
 
@@ -52,7 +68,7 @@ module Api
     end
 
     def user_params
-      params.permit(:two_factor, :nickname, :first_login, :banned)
+      params.permit(:two_factor, :nickname, :first_login, :banned, :guild_id)
     end
 
     def set_user

@@ -2,25 +2,93 @@
     display: none;
 }
 
-.chat .modalCreateChannel
-.modalOpen {
-    padding: 16px;
+.chat .modalCreateDirectMessages {
+    display: none;
 }
 
-.chat .modalCreateChannel .eachFriend
+.chat .modalSearchChannel {
+    display: none;
+}
+
+.chat .validationModal {
+    display: none;
+}
+
+.chat .modal
+.modalOpen {
+    padding: 16px;
+    width: 523px;
+}
+
+.chat .validationModal
+.modalOpen {
+    padding: 32px;
+    width: auto;
+    height: auto;
+
+    width: auto;
+    height: auto;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.chat .validationModal .modalOpen
+.buttons {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.chat .validationModal .modalOpen
+.buttons .validation-buttons {
+    width: 98px;
+    height: 42px;
+
+    margin: 8px;
+}
+
+.chat .validationModal .modalOpen 
+.sure {
+    margin: 0px;
+    font-size: 18px;
+}
+
+.chat .validationModal .modalOpen 
+.adminRights {
+    margin: 16px;
+    font-size: 14px;
+}
+
+.chat .validationModal .modalOpen
+.buttons .button {
+    width: 98px;
+    height: 42px;
+    border-radius: 7px;
+    font-size: 14px;
+    font-family: Roboto-Regular;
+}
+
+.chat .validationModal .modalOpen
+.buttons .validation-buttons .no {
+    background-color: #E0E0E0;
+}
+
+.chat .modal .eachFriend
 .image-container {
     width: 42px;
     height: 33px;
 }
 
-.chat .modalCreateChannel .eachFriend .image-container
+.chat .modal .eachFriend .image-container
 .image_url {
     object-fit: cover;
     width: 100%;
     height: 100%;
 }
 
-.chat .modalCreateChannel
+.chat .modal
 .button-container {
     align-self: center;
     width: 323px;
@@ -29,7 +97,7 @@
     margin-top: 8px;
 }
 
-.chat .modalCreateChannel .modalOpen .button-container
+.chat .modal .modalOpen .button-container
 .createChannel {
     width: 100%;
     height: 100%;
@@ -37,10 +105,9 @@
     font-size: 18px;
 }
 
-.chat .modalCreateChannel .modalOpen
+.chat .modal .modalOpen
 .textInput {
-    width: 523px;
-    height: 38px;
+    height: 64px;
     border-radius: 9px;
 }
 
@@ -56,46 +123,59 @@
     margin-bottom: 8px;
 }
 
-.chat .modalCreateChannel .modalOpen
+.chat .modal .modalOpen
 .search {
     margin-bottom: 8px;
 }
 
-.chat .modalCreateChannel .modalOpen
+.chat .modal .modalOpen
 .label {
     margin-bottom: 8px;
 }
 
-.chat .modalCreateChannel .modalOpen
+.chat .modal .modalOpen
 .labelSelectFriends {
     margin-top: 8px;
 }
 
 .chat .modalCreateChannel .modalOpen
 .friends {
-    height: 150px;
+    height: 100%;
     overflow-y: scroll;
 }
 
-.chat .modalCreateChannel .modalOpen
+.chat .modalSearchChannel .modalOpen
+.friends {
+    height: 100%;
+    overflow-y: scroll;
+}
+
+.chat .modalCreateDirectMessages .modalOpen
+.friends {
+    height: 50vh;
+    width: 50vw;
+    overflow-y: scroll;
+}
+
+.chat .modal .modalOpen
 .friends::-webkit-scrollbar-track {
     width: 0px;
     background-color: transparent;
 }
 
-.chat .modalCreateChannel .modalOpen
+.chat .modal .modalOpen
 .friends::-webkit-scrollbar {
     width: 0px;
     background-color: transparent;
 }
 
-.chat .modalCreateChannel .modalOpen
+.chat .modal .modalOpen
 .friends::-webkit-scrollbar-thumb {
     width: 0px;
     background-color: transparent;
 }
 
-.chat .modalCreateChannel .modalOpen
+.chat .modal .modalOpen
 .eachFriend {
     display: flex;
     align-items: center;
@@ -114,19 +194,19 @@
     padding-right: 8px;
 }
 
-.chat .modalCreateChannel .modalOpen .eachFriend
+.chat .modal .modalOpen .eachFriend
 .left {
     display: flex;
     align-items: center;
     flex-direction: row;
 }
 
-.chat .modalCreateChannel .modalOpen .eachFriend
+.chat .modal .modalOpen .eachFriend
 .image-container {
     margin-right: 8px;
 }
 
-.chat .modalCreateChannel .modalOpen
+.chat .modal .modalOpen
 .close {
     align-self: flex-end;
     cursor: pointer;

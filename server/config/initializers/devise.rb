@@ -13,5 +13,4 @@ Devise.setup do |config|
   require 'devise/orm/active_record'
   config.navigational_formats = [:json]
   OmniAuth.config.logger = Rails.logger if Rails.env.development?
-  OmniAuth.config.full_host = "http://localhost:3000"
 end

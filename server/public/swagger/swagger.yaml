@@ -364,12 +364,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                anagram:
-                  type: string
+              $ref: "#/components/schemas/guild"
 
   "/api/guilds/{id}":
     parameters:
@@ -428,7 +423,65 @@ paths:
           $ref: '#/components/responses/403'
         '500':
           $ref: '#/components/responses/500'
+  "/api/wars":
+    get:
+      summary: Retrieves wars
+      tags:
+        - Wars
+      parameters:
+        - in: query
+          name: guild_id
+          schema:
+            type: integer
+          description: filter by guild_id
+      responses:
+        '200':
+          description: wars found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/war"
+    post:
+      summary: Declares a war
+      tags:
+        - Wars
+      responses:
+        '200':
+          description: war declared
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/war"
+    patch:
+      summary: Modifies a war
+      tags:
+        - Wars
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                war_term_ids:
+                  $ref: '#/components/schemas/war_terms_list'
+                war_time_id:
+                  $ref: '#/components/schemas/integer_list'
+      responses:
+        '200':
+          description: guild found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/guild_response"
 
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
   "/api/ladders/{id}":
     get:
       summary: Retrieves a ladder
@@ -554,6 +607,10 @@ paths:
                   type: string
                 banned:
                   type: boolean
+                guild_id:
+                  type: integer
+                ignore_ids:
+                  $ref: '#/components/schemas/integer_list'
     get:
       summary: Retrieves an user
       tags:
@@ -638,7 +695,7 @@ components:
     arrayOfGames:
       type: array
       items:
-        $ref:  '#/components/schemas/game_response'
+        $ref: '#/components/schemas/game_response'
     game_response:
       type: object
       properties:
@@ -698,6 +755,8 @@ components:
           type: string
         chat_ids:
           $ref: '#/components/schemas/integer_list'
+        ignore_ids:
+          $ref: '#/components/schemas/integer_list'
     guild_response:
       allOf:
         - type: object
@@ -706,7 +765,10 @@ components:
               type: string
             score:
               type: integer
+            war_records:
+              $ref: '#/components/schemas/integer_list'
         - $ref: "#/components/schemas/guild"
+
     user_response:
       allOf:
         - type: object
@@ -733,6 +795,7 @@ components:
           nullable: true
       required:
         - name
+
     guild:
       type: object
       properties:
@@ -744,8 +807,7 @@ components:
           type: integer
         officer_ids:
           $ref: '#/components/schemas/integer_list'
-        war_records:
-          $ref: '#/components/schemas/integer_list'
+
     ban:
       type: object
       properties:
@@ -774,6 +836,39 @@ components:
           $ref: '#/components/schemas/integer_list'
         ban_ids:
           $ref: '#/components/schemas/integer_list'
+    war:
+      type: object
+      properties:
+        from:
+          type: integer
+        on:
+          type: integer
+        prize:
+          type: integer
+        from_score:
+          type: integer
+        on_score:
+          type: integer
+        war_term_ids:
+          $ref: '#/components/schemas/war_terms_list'
+        war_time_id:
+          type: integer
+
+    war_terms_list:
+      type: array
+      items:
+        type: object
+        properties:
+          start:
+            type: string
+            format: date-time
+          end:
+            type: string
+            format: date-time
+          ladder:
+            type: boolean
+          agreed:
+            type: boolean
 
     integer_list:
       type: array
