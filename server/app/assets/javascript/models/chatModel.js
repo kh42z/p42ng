@@ -13,6 +13,7 @@ export const ChatModel = Backbone.Model.extend({
   },
   initialize: function () {
     this.superHeaders = new SuperHeaders()
+    this.headers = this.superHeaders.getHeaders()
   },
   urlRoot: '/api/chats/',
   url: function () {
@@ -47,20 +48,36 @@ export const ChatModel = Backbone.Model.extend({
     })
   },
   leaveRoom: function () {
-    const headers = this.superHeaders.getHeaders()
-
     const url = '/api/chats/' + this.id + '/participants'
     fetch(url, {
       method: 'DELETE',
-      headers: headers
+      headers: this.headers
     })
   },
   subscribeChannel: function () {
-    const headers = this.superHeaders.getHeaders()
     const url = '/api/chats/' + this.id + '/participants'
     fetch(url, {
       method: 'POST',
-      headers: headers
+      headers: this.headers
     })
+  },
+  invitesToChannel: async function (participantsIds) {
+    const header = this.superHeaders.getHeaders()
+    header.append('accept', 'application/json')
+    header.append('Content-Type', 'application/json')
+
+    const url = '/api/chats/' + this.id + '/invites'
+    console.log(participantsIds)
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: header,
+      body: JSON.stringify({
+        participant_ids: participantsIds
+      })
+
+    })
+    const data1 = await response.json()
+    console.log('data1')
+    console.log(data1)
   }
 })

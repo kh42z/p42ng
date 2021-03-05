@@ -110,8 +110,18 @@ export const ChatView = Backbone.View.extend({
     document.getElementById('params').style.display = 'flex'
   },
 
-  validateAddFriendsToChannel: function () {
+  validateAddFriendsToChannel: function (e) {
+    console.log(e.currentTarget.getAttribute('for'))
+    const channelId = e.currentTarget.getAttribute('for')
     const participantsIds = this.getSelectedBoxes()
+    const currentChannel = this.myChannels.get(channelId)
+    currentChannel.invitesToChannel(participantsIds)
+    const participants = currentChannel.get('participant_ids')
+    participantsIds.forEach(el => participants.push(el))
+    currentChannel.set({ participants_ids: participants })
+    this.updateContextRightSide(currentChannel)
+    this.updateHTML('right-side')
+    this.modalClose()
   },
 
   openModalAddFriendsToChannel: function () {
@@ -145,17 +155,20 @@ export const ChatView = Backbone.View.extend({
     console.log(currentChannel)
     const usersOnline = this.users.slice().filter(function (el) {
       const id = el.get('id')
-      if (currentChannel.get('participant_ids').find(el2 => el2 == id) && el.get('status') === 'online') { return true }
+      if (currentChannel.get('participant_ids').find(el2 => el2 == id) &&
+      el.get('status') === 'online') { return true }
       return false
     })
     const usersInGame = this.users.slice().filter(function (el) {
       const id = el.get('id')
-      if (currentChannel.get('participant_ids').find(el2 => el2 == id) && el.get('status') === 'ingame') { return true }
+      if (currentChannel.get('participant_ids').find(el2 => el2 == id) &&
+      el.get('status') === 'ingame') { return true }
       return false
     })
     const usersOffline = this.users.slice().filter(function (el) {
       const id = el.get('id')
-      if (currentChannel.get('participant_ids').find(el2 => el2 == id) && el.get('status') === 'offline') { return true }
+      if (currentChannel.get('participant_ids').find(el2 => el2 == id) &&
+      el.get('status') === 'offline') { return true }
       return false
     })
     this.context.nbOnline = usersOnline.length
@@ -221,6 +234,7 @@ export const ChatView = Backbone.View.extend({
         console.log(currentChannel)
         return (currentChannel.get('owner_id') == idUserLogged)
       }
+      this.context.chatId = currentChannel.get('id')
     }
   },
 
