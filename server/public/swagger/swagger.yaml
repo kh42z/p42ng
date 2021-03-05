@@ -448,6 +448,55 @@ paths:
           $ref: '#/components/responses/403'
         '500':
           $ref: '#/components/responses/500'
+
+  "/api/guilds/{id}/officers":
+    post:
+      summary: Adds guild officers
+      description: Allows current_user to add guild officers
+      tags:
+        - Guilds
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Guild ID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                officer_ids:
+                  $ref: '#/components/schemas/integer_list'
+      responses:
+        '200':
+          description: members added
+
+  "/api/guilds/{id}/officers/{uid}":
+    delete:
+      summary: Removes a guild officer
+      description: Allows current_user to remove a guild officer
+      tags:
+        - Guilds
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Guild ID
+        - name: uid
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: User ID
+      responses:
+        '204':
+          description: officer removed
+
   "/api/guilds/{id}/members":
     post:
       summary: Adds guild members

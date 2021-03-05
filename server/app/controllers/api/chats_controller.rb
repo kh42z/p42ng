@@ -99,12 +99,6 @@ module Api
       participants.each { |t| ChatParticipant.create(user_id: t, chat_id: chat.id) }
     end
 
-    def destroy_job(object)
-      timer = params.fetch(:duration).to_i
-      DestroyObjectJob.set(wait: timer.seconds).perform_later(object)
-      json_response(object, 200)
-    end
-
     def chat_params
       params.permit(:privacy, :password, :name)
     end

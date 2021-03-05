@@ -7,6 +7,8 @@ Rails.application.routes.draw do
       member do
         post 'members'
         delete 'members'
+        post 'officers'
+        delete 'officers'
       end
     end
     resources :wars

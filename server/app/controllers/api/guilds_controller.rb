@@ -2,7 +2,7 @@
 
 module Api
   class GuildsController < ApiController
-    before_action :set_guild, only: %i[show update destroy update_officers wars war_params_create members]
+    before_action :set_guild, only: %i[show update destroy update_officers members officers]
 
     def index
       json_response(Guild.all.order(score: :desc))
@@ -21,7 +21,6 @@ module Api
 
       guild = Guild.create!(guild_params_create)
       current_user.update!(guild: guild)
-      add_officers(guild)
       json_response(guild, :created)
     end
 
@@ -30,10 +29,18 @@ module Api
     end
 
     def members
-      return render_not_allowed unless current_user == @guild.owner || @guild.officers.find(current_user.id)
+      return render_not_allowed unless current_user == @guild.owner || @guild.officers.where(user_id: current_user)
 
       add_members(@guild) if request.post?
       destroy_member(@guild) if request.delete?
+      json_response(@guild)
+    end
+
+    def officers
+      return render_not_allowed unless current_user == @guild.owner
+
+      add_officers(@guild) if request.post?
+      destroy_officers(@guild) if request.delete?
       json_response(@guild)
     end
 
@@ -41,7 +48,9 @@ module Api
 
     def add_members(guild)
       members = params.fetch(:member_ids)
-      members.each { |t| User.find(t).update!(guild_id: guild.id) unless User.find(t).guild }
+      members.each do |t|
+        User.find(t).update!(guild_id: guild.id) unless User.find(t).guild
+      end
     end
 
     def destroy_member(guild)
@@ -51,7 +60,14 @@ module Api
 
     def add_officers(guild)
       officers = params.fetch(:officer_ids)
-      officers.each { |t| GuildOfficer.create(user_id: t, guild_id: guild.id) }
+      officers.each do |t|
+        GuildOfficer.create(user_id: t, guild_id: guild.id) if guild.members.find(t) || current_user == guild.owner
+      end
+    end
+
+    def destroy_officers(guild)
+      officer = params.fetch(:format)
+      GuildOfficer.destroy_by(user: officer) if current_user == guild.owner && GuildOfficer.where(guild_id: guild)
     end
 
     def update_officers
