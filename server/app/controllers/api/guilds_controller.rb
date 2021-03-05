@@ -41,20 +41,17 @@ module Api
 
     def add_members(guild)
       members = params.fetch(:member_ids)
-
       members.each { |t| User.find(t).update!(guild_id: guild.id) unless User.find(t).guild }
     end
 
     def destroy_member(guild)
       member = params.fetch(:format)
-
       User.find(member).update!(guild: nil) if User.find(member).guild == guild
     end
 
     def add_officers(guild)
-      return unless params.key?(:officer_ids)
-
-      params[:officer_ids].each { |t| GuildOfficer.create(user_id: t, guild_id: guild.id) }
+      officers = params.fetch(:officer_ids)
+      officers.each { |t| GuildOfficer.create(user_id: t, guild_id: guild.id) }
     end
 
     def update_officers
@@ -69,8 +66,7 @@ module Api
     end
 
     def guild_params_create
-      filtered_params = params.permit(:name, :anagram)
-      filtered_params.merge!({ owner: current_user })
+      params.permit(:name, :anagram).merge!({ owner: current_user })
     end
 
     def set_guild
