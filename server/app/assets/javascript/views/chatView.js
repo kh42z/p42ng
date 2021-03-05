@@ -22,7 +22,10 @@ export const ChatView = Backbone.View.extend({
     'click .clickable-discussions': 'openChat',
     'click .group_add-container': 'openModalAddFriendsToChannel',
     'click .validate-add-friends': 'validateAddFriendsToChannel',
-    'click .admin_panel_settings': 'adminPanelSettings'
+    'click .admin_panel_settings': 'adminPanelOverviewMenu',
+    'click .overview-menu': 'adminPanelOverviewMenu',
+    'click .permissions-menu': 'adminPanelPermissionsMenu',
+    'click .members-menu': 'adminPanelMembersMenu'
   },
   initialize: function () {
     this.myChannels = this.model.get('myChannels').get('obj')
@@ -47,7 +50,8 @@ export const ChatView = Backbone.View.extend({
     myChannels: undefined,
     channels: undefined,
     userLogged: undefined,
-    users: undefined
+    users: undefined,
+    channelId: undefined
   },
   el: $('#app'),
   render: function () {
@@ -80,15 +84,15 @@ export const ChatView = Backbone.View.extend({
 
       // history messages
       this.context.messages = Array()
-      for (let i = 0; i < 30; i++) {
-        this.context.messages.push({
-          anagram: '[24.c]',
-          image_url: './images/profile-pic.jpg',
-          nickname: 'pganglof-with-very-long-name',
-          time: i,
-          message: 'ptite game?'
-        })
-      }
+      // for (let i = 0; i < 30; i++) {
+      //   this.context.messages.push({
+      //     anagram: '[24.c]',
+      //     image_url: './images/profile-pic.jpg',
+      //     nickname: 'pganglof-with-very-long-name',
+      //     time: i,
+      //     message: 'ptite game?'
+      //   })
+      // }
 
       // right side
       this.updateContextRightSide(currentChannel)
@@ -102,16 +106,94 @@ export const ChatView = Backbone.View.extend({
     return this
   },
 
-  adminPanelSettings: function (e) {
+  adminPanelMembersMenu: function () {
+    const currentChannel = this.myChannels.get(this.channelId)
+    console.log(currentChannel)
+    const ownerId = currentChannel.get('owner_id')
+    let owner
+    if (ownerId === this.userLogged.get('id')) {
+      owner = this.userLogged
+    } else {
+      owner = this.users.get(
+        currentChannel.get('owner_id')
+      )
+    }
+    console.log(owner)
+    this.context.owner = Array()
+    this.context.owner.push({
+      image_url: owner.get('image_url'),
+      anagram: owner.get('anagram'),
+      nickname: owner.get('nickname')
+    })
+
+    const admins = currentChannel.get('admin_ids')
+    this.context.admin = Array()
+    for (let i = 0; i < admins.length; i++) {
+      if (admins[i] !== this.userLogged.get('id')) {
+        const admin = this.users.get(admins[i])
+        this.context.admin.push({
+          image_url: admin.get('image_url'),
+          anagram: admin.get('anagram'),
+          nickname: admin.get('nickname')
+        })
+      }
+    }
+
+    const members = currentChannel.get('participant_ids')
+    this.context.members = Array()
+    for (let i = 0; i < members.length; i++) {
+      if (members[i] !== this.userLogged.get('id') &&
+        !admins.find(el => el === members[i])) {
+        const member = this.users.get(members[i])
+        this.context.members.push({
+          image_url: member.get('image_url'),
+          anagram: member.get('anagram'),
+          nickname: member.get('nickname'),
+          id: member.get('id')
+        })
+      }
+    }
+
+    this.updateHTML('params-members')
+    document.getElementById('params-overview').style.display = 'none'
+    document.getElementById('params-permissions').style.display = 'none'
+    document.getElementById('params-members').style.display = 'flex'
+
+    document.getElementById('overview-menu').classList.remove('open')
+    document.getElementById('members-menu').classList.add('open')
+    document.getElementById('permissions-menu').classList.remove('open')
+  },
+
+  adminPanelPermissionsMenu: function () {
+    document.getElementById('params-overview').style.display = 'none'
+    document.getElementById('params-members').style.display = 'none'
+    document.getElementById('params-permissions').style.display = 'flex'
+    document.getElementById('overview-menu').classList.remove('open')
+    document.getElementById('members-menu').classList.remove('open')
+    document.getElementById('permissions-menu').classList.add('open')
+  },
+
+  adminPanelOverviewMenu: function (e) {
     e.stopPropagation()
+    if (this.channelId === undefined) {
+      this.channelId = e.currentTarget.getAttribute('for')
+    }
+
     document.getElementById('discussions').style.display = 'none'
     document.getElementById('center').style.display = 'none'
     document.getElementById('right-side').style.display = 'none'
     document.getElementById('params').style.display = 'flex'
+
+    document.getElementById('params-overview').style.display = 'flex'
+    document.getElementById('params-permissions').style.display = 'none'
+    document.getElementById('params-members').style.display = 'none'
+
+    document.getElementById('overview-menu').classList.add('open')
+    document.getElementById('members-menu').classList.remove('open')
+    document.getElementById('permissions-menu').classList.remove('open')
   },
 
   validateAddFriendsToChannel: function (e) {
-    console.log(e.currentTarget.getAttribute('for'))
     const channelId = e.currentTarget.getAttribute('for')
     const participantsIds = this.getSelectedBoxes()
     const currentChannel = this.myChannels.get(channelId)
@@ -152,7 +234,7 @@ export const ChatView = Backbone.View.extend({
   },
 
   updateContextRightSide: function (currentChannel) {
-    console.log(currentChannel)
+    console.log('updateContextRightSide')
     const usersOnline = this.users.slice().filter(function (el) {
       const id = el.get('id')
       if (currentChannel.get('participant_ids').find(el2 => el2 == id) &&
@@ -231,7 +313,6 @@ export const ChatView = Backbone.View.extend({
       this.context.channel = true
       this.context.name = currentChannel.get('name')
       this.context.owner = function () {
-        console.log(currentChannel)
         return (currentChannel.get('owner_id') == idUserLogged)
       }
       this.context.chatId = currentChannel.get('id')
@@ -343,14 +424,12 @@ export const ChatView = Backbone.View.extend({
   modalSearchFriends: function (e) {
     console.log('modalSearchFriends')
     const value = document.getElementById(e.currentTarget.getAttribute('id')).value
-    console.log(value)
     const search = this.users.slice().filter(function (el) {
       if (el.get('nickname').toLowerCase().startsWith(value.toLowerCase()) === true) { return true }
       if (el.get('anagram') !== undefined && el.get('anagram').toLowerCase().startsWith(value.toLowerCase()) === true) { return true }
       return false
     })
     const find = 'friends' + e.currentTarget.getAttribute('id')
-    console.log(find)
     this.context.friends = JSON.parse(JSON.stringify(search))
     this.updateHTML(find)
   },

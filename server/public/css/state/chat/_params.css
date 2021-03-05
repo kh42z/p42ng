@@ -1,0 +1,13 @@
+.chat .parameters .left-menu .menu
+.sub-menu:hover {
+    background: #364050;
+}
+
+.chat .parameters .left-menu .menu
+.sub-menu.open {
+    background: #202529;
+}
+
+.dots-container:hover {
+    background: #364050;
+}

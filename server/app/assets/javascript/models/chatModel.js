@@ -61,23 +61,18 @@ export const ChatModel = Backbone.Model.extend({
       headers: this.headers
     })
   },
-  invitesToChannel: async function (participantsIds) {
+  invitesToChannel: function (participantsIds) {
     const header = this.superHeaders.getHeaders()
     header.append('accept', 'application/json')
     header.append('Content-Type', 'application/json')
-
     const url = '/api/chats/' + this.id + '/invites'
     console.log(participantsIds)
-    const response = await fetch(url, {
+    fetch(url, {
       method: 'POST',
       headers: header,
       body: JSON.stringify({
         participant_ids: participantsIds
       })
-
     })
-    const data1 = await response.json()
-    console.log('data1')
-    console.log(data1)
   }
 })

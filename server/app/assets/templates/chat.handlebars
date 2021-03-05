@@ -20,7 +20,7 @@
                         {{!-- </div> --}}
                         <p class="channelName">#{{name}}</p>
                         {{#if admin}}
-                        <div class="admin_panel_settings">
+                        <div class="admin_panel_settings" for="{{id}}">
                             <img src='./icons/admin_panel_settings.svg' class="admin_panel_settings-icon" for={{id}}></img>
                         </div>
                         {{/if}}
@@ -300,22 +300,22 @@
     <div class="parameters" id="params">
         <div class="left-menu">
             <div class="menu">
-                <div class="overview-menu" id="overview-menu">Overview</div>
-                <div class="permissions-menu"  id="permissions-menu">Permissions</div>
-                <div class="members-menu" id="members-menu">Members</div>
+                <div class="sub-menu overview-menu" id="overview-menu"><p class="p">Overview</p></div>
+                <div class="sub-menu permissions-menu"  id="permissions-menu"><p class="p">Permissions</p></div>
+                <div class="sub-menu members-menu" id="members-menu"><p class="p">Members</p></div>
+                <div class="delete">Delete channel</div>
             </div>
-            <div class="delete">Delete channel</div>
         </div>
         <div class="right-menu">
             <div class="close">
                 <img src="./icons/esc.svg" class="close">
             </div>
-            <div class="overview">
+            <div class="page overview" id="params-overview">
                 <div class="title">OVERVIEW</div>
                 <div class="sub-title">CHANNEL NAME</div>
-                <input type="text" class="name" disabled>{{channelName}}</input>
+                <input type="text" class="name" disabled value={{name}}></input>
             </div>
-            <div class="permissions">
+            <div class="page permissions" id="params-permissions">
                 <div class="title">PERMISSIONS</div>
                 <div class="sub-title">CONFIDENTIALITY</div>
                 <div class="radio-button">
@@ -327,21 +327,38 @@
                     <label for="public">Public</label> 
                 </div>
                 <div class="radio-button">
-                    <input type="radio" id="protected" name="privacy" value="protected">
+                    <input type="radio" id="protected" name="privacy" value="protected"></input>
                     <label for="protected">Protected</label> 
                 </div>
                 <div class="password">
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password"></input>
+                    <div class="visibility"></div>
                     <button class="save">Save</button>
                 </div>
             </div>
-            <div class="members">
+            <div class="page members" id="params-members">
                 <div class="title">MEMBERS</div>
+                <div class="sub-title">OWNER</div>
+                <div class="list owner">
+                    {{#each owner}}
+                    <div class="self owner">
+                        <div class="image-container">
+                            <img src={{image_url}} class="image_url"></img>
+                        </div>
+                        <div class="anagram">
+                            <p class="text">{{anagram}}</p>
+                        </div>
+                        <div class="nickname">
+                            <p class="text">{{nickname}}</p>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
                 <div class="sub-title">ADMINISTRATORS</div>
-                <div class="admins">
+                <div class="list admins">
                     {{#each admins}}
-                        <div class="admin">
+                        <div class="self admin">
                             <div class="image-container">
                                 <img src={{image_url}} class="image_url"></img>
                             </div>
@@ -355,9 +372,9 @@
                     {{/each}}
                 </div>
                 <div class="sub-title">OTHER MEMBERS</div>
-                <div class="admins">
-                    {{#each admins}}
-                        <div class="admin">
+                <div class="list participants">
+                    {{#each members}}
+                        <div class="self member">
                             <div class="image-container">
                                 <img src={{image_url}} class="image_url"></img>
                             </div>
@@ -370,10 +387,10 @@
                             <div class="dots-container">
                                 <img src='./icons/dots.svg' class="dots"></img>
                             </div>
-                            <div class="params">
-                                <div class="appoint-as-admin" id="appointAsAdministrator">Appoint as administrator</div>
-                                <div class="mute" id="mute">Mute</div>
-                                <div class="ban" id="ban">Ban</div>
+                            <div class="params" style="display: none;">
+                                <div class="appoint-as-admin" id="appointAsAdministrator" for="{{id}}">Appoint as administrator</div>
+                                <div class="mute" id="mute" for="{{id}}">Mute</div>
+                                <div class="ban" id="ban" for="{{id}}">Ban</div>
                             </div>
                         </div>
                     {{/each}}
