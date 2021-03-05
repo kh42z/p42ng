@@ -17,6 +17,11 @@ export const TwoFactorView = Backbone.View.extend({
     validate_code: function (event) {
         this.code = document.getElementById('code').value
         this.twoFactorService = new TwoFactorService()
-        this.twoFactorService.auth(1, this.code)
+        this.twoFactorService.auth(1, this.code).then(function() {
+            Backbone.history.navigate('#home', { trigger: true} )
+        }).catch(function() {
+                console.log("invalidOrExpiredToken")
+            }
+        )
     },
 })

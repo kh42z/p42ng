@@ -71,7 +71,15 @@ export const Router = Backbone.Router.extend({
   },
 
   connexion: function (url) {
-    const fetchUser = async () => {
+      // Two-Factor redirection
+      this.urlParams = new URLSearchParams(window.location.search)
+      if (this.urlParams.get('two_factor')) {
+          window.localStorage.setItem('user_id', this.urlParams.get('user_id'))
+          this.navigate('#twoFactor', { trigger: true})
+          return 1
+      }
+
+      const fetchUser = async () => {
       this.oauthService.setAjaxEnvironnement()
       this.oauthService.ajaxSetup()
       await this.userLogged.fetchUser(window.localStorage.getItem('user_id'))
@@ -84,7 +92,7 @@ export const Router = Backbone.Router.extend({
   },
 
   accessPage: function (url) {
-    if (window.localStorage.getItem('access-token') === null) {
+ if (window.localStorage.getItem('access-token') === null) {
       this.oauth_view()
       return 1
     } else if (performance.navigation.type === 1 || performance.navigation.type === 2) {
