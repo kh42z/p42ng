@@ -25,7 +25,8 @@ export const ChatView = Backbone.View.extend({
     'click .admin_panel_settings': 'adminPanelOverviewMenu',
     'click .overview-menu': 'adminPanelOverviewMenu',
     'click .permissions-menu': 'adminPanelPermissionsMenu',
-    'click .members-menu': 'adminPanelMembersMenu'
+    'click .members-menu': 'adminPanelMembersMenu',
+    'click .closeParams': 'closeParams'
   },
   initialize: function () {
     this.myChannels = this.model.get('myChannels').get('obj')
@@ -164,6 +165,14 @@ export const ChatView = Backbone.View.extend({
     document.getElementById('permissions-menu').classList.remove('open')
   },
 
+  closeParams: function () {
+    document.getElementById('params').style.display = 'none'
+    document.getElementById('discussions').style.display = 'flex'
+    document.getElementById('center').style.display = 'flex'
+    document.getElementById('right-side').style.display = 'flex'
+    this.channelId = undefined
+  },
+
   adminPanelPermissionsMenu: function () {
     document.getElementById('params-overview').style.display = 'none'
     document.getElementById('params-members').style.display = 'none'
@@ -177,6 +186,8 @@ export const ChatView = Backbone.View.extend({
     e.stopPropagation()
     if (this.channelId === undefined) {
       this.channelId = e.currentTarget.getAttribute('for')
+      e.currentTarget = e.currentTarget.parentElement
+      this.openChat(e)
     }
 
     document.getElementById('discussions').style.display = 'none'
@@ -322,6 +333,7 @@ export const ChatView = Backbone.View.extend({
   openChat: function (e) {
     console.log('openChat')
 
+    console.log(e)
     // display
     const divId = e.currentTarget.getAttribute('id')
     const id = e.currentTarget.getAttribute('for')
