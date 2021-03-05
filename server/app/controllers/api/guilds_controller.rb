@@ -2,7 +2,7 @@
 
 module Api
   class GuildsController < ApiController
-    before_action :set_guild, only: %i[show update destroy update_officers wars war_params_create]
+    before_action :set_guild, only: %i[show update destroy update_officers wars war_params_create members]
 
     def index
       json_response(Guild.all.order(score: :desc))
@@ -29,7 +29,27 @@ module Api
       json_response(@guild)
     end
 
+    def members
+      return render_not_allowed unless current_user == @guild.owner || @guild.officers.find(current_user.id)
+
+      add_members(@guild) if request.post?
+      destroy_member(@guild) if request.delete?
+      json_response(@guild)
+    end
+
     private
+
+    def add_members(guild)
+      members = params.fetch(:member_ids)
+
+      members.each { |t| User.find(t).update!(guild_id: guild.id) unless User.find(t).guild }
+    end
+
+    def destroy_member(guild)
+      member = params.fetch(:format)
+
+      User.find(member).update!(guild: nil) if User.find(member).guild == guild
+    end
 
     def add_officers(guild)
       return unless params.key?(:officer_ids)

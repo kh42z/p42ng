@@ -450,8 +450,8 @@ paths:
           $ref: '#/components/responses/500'
   "/api/guilds/{id}/members":
     post:
-      summary: Add guild member
-      description: Allows current_user to add a member to the guild
+      summary: Adds guild members
+      description: Allows current_user to add guild members
       tags:
         - Guilds
       parameters:
@@ -461,16 +461,41 @@ paths:
           schema:
             type: integer
           description: Guild ID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                member_ids:
+                  $ref: '#/components/schemas/integer_list'
       responses:
         '200':
-          description: chat joined
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  participant_ids:
-                    $ref: '#/components/schemas/integer_list'
+          description: members added
+
+  "/api/guilds/{id}/members/{uid}":
+    delete:
+      summary: Removes a guild member
+      description: Allows current_user to remove a guild member
+      tags:
+        - Guilds
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Guild ID
+        - name: uid
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: User ID
+      responses:
+        '204':
+          description: member removed
+
   "/api/wars":
     get:
       summary: Retrieves wars

@@ -63,7 +63,7 @@ describe "Guild", type: :request do
     end
 
     describe "#update" do
-      it "should be updated", test:true do
+      it "should be updated" do
         guild = create(:guild, owner: auth)
         valid_attributes = { name: "Updated", anagram: "upd4t" }
         put api_guild_url(guild.id), headers: access_token, params: valid_attributes
@@ -71,6 +71,36 @@ describe "Guild", type: :request do
         expect(Guild.count).to eq(1)
         expect(response).to have_http_status(200)
       end
+    end
+
+    describe "#members" do
+      it 'should add members' do
+        user_1, user_2 = create_list(:user, 2)
+        attributes = { name: "NoShroud", anagram: "NOSDO" }
+        post api_guilds_url, headers: access_token, params: attributes
+        post members_api_guild_url(Guild.first), headers: access_token, params: { member_ids: [user_1.id, user_2.id] }
+        expect(Guild.first.members.count).to eq 3
+        expect(response.status).to eq 200
+      end
+      it 'should destroy a member' do
+        user_1, user_2 = create_list(:user, 2)
+        attributes = { name: "NoShroud", anagram: "NOSDO" }
+        post api_guilds_url, headers: access_token, params: attributes
+        post members_api_guild_url(Guild.first), headers: access_token, params: { member_ids: [user_1.id, user_2.id] }
+        delete members_api_guild_url(Guild.first, user_1.id), headers: access_token
+        expect(Guild.first.members.count).to eq 2
+        expect(user_1.guild).to_not eq Guild.first
+        expect(response.status).to eq 200
+      end
+      #  it 'should not add a member who is already member of a guild', test:true do
+    #    user_1, user_2 = create_list(:user, 2)
+    #    attributes = { name: "NoShroud", anagram: "NOSDO" }
+    #    post api_guilds_url, headers: access_token, params: attributes
+    #    post members_api_guild_url(Guild.first), headers: access_token, params: { member_ids: [user_1.id] }
+    #    post members_api_guild_url(Guild.first), headers: access_token, params: { member_ids: [user_1.id] }
+    #    expect(response.body).to match(I18n.t('hasGuildAlready'))
+    #    expect(response.status).to eq 403
+    #  end
     end
   end
 end
