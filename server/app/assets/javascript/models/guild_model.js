@@ -5,9 +5,10 @@ export const Guild = Backbone.Model.extend({
     anagram: undefined,
     owner_id: undefined,
     score: undefined,
-    oauthService: undefined
+    oauthService: undefined,
+    officers_ids: undefined,
+    war_records: undefined
   },
-
 
   initialize: function (id) {
     /* this.on('all', function (e) {
@@ -27,7 +28,6 @@ export const Guild = Backbone.Model.extend({
   //   })
   //   console.log(this.id)
   },
-
 
   urlRoot: 'api/guilds',
   url: function () {

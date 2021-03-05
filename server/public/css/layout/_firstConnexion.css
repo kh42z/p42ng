@@ -13,7 +13,6 @@
 
 .firstConnexion .validate {
     margin-top: min(150px, 10%);
-    margin-bottom: 10%;
 
     font-size: min(2vw, 24px);
     width: 20vw;
@@ -52,6 +51,10 @@
     font-size: min(2vw, 24px);
 }
 
+.firstConnexion .nickname .input:focus {
+    outline: none;
+}
+
 .firstConnexion .avatar {
     display: flex;
 
@@ -65,6 +68,3 @@
     background-color: rgba(196, 196, 196, 0.8);
 }
 
-.firstConnexion .error-message {
-    color: var(--error-message-color);
-}

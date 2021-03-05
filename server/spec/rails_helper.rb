@@ -84,4 +84,5 @@ RSpec.configure do |config|
   # devise
   config.include Devise::Test::IntegrationHelpers, type: :request
   config.include RequestSpecHelper, type: :request
+
 end

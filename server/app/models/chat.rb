@@ -11,8 +11,6 @@ class Chat < ApplicationRecord
   belongs_to :owner, class_name: 'User'
   has_many :chat_admins, dependent: :destroy
   has_many :chat_participants, dependent: :destroy
-  has_many :chat_bans, dependent: :destroy
-  has_many :chat_timeouts, dependent: :destroy
 
   def password_enabled?
     privacy == 'protected'

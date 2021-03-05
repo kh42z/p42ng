@@ -48,11 +48,8 @@ export const User = Backbone.Model.extend({
     return this.fetch({
       url: this.urlRoot + url,
       success: function (response) {
-        // console.log(response)
       },
       error: function (errorResponse) {
-        // console.log('error')
-        // console.log(errorResponse)
       }
     })
   },
@@ -62,10 +59,8 @@ export const User = Backbone.Model.extend({
     return this.save({ nickname: this.get('nickname') }, {
       patch: true,
       success: function (response) {
-        console.log(response)
       },
       error: function (data, statusText) {
-        console.log(statusText.status)
       }
     })
   },

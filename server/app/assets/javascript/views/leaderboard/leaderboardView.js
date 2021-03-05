@@ -1,12 +1,27 @@
 export const LeaderboardView = Backbone.View.extend({
   el: $('#app'),
   initialize: function () {
-    this.listenTo(this.collection, 'sync', function () {
+    this.guilds = this.model.get('guilds').get('obj')
+    this.template = Handlebars.templates.leaderboard
+    this.listenTo(this.guilds, 'sync', function () {
       this.render()
     }, this)
   },
   render: function () {
-    this.$el.html('Achivements')
+    const row = Array()
+    for (let i = 1; i <= this.guilds.length; i++) {
+      // Trier guilde par score ici
+      row.push(JSON.parse(JSON.stringify(this.guilds.get(i))))
+    }
+
+    // trier le tableau ici par score
+    for (let i = 1; i <= row.length; i++) {
+      // Trier guilde par score ici
+      row[i - 1].position = i
+    }
+    const context = { row: row }
+    console.log(row)
+    this.$el.html(this.template(context))
     return this
   }
 })

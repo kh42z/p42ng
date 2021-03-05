@@ -2,7 +2,10 @@
 
 require "rails_helper"
 
+
+
 RSpec.describe "Chats", type: :request do
+  include_context "with cache"
   let(:auth) { create(:user) }
   let(:access_token) { auth.create_new_auth_token }
 
@@ -40,10 +43,11 @@ RSpec.describe "Chats", type: :request do
       chat = chat_full
       get api_chat_url(chat.id), headers: access_token
       expect(response).to have_http_status(200)
-      expect(Chat.first.chat_bans.first).to be_instance_of(ChatBan)
       expect(Chat.first.chat_participants.first).to be_instance_of(ChatParticipant)
-      expect(Chat.first.chat_timeouts.first).to be_instance_of(ChatTimeout)
       expect(Chat.first.chat_admins.first).to be_instance_of(ChatAdmin)
+      # TODO: Should be tested
+      #expect(Chat.first.chat_bans.first).to be_instance_of(ChatBan)
+      #expect(Chat.first.chat_timeouts.first).to be_instance_of(ChatTimeout)
     end
   end
 
@@ -130,9 +134,10 @@ RSpec.describe "Chats", type: :request do
       timer = 2
       post participants_api_chat_url(chat.id), headers: access_token, params: {user: user, chat: chat}
       post mutes_api_chat_url(chat.id), headers: access_token, params: {user_id: user.id, duration: timer}
-      expect(response).to have_http_status(200)
-      expect(ChatTimeout.count).to eq(1)
-      expect { DestroyObjectJob.set(wait: timer, queue: "default").perform_later('ChatTimeout') }.to have_enqueued_job
+      expect(response).to have_http_status(204)
+      expect(Rails.cache.exist?("timeout_chat_#{chat.id}_#{user.id}")).to eq(true)
+      sleep((timer + 1).seconds)
+      expect(Rails.cache.exist?("timeout_chat_#{chat.id}_#{user.id}")).to eq(false)
     end
     it "should return an error, due to bad parameters" do
       post mutes_api_chat_url(chat.id), headers: access_token, params: {useP: user, duration: 2}
@@ -146,9 +151,8 @@ RSpec.describe "Chats", type: :request do
       timer = 2
       post participants_api_chat_url(chat.id), headers: access_token, params: {user: user, chat: chat}
       post bans_api_chat_url(chat.id), headers: access_token, params: {user_id: user.id, duration: timer}
-      expect(response).to have_http_status(200)
-      expect(ChatBan.count).to eq(1)
-      expect { DestroyObjectJob.set(wait: timer, queue: "default").perform_later('ChatBan') }.to have_enqueued_job
+      expect(response).to have_http_status(204)
+      expect(Rails.cache.exist?("ban_chat_#{chat.id}_#{user.id}")).to eq(true)
     end
     it "should return an error, due to bad parameters" do
       post bans_api_chat_url(chat.id), headers: access_token, params: {userP: user, duration: 2}
@@ -237,8 +241,7 @@ def chat_full
   create(:chat) do |chat|
     create(:chat_admin, chat: chat)
     create(:chat_participant, chat: chat)
-    create(:chat_ban, chat: chat)
-    create(:chat_timeout, chat: chat)
+    #TODO: write in cache for to/bans?
   end
 end
 

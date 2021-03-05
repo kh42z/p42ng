@@ -1,6 +1,7 @@
 require "rails_helper"
 
 RSpec.describe ChatChannel, type: :channel do
+  include_context "with cache"
   let!(:current_user) { create(:user) }
 
 
@@ -26,7 +27,8 @@ RSpec.describe ChatChannel, type: :channel do
     it "should not subscribe" do
       chat = create(:chat, privacy: 'public')
       create(:chat_participant, chat: chat, user: current_user)
-      create(:chat_ban, user: current_user, chat: chat)
+      Rails.cache.write("ban_chat_#{chat.id}_#{current_user.id}", 0,
+                        expires_in: 5.seconds)
       stub_connection current_user: current_user
       subscribe(id: chat.id)
       expect(subscription).to be_rejected

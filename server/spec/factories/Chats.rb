@@ -18,13 +18,4 @@ FactoryBot.define do
     user
   end
 
-  factory :chat_ban do
-    chat
-    user
-  end
-
-  factory :chat_timeout do
-    chat
-    user
-  end
 end

@@ -9,7 +9,7 @@ class ChatChannel < ApplicationCable::Channel
   end
 
   def received(data)
-    return unless ChatTimeout.where(user_id: current_user.id, chat_id: @chat_id).count.positive?
+    return unless Rails.cache.exist?("timeout_chat_#{@chat_id}_#{current_user.id}")
 
     broadcast_to("chat_#{@chat_id}", data['message'])
   end
@@ -19,7 +19,7 @@ class ChatChannel < ApplicationCable::Channel
   private
 
   def reject_user?
-    return true if ChatBan.where(user_id: current_user.id, chat_id: @chat_id).count.positive?
+    return true if Rails.cache.exist?("ban_chat_#{@chat_id}_#{current_user.id}")
 
     ChatParticipant.where(user_id: current_user.id, chat_id: @chat_id).empty?
   end

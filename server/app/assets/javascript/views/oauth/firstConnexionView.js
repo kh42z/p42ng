@@ -1,5 +1,3 @@
-import { Router } from '../../router/router'
-
 export const FirstConnexionView = Backbone.View.extend({
   events: {
     'click .validate': 'validate',
@@ -22,7 +20,6 @@ export const FirstConnexionView = Backbone.View.extend({
     array = JSON.parse(JSON.stringify(this.model))
     array.message = message
     const context = JSON.parse(JSON.stringify(array))
-    // const context = JSON.parse(JSON.stringify(this.model))
     const templateData = this.template(context)
     this.$el.html(templateData)
     return this

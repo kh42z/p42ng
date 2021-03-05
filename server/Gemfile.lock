@@ -226,7 +226,6 @@ GEM
     rspec-expectations (3.10.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.10.0)
-    rspec-json_expectations (2.2.0)
     rspec-mocks (3.10.2)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.10.0)
@@ -299,7 +298,6 @@ DEPENDENCIES
   rack-reducer
   rails (~> 6.0.3, >= 6.0.3.4)
   redis (~> 4.0)
-  rspec-json_expectations
   rspec-rails
   rswag-api
   rswag-ui
