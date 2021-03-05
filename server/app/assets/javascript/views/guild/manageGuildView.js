@@ -33,7 +33,8 @@ export const ManageGuildView = Backbone.View.extend({
   },
 
   chooseView: function () {
-    if (this.users.get(this.userId).get('guild_id') == undefined) {
+    console.log(this.users.get(this.userId).get('guild_id'))
+    if (this.users.get(this.userId).get('guild_id') === undefined) {
       this.createGuildView()
     } else {
       this.guild = this.guilds.get(this.users.get(this.userId).get('guild_id'))
@@ -80,9 +81,9 @@ export const ManageGuildView = Backbone.View.extend({
     if (ownerBool) {
       this.$el.find('#ownerPannel').html(Handlebars.templates.ownerPannel({}))
       this.$el.find('#officerPannel').html(Handlebars.templates.officerPannel({}))
-      console.log(JSON.stringify(this.membersList))
-      console.log(JSON.stringify(this.nonMembersList))
-      console.log(JSON.stringify(this.officersList))
+      // console.log(JSON.stringify(this.membersList))
+      // console.log(JSON.stringify(this.nonMembersList))
+      // console.log(JSON.stringify(this.officersList))
     }
     if (officerBool) {
       this.$el.find('#officerPannel').html(Handlebars.templates.officerPannel({}))
@@ -90,8 +91,21 @@ export const ManageGuildView = Backbone.View.extend({
     this.$el.find('#memberPannel').html(Handlebars.templates.memberPannel({}))
   },
 
-  leaveGuild: function () {
+  leaveGuild: function () { // a travailler
     console.log('leaveGuild')
+    const user = this.users.get(this.userId)
+    const patchAUser = async () => {
+      try {
+        const response = await user.save({ guild_id: undefined }, { patch: true })
+        this.users.fetch()
+        this.guilds.fetch()
+        this.preload()
+      } catch (error) {
+        this.preload()
+        console.log(JSON.stringify(error.responseJSON))
+      }
+    }
+    patchAUser()
   },
 
   inviteMember: function () {
@@ -105,7 +119,7 @@ export const ManageGuildView = Backbone.View.extend({
   promoteMember: function () {
     console.log('promote member')
     // trouver le moyen de recup l'id correctement
-    const member = document.getElementById('memberToPromote').value
+    /*    const member = document.getElementById('memberToPromote').value
     if (!this.guild.get('officer_ids').includes(member.id)) {
       const array = this.guild.get('officer_ids')
     }
@@ -122,7 +136,7 @@ export const ManageGuildView = Backbone.View.extend({
         // this.renderError(error, '#errorField', Handlebars.templates.guildError)
       }
     }
-    patchAGuild()
+    patchAGuild() */
   },
 
   relegateMember: function () {
