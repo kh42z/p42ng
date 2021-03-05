@@ -19,7 +19,10 @@ export const ChatView = Backbone.View.extend({
     'click .eachChannel': 'subscribeChannel',
     'click .yes': 'deleteChannel',
     'click .no': 'modalClose',
-    'click .clickable-discussions': 'openChat'
+    'click .clickable-discussions': 'openChat',
+    'click .group_add-container': 'openModalAddFriendsToChannel',
+    'click .validate-add-friends': 'validateAddFriendsToChannel',
+    'click .admin_panel_settings': 'adminPanelSettings'
   },
   initialize: function () {
     this.myChannels = this.model.get('myChannels').get('obj')
@@ -71,7 +74,6 @@ export const ChatView = Backbone.View.extend({
     }
 
     // header center
-    let userChat
     if (this.myChannels.length > 0) {
       const currentChannel = this.myChannels.at(0)
       this.updateContextCenter(currentChannel)
@@ -98,6 +100,25 @@ export const ChatView = Backbone.View.extend({
     // update post render
     this.updateDOM(this.myChannels.at(0))
     return this
+  },
+
+  adminPanelSettings: function (e) {
+    e.stopPropagation()
+    document.getElementById('discussions').style.display = 'none'
+    document.getElementById('center').style.display = 'none'
+    document.getElementById('right-side').style.display = 'none'
+    document.getElementById('params').style.display = 'flex'
+  },
+
+  validateAddFriendsToChannel: function () {
+    const participantsIds = this.getSelectedBoxes()
+  },
+
+  openModalAddFriendsToChannel: function () {
+    console.log('openModalAddFriendsToChannel')
+    this.context.friends = JSON.parse(JSON.stringify(this.users))
+    this.updateHTML('modalAddFriendsToChannel')
+    document.getElementById('modalAddFriendsToChannel').style.display = 'flex'
   },
 
   updateDOM: function (currentChannel) {
@@ -137,7 +158,6 @@ export const ChatView = Backbone.View.extend({
       if (currentChannel.get('participant_ids').find(el2 => el2 == id) && el.get('status') === 'offline') { return true }
       return false
     })
-    console.log(usersOnline.length)
     this.context.nbOnline = usersOnline.length
     this.context.nbOffline = usersOffline.length
     this.context.nbInGame = usersInGame.length
@@ -178,8 +198,9 @@ export const ChatView = Backbone.View.extend({
 
   updateContextCenter: function (currentChannel) {
     let status
+    const idUserLogged = this.userLogged.get('id')
     if (currentChannel.get('privacy') === 'direct_message') {
-      const id = currentChannel.get('participant_ids').find(el => el !== this.userLogged.get('id'))
+      const id = currentChannel.get('participant_ids').find(el => el !== idUserLogged)
       const user = this.users.get(id)
       this.context.channel = false
       this.context.image_url = user.get('image_url')
@@ -196,6 +217,10 @@ export const ChatView = Backbone.View.extend({
       this.context.privacy = currentChannel.get('privacy')[0].toUpperCase() + currentChannel.get('privacy').slice(1)
       this.context.channel = true
       this.context.name = currentChannel.get('name')
+      this.context.owner = function () {
+        console.log(currentChannel)
+        return (currentChannel.get('owner_id') == idUserLogged)
+      }
     }
   },
 
@@ -230,7 +255,6 @@ export const ChatView = Backbone.View.extend({
   },
 
   selectCheckbox: function (e) {
-    console.log('selectCheckbox')
     const id = e.currentTarget.getAttribute('for')
     const checkbox = document.getElementById(id)
     if (checkbox.checked === true) { checkbox.checked = false } else { checkbox.checked = true }
@@ -256,11 +280,15 @@ export const ChatView = Backbone.View.extend({
       })
   },
 
-  createChannel: function (e) {
-    console.log('createChannel')
+  getSelectedBoxes: function () {
     const checkboxes = document.getElementsByClassName('checkbox')
     const selectedCboxes = Array.prototype.slice.call(checkboxes).filter(ch => ch.checked === true)
-    const participantsIds = Array.from(selectedCboxes, x => x.value)
+    return Array.from(selectedCboxes, x => x.value)
+  },
+
+  createChannel: function (e) {
+    console.log('createChannel')
+    const participantsIds = this.getSelectedBoxes()
     const name = document.getElementById('channelName').value
     const newChannel = new ChatModel()
     const createChannel = async () => {
@@ -301,12 +329,14 @@ export const ChatView = Backbone.View.extend({
   modalSearchFriends: function (e) {
     console.log('modalSearchFriends')
     const value = document.getElementById(e.currentTarget.getAttribute('id')).value
+    console.log(value)
     const search = this.users.slice().filter(function (el) {
       if (el.get('nickname').toLowerCase().startsWith(value.toLowerCase()) === true) { return true }
       if (el.get('anagram') !== undefined && el.get('anagram').toLowerCase().startsWith(value.toLowerCase()) === true) { return true }
       return false
     })
     const find = 'friends' + e.currentTarget.getAttribute('id')
+    console.log(find)
     this.context.friends = JSON.parse(JSON.stringify(search))
     this.updateHTML(find)
   },

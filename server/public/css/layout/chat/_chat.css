@@ -316,6 +316,8 @@
     width: 33px;
     height: 33px;
     margin-right: 32px;
+
+    cursor: pointer;
 }
 
 .chat .center .header .left-header .info

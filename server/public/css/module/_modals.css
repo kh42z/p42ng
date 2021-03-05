@@ -14,6 +14,10 @@
     display: none;
 }
 
+.chat .modalAddFriendsToChannel {
+    display: none;
+}
+
 .chat .modal
 .modalOpen {
     padding: 16px;
@@ -33,7 +37,7 @@
     justify-content: center;
 }
 
-.chat .validationModal .modalOpen
+.chat .modalOpen
 .buttons {
     display: flex;
     align-items: center;
@@ -41,7 +45,7 @@
     justify-content: center;
 }
 
-.chat .validationModal .modalOpen
+.chat .modalOpen
 .buttons .validation-buttons {
     width: 98px;
     height: 42px;
@@ -61,7 +65,7 @@
     font-size: 14px;
 }
 
-.chat .validationModal .modalOpen
+.chat  .modalOpen
 .buttons .button {
     width: 98px;
     height: 42px;
@@ -138,7 +142,7 @@
     margin-top: 8px;
 }
 
-.chat .modalCreateChannel .modalOpen
+.chat .modalOpen
 .friends {
     height: 100%;
     overflow-y: scroll;

@@ -1,5 +1,5 @@
 <div class="chat" id="chat">
-    <div class="discussions">
+    <div class="discussions" id="discussions">
         <div class="title">
             <h2 class="h2-discussions">Discussions</h2>
         </div>
@@ -21,7 +21,7 @@
                         <p class="channelName">#{{name}}</p>
                         {{#if admin}}
                         <div class="admin_panel_settings">
-                            <img src='./icons/admin_panel_settings.svg' class="admin_panel_settings-icon"></img>
+                            <img src='./icons/admin_panel_settings.svg' class="admin_panel_settings-icon" for={{id}}></img>
                         </div>
                         {{/if}}
                         <div class="close delete">
@@ -77,9 +77,11 @@
             </div>
             <div class="right-header">
                 {{#if channel}}
+                {{#if owner}}
                 <div class="group_add-container">
                     <img src="./icons/group_add.svg" class="group_add"></img>
                 </div>
+                {{/if}}
                 {{/if}}
                 {{#unless channel}}
                 <button class="play-button">
@@ -266,7 +268,36 @@
             </div>
         </div>
     </div>
-    <div class="parameters">
+    <div class="modal modalAddFriendsToChannel" id="modalAddFriendsToChannel" >
+        <div class="background"></div>
+        <div class="modalOpen">
+            <div class="close closeModal">
+                <img src="./icons/close.svg" id="close"></img>
+            </div>
+            <label class="label labelSelectFriends" for="search">Select friends</label>
+            <input class="textInput search modalSearchChannels" type="text" id="modalSearchAddFriendsToChannel" placeholder="Research"></input>
+            <div class="friends modalSearchAddFriendsToChannel" id="friendsmodalSearchAddFriendsToChannel">
+                {{#each friends}}
+                <div class="eachFriend eachFriendModalCreateChannel" for="addfriends{{id}}">
+                    <div class="left">
+                        <div class="image-container">
+                            <img src={{image_url}} id="image_url" class="image_url"></img>
+                        </div>
+                        <p class="anagram_nickname">{{anagram}} {{nickname}}</p>
+                    </div>
+                    <div class="right">
+                        <label class="checkboxlabel" for="{{checkboxId}}"></label>
+                        <input type="checkbox" class="checkbox" id="addfriends{{id}}" value="{{id}}"></input>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+            <div class="button-container buttons">
+                <button class="validation-buttons button validate-add-friends">Validate</button>
+            </div>
+        </div>
+    </div>
+    <div class="parameters" id="params">
         <div class="left-menu">
             <div class="menu">
                 <div class="overview-menu" id="overview-menu">Overview</div>
