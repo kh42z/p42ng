@@ -33,8 +33,9 @@ export const ManageGuildView = Backbone.View.extend({
   },
 
   chooseView: function () {
-    console.log(this.users.get(this.userId).get('guild_id'))
-    if (this.users.get(this.userId).get('guild_id') === undefined) {
+    // console.log(this.users.get(this.userId).get('guild_id'))
+    if (this.users.get(this.userId).get('guild_id') === undefined ||
+		this.users.get(this.userId).get('guild_id') === null) {
       this.createGuildView()
     } else {
       this.guild = this.guilds.get(this.users.get(this.userId).get('guild_id'))
@@ -96,7 +97,7 @@ export const ManageGuildView = Backbone.View.extend({
     const user = this.users.get(this.userId)
     const patchAUser = async () => {
       try {
-        const response = await user.save({ guild_id: undefined }, { patch: true })
+        const response = await user.save({ guild_id: null }, { patch: true })
         this.users.fetch()
         this.guilds.fetch()
         this.preload()
