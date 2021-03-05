@@ -18,6 +18,7 @@ if Rails.env.development?
   FactoryBot.create_list(:user, 20)
   FactoryBot.create_list(:guild_with_officers, 5)
   FactoryBot.create_list(:chat, 2)
+  FactoryBot.create_list(:war, 4)
 
   def chat_with_participants(count: 1)
     FactoryBot.create(:chat) do |chat|

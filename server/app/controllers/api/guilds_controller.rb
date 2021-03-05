@@ -5,7 +5,7 @@ module Api
     before_action :set_guild, only: %i[show update destroy update_officers wars war_params_create]
 
     def index
-      json_response(Guild.all.order(:score))
+      json_response(Guild.all.order(score: :desc))
     end
 
     def update
@@ -20,8 +20,8 @@ module Api
       return render_error('hasGuildAlready') if current_user.guild
 
       guild = Guild.create!(guild_params_create)
-      add_officers(guild)
       current_user.update!(guild: guild)
+      add_officers(guild)
       json_response(guild, :created)
     end
 

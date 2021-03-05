@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :guild_officer do
-    user { FactoryBot.create(:user, guild: guild) }
+    user { create(:user, guild: guild) }
     guild
   end
 
