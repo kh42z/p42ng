@@ -95,66 +95,71 @@ export const ChatView = Backbone.View.extend({
         array.channel = true
         array.name = currentChannel.get('name')
       }
-    }
 
-    // history messages
-    array.messages = Array() // size of nb history messages
-    for (let i = 0; i < 30; i++) {
-      array.messages.push({
-        anagram: '[24.c]',
-        image_url: './images/profile-pic.jpg',
-        nickname: 'pganglof-with-very-long-name',
-        time: i,
-        message: 'ptite game?'
-      })
-    }
+      // history messages
 
-    // right side
-    array.usersOnline = Array() // nb usersOnline
-    array.nbOnline = '4'
-    array.nbInGame = '1'
-    array.nbOffline = '0'
-    for (let i = 0; i < 4; i++) {
-      array.usersOnline.push({
-        anagram: '[txt]',
-        image_url: './images/jdurand.png',
-        nickname: 'jdurand123456789',
-        others: true
-      })
-      const length = array.usersOnline[i].anagram.length + array.usersOnline[i].nickname.length
-      if (length > 17) {
-        const size = 16 - array.usersOnline[i].anagram.length
-        array.usersOnline[i].nickname = array.usersOnline[i].nickname.substr(0, size) + '.'
+      array.messages = Array() // size of nb history messages
+      for (let i = 0; i < 30; i++) {
+        array.messages.push({
+          anagram: '[24.c]',
+          image_url: './images/profile-pic.jpg',
+          nickname: 'pganglof-with-very-long-name',
+          time: i,
+          message: 'ptite game?'
+        })
       }
-    }
 
-    // in game
-    array.usersInGame = Array() // nb usersOnline
-    for (let i = 0; i < 1; i++) {
-      array.usersInGame.push({
-        anagram: '[txt]',
-        image_url: './images/jdurand.png',
-        nickname: 'jdurand123456789'
+      // right side
+      const usersOnline = this.users.slice().filter(function (el) {
+        const id = el.get('id')
+        if (currentChannel.get('participant_ids').find(el2 => el2 == id) && el.get('status') === 'online') { return true }
+        return false
       })
-      const length = array.usersInGame[i].anagram.length + array.usersInGame[i].nickname.length
-      if (length > 17) {
-        const size = 16 - array.usersInGame[i].anagram.length
-        array.usersInGame[i].nickname = array.usersInGame[i].nickname.substr(0, size) + '.'
+      const usersInGame = this.users.slice().filter(function (el) {
+        const id = el.get('id')
+        if (currentChannel.get('participant_ids').find(el2 => el2 == id) && el.get('status') === 'ingame') { return true }
+        return false
+      })
+      const usersOffline = this.users.slice().filter(function (el) {
+        const id = el.get('id')
+        if (currentChannel.get('participant_ids').find(el2 => el2 == id) && el.get('status') === 'offline') { return true }
+        return false
+      })
+      array.nbOnline = usersOnline.length
+      array.nbOffline = usersOffline.length
+      array.nbInGame = usersInGame.length
+      array.usersOnline = Array()
+      for (let i = 0; i < usersOnline.length; i++) {
+        array.usersOnline.push(usersOnline[i])
+        const length = array.usersOnline[i].anagram.length + array.usersOnline[i].nickname.length
+        if (length > 17) {
+          const size = 16 - array.usersOnline[i].anagram.length
+          array.usersOnline[i].nickname = array.usersOnline[i].nickname.substr(0, size) + '.'
+        }
       }
-    }
 
-    // offline
-    array.usersOffline = Array() // nb usersOnline
-    for (let i = 0; i < 1; i++) {
-      array.usersOffline.push({
-        anagram: '[txt]',
-        image_url: './images/jdurand.png',
-        nickname: 'jdurand123456789'
-      })
-      const length = array.usersOffline[i].anagram.length + array.usersOffline[i].nickname.length
-      if (length > 17) {
-        const size = 16 - array.usersOffline[i].anagram.length
-        array.usersOffline[i].nickname = array.usersOffline[i].nickname.substr(0, size) + '.'
+      // in game
+      array.usersInGame = Array()
+      for (let i = 0; i < usersInGame.length; i++) {
+        array.usersInGame.push(usersInGame[i])
+        const length = array.usersInGame[i].anagram.length + array.usersInGame[i].nickname.length
+        if (length > 17) {
+          const size = 16 - array.usersInGame[i].anagram.length
+          array.usersInGame[i].nickname = array.usersInGame[i].nickname.substr(0, size) + '.'
+        }
+      }
+
+      // offline
+      array.usersOffline = Array()
+      for (let i = 0; i < usersOffline.length; i++) {
+        array.usersOffline.push(JSON.parse(JSON.stringify(usersOffline[i])))
+        if (array.usersOffline[i].anagram !== undefined) {
+          const length = array.usersOffline[i].anagram.length + array.usersOffline[i].nickname.length
+          if (length > 17) {
+            const size = 16 - array.usersOffline[i].anagram.length
+            array.usersOffline[i].nickname = array.usersOffline[i].nickname.substr(0, size) + '.'
+          }
+        }
       }
     }
 
@@ -174,7 +179,6 @@ export const ChatView = Backbone.View.extend({
         document.getElementById('pastille').classList.add(userChat.get('status'))
         document.getElementById('DM' + id).classList.add('open')
       } else {
-        console.log(currentChannel.get('privacy'))
         document.getElementById('right-side').style.display = 'flex'
         document.getElementById('channel' + id).classList.add('open')
       }
