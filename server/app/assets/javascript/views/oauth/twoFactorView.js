@@ -9,19 +9,21 @@ export const TwoFactorView = Backbone.View.extend({
     },
     el: $('#app'),
 
-    render: function () {
+    render: function (message = '') {
         this.templateTwoFactor = Handlebars.templates.twoFactor
-        this.$el.html(this.templateTwoFactor)
+        this.$el.html(this.templateTwoFactor({ 'message': message }))
         return this
     },
+
     validate_code: function (event) {
+        var current = this;
+
         this.code = document.getElementById('code').value
         this.twoFactorService = new TwoFactorService()
-        this.twoFactorService.auth(1, this.code).then(function() {
-            Backbone.history.navigate('#home', { trigger: true} )
+        this.twoFactorService.auth(this.code).then(function() {
+            Backbone.history.navigate('#two_factor_connexion', { trigger: true} )
         }).catch(function() {
-                console.log("invalidOrExpiredToken")
-            }
-        )
+            current.render('Your token is either invalid or expired.')
+        })
     },
 })

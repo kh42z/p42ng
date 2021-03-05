@@ -1,6 +1,6 @@
 export class TwoFactorService {
 
-    auth(user_id, code) {
+    auth(code) {
         this.uid = window.localStorage.getItem('user_id')
         return fetch('/two_factor/' + this.uid + '?' + new URLSearchParams({
             code: code,
@@ -12,9 +12,8 @@ export class TwoFactorService {
             }
             return response.json();
         }).then(function(data) {
-            console.log(data)
             window.localStorage.setItem('access-token', data['access-token'])
-            window.localStorage.setItem('client_id', data['client_id'])
+            window.localStorage.setItem('client_id', data['client'])
             window.localStorage.setItem('uid', data['uid'])
         })
     }

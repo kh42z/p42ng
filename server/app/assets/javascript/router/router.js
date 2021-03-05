@@ -64,11 +64,15 @@ export const Router = Backbone.Router.extend({
     connexion: 'connexion',
     exit: 'exit',
     firstConnexion: 'firstConnexion_view',
+    two_factor_connexion: 'two_factor_connexion',
     twoFactor: 'twoFactor_view',
     'search(/:item)': 'search_view',
     'search(/:item)/': 'search_view',
     '': 'oauth_view'
   },
+
+
+
 
   connexion: function (url) {
       // Two-Factor redirection
@@ -76,7 +80,7 @@ export const Router = Backbone.Router.extend({
       if (this.urlParams.get('two_factor')) {
           window.localStorage.setItem('user_id', this.urlParams.get('user_id'))
           this.navigate('#twoFactor', { trigger: true})
-          return 1
+          return
       }
 
       const fetchUser = async () => {
@@ -91,6 +95,15 @@ export const Router = Backbone.Router.extend({
     fetchUser()
   },
 
+    two_factor_connexion: function (url) {
+        const fetchUser = async () => {
+            this.oauthService.ajaxSetup()
+            await this.userLogged.fetchUser(window.localStorage.getItem('user_id'))
+            this.navigate('#home', { trigger: true })
+        }
+        fetchUser()
+    },
+
   accessPage: function (url) {
  if (window.localStorage.getItem('access-token') === null) {
       this.oauth_view()
@@ -100,7 +113,7 @@ export const Router = Backbone.Router.extend({
         this.oauthService = new OauthService()
         this.oauthService.ajaxSetup()
         await this.userLogged.fetchUser(window.localStorage.getItem('user_id'))
-        if (url !== 'firstConnexion') { this.headerView.render() }
+        if (url !== 'firstConnexion'|| url !== 'twoFactor') { this.headerView.render() }
       }
       fetchUser()
     }
@@ -112,7 +125,6 @@ export const Router = Backbone.Router.extend({
   },
 
   twoFactor_view: function () {
-    this.headerView.remove()
     const twoFactorView = new TwoFactorView()
   },
 
