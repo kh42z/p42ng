@@ -43,9 +43,9 @@
                             <img src={{image_url}} id="image_url" class="image_url"></img>
                         </div>
                         <p class="anagram_nickname">{{nickname}}</p>
-                        <div class="close">
+                        {{!-- <div class="close">
                             <img src='./icons/close.svg' class="close-icon" for={{id}}></img>
-                        </div>
+                        </div> --}}
                     </div>
                 {{/each}}
                 </div>
@@ -323,7 +323,7 @@
         </div>
         <div class="right-menu">
             <div class="close closeParams">
-                <img src="./icons/esc.svg" class="close">
+                <img src="./icons/esc.svg" class="">
             </div>
             <div class="page overview" id="params-overview">
                 <div class="title">OVERVIEW</div>
@@ -407,6 +407,21 @@
                                 <div class="el mute" id="mute" for="{{id}}">Mute</div>
                                 <div class="el ban" id="ban" for="{{id}}">Ban</div>
                             </div>
+                        </div>
+                        <div class="modal validationModal modalValidationAppointAsAdmin" id="modalValidationAppointAsAdmin{{id}}" style="display: none;">
+                        <div class="background"></div>
+                        <div class="modalOpen">
+                            <p class="sure">Appoint this member as administrator</p>
+                            <p class="adminRights">{{nickname}} will be able to mute and ban other members.</p>
+                            <div class="buttons">
+                                <div class="validation-buttons button-container-yes">
+                                    <button class="button yes yesAsAdmin" for="{{id}}">Yes</button>
+                                </div>
+                                <div class="validation-buttons button-container-no">
+                                    <button class="button no">No</button>
+                                </div>
+                            </div>
+                        </div>
                         </div>
                     {{/each}}
                 </div>

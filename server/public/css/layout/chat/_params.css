@@ -1,6 +1,7 @@
 .chat
 .parameters {
     display: none;
+    overflow: auto;
 }
 
 .chat .parameters
@@ -17,8 +18,8 @@
 .chat .parameters
 .right-menu .close {
     position: relative;
-    top: 16px;
-    left: 252px;
+    top: 32px;
+    left: 495px;
 
     width: 35px;
     height: 57px;
@@ -231,7 +232,9 @@ p.p {
 
 .chat .parameters .right-menu
 .members {
+    overflow-x: hidden;
     overflow-y: scroll;
+    height: 100%;
 }
 
 .chat .parameters .right-menu
@@ -273,4 +276,11 @@ p.p {
     padding-left: 16px;
     line-height: 48px;
     position: relative;
+
+}
+
+.chat .parameters .right-menu .members
+.admin-rights .mute {
+    border-top: 1px solid #404146;
+    border-bottom: 1px solid #404146;
 }

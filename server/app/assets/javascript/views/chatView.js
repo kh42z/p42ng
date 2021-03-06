@@ -30,7 +30,10 @@ export const ChatView = Backbone.View.extend({
     'keyup .modalSearchAddFriendsToChannel': 'modalSearchAddFriends',
     'click .dots-container': 'adminRights',
     'click .deleteChannel': 'deleteDefinitivelyChannel',
-    'click .yesDeleteDefinitivelyChannel': 'yesDeleteDefinitivelyChannel'
+    'click .yesDeleteDefinitivelyChannel': 'yesDeleteDefinitivelyChannel',
+    'click .appoint-as-admin': 'modalValidationAppointAsAdmin',
+    'click .members': 'closeAdminRights',
+    'click .yesAsAdmin': 'yesAsAdmin'
   },
   initialize: function () {
     this.myChannels = this.model.get('myChannels').get('obj')
@@ -111,11 +114,52 @@ export const ChatView = Backbone.View.extend({
     return this
   },
 
+  yesAsAdmin: function (e) {
+    const userId = e.currentTarget.getAttribute('for')
+    const currentChannel = this.myChannels.get(this.channelId)
+    const adminIds = currentChannel.get('admin_ids')
+    adminIds.push(Number(userId))
+    console.log(adminIds)
+    currentChannel.patchAdmin(adminIds)
+    currentChannel.set({ admin_ids: adminIds })
+  },
+
+  modalValidationAppointAsAdmin: function (e) {
+    e.stopPropagation()
+    document.getElementById('modalValidationAppointAsAdmin' + e.currentTarget.getAttribute('for')).style.display = 'flex'
+  },
+
+  closeAdminRights: function (e) {
+    console.log('closeAdminRights')
+    e.stopPropagation()
+    // e.currentTarget.classList.contains('el') !== false) {
+    if (e.currentTarget.classList.contains('admin-rights') === false) {
+      const adminRights = document.getElementsByClassName('admin-rights')
+      console.log(adminRights.length)
+      for (let i = 0; i < adminRights.length; i++) {
+        adminRights[i].style.display = 'none'
+      }
+      const dotsContainer = document.getElementsByClassName('dots-container')
+      for (let i = 0; i < dotsContainer.length; i++) {
+        dotsContainer[i].classList.remove('open')
+      }
+    }
+    // } else if (e.currentTarget.contains('appoint-as-admin')) {
+    //   this.modalValidationAppointAsAdmin(e)
+    // }
+  },
+
   adminRights: function (e) {
+    console.log('adminRights')
+    e.stopPropagation()
     const id = e.currentTarget.getAttribute('for')
-    console.log(id)
-    e.currentTarget.classList.add('open')
-    document.getElementById('admin-rights' + id).style.display = 'flex'
+    if (e.currentTarget.classList.contains('open')) {
+      document.getElementById('admin-rights' + id).style.display = 'none'
+      e.currentTarget.classList.remove('open')
+    } else {
+      e.currentTarget.classList.add('open')
+      document.getElementById('admin-rights' + id).style.display = 'flex'
+    }
   },
 
   adminPanelMembersMenu: function () {
@@ -130,7 +174,6 @@ export const ChatView = Backbone.View.extend({
         currentChannel.get('owner_id')
       )
     }
-    console.log(owner)
     this.context.owner = Array()
     let anagram
     if (owner.get('anagram') === undefined) {
@@ -138,14 +181,11 @@ export const ChatView = Backbone.View.extend({
     } else {
       anagram = owner.get('anagram')
     }
-    this.context.owner.push({
-      image_url: owner.get('image_url'),
-      anagram: anagram,
-      nickname: owner.get('nickname')
-    })
+    this.context.owner.push(JSON.parse(JSON.stringify(owner)))
+    this.context.owner[this.context.owner.length - 1].anagram = anagram
 
     const admins = currentChannel.get('admin_ids')
-    this.context.admin = Array()
+    this.context.admins = Array()
     for (let i = 0; i < admins.length; i++) {
       if (admins[i] !== this.userLogged.get('id')) {
         const admin = this.users.get(admins[i])
@@ -155,8 +195,8 @@ export const ChatView = Backbone.View.extend({
         } else {
           anagram = admin.get('anagram')
         }
-        this.context.admin.push(JSON.parse(JSON.stringify(admin)))
-        this.context.admin.anagram = anagram
+        this.context.admins.push(JSON.parse(JSON.stringify(admin)))
+        this.context.admins[this.context.admins.length - 1].anagram = anagram
       }
     }
 
@@ -172,12 +212,8 @@ export const ChatView = Backbone.View.extend({
         } else {
           anagram = owner.get('anagram')
         }
-        this.context.members.push({
-          image_url: member.get('image_url'),
-          anagram: anagram,
-          nickname: member.get('nickname'),
-          id: member.get('id')
-        })
+        this.context.members.push(JSON.parse(JSON.stringify(member)))
+        this.context.members[this.context.members.length - 1].anagram = anagram
       }
     }
 
