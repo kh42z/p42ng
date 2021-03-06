@@ -365,19 +365,6 @@ paths:
       tags:
         - Guilds
       parameters: [ ]
-      responses:
-        '201':
-          $ref: '#/components/responses/201'
-        '422':
-          $ref: '#/components/responses/422'
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '500':
-          $ref: '#/components/responses/500'
       requestBody:
         content:
           application/json:
@@ -388,8 +375,11 @@ paths:
                   type: string
                 anagram:
                   type: string
-                officer_ids:
-                  $ref: '#/components/schemas/integer_list'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '422':
+          $ref: '#/components/responses/422'
 
   "/api/guilds/{id}":
     parameters:

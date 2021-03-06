@@ -12,7 +12,6 @@ module Api
       return render_not_allowed if @guild.owner != current_user
 
       @guild.update!(guild_params)
-      # update_officers
       json_response(@guild)
     end
 
@@ -31,20 +30,28 @@ module Api
     def members
       return render_not_allowed unless current_user == @guild.owner || @guild.officers.where(user_id: current_user)
 
-      add_members(@guild) if request.post?
-      destroy_member(@guild) if request.delete?
-      json_response(@guild)
+      status = add_members(@guild) if request.post?
+      status = destroy_member(@guild) if request.delete?
+      json_response(@guild, status)
     end
 
     def officers
       return render_not_allowed unless current_user == @guild.owner
 
-      add_officers(@guild) if request.post?
-      destroy_officer(@guild) if request.delete?
-      json_response(@guild)
+      status = add_officers(@guild) if request.post?
+      status = destroy_officer(@guild) if request.delete?
+      json_response(@guild, status)
     end
 
     private
+
+    def manage_ownership(guild)
+      new_owner = GuildOfficer.where(guild_id: guild.id).pluck(:user_id)[0]
+      GuildOfficer.where(guild_id: guild.id, user_id: new_owner).destroy_all if new_owner
+      new_owner ||= guild.members.pluck(:id).first
+      guild.update!(owner_id: new_owner) if new_owner
+      guild.destroy! unless new_owner
+    end
 
     def add_members(guild)
       members = params.fetch(:member_ids)
@@ -53,29 +60,27 @@ module Api
 
         User.find(t).update!(guild_id: guild.id)
       end
+      200
     end
 
     def destroy_member(guild)
       member = params.fetch(:format)
-      User.find(member).update!(guild: nil) if User.find(member).guild == guild
+      destroyed = User.find(member).update!(guild: nil) if User.find(member).guild == guild
+      manage_ownership(guild) if current_user.id == member.to_i
+      destroyed ? 204 : 422
     end
 
     def add_officers(guild)
       officers = params.fetch(:officer_ids)
       officers.each { |t| GuildOfficer.create(user_id: t, guild_id: guild.id) if guild.members.find(t) }
+      200
     end
 
     def destroy_officer(guild)
       officer = params.fetch(:format)
       GuildOfficer.destroy_by(user: officer) if User.where(guild_id: guild).find(officer)
+      204
     end
-
-    # def update_officers
-    #   return unless params.key?(:officer_ids)
-
-    #   @guild.officers.destroy_all
-    #   add_officers(@guild)
-    # end
 
     def guild_params
       params.permit(:name, :anagram, :owner_id)
