@@ -18,7 +18,7 @@ class User < ApplicationRecord
   has_many :user_achievements
   has_many :friendships, ->(user) { where('friend_a_id = ? OR friend_b_id = ?', user.id, user.id) }
   has_many :friends, through: :friendships
-  has_many :user_ignores, foreign_key: 'user_id', dependent: :destroy
+  has_many :ignores, foreign_key: 'user_id', dependent: :destroy, class_name: 'UserIgnore'
 
   validates_presence_of :nickname
   validates :nickname, uniqueness: true

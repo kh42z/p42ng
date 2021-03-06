@@ -25,7 +25,9 @@ Rails.application.routes.draw do
     end
     resources :users do
       member do
-      post :avatar, to: 'users#upload_avatar'
+        post :avatar, to: 'users#upload_avatar'
+        post 'ignores', to: 'users#create_ignore'
+        delete 'ignores/:ignored_id', to: 'users#destroy_ignore'
       end
     end
   end

@@ -131,11 +131,11 @@ ActiveRecord::Schema.define(version: 2021_03_03_084016) do
 
   create_table "user_ignores", force: :cascade do |t|
     t.bigint "user_id"
-    t.bigint "user_ignored_id"
+    t.bigint "ignored_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["ignored_id"], name: "index_user_ignores_on_ignored_id"
     t.index ["user_id"], name: "index_user_ignores_on_user_id"
-    t.index ["user_ignored_id"], name: "index_user_ignores_on_user_ignored_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -236,7 +236,7 @@ ActiveRecord::Schema.define(version: 2021_03_03_084016) do
   add_foreign_key "guilds", "users", column: "owner_id"
   add_foreign_key "user_achievements", "users"
   add_foreign_key "user_ignores", "users"
-  add_foreign_key "user_ignores", "users", column: "user_ignored_id"
+  add_foreign_key "user_ignores", "users", column: "ignored_id"
   add_foreign_key "users", "guilds"
   add_foreign_key "users", "ladders"
   add_foreign_key "war_addons", "war_terms"

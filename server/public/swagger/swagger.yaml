@@ -731,8 +731,6 @@ paths:
                   type: boolean
                 guild_id:
                   type: integer
-                ignore_ids:
-                  $ref: '#/components/schemas/integer_list'
     get:
       summary: Retrieves an user
       tags:
@@ -759,6 +757,49 @@ paths:
           $ref: '#/components/responses/403'
         '500':
           $ref: '#/components/responses/500'
+  "/api/users/{id}/ignores":
+    post:
+      summary: Add user to ignore list
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref : '#/components/schemas/user_ignored'
+      responses:
+        '200':
+          description: ignore created
+          content:
+            application/json:
+              schema:
+                $ref : '#/components/schemas/user_ignored'
+  "/api/users/{id}/ignores/{ignored_id}":
+    delete:
+      summary: Removes ignored_id from ignore list
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: ignored_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: member removed
   "/api/users/{id}/avatar":
     post:
       summary: Upload an user avatar
@@ -814,6 +855,10 @@ components:
       name: uid
       in: header
   schemas:
+    arrayOfUserIgnored:
+      type: array
+      items:
+        $ref: '#/components/schemas/user_ignored'
     arrayOfGames:
       type: array
       items:
@@ -877,8 +922,8 @@ components:
           type: string
         chat_ids:
           $ref: '#/components/schemas/integer_list'
-        ignore_ids:
-          $ref: '#/components/schemas/integer_list'
+        ignores:
+          $ref: '#/components/schemas/arrayOfUserIgnored'
     guild_response:
       allOf:
         - type: object
@@ -938,6 +983,11 @@ components:
         duration:
           type: integer
           description: Duration in seconds
+    user_ignored:
+      type: object
+      properties:
+        ignored_id:
+          type: integer
     chat:
       type: object
       properties:

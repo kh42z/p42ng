@@ -15,13 +15,13 @@ class UserSerializer < ActiveModel::Serializer
              :banned,
              :first_login,
              :chat_ids,
-             :ignore_ids
+             :ignores
 
   def chat_ids
     object.chats.pluck(:id)
   end
 
-  def ignore_ids
-    object.user_ignores.pluck(:user_ignored_id)
+  def ignores
+    ActiveModelSerializers::SerializableResource.new(object.ignores, each_serializer: IgnoreUserSerializer)
   end
 end
