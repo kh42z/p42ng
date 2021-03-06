@@ -26,7 +26,9 @@ export const ChatView = Backbone.View.extend({
     'click .overview-menu': 'adminPanelOverviewMenu',
     'click .permissions-menu': 'adminPanelPermissionsMenu',
     'click .members-menu': 'adminPanelMembersMenu',
-    'click .closeParams': 'closeParams'
+    'click .closeParams': 'closeParams',
+    'keyup .modalSearchAddFriendsToChannel': 'modalSearchAddFriends',
+    'click .dots-container': 'adminRights'
   },
   initialize: function () {
     this.myChannels = this.model.get('myChannels').get('obj')
@@ -85,15 +87,15 @@ export const ChatView = Backbone.View.extend({
 
       // history messages
       this.context.messages = Array()
-      // for (let i = 0; i < 30; i++) {
-      //   this.context.messages.push({
-      //     anagram: '[24.c]',
-      //     image_url: './images/profile-pic.jpg',
-      //     nickname: 'pganglof-with-very-long-name',
-      //     time: i,
-      //     message: 'ptite game?'
-      //   })
-      // }
+      for (let i = 0; i < 0; i++) {
+        this.context.messages.push({
+          anagram: '[24.c]',
+          image_url: './images/profile-pic.jpg',
+          nickname: 'pganglof-with-very-long-name',
+          time: i,
+          message: 'ptite game?'
+        })
+      }
 
       // right side
       this.updateContextRightSide(currentChannel)
@@ -105,6 +107,13 @@ export const ChatView = Backbone.View.extend({
     // update post render
     this.updateDOM(this.myChannels.at(0))
     return this
+  },
+
+  adminRights: function (e) {
+    const id = e.currentTarget.getAttribute('for')
+    console.log(id)
+    e.currentTarget.classList.add('open')
+    document.getElementById('admin-rights' + id).style.display = 'flex'
   },
 
   adminPanelMembersMenu: function () {
@@ -121,9 +130,15 @@ export const ChatView = Backbone.View.extend({
     }
     console.log(owner)
     this.context.owner = Array()
+    let anagram
+    if (owner.get('anagram') === undefined) {
+      anagram = 'N/A'
+    } else {
+      anagram = owner.get('anagram')
+    }
     this.context.owner.push({
       image_url: owner.get('image_url'),
-      anagram: owner.get('anagram'),
+      anagram: anagram,
       nickname: owner.get('nickname')
     })
 
@@ -132,11 +147,14 @@ export const ChatView = Backbone.View.extend({
     for (let i = 0; i < admins.length; i++) {
       if (admins[i] !== this.userLogged.get('id')) {
         const admin = this.users.get(admins[i])
-        this.context.admin.push({
-          image_url: admin.get('image_url'),
-          anagram: admin.get('anagram'),
-          nickname: admin.get('nickname')
-        })
+        let anagram
+        if (admin.get('anagram') === undefined) {
+          anagram = 'N/A'
+        } else {
+          anagram = admin.get('anagram')
+        }
+        this.context.admin.push(JSON.parse(JSON.stringify(admin)))
+        this.context.admin.anagram = anagram
       }
     }
 
@@ -146,9 +164,15 @@ export const ChatView = Backbone.View.extend({
       if (members[i] !== this.userLogged.get('id') &&
         !admins.find(el => el === members[i])) {
         const member = this.users.get(members[i])
+        let anagram
+        if (owner.get('anagram') === undefined) {
+          anagram = 'N/A'
+        } else {
+          anagram = owner.get('anagram')
+        }
         this.context.members.push({
           image_url: member.get('image_url'),
-          anagram: member.get('anagram'),
+          anagram: anagram,
           nickname: member.get('nickname'),
           id: member.get('id')
         })
@@ -210,18 +234,50 @@ export const ChatView = Backbone.View.extend({
     const currentChannel = this.myChannels.get(channelId)
     currentChannel.invitesToChannel(participantsIds)
     const participants = currentChannel.get('participant_ids')
-    participantsIds.forEach(el => participants.push(el))
+    participantsIds.forEach(el => participants.push(Number(el)))
     currentChannel.set({ participants_ids: participants })
+    this.myChannels.set(currentChannel)
     this.updateContextRightSide(currentChannel)
     this.updateHTML('right-side')
     this.modalClose()
   },
 
-  openModalAddFriendsToChannel: function () {
-    console.log('openModalAddFriendsToChannel')
-    this.context.friends = JSON.parse(JSON.stringify(this.users))
+  openModalAddFriendsToChannel: function (e) {
+    const channelId = e.currentTarget.getAttribute('for')
+    const currentChannel = this.myChannels.get(channelId)
+    const participantIds = currentChannel.get('participant_ids')
+    const users = this.users.slice().filter(function (el) {
+      for (let i = 0; i < participantIds.length; i++) {
+        if (participantIds[i] === el.get('id')) {
+          return false
+        }
+      }
+      return true
+    })
+    this.context.friends = JSON.parse(JSON.stringify(users))
     this.updateHTML('modalAddFriendsToChannel')
     document.getElementById('modalAddFriendsToChannel').style.display = 'flex'
+  },
+
+  modalSearchAddFriends: function (e) {
+    console.log('modalSearchAddFriends')
+    const value = document.getElementById(e.currentTarget.getAttribute('id')).value
+    const channelId = e.currentTarget.getAttribute('for')
+    const currentChannel = this.myChannels.get(channelId)
+    const participantIds = currentChannel.get('participant_ids')
+    const search = this.users.slice().filter(function (el) {
+      for (let i = 0; i < participantIds.length; i++) {
+        if (participantIds[i] === el.get('id')) {
+          return false
+        }
+      }
+      if (el.get('nickname').toLowerCase().startsWith(value.toLowerCase()) === true) { return true }
+      if (el.get('anagram') !== undefined && el.get('anagram').toLowerCase().startsWith(value.toLowerCase()) === true) { return true }
+      return false
+    })
+    const find = 'friends' + e.currentTarget.getAttribute('id')
+    this.context.friends = JSON.parse(JSON.stringify(search))
+    this.updateHTML(find)
   },
 
   updateDOM: function (currentChannel) {
@@ -328,6 +384,7 @@ export const ChatView = Backbone.View.extend({
       }
       this.context.chatId = currentChannel.get('id')
     }
+    this.context.id = currentChannel.get('id')
   },
 
   openChat: function (e) {

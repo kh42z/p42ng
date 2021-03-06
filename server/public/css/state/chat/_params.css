@@ -11,3 +11,12 @@
 .dots-container:hover {
     background: #364050;
 }
+
+.dots-container.open {
+    background: #364050;
+}
+
+.chat .parameters .right-menu .members
+.admin-rights .el:hover {
+    background: #15181D;
+}

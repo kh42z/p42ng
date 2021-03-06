@@ -78,7 +78,7 @@
             <div class="right-header">
                 {{#if channel}}
                 {{#if owner}}
-                <div class="group_add-container">
+                <div class="group_add-container" for="{{id}}">
                     <img src="./icons/group_add.svg" class="group_add"></img>
                 </div>
                 {{/if}}
@@ -275,7 +275,7 @@
                 <img src="./icons/close.svg" id="close"></img>
             </div>
             <label class="label labelSelectFriends" for="search">Select friends</label>
-            <input class="textInput search modalSearchChannels" type="text" id="modalSearchAddFriendsToChannel" placeholder="Research"></input>
+            <input class="textInput  modalSearchChannels modalSearchAddFriendsToChannel" type="text" id="modalSearchAddFriendsToChannel" placeholder="Research" for={{id}}></input>
             <div class="friends modalSearchAddFriendsToChannel" id="friendsmodalSearchAddFriendsToChannel">
                 {{#each friends}}
                 <div class="eachFriend eachFriendModalCreateChannel" for="addfriends{{id}}">
@@ -384,13 +384,13 @@
                             <div class="nickname">
                                 <p class="text">{{nickname}}</p>
                             </div>
-                            <div class="dots-container">
+                            <div class="dots-container" for="{{id}}">
                                 <img src='./icons/dots.svg' class="dots"></img>
                             </div>
-                            <div class="params" style="display: none;">
-                                <div class="appoint-as-admin" id="appointAsAdministrator" for="{{id}}">Appoint as administrator</div>
-                                <div class="mute" id="mute" for="{{id}}">Mute</div>
-                                <div class="ban" id="ban" for="{{id}}">Ban</div>
+                            <div class="admin-rights" id="admin-rights{{id}}" style="display: none;">
+                                <div class="el appoint-as-admin" id="appointAsAdministrator" for="{{id}}">Appoint as administrator</div>
+                                <div class="el mute" id="mute" for="{{id}}">Mute</div>
+                                <div class="el ban" id="ban" for="{{id}}">Ban</div>
                             </div>
                         </div>
                     {{/each}}
