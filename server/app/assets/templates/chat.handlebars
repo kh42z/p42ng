@@ -260,7 +260,7 @@
             <p class="adminRights">You will lose your administrator rights</p>
             <div class="buttons">
                 <div class="validation-buttons button-container-yes">
-                    <button class="button yes">Yes</button>
+                    <button class="button yes yesDeleteChannel">Yes</button>
                 </div>
                 <div class="validation-buttons button-container-no">
                     <button class="button no">No</button>
@@ -303,7 +303,22 @@
                 <div class="sub-menu overview-menu" id="overview-menu"><p class="p">Overview</p></div>
                 <div class="sub-menu permissions-menu"  id="permissions-menu"><p class="p">Permissions</p></div>
                 <div class="sub-menu members-menu" id="members-menu"><p class="p">Members</p></div>
-                <div class="delete">Delete channel</div>
+                <div class="deleteChannel" >Delete channel</div>
+            </div>
+        </div>
+        <div class="modal validationModal modalValidationDeleteDefinitivelyChannel" id="modalValidationDeleteDefinitivelyChannel" style="display: none;">
+            <div class="background"></div>
+            <div class="modalOpen">
+                <p class="sure">Are you sure to want to delete this channel?</p>
+                <p class="adminRights">Any members won't have acces to this channel anymore</p>
+                <div class="buttons">
+                    <div class="validation-buttons button-container-yes">
+                        <button class="button yes yesDeleteDefinitivelyChannel">Yes</button>
+                    </div>
+                    <div class="validation-buttons button-container-no">
+                        <button class="button no">No</button>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="right-menu">
@@ -313,7 +328,7 @@
             <div class="page overview" id="params-overview">
                 <div class="title">OVERVIEW</div>
                 <div class="sub-title">CHANNEL NAME</div>
-                <input type="text" class="name" disabled value={{name}}></input>
+                <input type="text" class="name" id="inputName" disabled value={{name}}></input>
             </div>
             <div class="page permissions" id="params-permissions">
                 <div class="title">PERMISSIONS</div>

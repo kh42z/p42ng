@@ -17,7 +17,7 @@ export const ChatView = Backbone.View.extend({
     'click .close-icon': 'deleteChannelConfirmation',
     'click .search_channel': 'openModalSearchChannel',
     'click .eachChannel': 'subscribeChannel',
-    'click .yes': 'deleteChannel',
+    'click .yesDeleteChannel': 'deleteChannel',
     'click .no': 'modalClose',
     'click .clickable-discussions': 'openChat',
     'click .group_add-container': 'openModalAddFriendsToChannel',
@@ -28,7 +28,9 @@ export const ChatView = Backbone.View.extend({
     'click .members-menu': 'adminPanelMembersMenu',
     'click .closeParams': 'closeParams',
     'keyup .modalSearchAddFriendsToChannel': 'modalSearchAddFriends',
-    'click .dots-container': 'adminRights'
+    'click .dots-container': 'adminRights',
+    'click .deleteChannel': 'deleteDefinitivelyChannel',
+    'click .yesDeleteDefinitivelyChannel': 'yesDeleteDefinitivelyChannel'
   },
   initialize: function () {
     this.myChannels = this.model.get('myChannels').get('obj')
@@ -213,6 +215,9 @@ export const ChatView = Backbone.View.extend({
       e.currentTarget = e.currentTarget.parentElement
       this.openChat(e)
     }
+
+    this.context.name = this.myChannels.get(this.channelId).get('name')
+    this.updateHTML('params-overview')
 
     document.getElementById('discussions').style.display = 'none'
     document.getElementById('center').style.display = 'none'
@@ -458,7 +463,9 @@ export const ChatView = Backbone.View.extend({
     const createChannel = async () => {
       try {
         const response = await newChannel.createChannel(name, participantsIds)
+        console.log(this.myChannels)
         this.myChannels.add(newChannel)
+        console.log(this.myChannels)
         this.channels.add(newChannel)
         this.modalClose()
         const myChannels = this.myChannels.slice().filter(el => el.get('privacy') !== 'direct_message')
@@ -483,7 +490,7 @@ export const ChatView = Backbone.View.extend({
   },
 
   updateHTML: function (div) {
-    console.log('updateHTML')
+    console.log('updateHTML' + div)
     const html = this.templateChat(this.context)
     const found = $(html).find('#' + div)[0].innerHTML
     const currentDiv = document.getElementById(div)
@@ -574,11 +581,19 @@ export const ChatView = Backbone.View.extend({
     }
   },
 
-  deleteChannel: function (e) {
-    console.log('deleteChannel')
-    const id = document.getElementById('modalValidationDeleteChannel').getAttribute('for')
-    this.myChannels.get(id).leaveRoom()
-    this.myChannels.remove(id)
+  yesDeleteDefinitivelyChannel: function (e) {
+    const currentChannel = this.myChannels.get(this.channelId)
+    currentChannel.deleteDefinitivelyChannel()
+    this.myChannels.remove(this.channelId)
+    this.deleteChannelOfHTML(e)
+    this.closeParams()
+  },
+
+  deleteDefinitivelyChannel: function () {
+    document.getElementById('modalValidationDeleteDefinitivelyChannel').style.display = 'flex'
+  },
+
+  deleteChannelOfHTML: function (e) {
     const myChannels = this.myChannels.slice().filter(el => el.get('privacy') !== 'direct_message')
     const array = Array()
     for (let i = 0; i < myChannels.length; i++) {
@@ -596,6 +611,14 @@ export const ChatView = Backbone.View.extend({
       document.getElementById('center').style.display = 'none'
       document.getElementById('right-side').style.display = 'none'
     }
+  },
+
+  deleteChannel: function (e) {
+    console.log('deleteChannel')
+    const id = document.getElementById('modalValidationDeleteChannel').getAttribute('for')
+    this.myChannels.get(id).leaveRoom()
+    this.myChannels.remove(id)
+    this.deleteChannelOfHTML(e)
   },
 
   deleteChannelConfirmation: function (e) {

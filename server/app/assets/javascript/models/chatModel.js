@@ -74,5 +74,8 @@ export const ChatModel = Backbone.Model.extend({
         participant_ids: participantsIds
       })
     })
+  },
+  deleteDefinitivelyChannel: function () {
+    this.destroy()
   }
 })
