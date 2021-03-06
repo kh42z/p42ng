@@ -33,7 +33,11 @@ export const ChatView = Backbone.View.extend({
     'click .yesDeleteDefinitivelyChannel': 'yesDeleteDefinitivelyChannel',
     'click .appoint-as-admin': 'modalValidationAppointAsAdmin',
     'click .members': 'closeAdminRights',
-    'click .yesAsAdmin': 'yesAsAdmin'
+    'click .yesAsAdmin': 'yesAsAdmin',
+    'click .ban': 'openModalBan',
+    'click .yesBan': 'validateBan',
+    'click .mute': 'openModalMute',
+    'click .yesMute': 'validateMute'
   },
   initialize: function () {
     this.myChannels = this.model.get('myChannels').get('obj')
@@ -114,14 +118,64 @@ export const ChatView = Backbone.View.extend({
     return this
   },
 
+  validateMute: function (e) {
+    const userId = e.currentTarget.getAttribute('for')
+    const radio = document.getElementsByName('radioMute' + userId)
+    const getValue = function () {
+      let i = 0
+      for (; i < radio.length; i++) {
+        if (radio[i].checked === true) { break }
+      }
+      return radio[i].value
+    }
+    const value = getValue()
+    const currentChannel = this.myChannels.get(this.channelId)
+    currentChannel.muteUser(Number(value), Number(userId))
+    this.modalClose()
+  },
+
+  openModalMute: function (e) {
+    console.log('open modal mute')
+    document.getElementById('modalValidationMute' + e.currentTarget.getAttribute('for')).style.display = 'flex'
+  },
+
+  validateBan: function (e) {
+    const userId = e.currentTarget.getAttribute('for')
+    const radio = document.getElementsByName('radioBan' + userId)
+    const getValue = function () {
+      let i = 0
+      for (; i < radio.length; i++) {
+        if (radio[i].checked === true) { break }
+      }
+      return radio[i].value
+    }
+    const value = getValue()
+    const currentChannel = this.myChannels.get(this.channelId)
+    currentChannel.banUser(Number(value), Number(userId))
+    this.modalClose()
+  },
+
+  openModalBan: function (e) {
+    console.log('open modal ban')
+    document.getElementById('modalValidationBan' + e.currentTarget.getAttribute('for')).style.display = 'flex'
+  },
+
   yesAsAdmin: function (e) {
     const userId = e.currentTarget.getAttribute('for')
     const currentChannel = this.myChannels.get(this.channelId)
     const adminIds = currentChannel.get('admin_ids')
     adminIds.push(Number(userId))
     console.log(adminIds)
-    currentChannel.patchAdmin(adminIds)
+    const array = Array()
+    array.push(Number(userId))
+    console.log(Array(Number(userId)))
+    currentChannel.patchAdmin(array)
     currentChannel.set({ admin_ids: adminIds })
+    this.modalClose()
+    this.updateContextAdmin(currentChannel)
+    this.updateContextMembers(currentChannel)
+    this.updateHTML('admins')
+    this.updateHTML('participants')
   },
 
   modalValidationAppointAsAdmin: function (e) {
@@ -162,6 +216,59 @@ export const ChatView = Backbone.View.extend({
     }
   },
 
+  updateContextAdmin: function (currentChannel) {
+    const admins = currentChannel.get('admin_ids')
+    this.context.admins = Array()
+    for (let i = 0; i < admins.length; i++) {
+      if (admins[i] !== currentChannel.get('owner_id')) {
+        console.log(admins[i])
+        console.log(currentChannel.get('owner_id'))
+        let admin = this.users.get(admins[i])
+        if (admin === undefined) {
+          admin = this.userLogged
+        }
+        console.log(admin)
+        let anagram
+        if (admin.get('anagram') === undefined) {
+          anagram = 'N/A'
+        } else {
+          anagram = admin.get('anagram')
+        }
+        this.context.admins.push(JSON.parse(JSON.stringify(admin)))
+        this.context.admins[this.context.admins.length - 1].anagram = anagram
+      }
+    }
+  },
+
+  updateContextMembers: function (currentChannel) {
+    const members = currentChannel.get('participant_ids')
+    const admins = currentChannel.get('admin_ids')
+    const ownerId = currentChannel.get('owner_id')
+    let owner
+    if (ownerId === this.userLogged.get('id')) {
+      owner = this.userLogged
+    } else {
+      owner = this.users.get(
+        currentChannel.get('owner_id')
+      )
+    }
+    this.context.members = Array()
+    for (let i = 0; i < members.length; i++) {
+      if (members[i] !== this.userLogged.get('id') &&
+        !admins.find(el => el === members[i])) {
+        const member = this.users.get(members[i])
+        let anagram
+        if (owner.get('anagram') === undefined) {
+          anagram = 'N/A'
+        } else {
+          anagram = owner.get('anagram')
+        }
+        this.context.members.push(JSON.parse(JSON.stringify(member)))
+        this.context.members[this.context.members.length - 1].anagram = anagram
+      }
+    }
+  },
+
   adminPanelMembersMenu: function () {
     const currentChannel = this.myChannels.get(this.channelId)
     console.log(currentChannel)
@@ -184,38 +291,8 @@ export const ChatView = Backbone.View.extend({
     this.context.owner.push(JSON.parse(JSON.stringify(owner)))
     this.context.owner[this.context.owner.length - 1].anagram = anagram
 
-    const admins = currentChannel.get('admin_ids')
-    this.context.admins = Array()
-    for (let i = 0; i < admins.length; i++) {
-      if (admins[i] !== this.userLogged.get('id')) {
-        const admin = this.users.get(admins[i])
-        let anagram
-        if (admin.get('anagram') === undefined) {
-          anagram = 'N/A'
-        } else {
-          anagram = admin.get('anagram')
-        }
-        this.context.admins.push(JSON.parse(JSON.stringify(admin)))
-        this.context.admins[this.context.admins.length - 1].anagram = anagram
-      }
-    }
-
-    const members = currentChannel.get('participant_ids')
-    this.context.members = Array()
-    for (let i = 0; i < members.length; i++) {
-      if (members[i] !== this.userLogged.get('id') &&
-        !admins.find(el => el === members[i])) {
-        const member = this.users.get(members[i])
-        let anagram
-        if (owner.get('anagram') === undefined) {
-          anagram = 'N/A'
-        } else {
-          anagram = owner.get('anagram')
-        }
-        this.context.members.push(JSON.parse(JSON.stringify(member)))
-        this.context.members[this.context.members.length - 1].anagram = anagram
-      }
-    }
+    this.updateContextAdmin(currentChannel)
+    this.updateContextMembers(currentChannel)
 
     this.updateHTML('params-members')
     document.getElementById('params-overview').style.display = 'none'

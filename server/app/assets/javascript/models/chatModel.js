@@ -77,8 +77,38 @@ export const ChatModel = Backbone.Model.extend({
   deleteDefinitivelyChannel: function () {
     this.destroy()
   },
-
   patchAdmin: function (adminIds) {
     this.save({ admin_ids: adminIds }, { patch: true })
+  },
+  banUser: function (value, userId) {
+    const header = this.superHeaders.getHeaders()
+    console.log(header)
+    header.append('accept', 'application/json')
+    header.append('Content-Type', 'application/json')
+    const url = '/api/chats/' + this.id + '/bans'
+    fetch(url, {
+      method: 'POST',
+      headers: header,
+      body: JSON.stringify({
+        user_id: userId,
+        duration: value
+      })
+    })
+  },
+  muteUser: function (value, userId) {
+    const header = this.superHeaders.getHeaders()
+    console.log(header)
+    header.append('accept', 'application/json')
+    header.append('Content-Type', 'application/json')
+    const url = '/api/chats/' + this.id + '/mutes'
+    fetch(url, {
+      method: 'POST',
+      headers: header,
+      body: JSON.stringify({
+        user_id: userId,
+        duration: value
+      })
+    })
   }
+
 })
