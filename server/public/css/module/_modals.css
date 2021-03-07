@@ -24,6 +24,20 @@
     width: 523px;
 }
 
+.chat .modalPassword  .modalOpen
+.inputModalPassword {
+    height: 46px;
+    border-radius: 9px;
+    padding-left: 16px;
+    font-family: Roboto-Regular;
+    width: 100%;
+}
+
+.chat .modalPassword .modalOpen
+.labelModalPassword {
+    align-self: baseline;
+}
+
 .chat .validationModal
 .modalOpen {
     padding: 32px;
@@ -58,6 +72,7 @@
     margin: 0px;
     font-size: 18px;
 }
+
 
 .chat .validationModal .modalOpen 
 .adminRights {

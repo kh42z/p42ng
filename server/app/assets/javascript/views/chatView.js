@@ -42,7 +42,8 @@ export const ChatView = Backbone.View.extend({
     'click .private': 'radioPrivate',
     'click .public': 'radioPublic',
     'click .protected': 'radioProtected',
-    'click .save': 'savePrivacy'
+    'click .save': 'savePrivacy',
+    'click .validate-password': 'subscribeProtectedChannel'
   },
   initialize: function () {
     this.myChannels = this.model.get('myChannels').get('obj')
@@ -339,9 +340,13 @@ export const ChatView = Backbone.View.extend({
     const updatePrivacy = async () => {
       try {
         const response = await currentChannel.updatePrivacy(privacy, password)
+        document.getElementById('error-password').innerHTML = 'Your changes have been saved.'
+        document.getElementById('error-password').style.display = 'block'
+        document.getElementById('error-password').style.color = 'var(--secondary-color)'
       } catch (error) {
         document.getElementById('error-password').innerHTML = error.responseJSON.message
         document.getElementById('error-password').style.display = 'block'
+        document.getElementById('error-password').style.color = 'var(--error-message-color)'
       }
     }
     updatePrivacy()
@@ -380,14 +385,14 @@ export const ChatView = Backbone.View.extend({
 
   adminPanelOverviewMenu: function (e) {
     e.stopPropagation()
+
     if (this.channelId === undefined) {
       this.channelId = e.currentTarget.getAttribute('for')
       e.currentTarget = e.currentTarget.parentElement
+      this.context.name = this.myChannels.get(this.channelId).get('name')
       this.openChat(e)
     }
-
-    this.context.name = this.myChannels.get(this.channelId).get('name')
-    this.updateHTML('params-overview')
+    this.updateHTML('params')
 
     document.getElementById('discussions').style.display = 'none'
     document.getElementById('center').style.display = 'none'
@@ -554,9 +559,8 @@ export const ChatView = Backbone.View.extend({
       this.context.privacy = currentChannel.get('privacy')[0].toUpperCase() + currentChannel.get('privacy').slice(1)
       this.context.channel = true
       this.context.name = currentChannel.get('name')
-      this.context.owner = function () {
-        return (currentChannel.get('owner_id') == idUserLogged)
-      }
+      const isOwner = function () { return currentChannel.get('owner_id') == idUserLogged }
+      this.context.owner = isOwner()
       this.context.chatId = currentChannel.get('id')
     }
     this.context.id = currentChannel.get('id')
@@ -829,27 +833,44 @@ export const ChatView = Backbone.View.extend({
     document.getElementById('modalSearchAllChannels').style.display = 'flex'
   },
 
-  subscribeChannel: function (e) {
-    console.log('subscribeChannel')
-    const id = e.currentTarget.getAttribute('for')
-    const myChannels = this.myChannels.slice().filter(el => el.get('privacy') !== 'direct_message')
-    let i = 0
-    for (; i < myChannels.length; i++) {
-      if (myChannels[i].get('id') == id) {
-        break
-      }
-    }
-    if (i === myChannels.length) {
-      const channel = this.channels.get(id)
-      channel.subscribeChannel()
-      this.myChannels.add(channel)
-      this.context.myChannels.push(JSON.parse(JSON.stringify(channel)))
-      this.updateHTML('myChannels')
-    }
+  updateDOMSubsribeChannel: function (id, e) {
     this.modalClose()
     this.closeOpenDiscussion()
     document.getElementById('channel' + id).classList.add('open')
     e.currentTarget = document.getElementById('channel' + id)
     this.openChat(e)
+  },
+
+  subscribeChannelModel: function (e, id, password) {
+    console.log(this.myChannels.find(el => el.name == 'general'))
+    console.log(this.myChannels.find(el => el.id == id))
+    if (this.myChannels.find(el => el.id == id) === undefined) {
+      console.log('test')
+      const channel = this.channels.get(id)
+      channel.subscribeChannel(password)
+      this.myChannels.add(channel)
+      this.context.myChannels.push(JSON.parse(JSON.stringify(channel)))
+      this.updateHTML('myChannels')
+    }
+    this.updateDOMSubsribeChannel(id, e)
+  },
+
+  subscribeProtectedChannel: function (e) {
+    console.log(e.currentTarget.getAttribute('for'))
+    const channelId = e.currentTarget.getAttribute('for')
+    const password = document.getElementById('inputModalPassword' + channelId).value
+    this.subscribeChannelModel(e, channelId, password)
+  },
+
+  subscribeChannel: function (e) {
+    console.log('subscribeChannel')
+    const id = e.currentTarget.getAttribute('for')
+    if (this.myChannels.find(el => el.id == id) !== undefined) {
+      this.updateDOMSubsribeChannel(id, e)
+    } else if (this.channels.get(id).get('privacy') === 'protected') {
+      document.getElementById('modalPassword' + id).style.display = 'flex'
+    } else {
+      this.subscribeChannelModel(e, id)
+    }
   }
 })

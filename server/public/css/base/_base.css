@@ -14,7 +14,7 @@ body {
 
 #header {
     display: flex;
-    height: 82px;
+    height: var(--header-size);
 }
 
 #app {
@@ -45,7 +45,7 @@ label {
     --error-message-color: #EB5757;
     --green-color: #6FCF97;
     --modal-background-color: #202732;
-
+    --header-size: 82px;
 }
 
 button {

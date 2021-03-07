@@ -54,8 +54,8 @@ export const ChatModel = Backbone.Model.extend({
       headers: this.headers
     })
   },
-  subscribeChannel: function () {
-    const url = '/api/chats/' + this.id + '/participants'
+  subscribeChannel: function (password = '') {
+    const url = '/api/chats/' + this.id + '/participants?password=' + password
     fetch(url, {
       method: 'POST',
       headers: this.headers

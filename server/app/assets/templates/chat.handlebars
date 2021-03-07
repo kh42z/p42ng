@@ -249,6 +249,19 @@
                         <input type="checkbox" class="checkbox" id="{{id}}" value="{{id}}"></input>
                     </div> --}}
                 </div>
+                <div class="modal validationModal modalPassword" id="modalPassword{{id}}" style="display: none;">
+                    <div class="background"></div>
+                    <div class="modalOpen">
+                        <div class="close closeModal">
+                            <img src="./icons/close.svg" id="close"></img>
+                        </div>
+                        <label class="label labelModalPassword" for="labelModalPassword">Password:</label>
+                        <input class="inputModalPassword" type="password" id="inputModalPassword{{id}}" placeholder="Password" for={{id}}></input>
+                        <div class="button-container buttons">
+                            <button class="validation-buttons button validate-password" for="{{id}}">Validate</button>
+                        </div>
+                    </div>
+                </div>
                 {{/each}}
             </div>
         </div>
@@ -353,8 +366,8 @@
                     <div class="passwordVisibility" id="visibility">
                         <img src='./icons/visibility_off.svg' class="icon-visibility " id="eyeVisibility"></img>
                     </div>
-                    <p class="error-message error-password" id="error-password" style="display: none;"></p>
                 </div>
+                <p class="error-message error-password" id="error-password" style="display: none;"></p>
                 <button class="save">Save</button>
             </div>
             <div class="page members" id="params-members">
