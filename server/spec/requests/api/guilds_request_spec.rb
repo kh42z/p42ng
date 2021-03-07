@@ -3,8 +3,8 @@
 require "rails_helper"
 
 describe "Guild", type: :request do
-  let(:auth) { create(:user, nickname: "Tom") }
-  let(:auth_2) { create(:user, nickname: "Jade") }
+  let(:auth) { create(:user) }
+  let(:auth_2) { create(:user) }
   let(:access_token) { auth.create_new_auth_token }
   let(:access_token_2) { auth_2.create_new_auth_token }
   let(:attributes) { { name: "NoShroud", anagram: "NOSDO" } }
@@ -68,13 +68,20 @@ describe "Guild", type: :request do
       expect(User.find(user_1.id).guild).to eq Guild.first
       expect(response.status).to eq 200
     end
-    it '(officer) should add members' do
-      post members_api_guild_url(Guild.first), headers: access_token, params: { member_ids: [user_2.id] }
-      post officers_api_guild_url(Guild.first), headers: access_token, params: { officer_ids: [user_2.id] }
-      post members_api_guild_url(Guild.first), headers: access_token_2, params: { member_ids: [user_1.id] }
+    it 'should let officers add members' do
+      user_1_access = user_1.create_new_auth_token
+      post members_api_guild_url(Guild.first), headers: access_token, params: { member_ids: [user_1.id] }
+      post officers_api_guild_url(Guild.first), headers: access_token, params: { officer_ids: [user_1.id] }
+      post members_api_guild_url(Guild.first), headers: user_1_access, params: { member_ids: [user_2.id] }
       expect(Guild.first.officers.count).to eq 1
       expect(User.find(user_1.id).guild).to eq Guild.first
       expect(response.status).to eq 200
+    end
+    it 'should not let members add members', test:true do
+      user_1_access = user_1.create_new_auth_token
+      post members_api_guild_url(Guild.first), headers: access_token, params: { member_ids: [user_1.id] }
+      post members_api_guild_url(Guild.first), headers: user_1_access, params: { member_ids: [user_2.id] }
+      expect(response.status).to eq 401
     end
     it 'should return error => param missing' do
       post members_api_guild_url(Guild.first), headers: access_token

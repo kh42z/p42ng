@@ -3,7 +3,7 @@
 module Api
   class WarsController < ApiController
     before_action :set_war, only: %i[show update]
-    before_action :set_from, only: %i[create war_params_create]
+    before_action :set_from, only: %i[create war_params war_params_create]
 
     UserReducer = Rack::Reducer.new(War.all.order(war_end: :desc), ->(guild_id:) { where(guild_id: guild_id) })
 
@@ -13,7 +13,9 @@ module Api
     end
 
     def create
-      return unless @from.officers.where(user_id: current_user.id)
+      unless current_user == @from.owner || GuildOfficer.where(user_id: current_user, guild_id: @from.id)[0]
+        return render_not_allowed
+      end
 
       war = War.create!(war_params_create)
       json_response(war, :created)
@@ -33,11 +35,11 @@ module Api
     private
 
     def war_params
-      params.permit(:from, :on, :war_start, :war_end, :prize, :max_unanswered)
+      params.permit(:on, :war_start, :war_end, :prize, :max_unanswered)
     end
 
     def war_params_create
-      params.permit(:from, :on, :war_start, :war_end, :prize, :max_unanswered).merge!(guild_id: @from.id)
+      params.permit(:on, :war_start, :war_end, :prize, :max_unanswered).merge!(from: @from.id, guild_id: @from.id)
     end
 
     def set_war
@@ -45,7 +47,7 @@ module Api
     end
 
     def set_from
-      @from = Guild.find(params[:from])
+      @from = Guild.find(current_user.guild_id)
     end
   end
 end

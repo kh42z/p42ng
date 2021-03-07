@@ -28,7 +28,7 @@ module Api
     end
 
     def members
-      return render_not_allowed unless current_user == @guild.owner || @guild.officers.where(user_id: current_user)
+      return render_not_allowed unless current_user == @guild.owner || @guild.officers.where(user_id: current_user)[0]
 
       status = add_members(@guild) if request.post?
       status = destroy_member(@guild) if request.delete?
