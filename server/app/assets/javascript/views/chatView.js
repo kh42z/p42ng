@@ -37,7 +37,12 @@ export const ChatView = Backbone.View.extend({
     'click .ban': 'openModalBan',
     'click .yesBan': 'validateBan',
     'click .mute': 'openModalMute',
-    'click .yesMute': 'validateMute'
+    'click .yesMute': 'validateMute',
+    'click .passwordVisibility': 'passwordVisibility',
+    'click .private': 'radioPrivate',
+    'click .public': 'radioPublic',
+    'click .protected': 'radioProtected',
+    'click .save': 'savePrivacy'
   },
   initialize: function () {
     this.myChannels = this.model.get('myChannels').get('obj')
@@ -118,6 +123,19 @@ export const ChatView = Backbone.View.extend({
     return this
   },
 
+  passwordVisibility: function () {
+    console.log('password visibility')
+    const icon = document.getElementById('eyeVisibility')
+    const password = document.getElementById('password')
+    if (icon.src.includes('icons/visibility.svg')) {
+      icon.src = './icons/visibility_off.svg'
+      password.type = 'password'
+    } else {
+      icon.src = './icons/visibility.svg'
+      password.type = 'text'
+    }
+  },
+
   validateMute: function (e) {
     const userId = e.currentTarget.getAttribute('for')
     const radio = document.getElementsByName('radioMute' + userId)
@@ -186,7 +204,6 @@ export const ChatView = Backbone.View.extend({
   closeAdminRights: function (e) {
     console.log('closeAdminRights')
     e.stopPropagation()
-    // e.currentTarget.classList.contains('el') !== false) {
     if (e.currentTarget.classList.contains('admin-rights') === false) {
       const adminRights = document.getElementsByClassName('admin-rights')
       console.log(adminRights.length)
@@ -198,9 +215,6 @@ export const ChatView = Backbone.View.extend({
         dotsContainer[i].classList.remove('open')
       }
     }
-    // } else if (e.currentTarget.contains('appoint-as-admin')) {
-    //   this.modalValidationAppointAsAdmin(e)
-    // }
   },
 
   adminRights: function (e) {
@@ -221,8 +235,6 @@ export const ChatView = Backbone.View.extend({
     this.context.admins = Array()
     for (let i = 0; i < admins.length; i++) {
       if (admins[i] !== currentChannel.get('owner_id')) {
-        console.log(admins[i])
-        console.log(currentChannel.get('owner_id'))
         let admin = this.users.get(admins[i])
         if (admin === undefined) {
           admin = this.userLogged
@@ -265,13 +277,13 @@ export const ChatView = Backbone.View.extend({
         }
         this.context.members.push(JSON.parse(JSON.stringify(member)))
         this.context.members[this.context.members.length - 1].anagram = anagram
+        this.context.members[this.context.members.length - 1].owner = this.context.owner
       }
     }
   },
 
   adminPanelMembersMenu: function () {
     const currentChannel = this.myChannels.get(this.channelId)
-    console.log(currentChannel)
     const ownerId = currentChannel.get('owner_id')
     let owner
     if (ownerId === this.userLogged.get('id')) {
@@ -281,15 +293,15 @@ export const ChatView = Backbone.View.extend({
         currentChannel.get('owner_id')
       )
     }
-    this.context.owner = Array()
+    this.context.owners = Array()
     let anagram
     if (owner.get('anagram') === undefined) {
       anagram = 'N/A'
     } else {
       anagram = owner.get('anagram')
     }
-    this.context.owner.push(JSON.parse(JSON.stringify(owner)))
-    this.context.owner[this.context.owner.length - 1].anagram = anagram
+    this.context.owners.push(JSON.parse(JSON.stringify(owner)))
+    this.context.owners[this.context.owners.length - 1].anagram = anagram
 
     this.updateContextAdmin(currentChannel)
     this.updateContextMembers(currentChannel)
@@ -306,13 +318,58 @@ export const ChatView = Backbone.View.extend({
 
   closeParams: function () {
     document.getElementById('params').style.display = 'none'
+    document.getElementById('passwordDiv').style.display = 'none'
+    document.getElementById('password').value = ''
     document.getElementById('discussions').style.display = 'flex'
     document.getElementById('center').style.display = 'flex'
     document.getElementById('right-side').style.display = 'flex'
     this.channelId = undefined
   },
 
+  savePrivacy: function () {
+    // const radios = document.getElementByName('privacy')
+    const privacy = document.querySelector('input[name="privacy"]:checked').value
+    const password = document.getElementById('password').value
+    console.log(password)
+    const currentChannel = this.myChannels.get(this.channelId)
+    console.log(privacy, password)
+
+    console.log(currentChannel)
+    console.log(currentChannel.get('password'))
+    const updatePrivacy = async () => {
+      try {
+        const response = await currentChannel.updatePrivacy(privacy, password)
+      } catch (error) {
+        document.getElementById('error-password').innerHTML = error.responseJSON.message
+        document.getElementById('error-password').style.display = 'block'
+      }
+    }
+    updatePrivacy()
+  },
+
+  radioPublic: function () {
+    document.getElementById('passwordDiv').style.display = 'none'
+  },
+
+  radioPrivate: function () {
+    document.getElementById('passwordDiv').style.display = 'none'
+  },
+
+  radioProtected: function () {
+    console.log('radio protected')
+    document.getElementById('passwordDiv').style.display = 'flex'
+  },
+
   adminPanelPermissionsMenu: function () {
+    const currentChannel = this.myChannels.get(this.channelId)
+    const privacy = currentChannel.get('privacy')
+    const radio = document.getElementById(privacy)
+    radio.checked = true
+
+    if (privacy === 'protected') {
+      document.getElementById('passwordDiv').style.display = 'flex'
+    }
+
     document.getElementById('params-overview').style.display = 'none'
     document.getElementById('params-members').style.display = 'none'
     document.getElementById('params-permissions').style.display = 'flex'

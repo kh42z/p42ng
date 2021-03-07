@@ -97,7 +97,6 @@ export const ChatModel = Backbone.Model.extend({
   },
   muteUser: function (value, userId) {
     const header = this.superHeaders.getHeaders()
-    console.log(header)
     header.append('accept', 'application/json')
     header.append('Content-Type', 'application/json')
     const url = '/api/chats/' + this.id + '/mutes'
@@ -109,6 +108,14 @@ export const ChatModel = Backbone.Model.extend({
         duration: value
       })
     })
+  },
+  updatePrivacy: function (privacy, password) {
+    return this.save({
+      privacy: privacy,
+      password: password
+    },
+    { patch: true }
+    )
   }
 
 })

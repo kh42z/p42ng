@@ -303,7 +303,9 @@
                 <div class="sub-menu overview-menu" id="overview-menu"><p class="p">Overview</p></div>
                 <div class="sub-menu permissions-menu"  id="permissions-menu"><p class="p">Permissions</p></div>
                 <div class="sub-menu members-menu" id="members-menu"><p class="p">Members</p></div>
+                {{#if owner}}
                 <div class="deleteChannel" >Delete channel</div>
+                {{/if}}
             </div>
         </div>
         <div class="modal validationModal modalValidationDeleteDefinitivelyChannel" id="modalValidationDeleteDefinitivelyChannel" style="display: none;">
@@ -334,29 +336,32 @@
                 <div class="title">PERMISSIONS</div>
                 <div class="sub-title">CONFIDENTIALITY</div>
                 <div class="radio-button">
-                    <input type="radio" id="private" name="privacy" value="private" checked>
+                    <input type="radio" class="private" id="private" name="privacy" value="private" checked>
                     <label for="private">Private</label> 
                 </div>
                 <div class="radio-button">
-                    <input type="radio" id="public" name="privacy" value="public">
+                    <input type="radio" class="public" id="public" name="privacy" value="public">
                     <label for="public">Public</label> 
                 </div>
                 <div class="radio-button">
-                    <input type="radio" id="protected" name="privacy" value="protected"></input>
+                    <input type="radio" class="protected"  id="protected" name="privacy" value="protected"></input>
                     <label for="protected">Protected</label> 
                 </div>
-                <div class="password">
+                <div class="password" id="passwordDiv" style="display: none;">
                     <label for="password">Password</label>
                     <input type="password" id="password" name="password"></input>
-                    <div class="visibility"></div>
-                    <button class="save">Save</button>
+                    <div class="passwordVisibility" id="visibility">
+                        <img src='./icons/visibility_off.svg' class="icon-visibility " id="eyeVisibility"></img>
+                    </div>
+                    <p class="error-message error-password" id="error-password" style="display: none;"></p>
                 </div>
+                <button class="save">Save</button>
             </div>
             <div class="page members" id="params-members">
                 <div class="title">MEMBERS</div>
                 <div class="sub-title">OWNER</div>
                 <div class="list owner">
-                    {{#each owner}}
+                    {{#each owners}}
                     <div class="self owner">
                         <div class="image-container">
                             <img src={{image_url}} class="image_url"></img>
@@ -403,7 +408,9 @@
                                 <img src='./icons/dots.svg' class="dots"></img>
                             </div>
                             <div class="admin-rights" id="admin-rights{{id}}" style="display: none;">
+                                {{#if owner}}
                                 <div class="el appoint-as-admin" id="appointAsAdministrator" for="{{id}}">Appoint as administrator</div>
+                                {{/if}}
                                 <div class="el mute" id="mute" for="{{id}}">Mute</div>
                                 <div class="el ban" id="ban" for="{{id}}">Ban</div>
                             </div>
