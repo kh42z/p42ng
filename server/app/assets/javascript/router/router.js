@@ -159,6 +159,7 @@ export const Router = Backbone.Router.extend({
 
   profile_view: function (id, page) {
     if (this.accessPage()) { return }
+    console.log('profile view')
     this.profileController.loadView(id, page, this.loadWrapper())
   },
 

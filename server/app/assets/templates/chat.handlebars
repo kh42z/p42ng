@@ -40,7 +40,7 @@
                 {{#each DM}}
                     <div class="clickable-discussions user" for={{id}} id="DM{{id}}">
                         <div class="image-container">
-                            <img src={{image_url}} id="image_url" class="image_url"></img>
+                            <img src={{image_url}} id="image_url" class="image_url" for={{id}}></img>
                         </div>
                         <p class="anagram_nickname">{{nickname}}</p>
                         {{!-- <div class="close">
@@ -174,7 +174,7 @@
         </div>
     </div>
     <div class="droplistBlockViewProfile" id="droplistBlockViewProfile" style="display: none;">
-        <div class="el view-profile" id="view-profile">View profile</div>
+        <a class="el view-profile" id="view-profile">View profile</a>
         <div class="el block" id="block"></div>
     </div>
     <div class="modal modalCreateChannel" id="modalCreateChannel" >

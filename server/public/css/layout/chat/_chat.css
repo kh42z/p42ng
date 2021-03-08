@@ -155,6 +155,11 @@
 
     padding-right: 16px;
     padding-left: 32px;
+
+}
+
+.chat .image-container {
+    cursor: pointer;
 }
 
 .chat .discussions .discussions-container .clickable-discussions .image-container

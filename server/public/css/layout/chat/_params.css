@@ -318,6 +318,7 @@ p.p {
     font-size: 14px;
     font-family: Roboto-Regular;
     color: var(--secondary-color);
+    text-decoration: none;
 }
 
 .chat .parameters .right-menu .members

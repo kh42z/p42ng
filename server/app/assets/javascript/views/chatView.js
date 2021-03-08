@@ -45,7 +45,8 @@ export const ChatView = Backbone.View.extend({
     'click .save': 'savePrivacy',
     'click .validate-password': 'subscribeProtectedChannel',
     'click .image_url': 'openDropListBlockViewProfile',
-    'click .chat': 'closeDropListBlockViewProfile'
+    'click .chat': 'closeDropListBlockViewProfile',
+    'click .block': 'blockUser'
   },
   initialize: function () {
     this.myChannels = this.model.get('myChannels').get('obj')
@@ -126,20 +127,52 @@ export const ChatView = Backbone.View.extend({
     return this
   },
 
-  openDropListBlockViewProfile: function (e) {
-    const dropList = document.getElementById('droplistBlockViewProfile')
-    dropList.style.display = 'flex'
-    console.log(e)
-    console.log(e.target.offsetParent.offsetTop + ' ' + e.target.offsetParent.offsetLeft)
-    console.log(e.target.offsetWidth + ' ' + e.target.offsetHeight)
-    console.log(e.target.offsetTop + ' ' + e.target.offsetLeft)
-    dropList.style.top = e.target.offsetTop + e.target.offsetHeight + 4
-    dropList.style.left = e.target.offsetLeft
-    console.log(dropList.childNodes[3])
-    const block = dropList.childNodes[3]
-    console.log(block)
+  blockUser: function (e) {
     const userId = e.currentTarget.getAttribute('for')
+  },
+
+  viewProfile: function (e) {
+    console.log(e.currentTarget.getAttribute('href'))
+    e.stopPropagation()
+  },
+
+  openDropListBlockViewProfile: function (e) {
+    console.log('openDropList')
+    e.stopPropagation()
+    const dropList = document.getElementById('droplistBlockViewProfile')
+    const viewProfile = document.getElementById('view-profile')
+    const blockDiv = document.getElementById('block')
+    const userId = e.currentTarget.getAttribute('for')
+    dropList.style.display = 'flex'
+    blockDiv.setAttribute('for', userId)
+    console.log(window.location)
+    viewProfile.setAttribute('href', '/#profile/' + userId )
     console.log(userId)
+
+    const getOffsetTop = element => {
+      let offsetTop = 0;
+      while(element) {
+        offsetTop += element.offsetTop;
+        element = element.offsetParent;
+      }
+      return offsetTop;
+    }
+    const X = getOffsetTop(e.target);
+
+    const getOffsetLeft = element => {
+      let offsetLet = 0;
+      while(element) {
+        offsetLet += element.offsetLeft;
+        element = element.offsetParent;
+      }
+      return offsetLet;
+    }
+    const Y = getOffsetLeft(e.target);
+
+    dropList.style.top = X + e.target.offsetHeight + 4
+    dropList.style.left = Y 
+    const block = dropList.childNodes[3]
+    
     if (this.userLogged.get('ignore_ids').find(el => el === userId)) {
       block.innerHTML = 'Unblock'
     } else {
@@ -149,12 +182,15 @@ export const ChatView = Backbone.View.extend({
 
   closeDropListBlockViewProfile: function (e) {
     console.log('closeDropListBlockViewProfile')
-    // e.stopPropagation()
-    console.log(e.currentTarget.classList)
+    e.stopPropagation()
+    const viewProfile = document.getElementById('view-profile')
+    const block = document.getElementById('block')
     if (e.currentTarget.classList.contains('image-container') === false) {
       const droplistBlockViewProfile = document.getElementsByClassName('droplistBlockViewProfile')
       for (let i = 0; i < droplistBlockViewProfile.length; i++) {
         droplistBlockViewProfile[i].style.display = 'none'
+        block.setAttribute('for', '')
+        viewProfile.setAttribute('href', '')
       }
     }
   },
@@ -354,6 +390,7 @@ export const ChatView = Backbone.View.extend({
     document.getElementById('password').value = ''
     document.getElementById('discussions').style.display = 'flex'
     document.getElementById('center').style.display = 'flex'
+    this.updateHTML('right-side')
     document.getElementById('right-side').style.display = 'flex'
     this.channelId = undefined
   },
@@ -366,6 +403,9 @@ export const ChatView = Backbone.View.extend({
     const updatePrivacy = async () => {
       try {
         const response = await currentChannel.updatePrivacy(privacy, password)
+        this.context.privacy = privacy[0].toUpperCase() + privacy.slice(1)
+        console.log(response)
+        console.log(currentChannel)
         document.getElementById('error-password').innerHTML = 'Your changes have been saved.'
         document.getElementById('error-password').style.display = 'block'
         document.getElementById('error-password').style.color = 'var(--secondary-color)'
@@ -436,11 +476,12 @@ export const ChatView = Backbone.View.extend({
 
   validateAddFriendsToChannel: function (e) {
     const channelId = e.currentTarget.getAttribute('for')
-    const participantsIds = this.getSelectedBoxes()
+    const participantIds = this.getSelectedBoxes()
     const currentChannel = this.myChannels.get(channelId)
-    currentChannel.invitesToChannel(participantsIds)
+    currentChannel.invitesToChannel(participantIds)
     const participants = currentChannel.get('participant_ids')
-    participantsIds.forEach(el => participants.push(Number(el)))
+    participantIds.forEach(el => participants.push(Number(el)))
+    console.log(participants)
     currentChannel.set({ participants_ids: participants })
     this.myChannels.set(currentChannel)
     this.updateContextRightSide(currentChannel)
