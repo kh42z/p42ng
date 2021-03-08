@@ -15,7 +15,8 @@ class UserSerializer < ActiveModel::Serializer
              :banned,
              :first_login,
              :chat_ids,
-             :ignores
+             :ignores,
+             :friends
 
   def chat_ids
     object.chats.pluck(:id)
@@ -23,5 +24,17 @@ class UserSerializer < ActiveModel::Serializer
 
   def ignores
     ActiveModelSerializers::SerializableResource.new(object.ignores, each_serializer: IgnoreUserSerializer)
+  end
+
+  def friends
+    arr = []
+    object.friendships.each do |e|
+      arr.push(if e.friend_a_id == object.id
+                 { friend_id: e.friend_b_id }
+               else
+                 { friend_id: e.friend_a_id }
+               end)
+    end
+    arr
   end
 end

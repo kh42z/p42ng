@@ -747,6 +747,49 @@ paths:
           $ref: '#/components/responses/403'
         '500':
           $ref: '#/components/responses/500'
+  "/api/users/{id}/friends":
+    post:
+      summary: Creates a friendship
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref : '#/components/schemas/friend'
+      responses:
+        '200':
+          description: friendship added
+          content:
+            application/json:
+              schema:
+                $ref : '#/components/schemas/friend'
+  "/api/users/{id}/friends/{friend_id}":
+    delete:
+      summary: Removes a friendship
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: friend_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: member removed
   "/api/users/{id}/ignores":
     post:
       summary: Add user to ignore list
@@ -845,6 +888,10 @@ components:
       name: uid
       in: header
   schemas:
+    arrayOfFriends:
+      type: array
+      items:
+        $ref: '#/components/schemas/friend'
     arrayOfUserIgnored:
       type: array
       items:
@@ -912,6 +959,8 @@ components:
           type: string
         chat_ids:
           $ref: '#/components/schemas/integer_list'
+        friends:
+          $ref: '#/components/schemas/arrayOfFriends'
         ignores:
           $ref: '#/components/schemas/arrayOfUserIgnored'
     guild_response:
@@ -977,6 +1026,11 @@ components:
       type: object
       properties:
         ignored_id:
+          type: integer
+    friend:
+      type: object
+      properties:
+        friend_id:
           type: integer
     chat:
       type: object

@@ -28,6 +28,8 @@ Rails.application.routes.draw do
         post :avatar, to: 'users#upload_avatar'
         post 'ignores', to: 'users#create_ignore'
         delete 'ignores/:ignored_id', to: 'users#destroy_ignore'
+        post 'friends', to: 'users#create_friendship'
+        delete 'friends/:friend_id', to: 'users#destroy_friendship'
       end
     end
   end

@@ -144,6 +144,28 @@ RSpec.describe "Users", type: :request do
     end
   end
 
+
+  describe "#friends", test: true do
+    let(:user) { create(:user) }
+    let(:auth) { create(:user) }
+    let(:access_token) { auth.create_new_auth_token }
+    it "should create a friendship" do
+      post "/api/users/#{auth.id}/friends", params: { friend_id: user.id.to_i }, headers: access_token
+      expect(response).to have_http_status(200)
+      expect(Friendship.count).to eq(1)
+      expect(json['friend_id'].to_i).to eq(user.id)
+      # unicity
+      post "/api/users/#{auth.id}/friends", params: { friend_id: user.id.to_i }, headers: access_token
+      expect(response).to have_http_status(422)
+    end
+    it "should delete a friendship" do
+      Friendship.create!(friend_a: user, friend_b_id: auth.id)
+      delete "/api/users/#{auth.id}/friends/#{user.id}", headers: access_token
+      expect(response).to have_http_status(204)
+      expect(Friendship.count).to eq(0)
+    end
+  end
+
   #describe "delete one user" do
   #  before do
   #    @last = users.last
