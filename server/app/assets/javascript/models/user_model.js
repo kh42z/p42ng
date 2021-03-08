@@ -30,6 +30,8 @@ export const User = Backbone.Model.extend({
   },
 
   initialize: function (url) {
+    this.superHeaders = new SuperHeaders()
+    this.headers = this.superHeaders.getHeaders()
   },
 
   urlRoot: '/api/users/',
@@ -74,5 +76,29 @@ export const User = Backbone.Model.extend({
   saveFirstLogin: function (firstLogin) {
     this.set({ first_login: firstLogin })
     this.save({ first_login: firstLogin }, { patch: true })
+  },
+
+  block: function (id) {
+    const header = this.superHeaders.getHeaders()
+    header.append('accept', 'application/json')
+    header.append('Content-Type', 'application/json')
+    const url = '/api/users/' + this.id + '/ignores'
+    fetch(url, {
+      method: 'POST',
+      headers: header,
+      body: JSON.stringify({
+        ignored_id: id
+      })
+    })
+  },
+  unblock: function (id) {
+    const header = this.superHeaders.getHeaders()
+    header.append('accept', 'application/json')
+    header.append('Content-Type', 'application/json')
+    const url = '/api/users/' + this.id + '/ignores/' + id
+    fetch(url, {
+      method: 'DELETE',
+      headers: header
+    })
   }
 })

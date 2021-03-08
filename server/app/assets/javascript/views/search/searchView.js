@@ -14,13 +14,13 @@ export const SearchView = Backbone.View.extend({
 
   el: $('#app'),
   render: function () {
-    const result = Array()
+    const result = []
     console.log(this.item)
 
     if (this.item === undefined) { this.$el.html('searcbar') } else {
       for (let i = 1; i <= this.guilds.length; i++) {
         if (this.guilds.get(i).get('name').toLowerCase().search(this.item.toLowerCase()) !== -1 ||
-				this.guilds.get(i).get('anagram').toLowerCase().search(this.item.toLowerCase()) !== -1) {
+            this.guilds.get(i).get('anagram').toLowerCase().search(this.item.toLowerCase()) !== -1) {
           result.push({
             type: 'guild',
             name: this.guilds.get(i).get('name'),
@@ -41,12 +41,12 @@ export const SearchView = Backbone.View.extend({
       }
     }
 
-	    const context = {
-	      result: result,
-      	item: this.item
-	    }
+    const context = {
+      result: result,
+      item: this.item
+    }
     console.log(result)
-	    this.$el.html(this.template(context))
+    this.$el.html(this.template(context))
     return this
   }
 })

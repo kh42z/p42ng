@@ -1,5 +1,4 @@
 export const LeaderboardView = Backbone.View.extend({
-  el: $('#app'),
   initialize: function () {
     this.guilds = this.model.get('guilds').get('obj')
     this.template = Handlebars.templates.leaderboard
@@ -7,8 +6,9 @@ export const LeaderboardView = Backbone.View.extend({
       this.render()
     }, this)
   },
+  el: $('#app'),
   render: function () {
-    const row = Array()
+    const row = []
     for (let i = 1; i <= this.guilds.length; i++) {
       // Trier guilde par score ici
       row.push(JSON.parse(JSON.stringify(this.guilds.get(i))))

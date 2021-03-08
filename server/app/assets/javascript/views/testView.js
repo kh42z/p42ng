@@ -4,7 +4,6 @@ import { Users } from '../collections/users_collection.js'
 import { Guilds } from '../collections/guilds_collection.js'
 
 export const TestView = Backbone.View.extend({
-  el: $('#app'),
   initialize: function () {
     this.guilds = this.model.get('guilds').get('obj')
     this.userLogged = this.model.get('userLogged').get('obj')
@@ -15,7 +14,7 @@ export const TestView = Backbone.View.extend({
       console.log(this.userLogged.get('nickname'))
     }, this)
   },
-
+  el: $('#app'),
   render: function () {
     this.$el.html('test in render')
     console.log(this.guilds.at(0).get('name'))

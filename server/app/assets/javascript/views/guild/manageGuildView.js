@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import { Guild } from '../../models/guild_model.js'
 
 export const ManageGuildView = Backbone.View.extend({
@@ -15,7 +16,6 @@ export const ManageGuildView = Backbone.View.extend({
     'keyup #memberToPromote': function () { this.nicknameSearch(this.membersList, 'memberToPromote', '#promoteMemberResult') },
     'keyup #memberToRelegate': function () { this.nicknameSearch(this.officersList, 'memberToRelegate', '#relegateMemberResult') }
   },
-  el: $('#app'),
   initialize: function () {
     this.guilds = this.model.get('guilds').get('obj')
     this.users = this.model.get('users').get('obj')
@@ -23,7 +23,7 @@ export const ManageGuildView = Backbone.View.extend({
     this.router = this.model.get('router')
     this.preload()
   },
-
+  el: $('#app'),
   preload: function () {
     this.listenTo(this.guilds, 'sync', function () { this.getUsers() }, this)
   },
@@ -35,7 +35,7 @@ export const ManageGuildView = Backbone.View.extend({
   chooseView: function () {
     // console.log(this.users.get(this.userId).get('guild_id'))
     if (this.users.get(this.userId).get('guild_id') === undefined ||
-		this.users.get(this.userId).get('guild_id') === null) {
+        this.users.get(this.userId).get('guild_id') === null) {
       this.createGuildView()
     } else {
       this.guild = this.guilds.get(this.users.get(this.userId).get('guild_id'))
@@ -59,7 +59,7 @@ export const ManageGuildView = Backbone.View.extend({
       const createAGuild = async () => {
         try {
           console.log('create a guild, try')
-	        const response = await guild.create(name, anagram)
+          const response = await guild.create(name, anagram)
           this.users.fetch()
           this.guilds.fetch()
           this.preload()
@@ -207,9 +207,9 @@ export const ManageGuildView = Backbone.View.extend({
 
   list: function (owner, officer) {
     if (!owner && !officer) { return }
-    this.nonMembersList = Array()
-    this.membersList = Array()
-    this.officersList = Array()
+    this.nonMembersList = []
+    this.membersList = []
+    this.officersList = []
     for (let i = 1; i <= this.users.length; i++) {
       if (owner && this.guild.get('officer_ids').includes(this.users.get(i).get('id'))) {
         this.officersList.push({
@@ -218,17 +218,17 @@ export const ManageGuildView = Backbone.View.extend({
         })
       }
       if (officer && this.users.get(i).get('guild_id') === this.guild.get('id') &&
-			!this.guild.get('officer_ids').includes(this.users.get(i).get('id')) &&
-			this.users.get(i).get('id') != this.guild.get('owner_id')) {
-	       this.membersList.push({
-	          nickname: this.users.get(i).get('nickname'),
-	          id: this.users.get(i).get('id')
-	      })
+  !this.guild.get('officer_ids').includes(this.users.get(i).get('id')) &&
+  this.users.get(i).get('id') != this.guild.get('owner_id')) {
+        this.membersList.push({
+          nickname: this.users.get(i).get('nickname'),
+          id: this.users.get(i).get('id')
+        })
       } else if (officer && this.users.get(i).get('guild_id') == undefined) {
         this.nonMembersList.push({
-				 	nickname: this.users.get(i).get('nickname'),
-				 	id: this.users.get(i).get('id')
-		 			})
+          nickname: this.users.get(i).get('nickname'),
+          id: this.users.get(i).get('id')
+        })
       }
     }
   }

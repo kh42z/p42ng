@@ -4,7 +4,7 @@ export const GameRecords = Backbone.Collection.extend({
   initialize: function (url) {
     this.on('all', function (e) {
       //
-    })
+    }, this)
     this.fetch('success')
   },
   model: GameRecord,

@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import { Users } from '../collections/users_collection'
 import { ChatModel } from '../models/chatModel'
 import { User } from '../models/user_model'
@@ -63,6 +64,7 @@ export const ChatView = Backbone.View.extend({
     this.listenTo(this.myChannels, 'sync', function () {
       this.listenTo(this.users, 'sync', function () {
         this.users.remove(window.localStorage.getItem('user_id'))
+        console.log(this.userLogged)
         this.render()
       }, this)
     }, this)
@@ -81,7 +83,7 @@ export const ChatView = Backbone.View.extend({
 
     // my channels
     const channels = this.myChannels.slice().filter(el => el.get('privacy') !== 'direct_message')
-    this.context.myChannels = Array()
+    this.context.myChannels = []
     for (let i = 0; i < channels.length; i++) {
       this.context.myChannels.push(JSON.parse(JSON.stringify(channels[i])))
       this.context.myChannels[i].admin = channels[i].get('admin_ids').find(el => el === this.userLogged.get('id'))
@@ -89,7 +91,7 @@ export const ChatView = Backbone.View.extend({
 
     // direct messages
     const DM = this.myChannels.slice().filter(el => el.get('privacy') === 'direct_message')
-    this.context.DM = Array()
+    this.context.DM = []
     for (let i = 0; i < DM.length; i++) {
       this.context.DM.push(JSON.parse(JSON.stringify(DM[i])))
       const id = DM[i].get('participant_ids').find(el => el !== this.userLogged.get('id'))
@@ -104,7 +106,7 @@ export const ChatView = Backbone.View.extend({
       this.updateContextCenter(currentChannel)
 
       // history messages
-      this.context.messages = Array()
+      this.context.messages = []
       for (let i = 0; i < 0; i++) {
         this.context.messages.push({
           anagram: '[24.c]',
@@ -129,6 +131,25 @@ export const ChatView = Backbone.View.extend({
 
   blockUser: function (e) {
     const userId = e.currentTarget.getAttribute('for')
+    const innerHtml = e.currentTarget.innerHTML
+    console.log(e.currentTarget.innerHTML)
+    console.log(innerHtml)
+    let ignores = this.userLogged.get('ignores')
+    if (innerHtml === 'Block') {
+      this.userLogged.block(Number(userId))
+      console.log(ignores)
+      ignores.push({ ignored_id: Number(userId) })
+      console.log(ignores)
+      this.userLogged.set({ ignores: ignores })
+      e.currentTarget.innerHTML = 'Unblock'
+    } else {
+      this.userLogged.unblock(Number(userId))
+      console.log(ignores)
+      ignores = ignores.filter(el => el.ignored_id !== userId)
+      this.userLogged.set({ ignores: ignores })
+      console.log(this.userLogged.get('ignores'))
+      e.currentTarget.innerHTML = 'Block'
+    }
   },
 
   viewProfile: function (e) {
@@ -145,37 +166,41 @@ export const ChatView = Backbone.View.extend({
     const userId = e.currentTarget.getAttribute('for')
     dropList.style.display = 'flex'
     blockDiv.setAttribute('for', userId)
-    console.log(window.location)
-    viewProfile.setAttribute('href', '/#profile/' + userId )
-    console.log(userId)
+    viewProfile.setAttribute('href', '/#profile/' + userId)
 
     const getOffsetTop = element => {
-      let offsetTop = 0;
-      while(element) {
-        offsetTop += element.offsetTop;
-        element = element.offsetParent;
+      let offsetTop = 0
+      while (element) {
+        offsetTop += element.offsetTop
+        element = element.offsetParent
       }
-      return offsetTop;
+      return offsetTop
     }
-    const X = getOffsetTop(e.target);
+    const X = getOffsetTop(e.target)
 
     const getOffsetLeft = element => {
-      let offsetLet = 0;
-      while(element) {
-        offsetLet += element.offsetLeft;
-        element = element.offsetParent;
+      let offsetLet = 0
+      while (element) {
+        offsetLet += element.offsetLeft
+        element = element.offsetParent
       }
-      return offsetLet;
+      return offsetLet
     }
-    const Y = getOffsetLeft(e.target);
+    const Y = getOffsetLeft(e.target)
 
     dropList.style.top = X + e.target.offsetHeight + 4
-    dropList.style.left = Y 
+    dropList.style.left = Y
     const block = dropList.childNodes[3]
-    
-    if (this.userLogged.get('ignore_ids').find(el => el === userId)) {
+
+    console.log(this.userLogged)
+    if (this.userLogged.get('ignores').find(el => {
+      console.log(el)
+      return el.ignored_id == userId
+    })) {
+      console.log('unblock')
       block.innerHTML = 'Unblock'
     } else {
+      console.log('block')
       block.innerHTML = 'Block'
     }
   },
@@ -255,7 +280,7 @@ export const ChatView = Backbone.View.extend({
     const currentChannel = this.myChannels.get(this.channelId)
     const adminIds = currentChannel.get('admin_ids')
     adminIds.push(Number(userId))
-    const array = Array()
+    const array = []
     array.push(Number(userId))
     currentChannel.patchAdmin(array)
     currentChannel.set({ admin_ids: adminIds })
@@ -301,7 +326,7 @@ export const ChatView = Backbone.View.extend({
 
   updateContextAdmin: function (currentChannel) {
     const admins = currentChannel.get('admin_ids')
-    this.context.admins = Array()
+    this.context.admins = []
     for (let i = 0; i < admins.length; i++) {
       if (admins[i] !== currentChannel.get('owner_id')) {
         let admin = this.users.get(admins[i])
@@ -332,7 +357,7 @@ export const ChatView = Backbone.View.extend({
         currentChannel.get('owner_id')
       )
     }
-    this.context.members = Array()
+    this.context.members = []
     for (let i = 0; i < members.length; i++) {
       if (members[i] !== this.userLogged.get('id') &&
         !admins.find(el => el === members[i])) {
@@ -361,7 +386,7 @@ export const ChatView = Backbone.View.extend({
         currentChannel.get('owner_id')
       )
     }
-    this.context.owners = Array()
+    this.context.owners = []
     let anagram
     if (owner.get('anagram') === undefined) {
       anagram = 'N/A'
@@ -570,7 +595,7 @@ export const ChatView = Backbone.View.extend({
     this.context.nbOnline = usersOnline.length
     this.context.nbOffline = usersOffline.length
     this.context.nbInGame = usersInGame.length
-    this.context.usersOnline = Array()
+    this.context.usersOnline = []
     for (let i = 0; i < usersOnline.length; i++) {
       this.context.usersOnline.push(usersOnline[i])
       const length = this.context.usersOnline[i].anagram.length + this.context.usersOnline[i].nickname.length
@@ -581,7 +606,7 @@ export const ChatView = Backbone.View.extend({
     }
 
     // in game
-    this.context.usersInGame = Array()
+    this.context.usersInGame = []
     for (let i = 0; i < usersInGame.length; i++) {
       this.context.usersInGame.push(usersInGame[i])
       const length = this.context.usersInGame[i].anagram.length + this.context.usersInGame[i].nickname.length
@@ -592,7 +617,7 @@ export const ChatView = Backbone.View.extend({
     }
 
     // offline
-    this.context.usersOffline = Array()
+    this.context.usersOffline = []
     for (let i = 0; i < usersOffline.length; i++) {
       this.context.usersOffline.push(JSON.parse(JSON.stringify(usersOffline[i])))
       if (this.context.usersOffline[i].anagram !== undefined) {
@@ -692,8 +717,8 @@ export const ChatView = Backbone.View.extend({
 
   getSelectedBoxes: function () {
     const checkboxes = document.getElementsByClassName('checkbox')
-    const selectedCboxes = Array.prototype.slice.call(checkboxes).filter(ch => ch.checked === true)
-    return Array.from(selectedCboxes, x => x.value)
+    const selectedCboxes = [].prototype.slice.call(checkboxes).filter(ch => ch.checked === true)
+    return [].from(selectedCboxes, x => x.value)
   },
 
   createChannel: function (e) {
@@ -796,7 +821,7 @@ export const ChatView = Backbone.View.extend({
     }
     if (i === DM.length) {
       const newChannel = new ChatModel()
-      const participantsIds = new Array()
+      const participantsIds = new []()
       participantsIds.push(id)
       const createChannel = async () => {
         try {
@@ -834,7 +859,7 @@ export const ChatView = Backbone.View.extend({
 
   deleteChannelOfHTML: function (e) {
     const myChannels = this.myChannels.slice().filter(el => el.get('privacy') !== 'direct_message')
-    const array = Array()
+    const array = []
     for (let i = 0; i < myChannels.length; i++) {
       array.push(JSON.parse(JSON.stringify(myChannels[i])))
       array[i].admin = myChannels[i].get('admin_ids').find(el => el === this.userLogged.get('id'))
