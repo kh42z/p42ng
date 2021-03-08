@@ -95,9 +95,23 @@ export const ChatView = Backbone.View.extend({
     for (let i = 0; i < DM.length; i++) {
       this.context.DM.push(JSON.parse(JSON.stringify(DM[i])))
       const id = DM[i].get('participant_ids').find(el => el !== this.userLogged.get('id'))
-      this.context.DM[i].image_url = this.users.get(id).get('image_url')
-      this.context.DM[i].anagram = this.users.get(id).get('anagram')
-      this.context.DM[i].nickname = this.users.get(id).get('nickname')
+      const user = this.users.get(id)
+      console.log(id)
+      console.log(id)
+      console.log(this.userLogged.get('ignores'))
+      console.log(this.userLogged.get('ignores').some(el => {
+        console.log(el.ignored_id)
+        return el.ignored_id == id
+      }))
+      if (this.userLogged.get('ignores').some(el => el.ignored_id == id) !== undefined) {
+        console.log('ignore')
+        this.context.DM[i].image_url = user.get('image_url')
+      } else {
+        console.log('not ignore')
+        this.context.DM[i].image_url = user.get('image_url')
+      }
+      this.context.DM[i].anagram = user.get('anagram')
+      this.context.DM[i].nickname = user.get('nickname')
     }
 
     // header center
@@ -131,23 +145,19 @@ export const ChatView = Backbone.View.extend({
 
   blockUser: function (e) {
     const userId = e.currentTarget.getAttribute('for')
+    console.log(userId)
     const innerHtml = e.currentTarget.innerHTML
-    console.log(e.currentTarget.innerHTML)
-    console.log(innerHtml)
     let ignores = this.userLogged.get('ignores')
     if (innerHtml === 'Block') {
       this.userLogged.block(Number(userId))
-      console.log(ignores)
       ignores.push({ ignored_id: Number(userId) })
-      console.log(ignores)
       this.userLogged.set({ ignores: ignores })
       e.currentTarget.innerHTML = 'Unblock'
     } else {
       this.userLogged.unblock(Number(userId))
-      console.log(ignores)
-      ignores = ignores.filter(el => el.ignored_id !== userId)
+      console.log('unblock model')
+      ignores = ignores.splice().filter(el => el.ignored_id == userId)
       this.userLogged.set({ ignores: ignores })
-      console.log(this.userLogged.get('ignores'))
       e.currentTarget.innerHTML = 'Block'
     }
   },
@@ -163,7 +173,9 @@ export const ChatView = Backbone.View.extend({
     const dropList = document.getElementById('droplistBlockViewProfile')
     const viewProfile = document.getElementById('view-profile')
     const blockDiv = document.getElementById('block')
+    console.log(e.currentTarget.getAttribute('for'))
     const userId = e.currentTarget.getAttribute('for')
+    console.log(e.currentTarget)
     dropList.style.display = 'flex'
     blockDiv.setAttribute('for', userId)
     viewProfile.setAttribute('href', '/#profile/' + userId)
@@ -637,7 +649,11 @@ export const ChatView = Backbone.View.extend({
       const id = currentChannel.get('participant_ids').find(el => el !== idUserLogged)
       const user = this.users.get(id)
       this.context.channel = false
-      this.context.image_url = user.get('image_url')
+      if (this.userLogged.get('ignores').filter(el => el.ignored_id !== id)) {
+        this.context.image_url = user.get('image_url')
+      } else {
+        this.context.image_url = './icons/blocked.svg'
+      }
       this.context.anagram = user.get('anagram')
       this.context.nickname = user.get('nickname')
       status = user.get('status')
@@ -717,8 +733,8 @@ export const ChatView = Backbone.View.extend({
 
   getSelectedBoxes: function () {
     const checkboxes = document.getElementsByClassName('checkbox')
-    const selectedCboxes = [].prototype.slice.call(checkboxes).filter(ch => ch.checked === true)
-    return [].from(selectedCboxes, x => x.value)
+    const selectedCboxes = Array.prototype.slice.call(checkboxes).filter(ch => ch.checked === true)
+    return Array.from(selectedCboxes, x => x.value)
   },
 
   createChannel: function (e) {
@@ -821,7 +837,7 @@ export const ChatView = Backbone.View.extend({
     }
     if (i === DM.length) {
       const newChannel = new ChatModel()
-      const participantsIds = new []()
+      const participantsIds = []
       participantsIds.push(id)
       const createChannel = async () => {
         try {
