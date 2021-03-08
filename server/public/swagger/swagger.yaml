@@ -869,6 +869,7 @@ servers:
     variables:
       defaultHost:
         default: localhost
+  - url: https://p42ng.herokuapp.com
 security:
   - client: []
     access_token: []
