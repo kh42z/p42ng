@@ -4,9 +4,10 @@ require 'mini_magick'
 
 module Api
   class UsersController < ApiController
-    before_action :set_user, only: %i[show update upload_avatar]
-    before_action :allowed?, only: %i[update upload_avatar]
-    # before_action :update_ignores, only: %i[update]
+    before_action :set_user,
+                  only: %i[show update upload_avatar create_ignore destroy_ignore create_friendship destroy_friendship]
+    before_action :allowed?,
+                  only: %i[update upload_avatar create_ignore destroy_ignore create_friendship destroy_friendship]
 
     UserReducer = Rack::Reducer.new(
       User.all,
@@ -25,7 +26,6 @@ module Api
 
       disconnect_banned_user(@user.id) if user_params.key?(:banned) && user_params.fetch(:banned) == true
 
-      update_ignores
       @user.update!(user_params)
       json_response(@user)
     end
@@ -46,20 +46,32 @@ module Api
       json_response({ image_url: url })
     end
 
-    private
-
-    def update_ignores
-      return unless params.key?(:ignore_ids)
-
-      @user.user_ignores.destroy_all
-
-      return unless params[:ignore_ids][0] != ''
-
-      params[:ignore_ids].each do |t|
-        UserIgnore.create!(user: current_user, user_ignored_id: t)
-      end
-      @user.reload
+    def create_ignore
+      p = ignore_params
+      json_response(UserIgnore.create!(user: @user, ignored_id: p[:ignored_id]))
     end
+
+    def destroy_ignore
+      id = params.fetch(:ignored_id)
+      UserIgnore.where(ignored_id: id, user: @user).destroy_all
+      head :no_content
+    end
+
+    def create_friendship
+      p = friendship_params
+      Friendship.create!(friend_a: @user, friend_b_id: p[:friend_id])
+      json_response({ friend_id: p[:friend_id] })
+    end
+
+    def destroy_friendship
+      id = params.fetch(:friend_id)
+      Friendship.where('friend_a_id = ? or friend_b_id = ?', @user.id, @user.id).where(
+        'friend_a_id = ? or friend_b_id = ?', id, id
+      ).destroy_all
+      head :no_content
+    end
+
+    private
 
     def allowed?
       return unless current_user.id != @user.id && current_user.admin? == false
@@ -67,8 +79,16 @@ module Api
       render_not_allowed
     end
 
+    def ignore_params
+      params.permit(:ignored_id)
+    end
+
+    def friendship_params
+      params.permit(:friend_id)
+    end
+
     def user_params
-      params.permit(:two_factor, :nickname, :first_login, :banned, :guild_id)
+      params.require(:user).permit(:two_factor, :nickname, :first_login, :banned, :guild_id)
     end
 
     def set_user

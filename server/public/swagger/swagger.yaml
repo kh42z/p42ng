@@ -156,15 +156,8 @@ paths:
             schema:
               $ref: "#/components/schemas/ban"
       responses:
-        '200':
+        '204':
           description: user muted
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  mute_ids:
-                    $ref: '#/components/schemas/integer_list'
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -192,15 +185,8 @@ paths:
             schema:
               $ref: "#/components/schemas/ban"
       responses:
-        '200':
+        '204':
           description: user banned
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  ban_ids:
-                    $ref: '#/components/schemas/integer_list'
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -379,19 +365,6 @@ paths:
       tags:
         - Guilds
       parameters: [ ]
-      responses:
-        '201':
-          $ref: '#/components/responses/201'
-        '422':
-          $ref: '#/components/responses/422'
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '500':
-          $ref: '#/components/responses/500'
       requestBody:
         content:
           application/json:
@@ -402,8 +375,11 @@ paths:
                   type: string
                 anagram:
                   type: string
-                officer_ids:
-                  $ref: '#/components/schemas/integer_list'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '422':
+          $ref: '#/components/responses/422'
 
   "/api/guilds/{id}":
     parameters:
@@ -462,10 +438,11 @@ paths:
           $ref: '#/components/responses/403'
         '500':
           $ref: '#/components/responses/500'
-  "/api/guilds/{id}/members":
+
+  "/api/guilds/{id}/officers":
     post:
-      summary: Add guild member
-      description: Allows current_user to add a member to the guild
+      summary: Adds guild officers
+      description: Allows current_user to add guild officers
       tags:
         - Guilds
       parameters:
@@ -475,16 +452,89 @@ paths:
           schema:
             type: integer
           description: Guild ID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                officer_ids:
+                  $ref: '#/components/schemas/integer_list'
       responses:
         '200':
-          description: chat joined
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  participant_ids:
-                    $ref: '#/components/schemas/integer_list'
+          description: members added
+
+  "/api/guilds/{id}/officers/{uid}":
+    delete:
+      summary: Removes a guild officer
+      description: Allows current_user to remove a guild officer
+      tags:
+        - Guilds
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Guild ID
+        - name: uid
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: User ID
+      responses:
+        '204':
+          description: officer removed
+
+  "/api/guilds/{id}/members":
+    post:
+      summary: Adds guild members
+      description: Allows current_user to add guild members
+      tags:
+        - Guilds
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Guild ID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                member_ids:
+                  $ref: '#/components/schemas/integer_list'
+      responses:
+        '200':
+          description: members added
+
+  "/api/guilds/{id}/members/{uid}":
+    delete:
+      summary: Removes a guild member
+      description: Allows current_user to remove a guild member
+      tags:
+        - Guilds
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Guild ID
+        - name: uid
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: User ID
+      responses:
+        '204':
+          description: member removed
+
   "/api/wars":
     get:
       summary: Retrieves wars
@@ -671,8 +721,6 @@ paths:
                   type: boolean
                 guild_id:
                   type: integer
-                ignore_ids:
-                  $ref: '#/components/schemas/integer_list'
     get:
       summary: Retrieves an user
       tags:
@@ -699,6 +747,92 @@ paths:
           $ref: '#/components/responses/403'
         '500':
           $ref: '#/components/responses/500'
+  "/api/users/{id}/friends":
+    post:
+      summary: Creates a friendship
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref : '#/components/schemas/friend'
+      responses:
+        '200':
+          description: friendship added
+          content:
+            application/json:
+              schema:
+                $ref : '#/components/schemas/friend'
+  "/api/users/{id}/friends/{friend_id}":
+    delete:
+      summary: Removes a friendship
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: friend_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: member removed
+  "/api/users/{id}/ignores":
+    post:
+      summary: Add user to ignore list
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref : '#/components/schemas/user_ignored'
+      responses:
+        '200':
+          description: ignore created
+          content:
+            application/json:
+              schema:
+                $ref : '#/components/schemas/user_ignored'
+  "/api/users/{id}/ignores/{ignored_id}":
+    delete:
+      summary: Removes ignored_id from ignore list
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: ignored_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: member removed
   "/api/users/{id}/avatar":
     post:
       summary: Upload an user avatar
@@ -754,6 +888,14 @@ components:
       name: uid
       in: header
   schemas:
+    arrayOfFriends:
+      type: array
+      items:
+        $ref: '#/components/schemas/friend'
+    arrayOfUserIgnored:
+      type: array
+      items:
+        $ref: '#/components/schemas/user_ignored'
     arrayOfGames:
       type: array
       items:
@@ -817,8 +959,10 @@ components:
           type: string
         chat_ids:
           $ref: '#/components/schemas/integer_list'
-        ignore_ids:
-          $ref: '#/components/schemas/integer_list'
+        friends:
+          $ref: '#/components/schemas/arrayOfFriends'
+        ignores:
+          $ref: '#/components/schemas/arrayOfUserIgnored'
     guild_response:
       allOf:
         - type: object
@@ -878,6 +1022,16 @@ components:
         duration:
           type: integer
           description: Duration in seconds
+    user_ignored:
+      type: object
+      properties:
+        ignored_id:
+          type: integer
+    friend:
+      type: object
+      properties:
+        friend_id:
+          type: integer
     chat:
       type: object
       properties:

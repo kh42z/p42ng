@@ -12,6 +12,13 @@ class ApiController < ApplicationController
   end
   rescue_from WrongPasswordError, with: :response_error
 
+  class HasGuildAlreadyError < StandardError
+    def message
+      I18n.t('hasGuildAlready')
+    end
+  end
+  rescue_from HasGuildAlreadyError, with: :response_error
+
   private
 
   def response_error(error)

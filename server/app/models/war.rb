@@ -10,7 +10,19 @@ class War < ApplicationRecord
   validates_presence_of :from_score
   validates_presence_of :on_score
   validates_presence_of :max_unanswered
+  validate :start_before_end
+  validate :from_must_not_eq_on
   belongs_to :guild
   has_many :war_terms
   has_one :war_time
+
+  def from_must_not_eq_on
+    valid = from && on && from != on
+    errors.add(:from, "can't be equal to 'on'") unless valid
+  end
+
+  def start_before_end
+    valid = war_start && war_end && war_start < war_end
+    errors.add(:war_start, 'must be before end time') unless valid
+  end
 end

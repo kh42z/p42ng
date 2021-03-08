@@ -3,7 +3,14 @@
 Rails.application.routes.draw do
   resources :two_factor
   namespace :api do
-    resources :guilds
+    resources :guilds do
+      member do
+        post 'members'
+        delete 'members'
+        post 'officers'
+        delete 'officers'
+      end
+    end
     resources :wars
     resources :ladders
     resources :games
@@ -18,7 +25,11 @@ Rails.application.routes.draw do
     end
     resources :users do
       member do
-      post :avatar, to: 'users#upload_avatar'
+        post :avatar, to: 'users#upload_avatar'
+        post 'ignores', to: 'users#create_ignore'
+        delete 'ignores/:ignored_id', to: 'users#destroy_ignore'
+        post 'friends', to: 'users#create_friendship'
+        delete 'friends/:friend_id', to: 'users#destroy_friendship'
       end
     end
   end

@@ -8,5 +8,5 @@ class Guild < ApplicationRecord
   belongs_to :owner, class_name: 'User'
   has_many :officers, class_name: 'GuildOfficer', dependent: :destroy
   has_many :wars, dependent: :destroy
-  has_many :user, dependent: :nullify
+  has_many :members, class_name: 'User', dependent: :nullify
 end
