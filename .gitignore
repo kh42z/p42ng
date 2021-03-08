@@ -78,8 +78,8 @@ server/coverage
 node_modules
 database
 
-package.json
+# package.json
 package-lock.json
-.eslintrc.json
+# .eslintrc.json
 .eslintignore
 .eslintrc.yml

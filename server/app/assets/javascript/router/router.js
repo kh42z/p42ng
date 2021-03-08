@@ -71,19 +71,16 @@ export const Router = Backbone.Router.extend({
     '': 'oauth_view'
   },
 
-
-
-
   connexion: function (url) {
-      // Two-Factor redirection
-      this.urlParams = new URLSearchParams(window.location.search)
-      if (this.urlParams.get('two_factor')) {
-          window.localStorage.setItem('user_id', this.urlParams.get('user_id'))
-          this.navigate('#twoFactor', { trigger: true})
-          return
-      }
+    // Two-Factor redirection
+    this.urlParams = new URLSearchParams(window.location.search)
+    if (this.urlParams.get('two_factor')) {
+      window.localStorage.setItem('user_id', this.urlParams.get('user_id'))
+      this.navigate('#twoFactor', { trigger: true })
+      return
+    }
 
-      const fetchUser = async () => {
+    const fetchUser = async () => {
       this.oauthService.setAjaxEnvironnement()
       this.oauthService.ajaxSetup()
       await this.userLogged.fetchUser(window.localStorage.getItem('user_id'))
@@ -95,17 +92,17 @@ export const Router = Backbone.Router.extend({
     fetchUser()
   },
 
-    two_factor_connexion: function (url) {
-        const fetchUser = async () => {
-            this.oauthService.ajaxSetup()
-            await this.userLogged.fetchUser(window.localStorage.getItem('user_id'))
-            this.navigate('#home', { trigger: true })
-        }
-        fetchUser()
-    },
+  two_factor_connexion: function (url) {
+    const fetchUser = async () => {
+      this.oauthService.ajaxSetup()
+      await this.userLogged.fetchUser(window.localStorage.getItem('user_id'))
+      this.navigate('#home', { trigger: true })
+    }
+    fetchUser()
+  },
 
   accessPage: function (url) {
- if (window.localStorage.getItem('access-token') === null) {
+    if (window.localStorage.getItem('access-token') === null) {
       this.oauth_view()
       return 1
     } else if (performance.navigation.type === 1 || performance.navigation.type === 2) {
@@ -113,7 +110,7 @@ export const Router = Backbone.Router.extend({
         this.oauthService = new OauthService()
         this.oauthService.ajaxSetup()
         await this.userLogged.fetchUser(window.localStorage.getItem('user_id'))
-        if (url !== 'firstConnexion'|| url !== 'twoFactor') { this.headerView.render() }
+        if (url !== 'firstConnexion' || url !== 'twoFactor') { this.headerView.render() }
       }
       fetchUser()
     }
