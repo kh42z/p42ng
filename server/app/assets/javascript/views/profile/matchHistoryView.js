@@ -4,18 +4,18 @@ export const MatchHistoryView = Backbone.View.extend({
   el: $('#app'),
   initialize: function () {
     this.template = Handlebars.templates.matchHistory
+    this.gameRecords = this.model.get('gameRecords').get('obj')
     this.users = this.model.get('users').get('obj')
     this.guilds = this.model.get('guilds').get('obj')
-    this.listenTo(this.guilds, 'sync', function () { this.getUsers() }, this)
+    this.listenTo(this.gameRecords, 'sync', function () { this.getGuilds() }, this)
   },
 
   getUsers: function () {
-    this.listenTo(this.users, 'sync', function () { this.getGameRecords() }, this)
+    this.listenTo(this.users, 'sync', function () { this.render() }, this)
   },
 
-  getGameRecords: function () {
-    this.gameRecords = new GameRecords()
-    this.listenTo(this.gameRecords, 'sync', function () { this.render() }, this)
+  getGuilds: function () {
+    this.listenTo(this.guilds, 'sync', function () { this.getUsers() }, this)
     // this.render()
   },
 

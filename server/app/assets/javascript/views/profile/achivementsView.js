@@ -4,7 +4,7 @@ export const AchivementsView = Backbone.View.extend({
   el: $('#app'),
   initialize: function () {
     this.template = Handlebars.templates.achivements
-    this.ladders = new Ladders()
+    this.ladders = this.model.get('ladders').get('obj')
     this.users = this.model.get('users').get('obj')
    	// this.guilds = this.model.get('guilds').get('obj')
 

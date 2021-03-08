@@ -1,0 +1,6 @@
+(function() {
+  var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
+templates['ownerPannel'] = template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "<p>Owner prerogative</p>\n<label for=\"guildName\">\n	<input id=\"guildName\" type=\"text\"></input>\n</label>\n<button class=\"updateGuildName\">Update guild name</button>\n<div id=\"nameError\" class=\"errorMessage\"></div>\n\n<label for=\"guildAnagram\">\n	<input id=\"guildAnagram\" type=\"text\"></input>\n</label>\n<button class=\"updateGuildAnagram\">Update guild anagram</button>\n<div id=\"anagramError\" class=\"errorMessage\"></div>\n<div></div>\n<label for=\"memberToPromote\" class=\"labelGuildField\">\n	<input class=\"nicknameSearch\" type=\"text\" id=\"memberToPromote\"></input>\n</label>\n<button class=\"promoteMember\">Promote officer</button>\n<div class=\"nicknameSearchResult\" id=\"promoteMemberResult\"></div>\n\n<label for=\"memberToRelegate\" class=\"labelGuildField\">\n	<input class=\"nicknameSearch\" type=\"text\" id=\"memberToRelegate\"></input>\n</label>\n<button class=\"relegateMember\">Relegate to member</button>\n<div class=\"nicknameSearchResult\" id=\"relegateMemberResult\"></div>\n";
+},"useData":true});
+})();

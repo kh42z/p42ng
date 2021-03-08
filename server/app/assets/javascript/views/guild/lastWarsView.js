@@ -1,6 +1,7 @@
 export const LastWarsView = Backbone.View.extend({
   el: $('#app'),
   initialize: function () {
+    console.log('yes')
     this.guildSubNavBar = Handlebars.templates.guildSubNavBar
     this.guildPannel = Handlebars.templates.guildPannel
     this.template = Handlebars.templates.lastWars
@@ -12,6 +13,7 @@ export const LastWarsView = Backbone.View.extend({
     this.$el.html(this.template(context))
     this.$el.find('#guildPannel').html(this.guildPannel(context))
     this.$el.find('#guildSubNavBar').html(this.guildSubNavBar(context))
+
     return this
   }
 })
