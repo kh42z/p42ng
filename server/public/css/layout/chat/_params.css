@@ -295,6 +295,30 @@ p.p {
     position: relative;
 }
 
+.chat 
+.droplistBlockViewProfile {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    /* left: 380px;
+    top: 50px; */
+    background: #364050;
+    z-index: 1;
+    width: 200px;
+    border-radius: 4px;
+}
+
+.chat 
+.droplistBlockViewProfile .el {
+    height: 37px;
+    cursor: pointer;
+    padding-left: 16px;
+    line-height: 37px;
+    position: relative;
+    font-size: 14px;
+    font-family: Roboto-Regular;
+    color: var(--secondary-color);
+}
 
 .chat .parameters .right-menu .members
 .admin-rights .mute {

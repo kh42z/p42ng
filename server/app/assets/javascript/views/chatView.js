@@ -43,7 +43,9 @@ export const ChatView = Backbone.View.extend({
     'click .public': 'radioPublic',
     'click .protected': 'radioProtected',
     'click .save': 'savePrivacy',
-    'click .validate-password': 'subscribeProtectedChannel'
+    'click .validate-password': 'subscribeProtectedChannel',
+    'click .image_url': 'openDropListBlockViewProfile',
+    'click .chat': 'closeDropListBlockViewProfile'
   },
   initialize: function () {
     this.myChannels = this.model.get('myChannels').get('obj')
@@ -124,6 +126,39 @@ export const ChatView = Backbone.View.extend({
     return this
   },
 
+  openDropListBlockViewProfile: function (e) {
+    const dropList = document.getElementById('droplistBlockViewProfile')
+    dropList.style.display = 'flex'
+    console.log(e)
+    console.log(e.target.offsetParent.offsetTop + ' ' + e.target.offsetParent.offsetLeft)
+    console.log(e.target.offsetWidth + ' ' + e.target.offsetHeight)
+    console.log(e.target.offsetTop + ' ' + e.target.offsetLeft)
+    dropList.style.top = e.target.offsetTop + e.target.offsetHeight + 4
+    dropList.style.left = e.target.offsetLeft
+    console.log(dropList.childNodes[3])
+    const block = dropList.childNodes[3]
+    console.log(block)
+    const userId = e.currentTarget.getAttribute('for')
+    console.log(userId)
+    if (this.userLogged.get('ignore_ids').find(el => el === userId)) {
+      block.innerHTML = 'Unblock'
+    } else {
+      block.innerHTML = 'Block'
+    }
+  },
+
+  closeDropListBlockViewProfile: function (e) {
+    console.log('closeDropListBlockViewProfile')
+    // e.stopPropagation()
+    console.log(e.currentTarget.classList)
+    if (e.currentTarget.classList.contains('image-container') === false) {
+      const droplistBlockViewProfile = document.getElementsByClassName('droplistBlockViewProfile')
+      for (let i = 0; i < droplistBlockViewProfile.length; i++) {
+        droplistBlockViewProfile[i].style.display = 'none'
+      }
+    }
+  },
+
   passwordVisibility: function () {
     console.log('password visibility')
     const icon = document.getElementById('eyeVisibility')
@@ -184,10 +219,8 @@ export const ChatView = Backbone.View.extend({
     const currentChannel = this.myChannels.get(this.channelId)
     const adminIds = currentChannel.get('admin_ids')
     adminIds.push(Number(userId))
-    console.log(adminIds)
     const array = Array()
     array.push(Number(userId))
-    console.log(Array(Number(userId)))
     currentChannel.patchAdmin(array)
     currentChannel.set({ admin_ids: adminIds })
     this.modalClose()
@@ -207,7 +240,6 @@ export const ChatView = Backbone.View.extend({
     e.stopPropagation()
     if (e.currentTarget.classList.contains('admin-rights') === false) {
       const adminRights = document.getElementsByClassName('admin-rights')
-      console.log(adminRights.length)
       for (let i = 0; i < adminRights.length; i++) {
         adminRights[i].style.display = 'none'
       }
@@ -240,7 +272,6 @@ export const ChatView = Backbone.View.extend({
         if (admin === undefined) {
           admin = this.userLogged
         }
-        console.log(admin)
         let anagram
         if (admin.get('anagram') === undefined) {
           anagram = 'N/A'
@@ -331,12 +362,7 @@ export const ChatView = Backbone.View.extend({
     // const radios = document.getElementByName('privacy')
     const privacy = document.querySelector('input[name="privacy"]:checked').value
     const password = document.getElementById('password').value
-    console.log(password)
     const currentChannel = this.myChannels.get(this.channelId)
-    console.log(privacy, password)
-
-    console.log(currentChannel)
-    console.log(currentChannel.get('password'))
     const updatePrivacy = async () => {
       try {
         const response = await currentChannel.updatePrivacy(privacy, password)
@@ -569,7 +595,7 @@ export const ChatView = Backbone.View.extend({
   openChat: function (e) {
     console.log('openChat')
 
-    console.log(e)
+    console.log(e.pageY + ' ' + e.pageX)
     // display
     const divId = e.currentTarget.getAttribute('id')
     const id = e.currentTarget.getAttribute('for')
@@ -637,9 +663,7 @@ export const ChatView = Backbone.View.extend({
     const createChannel = async () => {
       try {
         const response = await newChannel.createChannel(name, participantsIds)
-        console.log(this.myChannels)
         this.myChannels.add(newChannel)
-        console.log(this.myChannels)
         this.channels.add(newChannel)
         this.modalClose()
         const myChannels = this.myChannels.slice().filter(el => el.get('privacy') !== 'direct_message')
@@ -842,10 +866,7 @@ export const ChatView = Backbone.View.extend({
   },
 
   subscribeChannelModel: function (e, id, password) {
-    console.log(this.myChannels.find(el => el.name == 'general'))
-    console.log(this.myChannels.find(el => el.id == id))
     if (this.myChannels.find(el => el.id == id) === undefined) {
-      console.log('test')
       const channel = this.channels.get(id)
       channel.subscribeChannel(password)
       this.myChannels.add(channel)
@@ -856,14 +877,12 @@ export const ChatView = Backbone.View.extend({
   },
 
   subscribeProtectedChannel: function (e) {
-    console.log(e.currentTarget.getAttribute('for'))
     const channelId = e.currentTarget.getAttribute('for')
     const password = document.getElementById('inputModalPassword' + channelId).value
     this.subscribeChannelModel(e, channelId, password)
   },
 
   subscribeChannel: function (e) {
-    console.log('subscribeChannel')
     const id = e.currentTarget.getAttribute('for')
     if (this.myChannels.find(el => el.id == id) !== undefined) {
       this.updateDOMSubsribeChannel(id, e)

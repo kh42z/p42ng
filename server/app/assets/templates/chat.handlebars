@@ -38,7 +38,7 @@
                 </div>
                 <div class="DM" id="DM">
                 {{#each DM}}
-                    <div class="clickable-discussions" for={{id}} id="DM{{id}}">
+                    <div class="clickable-discussions user" for={{id}} id="DM{{id}}">
                         <div class="image-container">
                             <img src={{image_url}} id="image_url" class="image_url"></img>
                         </div>
@@ -57,7 +57,7 @@
             <div class="left-header">
                 {{#unless channel}}
                 <div class="image-container">
-                    <img src={{image_url}} class="image_url"></img>
+                    <img src={{image_url}} class="image_url" for="{{id}}"></img>
                 </div>
                 {{/unless}}
                 <div class="info">
@@ -96,7 +96,7 @@
                 <div class="message">
                     <div class="info">
                         <div class="image-container">
-                            <img src={{image_url}} class="image_url"></img>
+                            <img src={{image_url}} class="image_url" for="{{id}}"></img>
                         </div>
                         <div class="anagram">{{anagram}}</div>
                         <div class="nickname">{{nickname}}</div>
@@ -122,7 +122,7 @@
                 <div class="user">
                     <div class="name">
                         <div class="image-container">
-                            <img src={{image_url}} class="image_url"></img>
+                            <img src={{image_url}} class="image_url" for="{{id}}"></img>
                         </div>
                         <div class="name anagram">{{anagram}}</div>
                         <div class="name nickname">{{nickname}}</div>
@@ -144,7 +144,7 @@
                 <div class="user">
                     <div class="name">
                         <div class="image-container">
-                            <img src={{image_url}} class="image_url"></img>
+                            <img src={{image_url}} class="image_url" for="{{id}}"></img>
                         </div>
                         <div class="name anagram">{{anagram}}</div>
                         <div class="name nickname">{{nickname}}</div>
@@ -164,7 +164,7 @@
                 <div class="user">
                     <div class="name">
                         <div class="image-container">
-                            <img src={{image_url}} class="image_url"></img>
+                            <img src={{image_url}} class="image_url" for="{{id}}"></img>
                         </div>
                         <div class="name anagram">{{anagram}}</div>
                         <div class="name nickname">{{nickname}}</div>
@@ -172,6 +172,10 @@
                 </div>
             {{/each}}
         </div>
+    </div>
+    <div class="droplistBlockViewProfile" id="droplistBlockViewProfile" style="display: none;">
+        <div class="el view-profile" id="view-profile">View profile</div>
+        <div class="el block" id="block"></div>
     </div>
     <div class="modal modalCreateChannel" id="modalCreateChannel" >
         <div class="background"></div>
@@ -255,7 +259,7 @@
                         <div class="close closeModal">
                             <img src="./icons/close.svg" id="close"></img>
                         </div>
-                        <label class="label labelModalPassword" for="labelModalPassword">Password:</label>
+                        <label class="label labelModalPassword" for="labelModalPassword">Password</label>
                         <input class="inputModalPassword" type="password" id="inputModalPassword{{id}}" placeholder="Password" for={{id}}></input>
                         <div class="button-container buttons">
                             <button class="validation-buttons button validate-password" for="{{id}}">Validate</button>
@@ -377,7 +381,7 @@
                     {{#each owners}}
                     <div class="self owner">
                         <div class="image-container">
-                            <img src={{image_url}} class="image_url"></img>
+                            <img src={{image_url}} class="image_url" for="{{id}}"></img>
                         </div>
                         <div class="anagram">
                             <p class="text">{{anagram}}</p>
@@ -393,7 +397,7 @@
                     {{#each admins}}
                         <div class="self admin">
                             <div class="image-container">
-                                <img src={{image_url}} class="image_url"></img>
+                                <img src={{image_url}} class="image_url" for="{{id}}"></img>
                             </div>
                             <div class="anagram">
                                 <p class="text">{{anagram}}</p>
@@ -409,7 +413,7 @@
                     {{#each members}}
                         <div class="self member">
                             <div class="image-container">
-                                <img src={{image_url}} class="image_url"></img>
+                                <img src={{image_url}} class="image_url" for="{{id}}"></img>
                             </div>
                             <div class="anagram">
                                 <p class="text">{{anagram}}</p>
