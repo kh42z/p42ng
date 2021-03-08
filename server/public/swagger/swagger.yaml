@@ -4,6 +4,32 @@ info:
   title: Pong API
   description: Pong API
 paths:
+  "/api/achievements":
+    get:
+      summary: Retrieves all achievements
+      tags:
+        - Achievements
+      parameters:
+        - in: query
+          name: user_id
+          schema:
+            type: integer
+          description: filter by user_id
+      responses:
+        '200':
+          description: All achievements
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/arrayOfAchievements"
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
   "/api/chats/":
     get:
       summary: Retrieves chats
@@ -771,6 +797,7 @@ paths:
             application/json:
               schema:
                 $ref : '#/components/schemas/friend'
+
   "/api/users/{id}/friends/{friend_id}":
     delete:
       summary: Removes a friendship
@@ -900,6 +927,19 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/game_response'
+    arrayOfAchievements:
+      type: array
+      items:
+        $ref: '#/components/schemas/achievement'
+    achievement:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        desc:
+          type: string
     game_response:
       type: object
       properties:

@@ -48,7 +48,8 @@ module Api
 
     def create_ignore
       p = ignore_params
-      json_response(UserIgnore.create!(user: @user, ignored_id: p[:ignored_id]))
+      UserIgnore.create!(user: @user, ignored_id: p[:ignored_id])
+      json_response({ ignored_id: p[:ignored_id].to_i })
     end
 
     def destroy_ignore
@@ -60,7 +61,7 @@ module Api
     def create_friendship
       p = friendship_params
       Friendship.create!(friend_a: @user, friend_b_id: p[:friend_id])
-      json_response({ friend_id: p[:friend_id] })
+      json_response({ friend_id: p[:friend_id].to_i })
     end
 
     def destroy_friendship

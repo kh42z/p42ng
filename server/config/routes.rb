@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     resources :wars
     resources :ladders
     resources :games
+    resources :achievements
     resources :chats do
       member do
         post 'participants', to: 'chats#create_participant'
