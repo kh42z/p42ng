@@ -36,15 +36,6 @@ jobs:
           MARVIN_PROVIDER_CALLBACK: "https://api.intra.42.fr"
           MAILGUN_SECRET: 9425db56741dfb1ce3070c9a36225be4-e49cc42c-5a708301
           MAILGUN_DOMAIN: sandbox718829b193c64c62971d9b885fa1d507.mailgun.org
-  eslint:
-    name: eslint
-    runs-on: ubuntu-18.04
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install modules
-        run: yarn
-      - name: Run ESLint
-        run: eslint server/app/assets/ --ext .js --ignore-pattern "**/templates-compiled/*.js"
   rubocop-test:
     name: Rubocop
     runs-on: ubuntu-18.04
@@ -60,7 +51,7 @@ jobs:
   rspec-test:
     name: RSpec
     runs-on: ubuntu-18.04
-    needs: [rubocop-test eslint]
+    needs: [rubocop-test]
     services:
       postgres:
         image: postgres:12.1
