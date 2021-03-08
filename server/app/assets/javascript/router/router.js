@@ -8,6 +8,7 @@ import { TournamentsView } from '../views/tournaments/tournamentsView.js'
 import { OauthView } from '../views/oauth/oauthView.js'
 import { GuildsView } from '../views/guild/guildsView.js'
 import { FirstConnexionView } from '../views/oauth/firstConnexionView.js'
+import { TwoFactorView } from '../views/oauth/twoFactorView.js'
 import { SearchView } from '../views/search/searchView.js'
 import { ChatView } from '../views/chatView'
 
@@ -63,12 +64,22 @@ export const Router = Backbone.Router.extend({
     connexion: 'connexion',
     exit: 'exit',
     firstConnexion: 'firstConnexion_view',
+    two_factor_connexion: 'two_factor_connexion',
+    twoFactor: 'twoFactor_view',
     'search(/:item)': 'search_view',
     'search(/:item)/': 'search_view',
     '': 'oauth_view'
   },
 
   connexion: function (url) {
+    // Two-Factor redirection
+    this.urlParams = new URLSearchParams(window.location.search)
+    if (this.urlParams.get('two_factor')) {
+      window.localStorage.setItem('user_id', this.urlParams.get('user_id'))
+      this.navigate('#twoFactor', { trigger: true })
+      return
+    }
+
     const fetchUser = async () => {
       this.oauthService.setAjaxEnvironnement()
       this.oauthService.ajaxSetup()
@@ -77,6 +88,15 @@ export const Router = Backbone.Router.extend({
       if (this.userLogged.get('first_login')) { this.navigate('#firstConnexion', { trigger: true }) } else {
         this.navigate('#home', { trigger: true })
       }
+    }
+    fetchUser()
+  },
+
+  two_factor_connexion: function (url) {
+    const fetchUser = async () => {
+      this.oauthService.ajaxSetup()
+      await this.userLogged.fetchUser(window.localStorage.getItem('user_id'))
+      this.navigate('#home', { trigger: true })
     }
     fetchUser()
   },
@@ -90,7 +110,7 @@ export const Router = Backbone.Router.extend({
         this.oauthService = new OauthService()
         this.oauthService.ajaxSetup()
         await this.userLogged.fetchUser(window.localStorage.getItem('user_id'))
-        if (url !== 'firstConnexion') { this.headerView.render() }
+        if (url !== 'firstConnexion' || url !== 'twoFactor') { this.headerView.render() }
       }
       fetchUser()
     }
@@ -99,6 +119,10 @@ export const Router = Backbone.Router.extend({
   firstConnexion_view: function () {
     if (this.accessPage('firstConnexion')) { return }
     const firstConnexionView = new FirstConnexionView({ model: this.userLogged })
+  },
+
+  twoFactor_view: function () {
+    const twoFactorView = new TwoFactorView()
   },
 
   exit: function () {

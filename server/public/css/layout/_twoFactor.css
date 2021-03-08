@@ -1,0 +1,20 @@
+.two_factor {
+    margin: auto;
+    text-align: center;
+    height: 300px;
+}
+.two_factor input {
+    margin-bottom: 25px;
+    font-size: 40px;
+    width: 145px;
+}
+
+.two_factor button {
+    display: block;
+    margin: auto;
+    font-size: 25px;
+}
+
+#two_factor_error {
+    color: #F2C94C;
+}
