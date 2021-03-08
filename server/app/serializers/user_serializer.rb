@@ -18,10 +18,6 @@ class UserSerializer < ActiveModel::Serializer
              :ignores,
              :friends
 
-  def chat_ids
-    object.chats.pluck(:id)
-  end
-
   def ignores
     ActiveModelSerializers::SerializableResource.new(object.ignores, each_serializer: IgnoreUserSerializer)
   end
