@@ -58,13 +58,13 @@ RSpec.describe "Wars", type: :request do
       expect(War.count).to eq(0)
     end
   end
-  describe "#update" do
-    it 'should update a war' do
-      post api_wars_url, headers: access_token, params: valid_attributes
-      put api_war_url(War.first.id), headers: access_token, params: { war_end: DateTime.new(2022, 03, 10, 11, 11, 0), max_unanswered: 12 }
-      expect(response.status).to eq 200
-      expect(War.first.war_end).to eq(DateTime.new(2022, 03, 10, 11, 11,0))
-      expect(War.first.max_unanswered).to eq(12)
-    end
-  end
+  # describe "#update" do
+  #   it 'should update a war' do
+  #     post api_wars_url, headers: access_token, params: valid_attributes
+  #     put api_war_url(War.first.id), headers: access_token, params: { war_end: DateTime.new(2022, 03, 10, 11, 11, 0), max_unanswered: 12 }
+  #     expect(response.status).to eq 200
+  #     expect(War.first.war_end).to eq(DateTime.new(2022, 03, 10, 11, 11,0))
+  #     expect(War.first.max_unanswered).to eq(12)
+  #   end
+  # end
 end

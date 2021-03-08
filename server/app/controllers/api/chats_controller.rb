@@ -18,14 +18,13 @@ module Api
     def update
       return render_not_allowed if @chat.owner != current_user
 
-      add_admins(@chat, params[:admin_ids])
       @chat.update!(chat_params)
-      json_response(@chat)
+      head :ok
     end
 
     def create
       chat = Chat.create!(chat_params_create)
-      add_admins(chat, [current_user.id])
+      ChatAdmin.create!(user: current_user, chat: chat)
       add_participants(chat, [current_user.id])
       add_participants(chat, params[:participant_ids])
       json_response(chat, 201)
@@ -34,14 +33,14 @@ module Api
     def create_participant
       raise WrongPasswordError if @chat.privacy == 'protected' && !@chat.authenticate(params.fetch(:password))
 
-      participant = ChatParticipant.create!(user_id: current_user.id, chat_id: @chat.id)
-      json_response(participant, 200)
+      ChatParticipant.create!(user: current_user, chat: @chat)
+      head :ok
     end
 
     def destroy_participant
-      ChatParticipant.where(chat: @chat).destroy_by(user: current_user)
-      ChatAdmin.where(chat: @chat).destroy_by(user: current_user)
-      manage_admin if @chat.owner == current_user
+      ChatParticipant.where(chat: @chat, user: current_user).destroy_all
+      ChatAdmin.where(chat: @chat, user: current_user).destroy_all
+      manage_admin if current_user == @chat.owner
       head :no_content
     end
 
@@ -62,7 +61,15 @@ module Api
       return render_not_allowed if current_user != @chat.owner
 
       add_participants(@chat, params[:participant_ids])
-      json_response(@chat)
+      head :ok
+    end
+
+    def admins
+      return unless current_user == @chat.owner
+
+      user_id = params.fetch(:user_id)
+      json_response(ChatAdmin.create!(user_id: user_id, chat: @chat)) if request.post?
+      json_response(ChatAdmin.where(chat: @chat, user: user_id).destroy_all, 204) if request.delete?
     end
 
     def show
@@ -70,6 +77,8 @@ module Api
     end
 
     def destroy
+      return render_not_allowed if current_user != @chat.owner
+
       @chat.destroy
       head :no_content
     end
@@ -85,12 +94,6 @@ module Api
       else
         destroy
       end
-    end
-
-    def add_admins(chat, admins)
-      return unless admins
-
-      admins.each { |t| ChatAdmin.create(user_id: t, chat_id: chat.id) }
     end
 
     def add_participants(chat, participants)
