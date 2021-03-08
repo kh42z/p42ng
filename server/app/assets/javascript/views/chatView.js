@@ -129,6 +129,11 @@ export const ChatView = Backbone.View.extend({
     console.log(e.currentTarget)
     const currentChannel = this.myChannels.get(e.currentTarget.getAttribute('channel-id'))
     this.updateContextLeftSide()
+    if (currentChannel.get('privacy') === 'direct_message') {
+      document.getElementById('right-side').style.display = 'none'
+    } else {
+      document.getElementById('right-side').style.display = 'flex'
+    }
     this.updateContextRightSide(currentChannel)
     this.updateContextCenter(currentChannel)
     this.updateHTML('discussions')
