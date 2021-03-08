@@ -48,8 +48,10 @@ templates['chat'] = template({"1":function(container,depth0,helpers,partials,dat
     + alias4(((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":41,"column":77},"end":{"line":41,"column":83}}}) : helper)))
     + "\">\n                        <div class=\"image-container\">\n                            <img src="
     + alias4(((helper = (helper = lookupProperty(helpers,"image_url") || (depth0 != null ? lookupProperty(depth0,"image_url") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"image_url","hash":{},"data":data,"loc":{"start":{"line":43,"column":37},"end":{"line":43,"column":50}}}) : helper)))
-    + " id=\"image_url\" class=\"image_url\" for="
-    + alias4(((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":43,"column":88},"end":{"line":43,"column":94}}}) : helper)))
+    + " id="
+    + alias4(((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":43,"column":54},"end":{"line":43,"column":60}}}) : helper)))
+    + " class=\"blockViewProfile image_url\" for="
+    + alias4(((helper = (helper = lookupProperty(helpers,"userId") || (depth0 != null ? lookupProperty(depth0,"userId") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"userId","hash":{},"data":data,"loc":{"start":{"line":43,"column":100},"end":{"line":43,"column":110}}}) : helper)))
     + "></img>\n                        </div>\n                        <p class=\"anagram_nickname\">"
     + alias4(((helper = (helper = lookupProperty(helpers,"nickname") || (depth0 != null ? lookupProperty(depth0,"nickname") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"nickname","hash":{},"data":data,"loc":{"start":{"line":45,"column":52},"end":{"line":45,"column":64}}}) : helper)))
     + "</p>\n                    </div>\n";
@@ -63,8 +65,10 @@ templates['chat'] = template({"1":function(container,depth0,helpers,partials,dat
 
   return "                <div class=\"image-container\">\n                    <img src="
     + alias4(((helper = (helper = lookupProperty(helpers,"image_url") || (depth0 != null ? lookupProperty(depth0,"image_url") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"image_url","hash":{},"data":data,"loc":{"start":{"line":60,"column":29},"end":{"line":60,"column":42}}}) : helper)))
-    + " class=\"image_url\" for=\""
-    + alias4(((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":60,"column":66},"end":{"line":60,"column":72}}}) : helper)))
+    + " class=\"blockViewProfile image_url\"  id="
+    + alias4(((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":60,"column":82},"end":{"line":60,"column":88}}}) : helper)))
+    + " for=\""
+    + alias4(((helper = (helper = lookupProperty(helpers,"userId") || (depth0 != null ? lookupProperty(depth0,"userId") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"userId","hash":{},"data":data,"loc":{"start":{"line":60,"column":94},"end":{"line":60,"column":104}}}) : helper)))
     + "\"></img>\n                </div>\n";
 },"8":function(container,depth0,helpers,partials,data) {
     var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function", alias4=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -126,8 +130,10 @@ templates['chat'] = template({"1":function(container,depth0,helpers,partials,dat
 
   return "                <div class=\"message\">\n                    <div class=\"info\">\n                        <div class=\"image-container\">\n                            <img src="
     + alias4(((helper = (helper = lookupProperty(helpers,"image_url") || (depth0 != null ? lookupProperty(depth0,"image_url") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"image_url","hash":{},"data":data,"loc":{"start":{"line":99,"column":37},"end":{"line":99,"column":50}}}) : helper)))
-    + " class=\"image_url\" for=\""
-    + alias4(((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":99,"column":74},"end":{"line":99,"column":80}}}) : helper)))
+    + " class=\"blockViewProfile image_url\" id="
+    + alias4(((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":99,"column":89},"end":{"line":99,"column":95}}}) : helper)))
+    + " for=\""
+    + alias4(((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":99,"column":101},"end":{"line":99,"column":107}}}) : helper)))
     + "\"></img>\n                        </div>\n                        <div class=\"anagram\">"
     + alias4(((helper = (helper = lookupProperty(helpers,"anagram") || (depth0 != null ? lookupProperty(depth0,"anagram") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"anagram","hash":{},"data":data,"loc":{"start":{"line":101,"column":45},"end":{"line":101,"column":56}}}) : helper)))
     + "</div>\n                        <div class=\"nickname\">"
@@ -147,8 +153,10 @@ templates['chat'] = template({"1":function(container,depth0,helpers,partials,dat
 
   return "                <div class=\"user\">\n                    <div class=\"name\">\n                        <div class=\"image-container\">\n                            <img src="
     + alias4(((helper = (helper = lookupProperty(helpers,"image_url") || (depth0 != null ? lookupProperty(depth0,"image_url") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"image_url","hash":{},"data":data,"loc":{"start":{"line":125,"column":37},"end":{"line":125,"column":50}}}) : helper)))
-    + " class=\"image_url\" for=\""
-    + alias4(((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":125,"column":74},"end":{"line":125,"column":80}}}) : helper)))
+    + " class=\"blockViewProfile image_url\" id="
+    + alias4(((helper = (helper = lookupProperty(helpers,"channelId") || (depth0 != null ? lookupProperty(depth0,"channelId") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"channelId","hash":{},"data":data,"loc":{"start":{"line":125,"column":89},"end":{"line":125,"column":102}}}) : helper)))
+    + " for=\""
+    + alias4(((helper = (helper = lookupProperty(helpers,"userId") || (depth0 != null ? lookupProperty(depth0,"userId") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"userId","hash":{},"data":data,"loc":{"start":{"line":125,"column":108},"end":{"line":125,"column":118}}}) : helper)))
     + "\"></img>\n                        </div>\n                        <div class=\"name anagram\">"
     + alias4(((helper = (helper = lookupProperty(helpers,"anagram") || (depth0 != null ? lookupProperty(depth0,"anagram") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"anagram","hash":{},"data":data,"loc":{"start":{"line":127,"column":50},"end":{"line":127,"column":61}}}) : helper)))
     + "</div>\n                        <div class=\"name nickname\">"
@@ -164,8 +172,10 @@ templates['chat'] = template({"1":function(container,depth0,helpers,partials,dat
 
   return "                <div class=\"user\">\n                    <div class=\"name\">\n                        <div class=\"image-container\">\n                            <img src="
     + alias4(((helper = (helper = lookupProperty(helpers,"image_url") || (depth0 != null ? lookupProperty(depth0,"image_url") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"image_url","hash":{},"data":data,"loc":{"start":{"line":147,"column":37},"end":{"line":147,"column":50}}}) : helper)))
-    + " class=\"image_url\" for=\""
-    + alias4(((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":147,"column":74},"end":{"line":147,"column":80}}}) : helper)))
+    + " class=\"blockViewProfile image_url\" id="
+    + alias4(((helper = (helper = lookupProperty(helpers,"channelId") || (depth0 != null ? lookupProperty(depth0,"channelId") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"channelId","hash":{},"data":data,"loc":{"start":{"line":147,"column":89},"end":{"line":147,"column":102}}}) : helper)))
+    + " for=\""
+    + alias4(((helper = (helper = lookupProperty(helpers,"userId") || (depth0 != null ? lookupProperty(depth0,"userId") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"userId","hash":{},"data":data,"loc":{"start":{"line":147,"column":108},"end":{"line":147,"column":118}}}) : helper)))
     + "\"></img>\n                        </div>\n                        <div class=\"name anagram\">"
     + alias4(((helper = (helper = lookupProperty(helpers,"anagram") || (depth0 != null ? lookupProperty(depth0,"anagram") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"anagram","hash":{},"data":data,"loc":{"start":{"line":149,"column":50},"end":{"line":149,"column":61}}}) : helper)))
     + "</div>\n                        <div class=\"name nickname\">"
@@ -181,8 +191,10 @@ templates['chat'] = template({"1":function(container,depth0,helpers,partials,dat
 
   return "                <div class=\"user\">\n                    <div class=\"name\">\n                        <div class=\"image-container\">\n                            <img src="
     + alias4(((helper = (helper = lookupProperty(helpers,"image_url") || (depth0 != null ? lookupProperty(depth0,"image_url") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"image_url","hash":{},"data":data,"loc":{"start":{"line":167,"column":37},"end":{"line":167,"column":50}}}) : helper)))
-    + " class=\"image_url\" for=\""
-    + alias4(((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":167,"column":74},"end":{"line":167,"column":80}}}) : helper)))
+    + " class=\"blockViewProfile image_url\" id="
+    + alias4(((helper = (helper = lookupProperty(helpers,"channelId") || (depth0 != null ? lookupProperty(depth0,"channelId") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"channelId","hash":{},"data":data,"loc":{"start":{"line":167,"column":89},"end":{"line":167,"column":102}}}) : helper)))
+    + " for=\""
+    + alias4(((helper = (helper = lookupProperty(helpers,"userId") || (depth0 != null ? lookupProperty(depth0,"userId") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"userId","hash":{},"data":data,"loc":{"start":{"line":167,"column":108},"end":{"line":167,"column":118}}}) : helper)))
     + "\"></img>\n                        </div>\n                        <div class=\"name anagram\">"
     + alias4(((helper = (helper = lookupProperty(helpers,"anagram") || (depth0 != null ? lookupProperty(depth0,"anagram") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"anagram","hash":{},"data":data,"loc":{"start":{"line":169,"column":50},"end":{"line":169,"column":61}}}) : helper)))
     + "</div>\n                        <div class=\"name nickname\">"
@@ -200,7 +212,7 @@ templates['chat'] = template({"1":function(container,depth0,helpers,partials,dat
     + alias4(((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":193,"column":74},"end":{"line":193,"column":80}}}) : helper)))
     + "\">\n                    <div class=\"left\">\n                        <div class=\"image-container\">\n                            <img src="
     + alias4(((helper = (helper = lookupProperty(helpers,"image_url") || (depth0 != null ? lookupProperty(depth0,"image_url") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"image_url","hash":{},"data":data,"loc":{"start":{"line":196,"column":37},"end":{"line":196,"column":50}}}) : helper)))
-    + " id=\"image_url\" class=\"image_url\"></img>\n                        </div>\n                        <p class=\"anagram_nickname\">"
+    + " id=\"blockViewProfile image_url\" class=\"image_url\"></img>\n                        </div>\n                        <p class=\"anagram_nickname\">"
     + alias4(((helper = (helper = lookupProperty(helpers,"anagram") || (depth0 != null ? lookupProperty(depth0,"anagram") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"anagram","hash":{},"data":data,"loc":{"start":{"line":198,"column":52},"end":{"line":198,"column":63}}}) : helper)))
     + " "
     + alias4(((helper = (helper = lookupProperty(helpers,"nickname") || (depth0 != null ? lookupProperty(depth0,"nickname") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"nickname","hash":{},"data":data,"loc":{"start":{"line":198,"column":64},"end":{"line":198,"column":76}}}) : helper)))
@@ -284,8 +296,10 @@ templates['chat'] = template({"1":function(container,depth0,helpers,partials,dat
 
   return "                    <div class=\"self owner\">\n                        <div class=\"image-container\">\n                            <img src="
     + alias4(((helper = (helper = lookupProperty(helpers,"image_url") || (depth0 != null ? lookupProperty(depth0,"image_url") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"image_url","hash":{},"data":data,"loc":{"start":{"line":384,"column":37},"end":{"line":384,"column":50}}}) : helper)))
-    + " class=\"image_url\" for=\""
-    + alias4(((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":384,"column":74},"end":{"line":384,"column":80}}}) : helper)))
+    + " class=\"image_url\" id="
+    + alias4(((helper = (helper = lookupProperty(helpers,"channelId") || (depth0 != null ? lookupProperty(depth0,"channelId") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"channelId","hash":{},"data":data,"loc":{"start":{"line":384,"column":72},"end":{"line":384,"column":85}}}) : helper)))
+    + " for=\""
+    + alias4(((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":384,"column":91},"end":{"line":384,"column":97}}}) : helper)))
     + "\"></img>\n                        </div>\n                        <div class=\"anagram\">\n                            <p class=\"text\">"
     + alias4(((helper = (helper = lookupProperty(helpers,"anagram") || (depth0 != null ? lookupProperty(depth0,"anagram") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"anagram","hash":{},"data":data,"loc":{"start":{"line":387,"column":44},"end":{"line":387,"column":55}}}) : helper)))
     + "</p>\n                        </div>\n                        <div class=\"nickname\">\n                            <p class=\"text\">"
@@ -301,8 +315,10 @@ templates['chat'] = template({"1":function(container,depth0,helpers,partials,dat
 
   return "                        <div class=\"self admin\">\n                            <div class=\"image-container\">\n                                <img src="
     + alias4(((helper = (helper = lookupProperty(helpers,"image_url") || (depth0 != null ? lookupProperty(depth0,"image_url") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"image_url","hash":{},"data":data,"loc":{"start":{"line":400,"column":41},"end":{"line":400,"column":54}}}) : helper)))
-    + " class=\"image_url\" for=\""
-    + alias4(((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":400,"column":78},"end":{"line":400,"column":84}}}) : helper)))
+    + " class=\"image_url\" id="
+    + alias4(((helper = (helper = lookupProperty(helpers,"channelId") || (depth0 != null ? lookupProperty(depth0,"channelId") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"channelId","hash":{},"data":data,"loc":{"start":{"line":400,"column":76},"end":{"line":400,"column":89}}}) : helper)))
+    + " for=\""
+    + alias4(((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":400,"column":95},"end":{"line":400,"column":101}}}) : helper)))
     + "\"></img>\n                            </div>\n                            <div class=\"anagram\">\n                                <p class=\"text\">"
     + alias4(((helper = (helper = lookupProperty(helpers,"anagram") || (depth0 != null ? lookupProperty(depth0,"anagram") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"anagram","hash":{},"data":data,"loc":{"start":{"line":403,"column":48},"end":{"line":403,"column":59}}}) : helper)))
     + "</p>\n                            </div>\n                            <div class=\"nickname\">\n                                <p class=\"text\">"
@@ -318,8 +334,10 @@ templates['chat'] = template({"1":function(container,depth0,helpers,partials,dat
 
   return "                        <div class=\"self member\">\n                            <div class=\"image-container\">\n                                <img src="
     + alias4(((helper = (helper = lookupProperty(helpers,"image_url") || (depth0 != null ? lookupProperty(depth0,"image_url") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"image_url","hash":{},"data":data,"loc":{"start":{"line":416,"column":41},"end":{"line":416,"column":54}}}) : helper)))
-    + " class=\"image_url\" for=\""
-    + alias4(((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":416,"column":78},"end":{"line":416,"column":84}}}) : helper)))
+    + " class=\"image_url\" id="
+    + alias4(((helper = (helper = lookupProperty(helpers,"channelId") || (depth0 != null ? lookupProperty(depth0,"channelId") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"channelId","hash":{},"data":data,"loc":{"start":{"line":416,"column":76},"end":{"line":416,"column":89}}}) : helper)))
+    + " for=\""
+    + alias4(((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":416,"column":95},"end":{"line":416,"column":101}}}) : helper)))
     + "\"></img>\n                            </div>\n                            <div class=\"anagram\">\n                                <p class=\"text\">"
     + alias4(((helper = (helper = lookupProperty(helpers,"anagram") || (depth0 != null ? lookupProperty(depth0,"anagram") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"anagram","hash":{},"data":data,"loc":{"start":{"line":419,"column":48},"end":{"line":419,"column":59}}}) : helper)))
     + "</p>\n                            </div>\n                            <div class=\"nickname\">\n                                <p class=\"text\">"
