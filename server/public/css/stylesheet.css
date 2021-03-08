@@ -15,7 +15,8 @@
 @import url(module/_textInput.css);
 
 @import url(state/_topnav.css);
-@import url(state/_chat.css);
+@import url(state/chat/_chat.css);
+@import url(state/chat/_params.css);
 @import url(state/_base.css);
 @import url(state/_input.css);
 

@@ -17,8 +17,8 @@ class User < ApplicationRecord
   has_many :chat_participant, dependent: :destroy
   has_many :chat_admin, dependent: :destroy
 
-  has_many :user_achievements
-  has_many :achievements, dependent: :destroy, through: :user_achievements
+  has_many :user_achievements, dependent: :destroy
+  has_many :achievements, through: :user_achievements
 
   has_many :ignores, foreign_key: 'user_id', dependent: :destroy, class_name: 'UserIgnore'
 

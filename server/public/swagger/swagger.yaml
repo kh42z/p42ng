@@ -862,8 +862,6 @@ components:
           type: integer
         uid:
           type: string
-        chat_ids:
-          $ref: '#/components/schemas/integer_list'
         friends:
           $ref: '#/components/schemas/arrayOfFriends'
         ignores:

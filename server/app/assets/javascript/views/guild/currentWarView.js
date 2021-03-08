@@ -1,5 +1,4 @@
 export const CurrentWarView = Backbone.View.extend({
-  el: $('#app'),
   initialize: function () {
     this.guildSubNavBar = Handlebars.templates.guildSubNavBar
     this.guildPannel = Handlebars.templates.guildPannel
@@ -8,6 +7,7 @@ export const CurrentWarView = Backbone.View.extend({
     this.guilds = this.model.get('guilds').get('obj')
     this.listenTo(this.guilds, 'sync', function () { this.render() }, this)
   },
+  el: $('#app'),
   render: function () {
     const context = JSON.parse(JSON.stringify(this.guilds.get(this.id)))
     this.$el.html(this.template(context))

@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import { AchivementsView } from './achivementsView.js'
 import { EditProfileView } from './editProfileView.js'
 import { MatchHistoryView } from './matchHistoryView.js'

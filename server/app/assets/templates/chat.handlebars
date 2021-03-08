@@ -1,5 +1,5 @@
-<div class="chat">
-    <div class="discussions">
+<div class="chat" id="chat">
+    <div class="discussions" id="discussions">
         <div class="title">
             <h2 class="h2-discussions">Discussions</h2>
         </div>
@@ -14,14 +14,14 @@
                 </div>
                 <div class="myChannels" id="myChannels">
                 {{#each myChannels}}
-                    <div class="clickable-discussions clikable-discussions{{id}}" id="channel{{id}}">
+                    <div class="clickable-discussions clikable-discussions{{id}}" for={{id}} id="channel{{id}}">
                         {{!-- <div class="image-container"> --}}
                             {{!-- <img src={{image_url}} id="image_url" class="image_url"></img> --}}
                         {{!-- </div> --}}
                         <p class="channelName">#{{name}}</p>
                         {{#if admin}}
-                        <div class="admin_panel_settings">
-                            <img src='./icons/admin_panel_settings.svg' class="admin_panel_settings-icon"></img>
+                        <div class="admin_panel_settings" for="{{id}}">
+                            <img src='./icons/admin_panel_settings.svg' class="admin_panel_settings-icon" for={{id}}></img>
                         </div>
                         {{/if}}
                         <div class="close delete">
@@ -38,33 +38,33 @@
                 </div>
                 <div class="DM" id="DM">
                 {{#each DM}}
-                    <div class="clickable-discussions" id="DM{{id}}">
+                    <div class="clickable-discussions user" for={{id}} id="DM{{id}}">
                         <div class="image-container">
-                            <img src={{image_url}} id="image_url" class="image_url"></img>
+                            <img src={{image_url}} id="image_url" class="image_url" for={{id}}></img>
                         </div>
                         <p class="anagram_nickname">{{nickname}}</p>
-                        <div class="close">
+                        {{!-- <div class="close">
                             <img src='./icons/close.svg' class="close-icon" for={{id}}></img>
-                        </div>
+                        </div> --}}
                     </div>
                 {{/each}}
                 </div>
             </div>
         </div>
     </div>
-    <div class="center">
+    <div class="center" id="center">
         <div class="header">
             <div class="left-header">
                 {{#unless channel}}
                 <div class="image-container">
-                    <img src={{image_url}} class="image_url"></img>
+                    <img src={{image_url}} class="image_url" for="{{id}}"></img>
                 </div>
                 {{/unless}}
                 <div class="info">
                     {{#unless channel}}
                     <p class="anagram">{{anagram}}</p>
                     <p class="nickname">{{nickname}}</p>
-                    <div class="pastille"></div>
+                    <div class="pastille" id="pastille"></div>
                     <p class="status">{{status}}</p>
                     <div class="slide-show-container">
                         <img src="{{slide_show}}" class="slide-show"></img>
@@ -76,9 +76,13 @@
                 </div>
             </div>
             <div class="right-header">
-                <div class="group_add-container">
+                {{#if channel}}
+                {{#if owner}}
+                <div class="group_add-container" for="{{id}}">
                     <img src="./icons/group_add.svg" class="group_add"></img>
                 </div>
+                {{/if}}
+                {{/if}}
                 {{#unless channel}}
                 <button class="play-button">
                     <img src="./icons/videogame.svg" height="24">
@@ -92,7 +96,7 @@
                 <div class="message">
                     <div class="info">
                         <div class="image-container">
-                            <img src={{image_url}} class="image_url"></img>
+                            <img src={{image_url}} class="image_url" for="{{id}}"></img>
                         </div>
                         <div class="anagram">{{anagram}}</div>
                         <div class="nickname">{{nickname}}</div>
@@ -107,8 +111,7 @@
         </div>
         </div>
     </div>
-    {{#if channel}}
-    <div class="right-side">
+    <div class="right-side" id="right-side">
         <div class="privacy">{{privacy}} channel</div>
         <div class="title online">
             <div class="pastille"></div>
@@ -119,16 +122,16 @@
                 <div class="user">
                     <div class="name">
                         <div class="image-container">
-                            <img src={{image_url}} class="image_url"></img>
+                            <img src={{image_url}} class="image_url" for="{{id}}"></img>
                         </div>
                         <div class="name anagram">{{anagram}}</div>
                         <div class="name nickname">{{nickname}}</div>
                     </div>
-                    {{#if others}}
+                    {{!-- {{#if others}} --}}
                     <div class="play-button-container">
                         <button class="play-button">Play</button>         
                     </div>
-                    {{/if}}
+                    {{!-- {{/if}} --}}
                 </div>
             {{/each}}
         </div>
@@ -141,7 +144,7 @@
                 <div class="user">
                     <div class="name">
                         <div class="image-container">
-                            <img src={{image_url}} class="image_url"></img>
+                            <img src={{image_url}} class="image_url" for="{{id}}"></img>
                         </div>
                         <div class="name anagram">{{anagram}}</div>
                         <div class="name nickname">{{nickname}}</div>
@@ -161,7 +164,7 @@
                 <div class="user">
                     <div class="name">
                         <div class="image-container">
-                            <img src={{image_url}} class="image_url"></img>
+                            <img src={{image_url}} class="image_url" for="{{id}}"></img>
                         </div>
                         <div class="name anagram">{{anagram}}</div>
                         <div class="name nickname">{{nickname}}</div>
@@ -170,7 +173,10 @@
             {{/each}}
         </div>
     </div>
-    {{/if}}
+    <div class="droplistBlockViewProfile" id="droplistBlockViewProfile" style="display: none;">
+        <a class="el view-profile" id="view-profile">View profile</a>
+        <div class="el block" id="block"></div>
+    </div>
     <div class="modal modalCreateChannel" id="modalCreateChannel" >
         <div class="background"></div>
         <div class="modalOpen">
@@ -247,6 +253,19 @@
                         <input type="checkbox" class="checkbox" id="{{id}}" value="{{id}}"></input>
                     </div> --}}
                 </div>
+                <div class="modal validationModal modalPassword" id="modalPassword{{id}}" style="display: none;">
+                    <div class="background"></div>
+                    <div class="modalOpen">
+                        <div class="close closeModal">
+                            <img src="./icons/close.svg" id="close"></img>
+                        </div>
+                        <label class="label labelModalPassword" for="labelModalPassword">Password</label>
+                        <input class="inputModalPassword" type="password" id="inputModalPassword{{id}}" placeholder="Password" for={{id}}></input>
+                        <div class="button-container buttons">
+                            <button class="validation-buttons button validate-password" for="{{id}}">Validate</button>
+                        </div>
+                    </div>
+                </div>
                 {{/each}}
             </div>
         </div>
@@ -258,7 +277,7 @@
             <p class="adminRights">You will lose your administrator rights</p>
             <div class="buttons">
                 <div class="validation-buttons button-container-yes">
-                    <button class="button yes">Yes</button>
+                    <button class="button yes yesDeleteChannel">Yes</button>
                 </div>
                 <div class="validation-buttons button-container-no">
                     <button class="button no">No</button>
@@ -266,53 +285,119 @@
             </div>
         </div>
     </div>
-    <div class="parameters">
+    <div class="modal modalAddFriendsToChannel" id="modalAddFriendsToChannel" >
+        <div class="background"></div>
+        <div class="modalOpen">
+            <div class="close closeModal">
+                <img src="./icons/close.svg" id="close"></img>
+            </div>
+            <label class="label labelSelectFriends" for="search">Select friends</label>
+            <input class="textInput  modalSearchChannels modalSearchAddFriendsToChannel" type="text" id="modalSearchAddFriendsToChannel" placeholder="Research" for={{id}}></input>
+            <div class="friends modalSearchAddFriendsToChannel" id="friendsmodalSearchAddFriendsToChannel">
+                {{#each friends}}
+                <div class="eachFriend eachFriendModalCreateChannel" for="addfriends{{id}}">
+                    <div class="left">
+                        <div class="image-container">
+                            <img src={{image_url}} id="image_url" class="image_url"></img>
+                        </div>
+                        <p class="anagram_nickname">{{anagram}} {{nickname}}</p>
+                    </div>
+                    <div class="right">
+                        <label class="checkboxlabel" for="{{checkboxId}}"></label>
+                        <input type="checkbox" class="checkbox" id="addfriends{{id}}" value="{{id}}"></input>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+            <div class="button-container buttons">
+                <button class="validation-buttons button validate-add-friends" for="{{chatId}}">Validate</button>
+            </div>
+        </div>
+    </div>
+    <div class="parameters" id="params">
         <div class="left-menu">
             <div class="menu">
-                <div class="overview-menu" id="overview-menu">Overview</div>
-                <div class="permissions-menu"  id="permissions-menu">Permissions</div>
-                <div class="members-menu" id="members-menu">Members</div>
+                <div class="sub-menu overview-menu" id="overview-menu"><p class="p">Overview</p></div>
+                <div class="sub-menu permissions-menu"  id="permissions-menu"><p class="p">Permissions</p></div>
+                <div class="sub-menu members-menu" id="members-menu"><p class="p">Members</p></div>
+                {{#if owner}}
+                <div class="deleteChannel" >Delete channel</div>
+                {{/if}}
             </div>
-            <div class="delete">Delete channel</div>
+        </div>
+        <div class="modal validationModal modalValidationDeleteDefinitivelyChannel" id="modalValidationDeleteDefinitivelyChannel" style="display: none;">
+            <div class="background"></div>
+            <div class="modalOpen">
+                <p class="sure">Are you sure to want to delete this channel?</p>
+                <p class="adminRights">Any members won't have acces to this channel anymore</p>
+                <div class="buttons">
+                    <div class="validation-buttons button-container-yes">
+                        <button class="button yes yesDeleteDefinitivelyChannel">Yes</button>
+                    </div>
+                    <div class="validation-buttons button-container-no">
+                        <button class="button no">No</button>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="right-menu">
-            <div class="close">
-                <img src="./icons/esc.svg" class="close">
+            <div class="close closeParams">
+                <img src="./icons/esc.svg" class="">
             </div>
-            <div class="overview">
+            <div class="page overview" id="params-overview">
                 <div class="title">OVERVIEW</div>
                 <div class="sub-title">CHANNEL NAME</div>
-                <input type="text" class="name" disabled>{{channelName}}</input>
+                <input type="text" class="name" id="inputName" disabled value={{name}}></input>
             </div>
-            <div class="permissions">
+            <div class="page permissions" id="params-permissions">
                 <div class="title">PERMISSIONS</div>
                 <div class="sub-title">CONFIDENTIALITY</div>
                 <div class="radio-button">
-                    <input type="radio" id="private" name="privacy" value="private" checked>
+                    <input type="radio" class="private" id="private" name="privacy" value="private" checked>
                     <label for="private">Private</label> 
                 </div>
                 <div class="radio-button">
-                    <input type="radio" id="public" name="privacy" value="public">
+                    <input type="radio" class="public" id="public" name="privacy" value="public">
                     <label for="public">Public</label> 
                 </div>
                 <div class="radio-button">
-                    <input type="radio" id="protected" name="privacy" value="protected">
+                    <input type="radio" class="protected"  id="protected" name="privacy" value="protected"></input>
                     <label for="protected">Protected</label> 
                 </div>
-                <div class="password">
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password">
-                    <button class="save">Save</button>
+                <div class="password" id="passwordDiv" style="display: none;">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password"></input>
+                    <div class="passwordVisibility" id="visibility">
+                        <img src='./icons/visibility_off.svg' class="icon-visibility " id="eyeVisibility"></img>
+                    </div>
                 </div>
+                <p class="error-message error-password" id="error-password" style="display: none;"></p>
+                <button class="save">Save</button>
             </div>
-            <div class="members">
+            <div class="page members" id="params-members">
                 <div class="title">MEMBERS</div>
+                <div class="sub-title">OWNER</div>
+                <div class="list owner">
+                    {{#each owners}}
+                    <div class="self owner">
+                        <div class="image-container">
+                            <img src={{image_url}} class="image_url" for="{{id}}"></img>
+                        </div>
+                        <div class="anagram">
+                            <p class="text">{{anagram}}</p>
+                        </div>
+                        <div class="nickname">
+                            <p class="text">{{nickname}}</p>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
                 <div class="sub-title">ADMINISTRATORS</div>
-                <div class="admins">
+                <div class="list admins" id="admins">
                     {{#each admins}}
-                        <div class="admin">
+                        <div class="self admin">
                             <div class="image-container">
-                                <img src={{image_url}} class="image_url"></img>
+                                <img src={{image_url}} class="image_url" for="{{id}}"></img>
                             </div>
                             <div class="anagram">
                                 <p class="text">{{anagram}}</p>
@@ -324,11 +409,11 @@
                     {{/each}}
                 </div>
                 <div class="sub-title">OTHER MEMBERS</div>
-                <div class="admins">
-                    {{#each admins}}
-                        <div class="admin">
+                <div class="list participants" id="participants">
+                    {{#each members}}
+                        <div class="self member">
                             <div class="image-container">
-                                <img src={{image_url}} class="image_url"></img>
+                                <img src={{image_url}} class="image_url" for="{{id}}"></img>
                             </div>
                             <div class="anagram">
                                 <p class="text">{{anagram}}</p>
@@ -336,13 +421,104 @@
                             <div class="nickname">
                                 <p class="text">{{nickname}}</p>
                             </div>
-                            <div class="dots-container">
+                            <div class="dots-container" for="{{id}}">
                                 <img src='./icons/dots.svg' class="dots"></img>
                             </div>
-                            <div class="params">
-                                <div class="appoint-as-admin" id="appointAsAdministrator">Appoint as administrator</div>
-                                <div class="mute" id="mute">Mute</div>
-                                <div class="ban" id="ban">Ban</div>
+                            <div class="admin-rights" id="admin-rights{{id}}" style="display: none;">
+                                {{#if owner}}
+                                <div class="el appoint-as-admin" id="appointAsAdministrator" for="{{id}}">Appoint as administrator</div>
+                                {{/if}}
+                                <div class="el mute" id="mute" for="{{id}}">Mute</div>
+                                <div class="el ban" id="ban" for="{{id}}">Ban</div>
+                            </div>
+                        </div>
+                        <div class="modal validationModal modalValidationAppointAsAdmin" id="modalValidationAppointAsAdmin{{id}}" style="display: none;">
+                            <div class="background"></div>
+                            <div class="modalOpen">
+                                <p class="sure">Appoint this member as administrator</p>
+                                <p class="adminRights">{{nickname}} will be able to mute and ban other members.</p>
+                                <div class="buttons">
+                                    <div class="validation-buttons button-container-yes">
+                                        <button class="button yes yesAsAdmin" for="{{id}}">Yes</button>
+                                    </div>
+                                    <div class="validation-buttons button-container-no">
+                                        <button class="button no">No</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal validationModal modalValidationBan" id="modalValidationBan{{id}}" style="display: none;">
+                            <div class="background"></div>
+                            <div class="modalOpen">
+                                <p class="sure">Ban this member</p>
+                                <p class="adminRights">{{nickname}} won't be able to find, see or join this channel.</p>
+                                <div class="radio-buttons" >
+                                    <div class="radio-button">
+                                        <input type="radio" id="1minBan" name="radioBan{{id}}" value="60" checked>
+                                        <label for="1minBan">1 minute</label> 
+                                    </div>
+                                    <div class="radio-button">
+                                        <input type="radio" id="10minBan" name="radioBan{{id}}" value="600">
+                                        <label for="10minBan">10 minutes</label> 
+                                    </div>
+                                    <div class="radio-button">
+                                        <input type="radio" id="12hBan" name="radioBan{{id}}" value="43200">
+                                        <label for="12hBan">12 hours</label> 
+                                    </div>
+                                    <div class="radio-button">
+                                        <input type="radio" id="24hBan" name="radioBan{{id}}" value="86400">
+                                        <label for="24hBan">24 hours</label> 
+                                    </div>
+                                    <div class="radio-button">
+                                        <input type="radio" id="7daysBan" name="radioBan{{id}}" value="604800">
+                                        <label for="7daysBan">7 days</label> 
+                                    </div>
+                                </div>
+                                <div class="buttons">
+                                    <div class="validation-buttons button-container-yes">
+                                        <button class="button yes yesBan" for="{{id}}">Ban</button>
+                                    </div>
+                                    <div class="validation-buttons button-container-no">
+                                        <button class="button no">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal validationModal modalValidationMute" id="modalValidationMute{{id}}" style="display: none;">
+                            <div class="background"></div>
+                            <div class="modalOpen">
+                                <p class="sure">Mute this member</p>
+                                <p class="adminRights">{{nickname}} will have access to this channel, but couldn't send messages.</p>
+                                <div class="radio-buttons" >
+                                    <div class="radio-button">
+                                        <input type="radio" id="1minBan" name="radioMute{{id}}" value="60" checked>
+                                        <label for="1minMute">1 minute</label> 
+                                    </div>
+                                    <div class="radio-button">
+                                        <input type="radio" id="10minBan" name="radioMute{{id}}" value="600">
+                                        <label for="10minMute">10 minutes</label> 
+                                    </div>
+                                    <div class="radio-button">
+                                        <input type="radio" id="12hBan" name="radioMute{{id}}" value="43200">
+                                        <label for="12hMute">12 hours</label> 
+                                    </div>
+                                    <div class="radio-button">
+                                        <input type="radio" id="24hBan" name="radioMute{{id}}" value="86400">
+                                        <label for="24hMute">24 hours</label> 
+                                    </div>
+                                    <div class="radio-button">
+                                        <input type="radio" id="7daysBan" name="radioMute{{id}}" value="604800">
+                                        <label for="7daysMute">7 days</label> 
+                                    </div>
+                                </div>
+                                <div class="buttons">
+                                    <div class="validation-buttons button-container-yes">
+                                        <button class="button yes yesMute" for="{{id}}">Mute</button>
+                                    </div>
+                                    <div class="validation-buttons button-container-no">
+                                        <button class="button no">Cancel</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     {{/each}}
