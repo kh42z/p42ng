@@ -50,7 +50,8 @@ module Api
 
       return render_not_allowed unless send_forbidden?(id) == false
 
-      ChatChannel.broadcast_to("chat_#{id}", params['content'])
+      ActionCable.server.broadcast("chat_#{id}", params['content'])
+      # ChatChannel.broadcast_to("chat_#{id}", params['content'])
       json_response(content: params['content'])
     end
 
