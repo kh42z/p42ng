@@ -123,13 +123,21 @@ export const ManageGuildView = Backbone.View.extend({
     }
     const inviteMember = async () => {
       try {
-        const response = await this.createRequest('/members', 'POST', { member_ids: [id] })
-        this.renderError(response, '#guildGlobalError', Handlebars.templates.guildError)
+        const response = await this.createRequest('/members' + '/' + id, 'POST')
+        /*				console.log('success_ici')
+				this.updateLists([this.membersList, this.nonMembersList], nickname, id)
+				this.users.get(id).set({ guild_id: this.guild.id }) */
+        // this.renderError(response, '#guildGlobalError', Handlebars.templates.guildError)
         // this.$el.find('#guildGlobalError').style.color = 'green'
-        this.updateLists([this.membersList, this.nonMembersList], nickname, id)
-        this.users.get(id).set({ guild_id: this.guild.id })
       } catch (e) {
+        console.log(e.status)
+        console.log(e)
         this.renderError(e, '#guildGlobalError', Handlebars.templates.guildError)
+        if (e.status == 200) {
+          console.log('success')
+          this.updateLists([this.membersList, this.nonMembersList], nickname, id)
+          this.users.get(id).set({ guild_id: this.guild.id })
+        }
       } finally {
       }
     }
@@ -148,12 +156,17 @@ export const ManageGuildView = Backbone.View.extend({
     const kickMember = async () => {
       try {
         const response = await this.createRequest('/members/' + id, 'DELETE')
-        this.renderError(response, '#guildGlobalError', Handlebars.templates.guildError)
-        // this.$el.find('#guildGlobalError').style.color = 'green'
         this.updateLists([this.nonMembersList, this.membersList], nickname, id)
         this.users.get(id).set({ guild_id: null })
+        // this.$el.find('#guildGlobalError').style.color = 'green'
       } catch (e) {
+        console.log(e)
         this.renderError(e, '#guildGlobalError', Handlebars.templates.guildError)
+        console.log(e.status)
+        if (e.status == 200) {
+          /*	this.updateLists([this.nonMembersList, this.membersList], nickname, id)
+	        this.users.get(id).set({ guild_id: null }) */
+        }
       } finally {
       }
     }
@@ -171,13 +184,19 @@ export const ManageGuildView = Backbone.View.extend({
     }
     const promoteMember = async () => {
       try {
-        const response = await this.createRequest('/officers', 'POST', { officer_ids: [id] })
+        const response = await this.createRequest('/officers/' + id, 'POST')
         this.renderError(response, '#guildGlobalError', Handlebars.templates.guildError)
-        // this.$el.find('#guildGlobalError').style.color = 'green'
-        this.updateLists([this.officersList, this.membersList], nickname, id)
+        console.log('success ici')
+        this.updateLists([this.officersList, []], nickname, id)
         this.guild.get('officer_ids').push(id)
+        // this.$el.find('#guildGlobalError').style.color = 'green'
       } catch (e) {
+        console.log(e)
         this.renderError(e, '#guildGlobalError', Handlebars.templates.guildError)
+        if (e.status == 200) {
+          this.updateLists([this.officersList, []], nickname, id)
+          this.guild.get('officer_ids').push(id)
+        }
       } finally {
       }
     }
@@ -196,12 +215,18 @@ export const ManageGuildView = Backbone.View.extend({
     const relegateMember = async () => {
       try {
         const response = await this.createRequest('/officers/' + id, 'DELETE')
-        this.renderError(response, '#guildGlobalError', Handlebars.templates.guildError)
-        // this.$el.find('#guildGlobalError').style.color = 'green'
-        this.updateLists([this.membersList, this.officersList], nickname, id)
+        // this.renderError(response, '#guildGlobalError', Handlebars.templates.guildError)
+        this.updateLists([Array(), this.officersList], nickname, id)
         this.guild.set({ officer_ids: this.guild.get('officer_ids').filter(el => el != id) })
+        // this.$el.find('#guildGlobalError').style.color = 'green'
       } catch (e) {
+        console.log(e)
         this.renderError(e, '#guildGlobalError', Handlebars.templates.guildError)
+        console.log(e.status)
+        if (e.status == 200) {
+          this.updateLists([Array(), this.officersList], nickname, id)
+          this.guild.set({ officer_ids: this.guild.get('officer_ids').filter(el => el != id) })
+        }
       } finally {
       }
     }
@@ -213,10 +238,12 @@ export const ManageGuildView = Backbone.View.extend({
     const patchAGuild = async () => {
       try {
         const response = await this.guild.save({ name: name }, { patch: true })
-        this.guild.set({ name: name })
-        this.$el.find('#guildManageIntro').html(Handlebars.templates.guildManageIntro(JSON.parse(JSON.stringify(this.guild))))
-      } catch (error) {
-        this.renderError(error, '#nameError', Handlebars.templates.guildError)
+      } catch (e) {
+        console.log(e)
+        if (e.status != 200) { this.renderError(e, '#nameError', Handlebars.templates.guildError) } else {
+          this.guild.set({ name: name })
+          this.$el.find('#guildManageIntro').html(Handlebars.templates.guildManageIntro(JSON.parse(JSON.stringify(this.guild))))
+        }
       }
     }
     patchAGuild()
@@ -227,11 +254,13 @@ export const ManageGuildView = Backbone.View.extend({
     const patchAGuild = async () => {
       try {
         const response = await this.guild.save({ anagram: anagram }, { patch: true })
-        this.guild.set({ anagram: anagram })
-        this.$el.find('#guildManageIntro').html(Handlebars.templates.guildManageIntro(JSON.parse(JSON.stringify(this.guild))))
-      } catch (error) {
+      } catch (e) {
+        console.log(e)
         // this.preload()
-        this.renderError(error, '#anagramError', Handlebars.templates.guildError)
+        if (e.status != 200) { this.renderError(e, '#anagramError', Handlebars.templates.guildError) } else {
+          this.guild.set({ anagram: anagram })
+	        this.$el.find('#guildManageIntro').html(Handlebars.templates.guildManageIntro(JSON.parse(JSON.stringify(this.guild))))
+        }
       }
     }
     patchAGuild()
@@ -286,10 +315,8 @@ export const ManageGuildView = Backbone.View.extend({
           id: this.users.get(i).get('id')
         })
       }
-      if (officer && this.users.get(i).get('guild_id') === this.guild.get('id') &&
-			!this.guild.get('officer_ids').includes(this.users.get(i).get('id')) &&
-			this.users.get(i).get('id') != this.guild.get('owner_id')) {
-	       this.membersList.push({
+      if (officer && this.users.get(i).get('guild_id') === this.guild.get('id')) {
+        this.membersList.push({
 	          nickname: this.users.get(i).get('nickname'),
 	          id: this.users.get(i).get('id')
 	      })
@@ -303,23 +330,30 @@ export const ManageGuildView = Backbone.View.extend({
   },
 
   updateLists: function (l, nickname, id) {
-    l[0].push({
-      nickname: nickname,
-      id: id
+    console.log('yes ici')
+    if (l[0].length > 0) {
+      console.log(1)
+      l[0].push({
+        nickname: nickname,
+        id: id
 	 })
+    }
+	 if (l[1].length > 0) {
+		 console.log(2)
 	 for (let i = 0; i < l[1].length; i++) {
-      if (l[1][i].id === id) {
-        l[1].splice(i, 1)
-        break
+        if (l[1][i].id === id) {
+          l[1].splice(i, 1)
+          break
+        }
       }
     }
   },
 
-  createRequest: function (path, method, data) {
+  createRequest: function (path, method) {
     return $.ajax({
       url: '/api/guilds/' + this.guild.id + path,
-      method: method,
-      data: data
+      method: method
+      // data: data
     })
   }
 })
