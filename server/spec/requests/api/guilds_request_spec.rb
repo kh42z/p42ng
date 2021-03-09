@@ -127,7 +127,7 @@ describe "Guild", type: :request do
     end
   end
 
-  describe "#officers", test:true do
+  describe "#officers" do
     before {
       post api_guilds_url, headers: access_token, params: attributes
       post "/api/guilds/#{Guild.first.id}/members/#{user_1.id}", headers: access_token
@@ -143,6 +143,13 @@ describe "Guild", type: :request do
       post "/api/guilds/#{Guild.last.id}/officers/#{user_1.id}", headers: access_token_2
       expect(Guild.last.officers.count).to eq 0
       expect(response.message).to eq 'Not Found'
+    end
+    it 'should not promote a member as officer twice', test:true do
+      post "/api/guilds/#{Guild.first.id}/officers/#{user_1.id}", headers: access_token
+      expect(Guild.first.officers.count).to eq 1
+      post "/api/guilds/#{Guild.first.id}/officers/#{user_1.id}", headers: access_token
+      expect(Guild.first.officers.count).to eq 1
+      expect(json["message"]).to eq "Validation failed: User has already been taken"
     end
     it '(owner) should destroy an officer' do
       post "/api/guilds/#{Guild.first.id}/officers/#{user_1.id}", headers: access_token

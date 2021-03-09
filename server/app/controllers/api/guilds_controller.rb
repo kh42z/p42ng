@@ -68,7 +68,7 @@ module Api
 
     def add_officers(guild)
       officer = params.fetch(:tid)
-      GuildOfficer.create(user_id: officer, guild_id: guild.id) if guild.members.find(officer)
+      GuildOfficer.create!(user_id: officer, guild_id: guild.id) if guild.members.find(officer)
       200
     end
 
