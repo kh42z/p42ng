@@ -110,6 +110,87 @@ paths:
       responses:
         '204':
           description: chat deleted
+  "/api/chats/{id}/admins/{tid}":
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Chat ID
+      - name: tid
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Target ID
+    post:
+      summary: Set participant as admin
+      description: Allows current_user to set participant as admin
+      tags:
+        - Chats
+      responses:
+        '200':
+          description: participant set as admin
+    delete:
+      summary: Demote admin
+      description: Allows current_user to ldemote admin
+      tags:
+        - Chats
+      responses:
+        '204':
+          description: admin demoted
+  "/api/chats/{id}/bans":
+    post:
+      summary: Bans an user
+      description: Allows moderators to ban an user for a specified duration (in seconds)
+      tags:
+        - Chats
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Chat ID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ban"
+      responses:
+        '204':
+          description: user banned
+
+  "/api/chats/{id}/messages":
+    post:
+      summary: broadcast a message
+      tags:
+        - Chats
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ChatID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                content:
+                  type: string
+      responses:
+        '200':
+          description: chats found
+          content:
+            application/json:
+              schema:
+                properties:
+                  content:
+                    type: string
+
   "/api/chats/{id}/mutes":
     post:
       summary: Mutes an user
@@ -132,27 +213,6 @@ paths:
         '204':
           description: user muted
 
-  "/api/chats/{id}/bans":
-    post:
-      summary: Bans an user
-      description: Allows moderators to ban an user for a specified duration (in seconds)
-      tags:
-        - Chats
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-          description: Chat ID
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ban"
-      responses:
-        '204':
-          description: user banned
 
   "/api/chats/{id}/participants":
     parameters:
@@ -185,36 +245,7 @@ paths:
         '204':
           description: chat left
 
-  "/api/chats/{id}/admins/{tid}":
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-        description: Chat ID
-      - name: tid
-        in: path
-        required: true
-        schema:
-          type: integer
-        description: Target ID
-    post:
-      summary: Set participant as admin
-      description: Allows current_user to set participant as admin
-      tags:
-        - Chats
-      responses:
-        '200':
-          description: participant set as admin
-    delete:
-      summary: Demote admin
-      description: Allows current_user to ldemote admin
-      tags:
-        - Chats
-      responses:
-        '204':
-          description: admin demoted
+
 
   "/api/chats/{id}/invites":
     post:

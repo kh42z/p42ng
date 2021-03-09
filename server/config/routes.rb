@@ -20,6 +20,7 @@ Rails.application.routes.draw do
         post 'participants', to: 'chats#create_participant'
         delete 'participants', to: 'chats#destroy_participant'
         post 'mutes'
+        post 'messages'
         post 'bans'
         post 'invites'
         post 'admins/:tid', to: 'chats#admins'
