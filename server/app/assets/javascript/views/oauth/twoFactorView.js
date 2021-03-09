@@ -23,7 +23,7 @@ export const TwoFactorView = Backbone.View.extend({
     this.twoFactorService.auth(this.code).then(function () {
       Backbone.history.navigate('#two_factor_connexion', { trigger: true })
     }).catch(function () {
-      current.render('Your token is either invalid or expired.')
+      current.render('Your code is either invalid or expired.')
     })
   }
 })

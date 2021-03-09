@@ -3,10 +3,9 @@ import { SuperHeaders } from '../services/headers'
 
 export const User = Backbone.Model.extend({
   defaults: {
-    chat_ids: [],
+    email: undefined,
     first_login: undefined,
     guild_id: undefined,
-    id: undefined,
     image_url: undefined,
     ladder_games_lost: undefined,
     ladder_games_won: undefined,
@@ -15,6 +14,8 @@ export const User = Backbone.Model.extend({
     status: undefined,
     two_factor: undefined,
     uid: undefined,
+    created_at: undefined,
+    updated_at: undefined,
     friends: [],
     ignores: []
   },
@@ -23,6 +24,9 @@ export const User = Backbone.Model.extend({
     this.superHeaders = new SuperHeaders()
     this.headers = this.superHeaders.getHeaders()
   },
+
+  // idAttribute is by default id anyway
+  idAttribute: 'id',
 
   urlRoot: '/api/users/',
 
@@ -66,6 +70,11 @@ export const User = Backbone.Model.extend({
   saveFirstLogin: function (firstLogin) {
     this.set({ first_login: firstLogin })
     this.save({ first_login: firstLogin }, { patch: true })
+  },
+
+  saveTwoFactor: function (twoFactor) {
+    this.set({ two_factor: twoFactor })
+    this.save({ two_factor: twoFactor }, { patch: true })
   },
 
   block: function (id) {
