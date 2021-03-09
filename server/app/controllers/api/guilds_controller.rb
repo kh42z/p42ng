@@ -16,10 +16,10 @@ module Api
     end
 
     def create
-      return render_error('hasGuildAlready') if current_user.guild
+      return render_error('hasGuildAlready') unless current_user.guild_member.nil?
 
       guild = Guild.create!(guild_params_create)
-      current_user.update!(guild: guild)
+      GuildMember.create!(user: current_user, guild: guild)
       json_response(guild, 201)
     end
 
@@ -30,17 +30,18 @@ module Api
     def members
       return render_not_allowed unless current_user == @guild.owner || @guild.officers.where(user_id: current_user)[0]
 
-      status = add_members(@guild) if request.post?
-      status = destroy_members(@guild) if request.delete?
-      json_response('', status)
+      member = params.fetch(:tid)
+      GuildMember.create!(user_id: member, guild: @guild) if request.post?
+      destroy_members(@guild, member) if request.delete?
+      head :ok
     end
 
     def officers
       return render_not_allowed unless current_user == @guild.owner
 
-      status = add_officers(@guild) if request.post?
-      status = destroy_officers(@guild) if request.delete?
-      json_response('', status)
+      add_officers(@guild) if request.post?
+      destroy_officers(@guild) if request.delete?
+      head :ok
     end
 
     private
@@ -48,34 +49,24 @@ module Api
     def manage_ownership(guild)
       new_owner = GuildOfficer.where(guild_id: guild.id).pluck(:user_id)[0]
       GuildOfficer.where(guild_id: guild.id, user_id: new_owner).destroy_all if new_owner
-      new_owner ||= guild.members.pluck(:id).first
+      new_owner ||= guild.members.pluck(:user_id).first
       guild.update!(owner_id: new_owner) if new_owner
       guild.destroy! unless new_owner
     end
 
-    def add_members(guild)
-      member = params.fetch(:tid)
-      User.find(member).update!(guild_id: guild.id) unless User.find(member).guild
-      200
-    end
-
-    def destroy_members(guild)
-      member = params.fetch(:tid)
-      destroyed = User.find(member).update!(guild: nil) if User.find(member).guild == guild
+    def destroy_members(guild, member)
+      GuildMember.where(user_id: member, guild_id: guild.id).destroy_all
       manage_ownership(guild) if current_user.id == member.to_i
-      destroyed ? 204 : 422
     end
 
     def add_officers(guild)
       officer = params.fetch(:tid)
-      GuildOfficer.create!(user_id: officer, guild_id: guild.id) if guild.members.find(officer)
-      200
+      GuildOfficer.create!(user_id: officer, guild_id: guild.id)
     end
 
     def destroy_officers(guild)
       officer = params.fetch(:tid)
-      GuildOfficer.destroy_by(user: officer) if User.where(guild_id: guild).find(officer)
-      204
+      GuildOfficer.where(user_id: officer, guild: guild).destroy_all
     end
 
     def guild_params

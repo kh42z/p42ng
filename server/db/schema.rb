@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_03_084016) do
+ActiveRecord::Schema.define(version: 2021_03_09_142539) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -94,6 +94,15 @@ ActiveRecord::Schema.define(version: 2021_03_03_084016) do
     t.index ["winner_id"], name: "index_games_on_winner_id"
   end
 
+  create_table "guild_members", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "guild_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["guild_id"], name: "index_guild_members_on_guild_id"
+    t.index ["user_id"], name: "index_guild_members_on_user_id"
+  end
+
   create_table "guild_officers", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "guild_id"
@@ -164,13 +173,11 @@ ActiveRecord::Schema.define(version: 2021_03_03_084016) do
     t.integer "ladder_games_won", default: 0
     t.integer "ladder_games_lost", default: 0
     t.bigint "ladder_id"
-    t.bigint "guild_id"
     t.string "status", default: "offline"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["guild_id"], name: "index_users_on_guild_id"
     t.index ["ladder_id"], name: "index_users_on_ladder_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
@@ -230,6 +237,8 @@ ActiveRecord::Schema.define(version: 2021_03_03_084016) do
   add_foreign_key "games", "users", column: "player_left_id"
   add_foreign_key "games", "users", column: "player_right_id"
   add_foreign_key "games", "users", column: "winner_id"
+  add_foreign_key "guild_members", "guilds"
+  add_foreign_key "guild_members", "users"
   add_foreign_key "guild_officers", "guilds"
   add_foreign_key "guild_officers", "users"
   add_foreign_key "guilds", "users", column: "owner_id"
@@ -237,7 +246,6 @@ ActiveRecord::Schema.define(version: 2021_03_03_084016) do
   add_foreign_key "user_achievements", "users"
   add_foreign_key "user_ignores", "users"
   add_foreign_key "user_ignores", "users", column: "ignored_id"
-  add_foreign_key "users", "guilds"
   add_foreign_key "users", "ladders"
   add_foreign_key "war_addons", "war_terms"
   add_foreign_key "war_terms", "wars"

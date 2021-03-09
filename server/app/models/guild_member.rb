@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class GuildOfficer < ApplicationRecord
+class GuildMember < ApplicationRecord
   validates_presence_of :user
   validates_uniqueness_of :user_id
   validates_presence_of :guild
