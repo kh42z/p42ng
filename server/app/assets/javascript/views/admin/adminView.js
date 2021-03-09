@@ -17,6 +17,9 @@ export const AdminView = Backbone.View.extend({
     return this
   },
   authorize: function (event) {
-    console.log('CLICK')
+    const userId = event.currentTarget.getAttribute('for')
+    const user = this.users.get(userId)
+    console.log('User: ' + userId)
+    user.updateBanned(event.currentTarget.checked)
   }
 })

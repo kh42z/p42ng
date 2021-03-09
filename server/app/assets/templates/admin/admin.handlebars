@@ -4,6 +4,7 @@
         <tr>
             <th>ID</th>
             <th>Username</th>
+            <th>Status</th>
             <th>Banned</th>
         </tr>
         </thead>
@@ -12,7 +13,8 @@
                 <tr>
                     <td>{{ this.id }} </td>
                     <td>{{ this.nickname }}</td>
-                    <td><input type="checkbox" name="banned" class="banned" {{#if this.banned }}checked>{{/if}}</td>
+                    <td>{{ this.status }}</td>
+                    <td><input type="checkbox" name="banned" for={{this.id}} class="banned" {{#if this.banned }}checked>{{/if}}</td>
                 </tr>
             {{/each}}
         </tbody>

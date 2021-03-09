@@ -58,6 +58,10 @@
     text-align: left;
 }
 
+.topnav .admin {
+    text-align: left;
+}
+
 .topnav .profile_pic {
     object-fit: cover;
     width: 61px;
