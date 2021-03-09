@@ -2,8 +2,6 @@ import { FetchAPI } from '../services/fetchAPI'
 import { SuperHeaders } from '../services/headers'
 
 export const User = Backbone.Model.extend({
-  // idAttribute is by default id anyway
-  idAttribute: 'id',
   defaults: {
     email: undefined,
     first_login: undefined,
@@ -17,11 +15,18 @@ export const User = Backbone.Model.extend({
     two_factor: undefined,
     uid: undefined,
     created_at: undefined,
-    updated_at: undefined
+    updated_at: undefined,
+    friends: [],
+    ignores: []
   },
 
   initialize: function (url) {
+    this.superHeaders = new SuperHeaders()
+    this.headers = this.superHeaders.getHeaders()
   },
+
+  // idAttribute is by default id anyway
+  idAttribute: 'id',
 
   urlRoot: '/api/users/',
 
@@ -70,5 +75,29 @@ export const User = Backbone.Model.extend({
   saveTwoFactor: function (twoFactor) {
     this.set({ two_factor: twoFactor })
     this.save({ two_factor: twoFactor }, { patch: true })
+  },
+
+  block: function (id) {
+    const header = this.superHeaders.getHeaders()
+    header.append('accept', 'application/json')
+    header.append('Content-Type', 'application/json')
+    const url = '/api/users/' + this.id + '/ignores'
+    fetch(url, {
+      method: 'POST',
+      headers: header,
+      body: JSON.stringify({
+        ignored_id: id
+      })
+    })
+  },
+  unblock: function (id) {
+    const header = this.superHeaders.getHeaders()
+    header.append('accept', 'application/json')
+    header.append('Content-Type', 'application/json')
+    const url = '/api/users/' + this.id + '/ignores/' + id
+    fetch(url, {
+      method: 'DELETE',
+      headers: header
+    })
   }
 })

@@ -11,45 +11,25 @@ export const Guild = Backbone.Model.extend({
   },
 
   initialize: function (id) {
-    /* this.on('all', function (e) {
-      //
-    }) */
-  //   this.url = '/api/guilds/' + id
-  //   console.log(this.url)
-  //   this.fetch({
-  //     url: this.url,
-  //     success: function (response) {
-  //       console.log(response)
-  //     },
-  //     error: function (errorResponse) {
-  //       console.log('error')
-  //       console.log(errorResponse)
-  //     }
-  //   })
-  //   console.log(this.id)
   },
 
-  urlRoot: 'api/guilds',
+  urlRoot: 'api/guilds/',
   url: function () {
     if (this.id !== undefined) { return this.urlRoot + this.id }
     return this.urlRoot
   },
 
-  create: function (url) {
-    this.set({
-      url: url,
-      data: {
-        name: 'test',
-        anagram: '',
-        owner_id: '1',
-        score: '0'
-      },
+  create: function (name, anagram) {
+    return this.save({
+      name: name,
+      anagram: anagram,
       success: function (response) {
+        console.log('Success while creating guild')
         console.log(response)
       },
-      error: function (errorResponse) {
-        console.log('error')
-        console.log(errorResponse)
+      error: function (response) {
+        console.log('error while creating guild')
+        console.log(response)
       }
     })
   }
@@ -78,14 +58,14 @@ export const Guild = Backbone.Model.extend({
 // type: 'post',
 // contentType: 'application/json',
 // data: JSON.stringify({
-// 		// Change `*****` and `#####` with your own credentials.
-// 		'appId': '*****',
-// 		'appKey': '#####',
-// 		'query': 'Starbucks OR frapp*',
-// 		'fields': [
-// 				'item_name',
-// 				'brand_name',
-// 				'nf_calories',
-// 				'nf_serving_weight_grams']
+//  // Change `*****` and `#####` with your own credentials.
+//  'appId': '*****',
+//  'appKey': '#####',
+//  'query': 'Starbucks OR frapp*',
+//  'fields': [
+//  'item_name',
+//  'brand_name',
+//  'nf_calories',
+//  'nf_serving_weight_grams']
 // }),
 // reset: true,

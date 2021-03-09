@@ -13,6 +13,7 @@ export const ChatModel = Backbone.Model.extend({
   },
   initialize: function () {
     this.superHeaders = new SuperHeaders()
+    this.headers = this.superHeaders.getHeaders()
   },
   urlRoot: '/api/chats/',
   url: function () {
@@ -47,20 +48,74 @@ export const ChatModel = Backbone.Model.extend({
     })
   },
   leaveRoom: function () {
-    const headers = this.superHeaders.getHeaders()
-
     const url = '/api/chats/' + this.id + '/participants'
     fetch(url, {
       method: 'DELETE',
-      headers: headers
+      headers: this.headers
     })
   },
-  subscribeChannel: function () {
-    const headers = this.superHeaders.getHeaders()
-    const url = '/api/chats/' + this.id + '/participants'
+  subscribeChannel: function (password = '') {
+    const url = '/api/chats/' + this.id + '/participants?password=' + password
     fetch(url, {
       method: 'POST',
-      headers: headers
+      headers: this.headers
     })
+  },
+  invitesToChannel: function (participantsIds) {
+    const header = this.superHeaders.getHeaders()
+    header.append('accept', 'application/json')
+    header.append('Content-Type', 'application/json')
+    const url = '/api/chats/' + this.id + '/invites'
+    fetch(url, {
+      method: 'POST',
+      headers: header,
+      body: JSON.stringify({
+        participant_ids: participantsIds
+      })
+    })
+  },
+  deleteDefinitivelyChannel: function () {
+    this.destroy()
+  },
+  patchAdmin: function (adminIds) {
+    this.save({ admin_ids: adminIds }, { patch: true })
+  },
+  banUser: function (value, userId) {
+    const header = this.superHeaders.getHeaders()
+    console.log(header)
+    header.append('accept', 'application/json')
+    header.append('Content-Type', 'application/json')
+    const url = '/api/chats/' + this.id + '/bans'
+    fetch(url, {
+      method: 'POST',
+      headers: header,
+      body: JSON.stringify({
+        user_id: userId,
+        duration: value
+      })
+    })
+  },
+  muteUser: function (value, userId) {
+    const header = this.superHeaders.getHeaders()
+    header.append('accept', 'application/json')
+    header.append('Content-Type', 'application/json')
+    const url = '/api/chats/' + this.id + '/mutes'
+    fetch(url, {
+      method: 'POST',
+      headers: header,
+      body: JSON.stringify({
+        user_id: userId,
+        duration: value
+      })
+    })
+  },
+  updatePrivacy: function (privacy, password) {
+    return this.save({
+      privacy: privacy,
+      password: password
+    },
+    { patch: true }
+    )
   }
+
 })

@@ -1,4 +1,328 @@
 .chat
 .parameters {
     display: none;
+    overflow: auto;
+}
+
+.chat .parameters
+.right-menu {
+    background: rgba(15, 24, 37, 0.37);
+    width: calc(100vw - 330px);
+    overflow-x: hidden;
+    border-top: 1px solid #313236;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.chat .parameters
+.right-menu .close {
+    position: relative;
+    top: 32px;
+    left: 495px;
+
+    width: 35px;
+    height: 57px;
+
+    cursor: pointer;
+}
+
+.chat .parameters .page {
+    display: flex;
+    flex-direction: column;
+    color: var(--secondary-color);
+    font-family: 'Roboto-Regular';
+    margin-left: 64px;
+}
+
+.chat .parameters .radio-button {
+    margin-bottom: 16px;
+}
+
+.chat .parameters
+.radio-button input {
+    height: 20px;
+    width: 20px;
+}
+
+.chat .parameters
+.radio-button label {
+    margin-left: 8px;
+}
+
+input[type="radio"] {
+    vertical-align: middle;
+    margin: 0;
+    margin-bottom: 16px;
+}
+
+.chat .parameters .password {
+    display: flex;
+    flex-direction: column;
+    margin-left: 32px;
+    font-size: 14px;
+}
+
+
+#password {
+    background: #333333;
+    border: 1px solid #000000;
+    width: 283px;
+    height: 38px;
+    margin-top: 8px;
+    padding-left: 8px;
+    color: var(--secondary-color);
+}
+
+.chat .parameters 
+.save {
+    width: 95px;
+    height: 29px;
+    background-color: var(--primary-color);
+    border-radius: 4px;
+    font-size: 14px;
+    position: relative;
+    left: 33px;
+}
+
+.chat .parameters
+.error-password {
+    top: -27px;
+    left: 34px;
+    position: relative;
+    margin-bottom: 0px;
+    font-size: 14px;
+}
+
+.chat .parameters .password
+.passwordVisibility {
+    display: block;
+    width: 26px;
+    height: 26px;
+    position: relative;
+    top: -32px;
+    left: 248px;
+
+    /* border: none;
+    z-index: 1; */
+
+    cursor: pointer;
+}
+
+.chat .parameters .password .passwordVisibility
+.icon-visibility {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+#password {
+    z-index: 0;
+}
+
+.chat .parameters
+.title {
+    font-size: 18px;
+    position: relative;
+    margin-bottom: 32px;
+}
+
+.chat .parameters .overview .name {
+    width: 405px;
+    height: 40px;
+    background: #364050;
+    border: 1px solid #000000;
+    color: var(--secondary-color);
+    padding-left: 16px;
+    font-size: 16px;
+}
+
+.chat .parameters .sub-title {
+    color: #C4C4C4;
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+.chat .parameters 
+.left-menu {
+    width: 330px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: left;
+
+    background: rgba(0, 0, 0, 0.37);
+    border: 1px solid #313236;
+}
+
+
+.chat .parameters .left-menu
+.menu {
+    font-size: 18px;
+
+    margin-top: 64px;
+    margin-right: 8px;
+
+    cursor: pointer;
+}
+
+.chat .parameters .left-menu .menu
+.sub-menu {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    width: 170px;
+    height: 40px;
+
+    border-radius: 2px;
+}
+
+p.p {
+    padding: 8px;
+    margin: 0;
+}
+
+.chat .parameters .left-menu 
+.deleteChannel {
+    font-family: Roboto-Regular;
+    padding: 8px;
+    color: #FA0808;
+    border-top: 1px solid #40454B;
+}
+
+.chat .parameters .right-menu
+.image-container {
+    width: 43px;
+    height: 34px;
+
+    margin-right: 16px;
+    position: relative;
+    top: 12%;
+}
+
+.chat .parameters .right-menu
+.image-container .image_url {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.chat .parameters .right-menu .list
+.self {
+    display: grid;
+    grid-template-columns: 80px 100px 200px 50px;
+    justify-items: left;
+
+    font-size: 16px;
+    margin-bottom: 16px;
+
+    position: relative;
+}
+
+.chat .parameters .right-menu .list
+.self .anagram {
+    margin-right: 16px;
+}
+
+.chat .parameters .right-menu .list
+.self .nickname {
+    margin-right: 16px;
+}
+
+.dots-container {
+    width: 39px;
+    height: 34px;
+    border-radius: 3px;
+    cursor: pointer;
+
+    position: relative;
+    top: 15%;
+}
+
+.dots {
+    margin: auto;
+    display: block;
+    top: 15%;
+    position: relative;
+}
+
+.chat .parameters .right-menu
+.members {
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 100%;
+    padding-bottom: 200px;
+}
+
+.chat .parameters .right-menu
+.members::-webkit-scrollbar-track {
+	box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 10px;
+	background-color: #191C20;
+}
+
+.chat .parameters .right-menu
+.members::-webkit-scrollbar {
+	width: 12px;
+}
+
+.chat .parameters .right-menu
+.members::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #7A808B;
+}
+
+.chat .parameters .right-menu .members
+.admin-rights {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    left: 380px;
+    top: 50px;
+    background: #364050;
+    z-index: 1;
+    width: 263px;
+    border-radius: 4px;
+}
+
+.chat .parameters .right-menu .members
+.admin-rights .el {
+    height: 48px;
+    cursor: pointer;
+    padding-left: 16px;
+    line-height: 48px;
+    position: relative;
+}
+
+.chat 
+.droplistBlockViewProfile {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    /* left: 380px;
+    top: 50px; */
+    background: #364050;
+    z-index: 1;
+    width: 200px;
+    border-radius: 4px;
+}
+
+.chat 
+.droplistBlockViewProfile .el {
+    height: 37px;
+    cursor: pointer;
+    padding-left: 16px;
+    line-height: 37px;
+    position: relative;
+    font-size: 14px;
+    font-family: Roboto-Regular;
+    color: var(--secondary-color);
+    text-decoration: none;
+}
+
+.chat .parameters .right-menu .members
+.admin-rights .mute {
+    border-top: 1px solid #404146;
+    border-bottom: 1px solid #404146;
 }

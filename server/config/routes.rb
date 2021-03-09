@@ -22,6 +22,8 @@ Rails.application.routes.draw do
         post 'mutes'
         post 'bans'
         post 'invites'
+        post 'admins'
+        delete 'admins'
       end
     end
     resources :users do

@@ -1,16 +1,16 @@
 import { Ladders } from '../../collections/laddersCollection.js'
 
 export const AchivementsView = Backbone.View.extend({
-  el: $('#app'),
   initialize: function () {
     this.template = Handlebars.templates.achivements
-    this.ladders = new Ladders()
+    this.ladders = this.model.get('ladders').get('obj')
     this.users = this.model.get('users').get('obj')
-   	// this.guilds = this.model.get('guilds').get('obj')
+    // this.guilds = this.model.get('guilds').get('obj')
 
     this.listenTo(this.ladders, 'sync', function () { this.getLadders() }, this)
     // this.listenTo(this.guilds, 'sync', function () { this.getUsers() }, this)
   },
+  el: $('#app'),
 
   getUsers: function () {
   },
@@ -20,7 +20,7 @@ export const AchivementsView = Backbone.View.extend({
   },
 
   render: function () {
-    const context =	{
+    const context = {
       name: this.users.get(this.id).get('nickname'),
       ladder_id: this.users.get(this.id).get('ladder_id'),
       ladder_name: this.ladders.get(this.users.get(this.id).get('ladder_id')).get('name'),

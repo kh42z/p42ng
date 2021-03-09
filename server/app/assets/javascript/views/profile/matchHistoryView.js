@@ -1,21 +1,22 @@
+/* eslint-disable eqeqeq */
 import { GameRecords } from '../../collections/gameRecords.js'
 
 export const MatchHistoryView = Backbone.View.extend({
-  el: $('#app'),
   initialize: function () {
     this.template = Handlebars.templates.matchHistory
+    this.gameRecords = this.model.get('gameRecords').get('obj')
     this.users = this.model.get('users').get('obj')
     this.guilds = this.model.get('guilds').get('obj')
-    this.listenTo(this.guilds, 'sync', function () { this.getUsers() }, this)
+    this.listenTo(this.gameRecords, 'sync', function () { this.getGuilds() }, this)
   },
+  el: $('#app'),
 
   getUsers: function () {
-    this.listenTo(this.users, 'sync', function () { this.getGameRecords() }, this)
+    this.listenTo(this.users, 'sync', function () { this.render() }, this)
   },
 
-  getGameRecords: function () {
-    this.gameRecords = new GameRecords()
-    this.listenTo(this.gameRecords, 'sync', function () { this.render() }, this)
+  getGuilds: function () {
+    this.listenTo(this.guilds, 'sync', function () { this.getUsers() }, this)
     // this.render()
   },
 
@@ -31,12 +32,12 @@ export const MatchHistoryView = Backbone.View.extend({
     context.guild_id = this.users.get(this.id).get('guild_id')
     context.id = this.id
 
-    context.matchs = Array()
+    context.matchs = []
 
     for (let i = 1; i <= this.gameRecords.length; i++) {
       const game = {}
       if (context.id == this.gameRecords.get(i).get('player_left_id') ||
-			context.id == this.gameRecords.get(i).get('player_right_id')) {
+          context.id == this.gameRecords.get(i).get('player_right_id')) {
         game.player_left_id = this.gameRecords.get(i).get('player_left_id')
         game.player_right_id = this.gameRecords.get(i).get('player_right_id')
         game.player_left_nickname = this.users.get(game.player_left_id).get('nickname')
