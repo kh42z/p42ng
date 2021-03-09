@@ -28,7 +28,7 @@ if Rails.env.development?
   chat_with_participants(count: 2)
 
   (1..20).each do |id|
-    User.find(id).update!(guild: Guild.find(rand(1..5)))
+    GuildMember.create(user_id: id, guild: Guild.find(rand(1..5)))
   end
 
   (1..20).each do |id|
