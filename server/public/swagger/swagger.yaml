@@ -69,6 +69,7 @@ paths:
         required: true
         schema:
           type: integer
+        description: Chat ID
     get:
       summary: Retrieves a chat
       tags:
@@ -102,10 +103,6 @@ paths:
       responses:
         '200':
           description: chat modified
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/chat_response"
     delete:
       summary: Deletes a chat
       tags:
@@ -113,7 +110,6 @@ paths:
       responses:
         '204':
           description: chat deleted
-          content: { }
   "/api/chats/{id}/mutes":
     post:
       summary: Mutes an user
@@ -217,7 +213,7 @@ paths:
       tags:
         - Chats
       responses:
-        '200':
+        '204':
           description: admin demoted
 
   "/api/chats/{id}/invites":
@@ -244,13 +240,6 @@ paths:
       responses:
         '200':
           description: participants added
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  participant_ids:
-                    $ref: '#/components/schemas/integer_list'
 
   "/api/games":
     get:
@@ -321,7 +310,6 @@ paths:
       summary: Creates a guild
       tags:
         - Guilds
-      parameters: [ ]
       requestBody:
         content:
           application/json:
@@ -334,9 +322,12 @@ paths:
                   type: string
       responses:
         '201':
-          $ref: '#/components/responses/201'
-        '422':
-          $ref: '#/components/responses/422'
+          description: guilds created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/guild_response"
+
   "/api/guilds/{id}":
     parameters:
       - name: id
@@ -344,6 +335,7 @@ paths:
         required: true
         schema:
           type: integer
+        description: Guild ID
     get:
       summary: Retrieves a guild
       tags:
@@ -369,111 +361,70 @@ paths:
                   type: string
                 anagram:
                   type: string
-                officer_ids:
-                  $ref: '#/components/schemas/integer_list'
       responses:
         '200':
           description: guild modified
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/guild_response"
-  "/api/guilds/{id}/officers":
+
+  "/api/guilds/{id}/officers/{tid}":
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Guild ID
+      - name: tid
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Target ID
     post:
-      summary: Adds guild officers
-      description: Allows current_user to add guild officers
+      summary: Adds a guild officer
+      description: Allows current_user to add a guild officer
       tags:
         - Guilds
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-          description: Guild ID
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                officer_ids:
-                  $ref: '#/components/schemas/integer_list'
       responses:
         '200':
-          description: members added
-
-  "/api/guilds/{id}/officers/{uid}":
+          description: member added
     delete:
       summary: Removes a guild officer
       description: Allows current_user to remove a guild officer
       tags:
         - Guilds
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-          description: Guild ID
-        - name: uid
-          in: path
-          required: true
-          schema:
-            type: integer
-          description: User ID
       responses:
         '204':
           description: officer removed
-
-  "/api/guilds/{id}/members":
+  "/api/guilds/{id}/members{tid}":
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Guild ID
+      - name: tid
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Target ID
     post:
-      summary: Adds guild members
-      description: Allows current_user to add guild members
+      summary: Adds a guild member
+      description: Allows current_user to add a guild member
       tags:
         - Guilds
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-          description: Guild ID
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                member_ids:
-                  $ref: '#/components/schemas/integer_list'
       responses:
         '200':
-          description: members added
-
-  "/api/guilds/{id}/members/{uid}":
+          description: member added
     delete:
       summary: Removes a guild member
       description: Allows current_user to remove a guild member
       tags:
         - Guilds
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-          description: Guild ID
-        - name: uid
-          in: path
-          required: true
-          schema:
-            type: integer
-          description: User ID
       responses:
         '204':
           description: member removed
-
   "/api/wars":
     get:
       summary: Retrieves wars
@@ -872,10 +823,6 @@ components:
           properties:
             id:
               type: integer
-            score:
-              type: integer
-            war_records:
-              $ref: '#/components/schemas/integer_list'
         - $ref: "#/components/schemas/guild"
     user_response:
       allOf:
@@ -911,6 +858,8 @@ components:
         anagram:
           type: string
         owner_id:
+          type: integer
+        score:
           type: integer
         officer_ids:
           $ref: '#/components/schemas/integer_list'

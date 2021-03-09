@@ -36,8 +36,8 @@ RSpec.describe "Wars", type: :request do
     it 'should let an officer create a war' do
       user_1 = create(:user)
       user_1_access = user_1.create_new_auth_token
-      post members_api_guild_url(Guild.first), headers: access_token, params: { member_ids: [user_1.id] }
-      post officers_api_guild_url(Guild.first), headers: access_token, params: { officer_ids: [user_1.id] }
+      post members_api_guild_url(Guild.first, tid: user_1.id), headers: access_token
+      post officers_api_guild_url(Guild.first, tid: user_1.id), headers: access_token
       post api_wars_url, headers: user_1_access, params: valid_attributes
       expect(response.status).to eq 201
       expect(War.count).to eq(1)
@@ -45,7 +45,7 @@ RSpec.describe "Wars", type: :request do
     it 'should not let a member create a war', test:true do
       user_1 = create(:user)
       user_1_access = user_1.create_new_auth_token
-      post members_api_guild_url(Guild.first), headers: access_token, params: { member_ids: [user_1.id] }
+      post members_api_guild_url(Guild.first, tid: user_1.id), headers: access_token
       post api_wars_url, headers: user_1_access, params: valid_attributes
       expect(response.status).to eq 401
       expect(response.message).to eq 'Unauthorized'
