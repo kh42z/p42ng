@@ -186,9 +186,10 @@ export const ManageGuildView = Backbone.View.extend({
       try {
         const response = await this.createRequest('/officers/' + id, 'POST')
         this.renderError(response, '#guildGlobalError', Handlebars.templates.guildError)
-        console.log('success ici')
+        console.log('success ici dans promote')
         this.updateLists([this.officersList, []], nickname, id)
         this.guild.get('officer_ids').push(id)
+        console.log('success ici dans promote')
         // this.$el.find('#guildGlobalError').style.color = 'green'
       } catch (e) {
         console.log(e)
