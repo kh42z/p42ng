@@ -65,7 +65,6 @@ describe "Guild", type: :request do
     it 'owner should add members' do
       post "/api/guilds/#{Guild.first.id}/members/#{user_1.id}", headers: access_token
       expect(Guild.first.members.count).to eq 2
-      expect(User.find(user_1.id).guild).to eq Guild.first
       expect(response.status).to eq 200
     end
     it 'should let officers add members' do
@@ -74,7 +73,6 @@ describe "Guild", type: :request do
       post "/api/guilds/#{Guild.first.id}/officers/#{user_1.id}", headers: access_token
       post "/api/guilds/#{Guild.first.id}/members/#{user_2.id}", headers: user_1_access
       expect(Guild.first.officers.count).to eq 1
-      expect(User.find(user_1.id).guild).to eq Guild.first
       expect(response.status).to eq 200
     end
     it 'should not let members add members' do
@@ -87,41 +85,40 @@ describe "Guild", type: :request do
       post api_guilds_url, headers: access_token_2, params: attributes_2
       post "/api/guilds/#{Guild.first.id}/members/#{user_1.id}", headers: access_token
       post "/api/guilds/#{Guild.last.id}/members/#{user_1.id}", headers: access_token_2
-      expect(Guild.last.members.count).to eq 1
-      expect(User.find(user_1.id).guild).to eq Guild.first
+      expect(json["message"]).to eq "Validation failed: User has already been taken"
+      expect(GuildMember.where(user_id: user_1.id, guild_id: Guild.last.id)[0]).to eq nil
     end
     it 'should destroy a member' do
       post "/api/guilds/#{Guild.first.id}/members/#{user_1.id}", headers: access_token
+      expect(Guild.first.members.count).to eq 2
       delete "/api/guilds/#{Guild.first.id}/members/#{user_1.id}", headers: access_token
       expect(Guild.first.members.count).to eq 1
-      expect(user_1.guild).to_not eq Guild.first
-      expect(response.status).to eq 204
+      expect(response.status).to eq 200
     end
     it 'should not destroy a member of another guild' do
       post api_guilds_url, headers: access_token_2, params: attributes_2
       post "/api/guilds/#{Guild.first.id}/members/#{user_1.id}", headers: access_token
       delete "/api/guilds/#{Guild.last.id}/members/#{user_1.id}", headers: access_token_2
-      expect(User.find( user_1.id).guild).to eq Guild.first
-      expect(response.status).to eq 422
+      expect(GuildMember.where(user_id: user_1.id, guild_id: Guild.first.id)).to exist
     end
     context 'if owner leaves' do
       it 'should destroy guild if he is the last to leave' do
         delete "/api/guilds/#{Guild.first.id}/members/#{auth.id}", headers: access_token
-        expect(response.status).to eq 204
+        expect(response.status).to eq 200
         expect(Guild.first).to eq nil
       end
       it "should give ownership to first officer and demote him" do
         post "/api/guilds/#{Guild.first.id}/members/#{user_1.id}", headers: access_token
         post "/api/guilds/#{Guild.first.id}/officers/#{user_1.id}", headers: access_token
         delete "/api/guilds/#{Guild.first.id}/members/#{auth.id}", headers: access_token
-        expect(response.status).to eq 204
+        expect(response.status).to eq 200
         expect(Guild.first.owner).to eq user_1
         expect(GuildOfficer.where(guild_id: Guild.first.id, user_id: user_1.id)[0]).to eq nil
       end
       it "should give ownership to first member" do
         post "/api/guilds/#{Guild.first.id}/members/#{user_1.id}", headers: access_token
         delete "/api/guilds/#{Guild.first.id}/members/#{auth.id}", headers: access_token
-        expect(response.status).to eq 204
+        expect(response.status).to eq 200
         expect(Guild.first.owner).to eq user_1
       end
     end
@@ -142,9 +139,9 @@ describe "Guild", type: :request do
       post api_guilds_url, headers: access_token_2, params: attributes_2
       post "/api/guilds/#{Guild.last.id}/officers/#{user_1.id}", headers: access_token_2
       expect(Guild.last.officers.count).to eq 0
-      expect(response.message).to eq 'Not Found'
+      expect(json["message"]).to eq "Validation failed: User has already been taken"
     end
-    it 'should not promote a member as officer twice', test:true do
+    it 'should not promote a member as officer twice' do
       post "/api/guilds/#{Guild.first.id}/officers/#{user_1.id}", headers: access_token
       expect(Guild.first.officers.count).to eq 1
       post "/api/guilds/#{Guild.first.id}/officers/#{user_1.id}", headers: access_token
@@ -155,13 +152,12 @@ describe "Guild", type: :request do
       post "/api/guilds/#{Guild.first.id}/officers/#{user_1.id}", headers: access_token
       delete "/api/guilds/#{Guild.first.id}/officers/#{user_1.id}", headers: access_token
       expect(Guild.first.officers.count).to eq 0
-      expect(response.status).to eq 204
+      expect(response.status).to eq 200
     end
-    it 'should not destroy an officer of another guild' do
+    it 'should not destroy an officer of another guild', test:true do
       post "/api/guilds/#{Guild.first.id}/officers/#{user_1.id}", headers: access_token
       post api_guilds_url, headers: access_token_2, params: attributes_2
       delete "/api/guilds/#{Guild.last.id}/officers/#{user_1.id}", headers: access_token_2
-      expect(response.message).to eq 'Not Found'
       expect(Guild.first.officers.count).to eq 1
     end
   end

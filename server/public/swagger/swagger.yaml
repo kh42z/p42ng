@@ -393,7 +393,7 @@ paths:
       tags:
         - Guilds
       responses:
-        '204':
+        '200':
           description: officer removed
   "/api/guilds/{id}/members{tid}":
     parameters:
@@ -423,7 +423,7 @@ paths:
       tags:
         - Guilds
       responses:
-        '204':
+        '200':
           description: member removed
   "/api/wars":
     get:
