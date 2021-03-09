@@ -71,18 +71,20 @@ RSpec.describe "Users", type: :request do
       end
     end
 
-    context "when he leaves a guild" do
-      before do
-        guild = FactoryBot.create(:guild, owner: users.last)
-        users.last.update!(guild: guild)
-        patch "/api/users/#{user_id}", params: { user: {"guild_id" => nil }}, headers: users.last.create_new_auth_token
-      end
-      it "returns 200" do
-        expect(response).to have_http_status(200)
-        users.last.reload
-        expect(users.last.guild).to be_nil
-      end
-    end
+    # specific route used now : DELETE /api/guilds/{id}/members{tid} - Removes a guild member
+    #
+    # context "when he leaves a guild" do
+    #   before do
+    #     guild = FactoryBot.create(:guild, owner: users.last)
+    #     users.last.update!(guild: guild)
+    #     patch "/api/users/#{user_id}", params: { user: {"guild_id" => nil }}, headers: users.last.create_new_auth_token
+    #   end
+    #   it "returns 200" do
+    #     expect(response).to have_http_status(200)
+    #     users.last.reload
+    #     expect(users.last.guild).to be_nil
+    #   end
+    # end
 
     context "when the user is trying to modify someone else" do
       before do

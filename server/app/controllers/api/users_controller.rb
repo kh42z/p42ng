@@ -89,7 +89,7 @@ module Api
     end
 
     def user_params
-      params.require(:user).permit(:two_factor, :nickname, :first_login, :banned, :guild_id)
+      params.require(:user).permit(:two_factor, :nickname, :first_login, :banned)
     end
 
     def set_user

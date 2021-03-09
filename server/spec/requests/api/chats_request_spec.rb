@@ -168,7 +168,7 @@ RSpec.describe "Chats", type: :request do
     end
   end
 
-  describe "#destroy_participant" do
+  describe "#destroy_participant", test:true do
     let(:user) { create(:user) }
     let(:chat) { create(:chat) }
     let(:access) { user.create_new_auth_token }

@@ -5,10 +5,10 @@ Rails.application.routes.draw do
   namespace :api do
     resources :guilds do
       member do
-        post 'members'
-        delete 'members'
-        post 'officers'
-        delete 'officers'
+        post 'members/:tid', to: 'guilds#members'
+        delete 'members/:tid', to: 'guilds#members'
+        post 'officers/:tid', to: 'guilds#officers'
+        delete 'officers/:tid', to: 'guilds#officers'
       end
     end
     resources :wars
