@@ -1,0 +1,20 @@
+<div id="adminView">
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Banned</th>
+        </tr>
+        </thead>
+        <tbody>
+            {{#each users}}
+                <tr>
+                    <td>{{ this.id }} </td>
+                    <td>{{ this.nickname }}</td>
+                    <td><input type="checkbox" name="banned" class="banned" {{#if this.banned }}checked>{{/if}}</td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
