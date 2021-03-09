@@ -46,6 +46,7 @@ export const Router = Backbone.Router.extend({
     this.guildController = new GuildController()
     this.superWrapper = undefined
     this.oauthService = new OauthService()
+    this.view = undefined // ZOmbie views problem
   },
 
   routes:
@@ -179,7 +180,9 @@ export const Router = Backbone.Router.extend({
 
   manage_guild_view: function () {
     if (this.accessPage()) { }
-    const manageGuildView = new ManageGuildView({ model: this.loadWrapper() })
+    console.log('ici')
+    if (this.view != undefined) { this.view.undelegateEvents() }
+    this.view = new ManageGuildView({ model: this.loadWrapper() })
   },
 
   loadWrapper: function () {

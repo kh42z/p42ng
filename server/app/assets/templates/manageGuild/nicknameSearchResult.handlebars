@@ -1,5 +1,11 @@
-<ul>
-	{{#each this}}
-		<li>{{this.nickname}}</li>
+<style>
+ul {
+	background-color: white;
+	color: black
+}
+</style>
+<ul id="{{this.input}}">
+	{{#each this.search}}
+		<li class="nicknameSearchElement">{{this.nickname}}</li>
 	{{/each}}
 </ul>
