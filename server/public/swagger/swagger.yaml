@@ -185,7 +185,7 @@ paths:
         '204':
           description: chat left
 
-  "/api/chats/{id}/admins/{participant_id}":
+  "/api/chats/{id}/admins/{tid}":
     parameters:
       - name: id
         in: path
@@ -193,12 +193,12 @@ paths:
         schema:
           type: integer
         description: Chat ID
-      - name: participant_id
+      - name: tid
         in: path
         required: true
         schema:
           type: integer
-        description: Participant ID
+        description: Target ID
     post:
       summary: Set participant as admin
       description: Allows current_user to set participant as admin

@@ -67,9 +67,9 @@ module Api
     def admins
       return unless current_user == @chat.owner
 
-      user_id = params.fetch(:user_id)
-      json_response(ChatAdmin.create!(user_id: user_id, chat: @chat)) if request.post?
-      json_response(ChatAdmin.where(chat: @chat, user: user_id).destroy_all, 204) if request.delete?
+      tid = params.fetch(:tid)
+      json_response(ChatAdmin.create!(user_id: tid, chat: @chat)) if request.post?
+      json_response(ChatAdmin.where(chat: @chat, user: tid).destroy_all, 204) if request.delete?
     end
 
     def show
