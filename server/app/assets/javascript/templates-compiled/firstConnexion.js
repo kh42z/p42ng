@@ -14,6 +14,6 @@ templates['firstConnexion'] = template({"compiler":[8,">= 4.3.0"],"main":functio
     + alias4(((helper = (helper = lookupProperty(helpers,"message") || (depth0 != null ? lookupProperty(depth0,"message") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"message","hash":{},"data":data,"loc":{"start":{"line":5,"column":29},"end":{"line":5,"column":40}}}) : helper)))
     + "</p>\n  </div>\n\n  <div class=\"avatar\">\n    <label class=\"status\" >Choose your avatar</label>\n      <label>\n      <input type=\"file\"  accept=\"image/*\" name=\"image\" id=\"file\"  style=\"display: none;\">\n      <img class=\"image\" alt=\"avatar\" src=\""
     + alias4(((helper = (helper = lookupProperty(helpers,"image_url") || (depth0 != null ? lookupProperty(depth0,"image_url") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"image_url","hash":{},"data":data,"loc":{"start":{"line":12,"column":43},"end":{"line":12,"column":56}}}) : helper)))
-    + "\" id=\"output\" width=\"200\" style=\"cursor: pointer;\" />\n    </label>\n  </div>\n  <button class=\"validate\">Validate</button>\n</div>\n";
+    + "\" id=\"output\" width=\"200\" style=\"cursor: pointer;\" />\n    </label>\n      <div id=\"twoFactor\">\n      <input type=\"checkbox\" id=\"2FA\" name=\"2FA\" />\n      <label class=\"status\">Activer Two-Factor via Email</label>\n      </div>\n  </div>\n  <button class=\"validate\">Validate</button>\n</div>\n";
 },"useData":true});
 })();

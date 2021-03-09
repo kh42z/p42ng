@@ -1,5 +1,5 @@
 export const TournamentsView = Backbone.View.extend({
-  el: this.$('#app'),
+  el: $('#app'),
   initialize: function () {
     this.render()
   },
