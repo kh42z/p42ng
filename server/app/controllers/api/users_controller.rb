@@ -10,7 +10,7 @@ module Api
                   only: %i[update upload_avatar create_ignore destroy_ignore create_friendship destroy_friendship]
 
     UserReducer = Rack::Reducer.new(
-      User.all,
+      User.all.order(id: :asc),
       ->(ladder_id:) { where(ladder_id: ladder_id) },
       ->(status:) { where(status: status) },
       ->(guild_id:) { where(guild_id: guild_id) }

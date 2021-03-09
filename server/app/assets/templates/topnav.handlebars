@@ -3,6 +3,9 @@
   <a class="btn tournaments{{#if tournaments}} {{active}}{{/if}}" href="#tournaments">Tournaments</a>
   <a class="btn{{#if leaderboard}} {{active}}{{/if}}" href="#leaderboard">Leaderboard</a>
   <a class="btn {{#if guilds}} {{active}} {{/if}} guilds" href="#guilds">Guilds</a>
+    {{#if admin }}
+        <a class="btn admin" href="#admin">Admin</a>
+    {{/if}}
   <a class="span"></a>
   <a class="btn {{#if chat}} {{active}} {{/if}} chat" href="#chat"></a>
   <a class="btn" href="#user_page">
