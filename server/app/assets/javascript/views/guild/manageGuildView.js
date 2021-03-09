@@ -95,11 +95,20 @@ export const ManageGuildView = Backbone.View.extend({
   },
 
   leaveGuild: function () { // a travailler
-    const leaveGuild = this.createRequest('/members/' + this.userId, 'DELETE', undefined)
-    const promise = leaveGuild()
-    console.log(promise)
-    promise.catch(function () { console.log('reject') })
-    promise.then(this.$el.html('<p>You successfully leaved the guild, this page is now a dead end</p>'))
+    const leaveGuild = async () => {
+      try {
+        const response = await this.createRequest('/members/' + this.userId, 'DELETE')
+        this.renderError(response, '#guildGlobalError', Handlebars.templates.guildError)
+        // this.$el.find('#guildGlobalError').style.color = 'green'
+        this.users.get(id).set({ guild_id: null })
+        // virer les autre trucks en front (owner, ect ..)
+        this.$el.html('<p>You successfully leaved the guild</p>')
+      } catch (e) {
+        this.renderError(e, '#guildGlobalError', Handlebars.templates.guildError)
+      } finally {
+      }
+    }
+    leaveGuild()
   },
 
   inviteMember: function () {
@@ -117,9 +126,8 @@ export const ManageGuildView = Backbone.View.extend({
         const response = await this.createRequest('/members', 'POST', { member_ids: [id] })
         this.renderError(response, '#guildGlobalError', Handlebars.templates.guildError)
         // this.$el.find('#guildGlobalError').style.color = 'green'
-
         this.updateLists([this.membersList, this.nonMembersList], nickname, id)
-        console.log(this.nonMembersList)
+        this.users.get(id).set({ guild_id: this.guild.id })
       } catch (e) {
         this.renderError(e, '#guildGlobalError', Handlebars.templates.guildError)
       } finally {
@@ -137,13 +145,13 @@ export const ManageGuildView = Backbone.View.extend({
       console.log('error') // a gerer
       return
     }
-    //    if (id === undefined) { return } No error check here for now
     const kickMember = async () => {
       try {
         const response = await this.createRequest('/members/' + id, 'DELETE')
         this.renderError(response, '#guildGlobalError', Handlebars.templates.guildError)
         // this.$el.find('#guildGlobalError').style.color = 'green'
         this.updateLists([this.nonMembersList, this.membersList], nickname, id)
+        this.users.get(id).set({ guild_id: null })
       } catch (e) {
         this.renderError(e, '#guildGlobalError', Handlebars.templates.guildError)
       } finally {
@@ -167,6 +175,7 @@ export const ManageGuildView = Backbone.View.extend({
         this.renderError(response, '#guildGlobalError', Handlebars.templates.guildError)
         // this.$el.find('#guildGlobalError').style.color = 'green'
         this.updateLists([this.officersList, this.membersList], nickname, id)
+        this.guild.get('officer_ids').push(id)
       } catch (e) {
         this.renderError(e, '#guildGlobalError', Handlebars.templates.guildError)
       } finally {
@@ -190,6 +199,7 @@ export const ManageGuildView = Backbone.View.extend({
         this.renderError(response, '#guildGlobalError', Handlebars.templates.guildError)
         // this.$el.find('#guildGlobalError').style.color = 'green'
         this.updateLists([this.membersList, this.officersList], nickname, id)
+        this.guild.set({ officer_ids: this.guild.get('officer_ids').filter(el => el != id) })
       } catch (e) {
         this.renderError(e, '#guildGlobalError', Handlebars.templates.guildError)
       } finally {
@@ -236,7 +246,6 @@ export const ManageGuildView = Backbone.View.extend({
     this.search = list.slice().filter(el => el.nickname.toLowerCase().includes(value.toLowerCase()) === true)
     const context = { search: JSON.parse(JSON.stringify(this.search)), input: input }
     this.$el.find(target).html(Handlebars.templates.nicknameSearchResult(context))
-    console.log(JSON.parse(JSON.stringify(this.search)))
   },
 
   outlineNickname: function (e) {
@@ -245,7 +254,7 @@ export const ManageGuildView = Backbone.View.extend({
 
   clickNickname: function (e) {
     const target = e.target.parentElement.id
-    console.log(this.$el.find('#' + target)[0].value = e.target.innerHTML)
+    this.$el.find('#' + target)[0].value = e.target.innerHTML
   },
 
   render: function () {
@@ -294,20 +303,16 @@ export const ManageGuildView = Backbone.View.extend({
   },
 
   updateLists: function (l, nickname, id) {
-    console.log('ici')
-    console.log(nickname, id)
     l[0].push({
       nickname: nickname,
       id: id
 	 })
 	 for (let i = 0; i < l[1].length; i++) {
       if (l[1][i].id === id) {
-        console.log('ici')
         l[1].splice(i, 1)
         break
       }
     }
-    console.log(l[1])
   },
 
   createRequest: function (path, method, data) {
