@@ -12,6 +12,7 @@ import { TwoFactorView } from '../views/oauth/twoFactorView.js'
 import { SearchView } from '../views/search/searchView.js'
 import { ChatView } from '../views/chatView'
 import { ManageGuildView } from '../views/guild/manageGuildView.js'
+import { AdminView } from '../views/admin/adminView.js'
 
 // models
 import { User } from '../models/user_model'
@@ -51,6 +52,7 @@ export const Router = Backbone.Router.extend({
 
   routes:
   {
+    admin: 'admin_view',
     user_page: 'users_view', // Achanger nom de route et tout
     home: 'home_view',
     pong: 'pong_view',
@@ -136,6 +138,10 @@ export const Router = Backbone.Router.extend({
     fetchAPI.exit()
     window.localStorage.clear()
     this.oauth_view()
+  },
+
+  admin_view: function () {
+    const adminView = new AdminView({ model: this.loadWrapper() })
   },
 
   oauth_view: function (url) {

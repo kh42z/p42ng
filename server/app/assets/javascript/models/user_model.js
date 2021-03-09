@@ -12,10 +12,11 @@ export const User = Backbone.Model.extend({
     ladder_id: undefined,
     nickname: undefined,
     status: undefined,
-    two_factor: undefined,
+    two_factor: false,
     uid: undefined,
     created_at: undefined,
     updated_at: undefined,
+    id: undefined,
     friends: [],
     ignores: []
   },
@@ -24,9 +25,6 @@ export const User = Backbone.Model.extend({
     this.superHeaders = new SuperHeaders()
     this.headers = this.superHeaders.getHeaders()
   },
-
-  // idAttribute is by default id anyway
-  idAttribute: 'id',
 
   urlRoot: '/api/users/',
 
@@ -75,6 +73,11 @@ export const User = Backbone.Model.extend({
   saveTwoFactor: function (twoFactor) {
     this.set({ two_factor: twoFactor })
     this.save({ two_factor: twoFactor }, { patch: true })
+  },
+
+  updateBanned: function (banned) {
+    this.set({ banned: banned })
+    this.save({ banned: banned }, { patch: true })
   },
 
   block: function (id) {
