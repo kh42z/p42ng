@@ -105,11 +105,14 @@ export const Router = Backbone.Router.extend({
   },
 
   accessPage: function (url) {
+    console.log('accessPageview')
     if (window.localStorage.getItem('access-token') === null) {
+      console.log('oauth view')
       this.oauth_view()
       return 1
-    } else if (performance.navigation.type === 1 || performance.navigation.type === 2) {
+    } else if (performance.navigation.type >= 0 && performance.navigation.type <= 2) {
       const fetchUser = async () => {
+        console.log('fetch user')
         this.oauthService = new OauthService()
         this.oauthService.ajaxSetup()
         await this.userLogged.fetchUser(window.localStorage.getItem('user_id'))

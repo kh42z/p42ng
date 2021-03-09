@@ -47,7 +47,8 @@ export const ChatView = Backbone.View.extend({
     'click .validate-password': 'subscribeProtectedChannel',
     'click .blockViewProfile': 'openDropListBlockViewProfile',
     'click .chat': 'closeDropListBlockViewProfile',
-    'click .block': 'blockUser'
+    'click .block': 'blockUser',
+    'click .view-profile': 'viewProfile'
   },
   initialize: function () {
     this.myChannels = this.model.get('myChannels').get('obj')
