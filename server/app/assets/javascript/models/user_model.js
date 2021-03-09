@@ -3,33 +3,27 @@ import { SuperHeaders } from '../services/headers'
 
 export const User = Backbone.Model.extend({
   defaults: {
-    allow_password_change: undefined,
-    chat_ids: [],
-    created_at: undefined,
-    displayname: undefined,
     email: undefined,
     first_login: undefined,
     guild_id: undefined,
-    id: undefined,
-    image: undefined,
     image_url: undefined,
     ladder_games_lost: undefined,
     ladder_games_won: undefined,
     ladder_id: undefined,
-    location: undefined,
-    mmr: undefined,
-    name: undefined,
     nickname: undefined,
-    phone: undefined,
-    provider: undefined,
-    state_id: undefined,
     status: undefined,
-    two_factor: undefined,
+    two_factor: false,
     uid: undefined,
-    updated_at: undefined
+    created_at: undefined,
+    updated_at: undefined,
+    id: undefined,
+    friends: [],
+    ignores: []
   },
 
   initialize: function (url) {
+    this.superHeaders = new SuperHeaders()
+    this.headers = this.superHeaders.getHeaders()
   },
 
   urlRoot: '/api/users/',
@@ -74,5 +68,39 @@ export const User = Backbone.Model.extend({
   saveFirstLogin: function (firstLogin) {
     this.set({ first_login: firstLogin })
     this.save({ first_login: firstLogin }, { patch: true })
+  },
+
+  saveTwoFactor: function (twoFactor) {
+    this.set({ two_factor: twoFactor })
+    this.save({ two_factor: twoFactor }, { patch: true })
+  },
+
+  updateBanned: function (banned) {
+    this.set({ banned: banned })
+    this.save({ banned: banned }, { patch: true })
+  },
+
+  block: function (id) {
+    const header = this.superHeaders.getHeaders()
+    header.append('accept', 'application/json')
+    header.append('Content-Type', 'application/json')
+    const url = '/api/users/' + this.id + '/ignores'
+    fetch(url, {
+      method: 'POST',
+      headers: header,
+      body: JSON.stringify({
+        ignored_id: id
+      })
+    })
+  },
+  unblock: function (id) {
+    const header = this.superHeaders.getHeaders()
+    header.append('accept', 'application/json')
+    header.append('Content-Type', 'application/json')
+    const url = '/api/users/' + this.id + '/ignores/' + id
+    fetch(url, {
+      method: 'DELETE',
+      headers: header
+    })
   }
 })

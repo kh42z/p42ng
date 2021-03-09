@@ -5,7 +5,7 @@ export const SuperWrapper = Backbone.Collection.extend({
   initialize: function () {
     this.on('all', function (e) {
     })
-	//	this.fetch();
+  //  this.fetch();
   },
   model: Wrapper,
   urlRoot: '',
@@ -20,12 +20,11 @@ export const SuperWrapper = Backbone.Collection.extend({
 // ?????
 
 export const SuperWrapper = Backbone.Model.extend({
-  default:
-	{
-	  users: undefined,
-	  guilds: undefined,
-	  ladders: undefined,
-	  userLogged: undefined,
-	  channels: undefined
-	}
+  defaults: {
+    users: undefined,
+    guilds: undefined,
+    ladders: undefined,
+    userLogged: undefined,
+    channels: undefined
+  }
 })

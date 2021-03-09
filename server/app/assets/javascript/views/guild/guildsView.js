@@ -1,5 +1,4 @@
 export const GuildsView = Backbone.View.extend({
-  el: $('#app'),
   initialize: function () {
     this.guilds = this.model.get('guilds').get('obj')
     this.users = this.model.get('users').get('obj')
@@ -9,6 +8,7 @@ export const GuildsView = Backbone.View.extend({
     }, this)
   },
 
+  el: $('#app'),
   preload: function () {
     this.listenTo(this.users, 'sync', function () {
       this.render()
@@ -22,7 +22,7 @@ export const GuildsView = Backbone.View.extend({
       const guilds = JSON.parse(JSON.stringify(this.guilds.get(i)))
 
       guilds.owner_nickname = this.users.get(guilds.owner_id).get('nickname')
-      guilds.officers = Array()
+      guilds.officers = []
 
       for (let j = 0; j < this.guilds.get(i).get('officer_ids').length; j++) {
         guilds.officers.push({
@@ -37,8 +37,8 @@ export const GuildsView = Backbone.View.extend({
 
     this.templateGuilds = Handlebars.templates.guilds
     const templateData = this.templateGuilds(context)
-    //	let guild1 = this.collection.get(0)
-    //	console.log(guild1.name)
+    //  let guild1 = this.collection.get(0)
+    //  console.log(guild1.name)
     this.$el.html(templateData)
     return this
   }

@@ -8,9 +8,11 @@ import { TournamentsView } from '../views/tournaments/tournamentsView.js'
 import { OauthView } from '../views/oauth/oauthView.js'
 import { GuildsView } from '../views/guild/guildsView.js'
 import { FirstConnexionView } from '../views/oauth/firstConnexionView.js'
+import { TwoFactorView } from '../views/oauth/twoFactorView.js'
 import { SearchView } from '../views/search/searchView.js'
 import { ChatView } from '../views/chatView'
 import { ManageGuildView } from '../views/guild/manageGuildView.js'
+import { AdminView } from '../views/admin/adminView.js'
 
 // models
 import { User } from '../models/user_model'
@@ -51,6 +53,7 @@ export const Router = Backbone.Router.extend({
 
   routes:
   {
+    admin: 'admin_view',
     user_page: 'users_view', // Achanger nom de route et tout
     home: 'home_view',
     pong: 'pong_view',
@@ -67,12 +70,22 @@ export const Router = Backbone.Router.extend({
     connexion: 'connexion',
     exit: 'exit',
     firstConnexion: 'firstConnexion_view',
+    two_factor_connexion: 'two_factor_connexion',
+    twoFactor: 'twoFactor_view',
     'search(/:item)': 'search_view',
     'search(/:item)/': 'search_view',
     '': 'oauth_view'
   },
 
   connexion: function (url) {
+    // Two-Factor redirection
+    this.urlParams = new URLSearchParams(window.location.search)
+    if (this.urlParams.get('two_factor')) {
+      window.localStorage.setItem('user_id', this.urlParams.get('user_id'))
+      this.navigate('#twoFactor', { trigger: true })
+      return
+    }
+
     const fetchUser = async () => {
       this.oauthService.setAjaxEnvironnement()
       this.oauthService.ajaxSetup()
@@ -85,16 +98,28 @@ export const Router = Backbone.Router.extend({
     fetchUser()
   },
 
+  two_factor_connexion: function (url) {
+    const fetchUser = async () => {
+      this.oauthService.ajaxSetup()
+      await this.userLogged.fetchUser(window.localStorage.getItem('user_id'))
+      this.navigate('#home', { trigger: true })
+    }
+    fetchUser()
+  },
+
   accessPage: function (url) {
+    console.log('accessPageview')
     if (window.localStorage.getItem('access-token') === null) {
+      console.log('oauth view')
       this.oauth_view()
       return 1
-    } else if (performance.navigation.type === 1 || performance.navigation.type === 2) {
+    } else if (performance.navigation.type >= 0 && performance.navigation.type <= 2) {
       const fetchUser = async () => {
+        console.log('fetch user')
         this.oauthService = new OauthService()
         this.oauthService.ajaxSetup()
         await this.userLogged.fetchUser(window.localStorage.getItem('user_id'))
-        if (url !== 'firstConnexion') { this.headerView.render() }
+        if (url !== 'firstConnexion' || url !== 'twoFactor') { this.headerView.render() }
       }
       fetchUser()
     }
@@ -105,11 +130,19 @@ export const Router = Backbone.Router.extend({
     const firstConnexionView = new FirstConnexionView({ model: this.userLogged })
   },
 
+  twoFactor_view: function () {
+    const twoFactorView = new TwoFactorView()
+  },
+
   exit: function () {
     const fetchAPI = new FetchAPI()
     fetchAPI.exit()
     window.localStorage.clear()
     this.oauth_view()
+  },
+
+  admin_view: function () {
+    const adminView = new AdminView({ model: this.loadWrapper() })
   },
 
   oauth_view: function (url) {
@@ -136,6 +169,7 @@ export const Router = Backbone.Router.extend({
 
   profile_view: function (id, page) {
     if (this.accessPage()) { return }
+    console.log('profile view')
     this.profileController.loadView(id, page, this.loadWrapper())
   },
 

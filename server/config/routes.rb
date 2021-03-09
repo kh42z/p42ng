@@ -5,15 +5,16 @@ Rails.application.routes.draw do
   namespace :api do
     resources :guilds do
       member do
-        post 'members'
-        delete 'members'
-        post 'officers'
-        delete 'officers'
+        post 'members/:tid', to: 'guilds#members'
+        delete 'members/:tid', to: 'guilds#members'
+        post 'officers/:tid', to: 'guilds#officers'
+        delete 'officers/:tid', to: 'guilds#officers'
       end
     end
     resources :wars
     resources :ladders
     resources :games
+    resources :achievements
     resources :chats do
       member do
         post 'participants', to: 'chats#create_participant'
@@ -21,6 +22,8 @@ Rails.application.routes.draw do
         post 'mutes'
         post 'bans'
         post 'invites'
+        post 'admins/:tid', to: 'chats#admins'
+        delete 'admins/:tid', to: 'chats#admins'
       end
     end
     resources :users do

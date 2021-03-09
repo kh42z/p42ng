@@ -36,8 +36,8 @@ RSpec.describe "Wars", type: :request do
     it 'should let an officer create a war' do
       user_1 = create(:user)
       user_1_access = user_1.create_new_auth_token
-      post members_api_guild_url(Guild.first), headers: access_token, params: { member_ids: [user_1.id] }
-      post officers_api_guild_url(Guild.first), headers: access_token, params: { officer_ids: [user_1.id] }
+      post "/api/guilds/#{Guild.first.id}/members/#{user_1.id}", headers: access_token
+      post "/api/guilds/#{Guild.first.id}/officers/#{user_1.id}", headers: access_token
       post api_wars_url, headers: user_1_access, params: valid_attributes
       expect(response.status).to eq 201
       expect(War.count).to eq(1)
@@ -45,7 +45,7 @@ RSpec.describe "Wars", type: :request do
     it 'should not let a member create a war', test:true do
       user_1 = create(:user)
       user_1_access = user_1.create_new_auth_token
-      post members_api_guild_url(Guild.first), headers: access_token, params: { member_ids: [user_1.id] }
+      post "/api/guilds/#{Guild.first.id}/members/#{user_1.id}", headers: access_token
       post api_wars_url, headers: user_1_access, params: valid_attributes
       expect(response.status).to eq 401
       expect(response.message).to eq 'Unauthorized'
@@ -58,13 +58,13 @@ RSpec.describe "Wars", type: :request do
       expect(War.count).to eq(0)
     end
   end
-  describe "#update" do
-    it 'should update a war' do
-      post api_wars_url, headers: access_token, params: valid_attributes
-      put api_war_url(War.first.id), headers: access_token, params: { war_end: DateTime.new(2022, 03, 10, 11, 11, 0), max_unanswered: 12 }
-      expect(response.status).to eq 200
-      expect(War.first.war_end).to eq(DateTime.new(2022, 03, 10, 11, 11,0))
-      expect(War.first.max_unanswered).to eq(12)
-    end
-  end
+  # describe "#update" do
+  #   it 'should update a war' do
+  #     post api_wars_url, headers: access_token, params: valid_attributes
+  #     put api_war_url(War.first.id), headers: access_token, params: { war_end: DateTime.new(2022, 03, 10, 11, 11, 0), max_unanswered: 12 }
+  #     expect(response.status).to eq 200
+  #     expect(War.first.war_end).to eq(DateTime.new(2022, 03, 10, 11, 11,0))
+  #     expect(War.first.max_unanswered).to eq(12)
+  #   end
+  # end
 end

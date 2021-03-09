@@ -5,6 +5,8 @@
 @import url(layout/_topnav.css);
 @import url(layout/_oauth.css);
 @import url(layout/_firstConnexion.css);
+@import url(layout/_twoFactor.css);
+@import url(layout/_admin.css);
 @import url(layout/chat/_chat.css);
 @import url(layout/chat/_params.css);
 
@@ -14,7 +16,8 @@
 @import url(module/_textInput.css);
 
 @import url(state/_topnav.css);
-@import url(state/_chat.css);
+@import url(state/chat/_chat.css);
+@import url(state/chat/_params.css);
 @import url(state/_base.css);
 @import url(state/_input.css);
 

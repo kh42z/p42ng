@@ -12,8 +12,8 @@
     box-shadow: inset 0 0 0 1000px rgba(27, 37, 52, 0.4);
     /* position: fixed; */
 
-    line-height: 82px;
-    height: 82px;
+    line-height: var(--header-size);
+    height: var(--header-size);
     width: 100%;
 
 
@@ -55,6 +55,10 @@
 }
 
 .topnav .guilds {
+    text-align: left;
+}
+
+.topnav .admin {
     text-align: left;
 }
 

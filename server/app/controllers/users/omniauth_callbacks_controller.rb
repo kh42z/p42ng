@@ -47,17 +47,17 @@ module Users
       }, status: 403
     end
 
-    def two_factor?
-      return unless @resource.two_factor?
-
+    def handle_two_factor
       send_code(@resource)
-      render json: {
-        errors: [I18n.t('twoFactorRequired')]
-      }, status: 401
+      params = { two_factor: true, user_id: @resource.id }
+      redirect_to DeviseTokenAuth::Url.generate(auth_origin_url, params.as_json)
     end
 
     def omniauth_success
       get_resource_from_auth_hash
+
+      return handle_two_factor if @resource.two_factor?
+
       set_token_on_resource
 
       @resource.skip_confirmation! if confirmable_enabled?
@@ -65,7 +65,7 @@ module Users
       sign_in(:user, @resource, store: false, bypass: false)
       @resource.save!
       @resource.reload
-      return if banned? || two_factor?
+      return if banned?
 
       create_auth_params
 

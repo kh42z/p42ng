@@ -7,19 +7,20 @@ class User < ApplicationRecord
   include DeviseTokenAuth::Concerns::User
 
   belongs_to :ladder, optional: true
-  belongs_to :guild, optional: true
 
+  belongs_to :guild, optional: true
   has_one :guild_officer, dependent: :destroy
+
   has_one_attached :avatar
 
   has_many :chats, foreign_key: 'owner_id', dependent: :destroy
   has_many :chat_participant, dependent: :destroy
   has_many :chat_admin, dependent: :destroy
-  has_many :user_achievements
-  has_many :ignores, foreign_key: 'user_id', dependent: :destroy, class_name: 'UserIgnore'
 
-  # has_many :friendships, ->(user) { where("friend_a_id = ? or friend_b_id = ?", user.id, user.id) }
-  # has_many :friends, through: :friendships
+  has_many :user_achievements, dependent: :destroy
+  has_many :achievements, through: :user_achievements
+
+  has_many :ignores, foreign_key: 'user_id', dependent: :destroy, class_name: 'UserIgnore'
 
   has_many :friendships_as_friend_a,
            foreign_key: :friend_a_id,
@@ -29,7 +30,6 @@ class User < ApplicationRecord
            class_name: :Friendship
   has_many :friend_as, through: :friendships_as_friend_b
   has_many :friend_bs, through: :friendships_as_friend_a
-
   def friendships
     friendships_as_friend_a + friendships_as_friend_b
   end

@@ -1,7 +1,7 @@
 .chat {
     background: url('../../../images/background.jpg');
     width: 100vw;
-    height: calc(100vh - 82px);
+    height: calc(100vh - var(--header-size));
 
     background-position: 50% 0;
     background-position: 0 0;
@@ -155,6 +155,11 @@
 
     padding-right: 16px;
     padding-left: 32px;
+
+}
+
+.chat .blockViewProfile {
+    cursor: pointer;
 }
 
 .chat .discussions .discussions-container .clickable-discussions .image-container
@@ -296,11 +301,28 @@
     margin-left: 32px;
 }
 
+.chat .center .header .left-header .info 
+.online {
+    background: var(--green-color);
+}
+
+.chat .center .header .left-header .info 
+.offline {
+    background: #EB5757;
+}
+
+.chat .center .header .left-header .info 
+.ingame {
+    background: var(--primary-color);
+}
+
 .chat .center .header .right-header
 .group_add-container {
     width: 33px;
     height: 33px;
     margin-right: 32px;
+
+    cursor: pointer;
 }
 
 .chat .center .header .left-header .info
@@ -356,6 +378,7 @@
     flex-direction: column-reverse;
     
     width: 100%;
+    height: 100%;
 
     margin-bottom: 152px;
 
@@ -447,6 +470,7 @@
     font-size: 18px;
 
     padding-left: 64px;
+    margin-bottom: 8px;
 }
 
 .chat
@@ -489,7 +513,7 @@
 
 .chat .right-side .online
 .pastille {
-    background: #6FCF97;
+    background: var(--green-color);
 }
 
 .chat .right-side .offline

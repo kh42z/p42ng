@@ -10,7 +10,7 @@ module Api
                   only: %i[update upload_avatar create_ignore destroy_ignore create_friendship destroy_friendship]
 
     UserReducer = Rack::Reducer.new(
-      User.all,
+      User.all.order(id: :asc),
       ->(ladder_id:) { where(ladder_id: ladder_id) },
       ->(status:) { where(status: status) },
       ->(guild_id:) { where(guild_id: guild_id) }
@@ -48,7 +48,8 @@ module Api
 
     def create_ignore
       p = ignore_params
-      json_response(UserIgnore.create!(user: @user, ignored_id: p[:ignored_id]))
+      UserIgnore.create!(user: @user, ignored_id: p[:ignored_id])
+      json_response({ ignored_id: p[:ignored_id].to_i })
     end
 
     def destroy_ignore
@@ -60,7 +61,7 @@ module Api
     def create_friendship
       p = friendship_params
       Friendship.create!(friend_a: @user, friend_b_id: p[:friend_id])
-      json_response({ friend_id: p[:friend_id] })
+      json_response({ friend_id: p[:friend_id].to_i })
     end
 
     def destroy_friendship
@@ -88,7 +89,7 @@ module Api
     end
 
     def user_params
-      params.require(:user).permit(:two_factor, :nickname, :first_login, :banned, :guild_id)
+      params.require(:user).permit(:two_factor, :nickname, :first_login, :banned)
     end
 
     def set_user

@@ -18,10 +18,8 @@ ActiveRecord::Schema.define(version: 2021_03_03_084016) do
   create_table "achievements", force: :cascade do |t|
     t.string "name"
     t.string "description"
-    t.bigint "user_achievement_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_achievement_id"], name: "index_achievements_on_user_achievement_id"
   end
 
   create_table "active_storage_attachments", force: :cascade do |t|
@@ -124,8 +122,10 @@ ActiveRecord::Schema.define(version: 2021_03_03_084016) do
 
   create_table "user_achievements", force: :cascade do |t|
     t.bigint "user_id"
+    t.bigint "achievement_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["achievement_id"], name: "index_user_achievements_on_achievement_id"
     t.index ["user_id"], name: "index_user_achievements_on_user_id"
   end
 
@@ -219,7 +219,6 @@ ActiveRecord::Schema.define(version: 2021_03_03_084016) do
     t.index ["guild_id"], name: "index_wars_on_guild_id"
   end
 
-  add_foreign_key "achievements", "user_achievements"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "chat_admins", "chats"
   add_foreign_key "chat_admins", "users"
@@ -234,6 +233,7 @@ ActiveRecord::Schema.define(version: 2021_03_03_084016) do
   add_foreign_key "guild_officers", "guilds"
   add_foreign_key "guild_officers", "users"
   add_foreign_key "guilds", "users", column: "owner_id"
+  add_foreign_key "user_achievements", "achievements"
   add_foreign_key "user_achievements", "users"
   add_foreign_key "user_ignores", "users"
   add_foreign_key "user_ignores", "users", column: "ignored_id"

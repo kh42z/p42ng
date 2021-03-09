@@ -4,6 +4,24 @@ info:
   title: Pong API
   description: Pong API
 paths:
+  "/api/achievements":
+    get:
+      summary: Retrieves all achievements
+      tags:
+        - Achievements
+      parameters:
+        - in: query
+          name: user_id
+          schema:
+            type: integer
+          description: filter by user_id
+      responses:
+        '200':
+          description: All achievements
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/arrayOfAchievements"
   "/api/chats/":
     get:
       summary: Retrieves chats
@@ -22,30 +40,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/chat_response'
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '500':
-          $ref: '#/components/responses/500'
     post:
       summary: Creates a chat
       tags:
         - Chats
-      parameters: [ ]
-      responses:
-        '201':
-          $ref: '#/components/responses/201'
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '500':
-          $ref: '#/components/responses/500'
       requestBody:
         content:
           application/json:
@@ -61,6 +59,9 @@ paths:
                   type: string
                 participant_ids:
                   $ref: '#/components/schemas/integer_list'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
   "/api/chats/{id}":
     parameters:
       - name: id
@@ -68,6 +69,7 @@ paths:
         required: true
         schema:
           type: integer
+        description: Chat ID
     get:
       summary: Retrieves a chat
       tags:
@@ -79,34 +81,11 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/chat_response"
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '500':
-          $ref: '#/components/responses/500'
     patch:
       summary: Modifies a chat
       description: Allows an chat_admin to modify chatroom settings
       tags:
         - Chats
-      responses:
-        '200':
-          description: chat modified
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/chat_response"
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '500':
-          $ref: '#/components/responses/500'
       requestBody:
         content:
           application/json:
@@ -121,6 +100,9 @@ paths:
                   type: string
                 admin_ids:
                   $ref: '#/components/schemas/integer_list'
+      responses:
+        '200':
+          description: chat modified
     delete:
       summary: Deletes a chat
       tags:
@@ -128,15 +110,6 @@ paths:
       responses:
         '204':
           description: chat deleted
-          content: { }
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '500':
-          $ref: '#/components/responses/500'
   "/api/chats/{id}/mutes":
     post:
       summary: Mutes an user
@@ -158,14 +131,7 @@ paths:
       responses:
         '204':
           description: user muted
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '500':
-          $ref: '#/components/responses/500'
+
   "/api/chats/{id}/bans":
     post:
       summary: Bans an user
@@ -187,27 +153,21 @@ paths:
       responses:
         '204':
           description: user banned
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '500':
-          $ref: '#/components/responses/500'
+
   "/api/chats/{id}/participants":
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Chat ID
     post:
       summary: Joins a chatroom
       description: Allows current_user to joins a chatroom
       tags:
         - Chats
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-          description: Chat ID
         - in: query
           name: password
           schema:
@@ -216,35 +176,45 @@ paths:
       responses:
         '200':
           description: chat joined
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  participant_ids:
-                    $ref: '#/components/schemas/integer_list'
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '500':
-          $ref: '#/components/responses/500'
     delete:
       summary: Leaves a chatroom
       description: Allows current_user to leaves a chatroom
       tags:
         - Chats
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
       responses:
         '204':
           description: chat left
+
+  "/api/chats/{id}/admins/{tid}":
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Chat ID
+      - name: tid
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Target ID
+    post:
+      summary: Set participant as admin
+      description: Allows current_user to set participant as admin
+      tags:
+        - Chats
+      responses:
+        '200':
+          description: participant set as admin
+    delete:
+      summary: Demote admin
+      description: Allows current_user to ldemote admin
+      tags:
+        - Chats
+      responses:
+        '204':
+          description: admin demoted
 
   "/api/chats/{id}/invites":
     post:
@@ -270,13 +240,6 @@ paths:
       responses:
         '200':
           description: participants added
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  participant_ids:
-                    $ref: '#/components/schemas/integer_list'
 
   "/api/games":
     get:
@@ -302,14 +265,6 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/arrayOfGames"
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '500':
-          $ref: '#/components/responses/500'
     post:
       summary: creates a game
       description: Either queue for a ladder game or duel someone
@@ -324,7 +279,6 @@ paths:
       responses:
         '204':
           description: invitations sent
-
   "/api/games/{id}":
     delete:
       summary: deletes a game
@@ -352,19 +306,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/guild_response"
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '500':
-          $ref: '#/components/responses/500'
     post:
       summary: Creates a guild
       tags:
         - Guilds
-      parameters: [ ]
       requestBody:
         content:
           application/json:
@@ -377,9 +322,11 @@ paths:
                   type: string
       responses:
         '201':
-          $ref: '#/components/responses/201'
-        '422':
-          $ref: '#/components/responses/422'
+          description: guilds created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/guild_response"
 
   "/api/guilds/{id}":
     parameters:
@@ -388,6 +335,7 @@ paths:
         required: true
         schema:
           type: integer
+        description: Guild ID
     get:
       summary: Retrieves a guild
       tags:
@@ -399,14 +347,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/guild_response"
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '500':
-          $ref: '#/components/responses/500'
     patch:
       summary: Modifies a guild
       tags:
@@ -421,120 +361,70 @@ paths:
                   type: string
                 anagram:
                   type: string
-                officer_ids:
-                  $ref: '#/components/schemas/integer_list'
       responses:
         '200':
           description: guild modified
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/guild_response"
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '500':
-          $ref: '#/components/responses/500'
 
-  "/api/guilds/{id}/officers":
+  "/api/guilds/{id}/officers/{tid}":
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Guild ID
+      - name: tid
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Target ID
     post:
-      summary: Adds guild officers
-      description: Allows current_user to add guild officers
+      summary: Adds a guild officer
+      description: Allows current_user to add a guild officer
       tags:
         - Guilds
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-          description: Guild ID
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                officer_ids:
-                  $ref: '#/components/schemas/integer_list'
       responses:
         '200':
-          description: members added
-
-  "/api/guilds/{id}/officers/{uid}":
+          description: member added
     delete:
       summary: Removes a guild officer
       description: Allows current_user to remove a guild officer
       tags:
         - Guilds
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-          description: Guild ID
-        - name: uid
-          in: path
-          required: true
-          schema:
-            type: integer
-          description: User ID
       responses:
         '204':
           description: officer removed
-
-  "/api/guilds/{id}/members":
+  "/api/guilds/{id}/members{tid}":
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Guild ID
+      - name: tid
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Target ID
     post:
-      summary: Adds guild members
-      description: Allows current_user to add guild members
+      summary: Adds a guild member
+      description: Allows current_user to add a guild member
       tags:
         - Guilds
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-          description: Guild ID
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                member_ids:
-                  $ref: '#/components/schemas/integer_list'
       responses:
         '200':
-          description: members added
-
-  "/api/guilds/{id}/members/{uid}":
+          description: member added
     delete:
       summary: Removes a guild member
       description: Allows current_user to remove a guild member
       tags:
         - Guilds
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-          description: Guild ID
-        - name: uid
-          in: path
-          required: true
-          schema:
-            type: integer
-          description: User ID
       responses:
         '204':
           description: member removed
-
   "/api/wars":
     get:
       summary: Retrieves wars
@@ -585,15 +475,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/guild_response"
-
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '500':
-          $ref: '#/components/responses/500'
   "/api/ladders/{id}":
     get:
       summary: Retrieves a ladder
@@ -612,14 +493,6 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/ladder"
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '500':
-          $ref: '#/components/responses/500'
   "/api/ladders":
     get:
       summary: Retrieves all ladders
@@ -632,14 +505,6 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/ladder"
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '500':
-          $ref: '#/components/responses/500'
   "/api/users":
     get:
       summary: Retrieves users
@@ -669,14 +534,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/user_response"
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '500':
-          $ref: '#/components/responses/500'
   "/api/users/{id}":
     parameters:
       - name: id
@@ -698,14 +555,6 @@ paths:
               schema:
                 oneOf:
                   - "$ref": "#/components/schemas/user_response"
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '500':
-          $ref: '#/components/responses/500'
       requestBody:
         content:
           application/json:
@@ -739,14 +588,6 @@ paths:
               schema:
                 oneOf:
                   - "$ref": "#/components/schemas/user_response"
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '500':
-          $ref: '#/components/responses/500'
   "/api/users/{id}/friends":
     post:
       summary: Creates a friendship
@@ -771,6 +612,7 @@ paths:
             application/json:
               schema:
                 $ref : '#/components/schemas/friend'
+
   "/api/users/{id}/friends/{friend_id}":
     delete:
       summary: Removes a friendship
@@ -869,6 +711,7 @@ servers:
     variables:
       defaultHost:
         default: localhost
+  - url: https://p42ng.herokuapp.com
 security:
   - client: []
     access_token: []
@@ -900,6 +743,19 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/game_response'
+    arrayOfAchievements:
+      type: array
+      items:
+        $ref: '#/components/schemas/achievement'
+    achievement:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        desc:
+          type: string
     game_response:
       type: object
       properties:
@@ -957,8 +813,6 @@ components:
           type: integer
         uid:
           type: string
-        chat_ids:
-          $ref: '#/components/schemas/integer_list'
         friends:
           $ref: '#/components/schemas/arrayOfFriends'
         ignores:
@@ -969,12 +823,7 @@ components:
           properties:
             id:
               type: integer
-            score:
-              type: integer
-            war_records:
-              $ref: '#/components/schemas/integer_list'
         - $ref: "#/components/schemas/guild"
-
     user_response:
       allOf:
         - type: object
@@ -1001,7 +850,6 @@ components:
           nullable: true
       required:
         - name
-
     guild:
       type: object
       properties:
@@ -1011,9 +859,10 @@ components:
           type: string
         owner_id:
           type: integer
+        score:
+          type: integer
         officer_ids:
           $ref: '#/components/schemas/integer_list'
-
     ban:
       type: object
       properties:
@@ -1069,7 +918,6 @@ components:
           $ref: '#/components/schemas/war_terms_list'
         war_time_id:
           type: integer
-
     war_terms_list:
       type: array
       items:
@@ -1085,58 +933,14 @@ components:
             type: boolean
           agreed:
             type: boolean
-
     integer_list:
       type: array
       items:
         type: integer
-
-    errors_object:
-      type: object
-      properties:
-        errors:
-          $ref: '#/components/schemas/errors_map'
-    errors_map:
-      type: object
-      additionalProperties:
-        type: array
-        items:
-          type: string
-
   responses:
     '201':
       description: Created
       content: { }
-    '400':
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/errors_map'
-    '401':
-      description: The user is not authenticated
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/errors_map'
-    '403':
-      description: The user does not have permissions to access this endpoint
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/errors_map'
-    '404':
-      description: Data not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/errors_map'
     '422':
       description: invalid request
       content: { }
-    '500':
-      description: Internal server error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/errors_map'

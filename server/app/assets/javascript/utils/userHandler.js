@@ -2,8 +2,9 @@ import { User } from '../models/user_model.js'
 import { Guild } from '../models/guild_model.js'
 
 export const UserHandler = Backbone.Model.extend({
-  initialize: function (user_id) {
-    this.userModel = new User('/api/users/' + user_id)
+  defaults: {},
+  initialize: function (userId) {
+    this.userModel = new User('/api/users/' + userId)
     this.guildModel = undefined
     this.listenTo(this.userModel, 'sync', function () {
       this.doGuild()
@@ -16,10 +17,10 @@ export const UserHandler = Backbone.Model.extend({
       console.log('bonjour')
     }
     this.listenTo(this.guildModel, 'sync', function () {
- 	console.log(this.guildModel.get('name') + ' here2')
+      console.log(this.guildModel.get('name') + ' here2')
     }, this)
     console.log(this.userModel.get('nickname') + ' here')
-    //		console.log(this.guildModel.get("name"))
+    //  console.log(this.guildModel.get("name"))
   },
 
   url: function () {

@@ -34,6 +34,7 @@ export const FirstConnexionView = Backbone.View.extend({
           this.model.set({ image_url: response.image_url })
         }
         this.model.saveFirstLogin(false)
+        this.model.saveTwoFactor(document.getElementById('2FA').checked)
         Backbone.history.navigate('#home', true)
       } catch (error) {
         if (error.status !== 200) {

@@ -58,14 +58,14 @@ export const Guild = Backbone.Model.extend({
 // type: 'post',
 // contentType: 'application/json',
 // data: JSON.stringify({
-// 		// Change `*****` and `#####` with your own credentials.
-// 		'appId': '*****',
-// 		'appKey': '#####',
-// 		'query': 'Starbucks OR frapp*',
-// 		'fields': [
-// 				'item_name',
-// 				'brand_name',
-// 				'nf_calories',
-// 				'nf_serving_weight_grams']
+//  // Change `*****` and `#####` with your own credentials.
+//  'appId': '*****',
+//  'appKey': '#####',
+//  'query': 'Starbucks OR frapp*',
+//  'fields': [
+//  'item_name',
+//  'brand_name',
+//  'nf_calories',
+//  'nf_serving_weight_grams']
 // }),
 // reset: true,
