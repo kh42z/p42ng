@@ -77,7 +77,7 @@ module Api
     end
 
     def destroy
-      return render_not_allowed if current_user != @chat.owner
+      return render_not_allowed unless current_user == @chat.owner || current_user.admin == true
 
       @chat.destroy
       head :no_content

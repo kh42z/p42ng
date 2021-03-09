@@ -41,7 +41,6 @@ RSpec.describe "Chats", type: :request do
       expect(response).to have_http_status(200)
       expect(Chat.first.chat_participants.first).to be_instance_of(ChatParticipant)
       expect(Chat.first.chat_admins.first).to be_instance_of(ChatAdmin)
-      # TODO: Should be tested
       #expect(Chat.first.chat_bans.first).to be_instance_of(ChatBan)
       #expect(Chat.first.chat_timeouts.first).to be_instance_of(ChatTimeout)
     end
@@ -169,7 +168,7 @@ RSpec.describe "Chats", type: :request do
     end
   end
 
-  describe "#destroy_participant" do
+  describe "#destroy_participant", test:true do
     let(:user) { create(:user) }
     let(:chat) { create(:chat) }
     let(:access) { user.create_new_auth_token }
@@ -193,13 +192,14 @@ RSpec.describe "Chats", type: :request do
       expect(response.status).to eq 204
       expect(Chat.first).to eq nil
     end
-    it "should destroy an admin" do
+    it "should destroy admin/participant and chat" do
       post api_chats_url, headers: access, params: { name: 'Hop' }
       delete participants_api_chat_url(Chat.first.id), headers: access
       expect(ChatParticipant.count).to eq(0)
       expect(ChatAdmin.count).to eq(0)
+      expect(Chat.first).to eq nil
     end
-    it "should destroy last ChatAdmin and set another participant admin/owner" do
+    it "should destroy last ChatAdmin and set another participant admin/owner", test:true do
       post api_chats_url, headers: access_token, params: { name: 'Hop', participant_ids: [user.id] }
       delete participants_api_chat_url(Chat.first.id), headers: access_token
       expect(ChatParticipant.count).to eq(1)
@@ -252,12 +252,12 @@ RSpec.describe "Chats", type: :request do
       expect(Chat.first.chat_participants.count).to eq 3
     end
   end
-  describe '#admins' do
+  describe '#admins', test:true do
     it 'should promote a user as admin' do
       user = create(:user)
       post api_chats_url, headers: access_token, params: { name: 'Hop' }
       post participants_api_chat_url(Chat.first.id), headers: access_token
-      post admins_api_chat_path(Chat.first.id, tid: user.id), headers: access_token
+      post "/api/chats/#{Chat.first.id}/admins/#{user.id}", headers: access_token
       expect(response.status).to eq 200
       expect(ChatAdmin.count).to eq 2
       expect(ChatAdmin.where(user: user, chat: Chat.first)).to exist
@@ -266,8 +266,8 @@ RSpec.describe "Chats", type: :request do
       user = create(:user)
       post api_chats_url, headers: access_token, params: { name: 'Hop' }
       post participants_api_chat_url(Chat.first.id), headers: access_token
-      post admins_api_chat_path(Chat.first.id, tid: user.id), headers: access_token
-      delete admins_api_chat_path(Chat.first, tid: user.id), headers: access_token
+      post "/api/chats/#{Chat.first.id}/admins/#{user.id}", headers: access_token
+      delete "/api/chats/#{Chat.first.id}/admins/#{user.id}", headers: access_token
       expect(response.status).to eq 204
       expect(ChatAdmin.count).to eq 1
       expect(ChatAdmin.where(user: user, chat: Chat.first)).to_not exist
