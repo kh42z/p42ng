@@ -19,6 +19,7 @@ module Api
       return render_error('hasGuildAlready') unless current_user.guild_member.nil?
 
       guild = Guild.create!(guild_params_create)
+      current_user.update!(guild_id: guild.id)
       GuildMember.create!(user: current_user, guild: guild)
       json_response(guild, 201)
     end
@@ -51,12 +52,16 @@ module Api
       GuildOfficer.where(guild_id: guild.id, user_id: new_owner).destroy_all if new_owner
       new_owner ||= guild.members.pluck(:user_id).first
       guild.update!(owner_id: new_owner) if new_owner
+      User.find(new_owner).update!(guild_id: guild.id) if new_owner
       guild.destroy! unless new_owner
     end
 
     def destroy_members(guild, member)
       GuildMember.where(user_id: member, guild_id: guild.id).destroy_all
-      manage_ownership(guild) if current_user.id == member.to_i
+      return unless current_user.id == member.to_i
+
+      current_user.update!(guild_id: '')
+      manage_ownership(guild)
     end
 
     def add_officers(guild)

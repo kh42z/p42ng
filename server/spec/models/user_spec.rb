@@ -13,6 +13,7 @@ RSpec.describe User, type: :model do
   it { should validate_presence_of(:ladder_games_won) }
   it { should validate_presence_of(:ladder_games_lost) }
   it { should belong_to(:ladder) }
+  it { should belong_to(:guild) }
   it { should have_one(:guild_officer).dependent(:destroy) }
   it { should have_one(:guild_member).dependent(:destroy) }
   it { should have_many(:chat_participant).dependent(:destroy) }

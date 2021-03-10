@@ -105,6 +105,7 @@ describe "Guild", type: :request do
       it 'should destroy guild if he is the last to leave' do
         delete "/api/guilds/#{Guild.first.id}/members/#{auth.id}", headers: access_token
         expect(response.status).to eq 200
+        expect(auth.guild_id).to eq nil
         expect(Guild.first).to eq nil
       end
       it "should give ownership to first officer and demote him" do
@@ -113,12 +114,14 @@ describe "Guild", type: :request do
         delete "/api/guilds/#{Guild.first.id}/members/#{auth.id}", headers: access_token
         expect(response.status).to eq 200
         expect(Guild.first.owner).to eq user_1
+        expect(User.find(user_1.id).guild_id).to eq Guild.first.id
         expect(GuildOfficer.where(guild_id: Guild.first.id, user_id: user_1.id)[0]).to eq nil
       end
-      it "should give ownership to first member" do
+      it "should give ownership to first member", test:true do
         post "/api/guilds/#{Guild.first.id}/members/#{user_1.id}", headers: access_token
         delete "/api/guilds/#{Guild.first.id}/members/#{auth.id}", headers: access_token
         expect(response.status).to eq 200
+        expect(User.find(user_1.id).guild_id).to eq Guild.first.id
         expect(Guild.first.owner).to eq user_1
       end
     end
@@ -154,7 +157,7 @@ describe "Guild", type: :request do
       expect(Guild.first.officers.count).to eq 0
       expect(response.status).to eq 200
     end
-    it 'should not destroy an officer of another guild', test:true do
+    it 'should not destroy an officer of another guild' do
       post "/api/guilds/#{Guild.first.id}/officers/#{user_1.id}", headers: access_token
       post api_guilds_url, headers: access_token_2, params: attributes_2
       delete "/api/guilds/#{Guild.last.id}/officers/#{user_1.id}", headers: access_token_2
