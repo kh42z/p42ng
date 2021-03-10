@@ -11,7 +11,7 @@ class ChatChannel < ApplicationCable::Channel
   def received(data)
     return if Rails.cache.exist?("timeout_chat_#{@chat_id}_#{current_user.id}")
 
-    ActionCable.server.broadcast("chat_#{id}", data['message'])
+    ActionCable.server.broadcast("chat_#{@chat_id}", data['message'])
   end
 
   def unsubscribed; end
