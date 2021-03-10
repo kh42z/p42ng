@@ -109,7 +109,10 @@ module Api
     def add_participants(chat, participants)
       return unless participants
 
-      participants.each { |t| ChatParticipant.create(user_id: t, chat_id: chat.id) }
+      participants.each do |t|
+        ChatParticipant.create(user_id: t, chat_id: chat.id)
+        ActionCable.server.broadcast("user_#{t}", { action: 'chat_invitation', id: chat.id })
+      end
     end
 
     def chat_params
@@ -126,9 +129,7 @@ module Api
     end
 
     def send_forbidden?(id)
-      return true if Rails.cache.exist?("timeout_chat_#{id}_#{current_user.id}")
-
-      Rails.cache.exist?("ban_chat_#{id}_#{current_user.id}")
+      chat_ban?(id, current_user.id) || chat_timeout?(id, current_user.id)
     end
   end
 end
