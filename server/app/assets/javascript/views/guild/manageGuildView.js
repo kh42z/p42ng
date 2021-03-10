@@ -23,24 +23,27 @@ export const ManageGuildView = Backbone.View.extend({
     this.guilds = this.model.get('guilds').get('obj')
     this.users = this.model.get('users').get('obj')
     this.userId = this.model.get('userLoggedId')
+    console.log(this.model.get('userLoggedId'))
     this.router = this.model.get('router')
     this.preload()
   },
 
   preload: function () {
-    this.listenToOnce(this.guilds, 'sync', function () { this.getUsers() }, this)
+    this.listenTo(this.guilds, 'sync', function () { this.getUsers() }, this)
   },
 
   getUsers: function () {
-    this.listenToOnce(this.users, 'sync', function () { this.chooseView() }, this)
+    this.listenTo(this.users, 'sync', function () { this.chooseView() }, this)
   },
 
   chooseView: function () {
-    // console.log(this.users.get(this.userId).get('guild_id'))
+    console.log(this.userId)
+    console.log(this.users.get(this.userId).get('guild_id'))
     if (this.users.get(this.userId).get('guild_id') === undefined ||
 		this.users.get(this.userId).get('guild_id') === null) {
       this.createGuildView()
     } else {
+      console.log('ici')
       this.guild = this.guilds.get(this.users.get(this.userId).get('guild_id'))
       this.manageGuildView()
     }
@@ -65,8 +68,14 @@ export const ManageGuildView = Backbone.View.extend({
 	        const response = await guild.create(name, anagram)
           this.users.fetch() // mettre a jour juste coté front
           this.guilds.fetch()
+          /* this.users.get(this.userId).set({ guild_id: response.id })
+          this.guilds.add(response)
+          this.users.get(this.userId).save({ guild_id: response.id }, { patch: true }) */
+          // console.log(response)
+          // this.chooseView()
           this.preload()
         } catch (error) {
+          console.log('non')
           this.$el.html(Handlebars.templates.createGuild({}))
           this.renderError(error, '#errorField', Handlebars.templates.guildError)
         }
