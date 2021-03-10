@@ -8,7 +8,7 @@ class User < ApplicationRecord
 
   belongs_to :ladder, optional: true
 
-  belongs_to :guild, optional: true
+  # belongs_to :guild, optional: true
   has_one :guild_officer, dependent: :destroy
   has_one :guild_member, dependent: :destroy
 

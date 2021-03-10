@@ -173,13 +173,11 @@ ActiveRecord::Schema.define(version: 2021_03_09_142539) do
     t.integer "ladder_games_won", default: 0
     t.integer "ladder_games_lost", default: 0
     t.bigint "ladder_id"
-    t.bigint "guild_id"
     t.string "status", default: "offline"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["guild_id"], name: "index_users_on_guild_id"
     t.index ["ladder_id"], name: "index_users_on_ladder_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
@@ -248,7 +246,6 @@ ActiveRecord::Schema.define(version: 2021_03_09_142539) do
   add_foreign_key "user_achievements", "users"
   add_foreign_key "user_ignores", "users"
   add_foreign_key "user_ignores", "users", column: "ignored_id"
-  add_foreign_key "users", "guilds"
   add_foreign_key "users", "ladders"
   add_foreign_key "war_addons", "war_terms"
   add_foreign_key "war_terms", "wars"
