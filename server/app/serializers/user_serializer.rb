@@ -5,6 +5,7 @@ class UserSerializer < ActiveModel::Serializer
              :image_url,
              :status,
              :ladder_id,
+             :guild_id,
              :two_factor,
              :nickname,
              :ladder_games_won,
@@ -19,6 +20,10 @@ class UserSerializer < ActiveModel::Serializer
 
   def ignores
     ActiveModelSerializers::SerializableResource.new(object.ignores, each_serializer: IgnoreUserSerializer)
+  end
+
+  def guild_id
+    object.guild_member[:guild_id] if object.guild_member
   end
 
   def friends
