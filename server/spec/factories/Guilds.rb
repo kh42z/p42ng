@@ -1,15 +1,9 @@
 FactoryBot.define do
-  factory :guild_officer do
-    user { create(:user) }
-    guild
-    after(:create) do |guild_officer, evaluator|
-      GuildMember.create(user: guild_officer.user, guild: guild_officer.guild)
-    end
-  end
 
   factory :guild_member do
-    user { create(:user) }
-    guild { create(:guild) }
+    user
+    guild
+    rank { 'member' }
   end
 
   factory :guild do
@@ -20,9 +14,7 @@ FactoryBot.define do
         officers_count { 2 }
       end
       after(:create) do |guild, evaluator|
-        create_list(:guild_officer, evaluator.officers_count, guild: guild)
-        guild.reload
-        GuildMember.create(user_id: guild.owner_id, guild: guild)
+        create_list(:guild_member, evaluator.officers_count, guild: guild, rank: 'officer')
       end
     end
   end

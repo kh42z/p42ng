@@ -13,7 +13,8 @@ module Api
     end
 
     def create
-      unless current_user == @from.owner || GuildOfficer.where(user_id: current_user, guild_id: @from.id)[0]
+      unless current_user == @from.owner || GuildMember.where(user_id: current_user, guild_id: @from.id,
+                                                              rank: 'officer')[0]
         return render_not_allowed
       end
 
