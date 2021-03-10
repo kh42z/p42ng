@@ -8,7 +8,6 @@ class User < ApplicationRecord
 
   belongs_to :ladder, optional: true
 
-  has_one :guild_officer, dependent: :destroy
   has_one :guild_member, dependent: :destroy
 
   has_one_attached :avatar
