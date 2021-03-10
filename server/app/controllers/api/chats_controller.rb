@@ -3,7 +3,7 @@
 module Api
   class ChatsController < ApiController
     before_action :set_chat
-    skip_before_action :set_chat, only: %i[index create]
+    skip_before_action :set_chat, only: %i[index create messages]
 
     ChatReducer = Rack::Reducer.new(
       Chat.all.order(:updated_at),
@@ -42,6 +42,16 @@ module Api
       ChatAdmin.where(chat: @chat, user: current_user).destroy_all
       manage_admin if current_user == @chat.owner
       head :no_content
+    end
+
+    def messages
+      # not using set_chat to avoid select
+      id = params['id']
+
+      return render_not_allowed unless send_forbidden?(id) == false
+
+      ActionCable.server.broadcast("chat_#{id}", params['content'])
+      json_response(content: params['content'])
     end
 
     def mutes
@@ -113,6 +123,12 @@ module Api
 
     def set_chat
       @chat = Chat.find(params[:id])
+    end
+
+    def send_forbidden?(id)
+      return true if Rails.cache.exist?("timeout_chat_#{id}_#{current_user.id}")
+
+      Rails.cache.exist?("ban_chat_#{id}_#{current_user.id}")
     end
   end
 end

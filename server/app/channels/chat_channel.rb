@@ -9,7 +9,7 @@ class ChatChannel < ApplicationCable::Channel
   end
 
   def received(data)
-    return unless Rails.cache.exist?("timeout_chat_#{@chat_id}_#{current_user.id}")
+    return if Rails.cache.exist?("timeout_chat_#{@chat_id}_#{current_user.id}")
 
     broadcast_to("chat_#{@chat_id}", data['message'])
   end

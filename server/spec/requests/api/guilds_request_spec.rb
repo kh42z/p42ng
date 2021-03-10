@@ -24,6 +24,11 @@ describe "Guild", type: :request do
       expect(json["id"]).to eq guild.id
       expect(response.status).to eq 200
     end
+    it 'should return user with guild_id', test:true do
+      post api_guilds_url, headers: access_token, params: attributes
+      get api_user_url(auth), headers: access_token
+      expect(json["guild_id"]).to eq Guild.first.id
+    end
   end
 
   describe "#create" do
@@ -154,7 +159,7 @@ describe "Guild", type: :request do
       expect(Guild.first.officers.count).to eq 0
       expect(response.status).to eq 200
     end
-    it 'should not destroy an officer of another guild', test:true do
+    it 'should not destroy an officer of another guild' do
       post "/api/guilds/#{Guild.first.id}/officers/#{user_1.id}", headers: access_token
       post api_guilds_url, headers: access_token_2, params: attributes_2
       delete "/api/guilds/#{Guild.last.id}/officers/#{user_1.id}", headers: access_token_2
