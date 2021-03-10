@@ -97,19 +97,11 @@ ActiveRecord::Schema.define(version: 2021_03_09_142539) do
   create_table "guild_members", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "guild_id"
+    t.integer "rank", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["guild_id"], name: "index_guild_members_on_guild_id"
     t.index ["user_id"], name: "index_guild_members_on_user_id"
-  end
-
-  create_table "guild_officers", force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "guild_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["guild_id"], name: "index_guild_officers_on_guild_id"
-    t.index ["user_id"], name: "index_guild_officers_on_user_id"
   end
 
   create_table "guilds", force: :cascade do |t|
@@ -239,8 +231,6 @@ ActiveRecord::Schema.define(version: 2021_03_09_142539) do
   add_foreign_key "games", "users", column: "winner_id"
   add_foreign_key "guild_members", "guilds"
   add_foreign_key "guild_members", "users"
-  add_foreign_key "guild_officers", "guilds"
-  add_foreign_key "guild_officers", "users"
   add_foreign_key "guilds", "users", column: "owner_id"
   add_foreign_key "user_achievements", "achievements"
   add_foreign_key "user_achievements", "users"
