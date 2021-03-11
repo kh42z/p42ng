@@ -14,7 +14,6 @@ class UserSerializer < ActiveModel::Serializer
              :admin,
              :banned,
              :first_login,
-             :chat_ids,
              :ignores,
              :friends
 

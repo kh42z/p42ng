@@ -16,11 +16,11 @@ Rails.application.routes.draw do
     resources :games
     resources :achievements
     resources :chats do
+      resources :messages, only: [:index, :create]
       member do
         post 'participants', to: 'chats#create_participant'
         delete 'participants', to: 'chats#destroy_participant'
         post 'mutes'
-        post 'messages'
         post 'bans'
         post 'invites'
         post 'admins/:tid', to: 'chats#create_admins'
