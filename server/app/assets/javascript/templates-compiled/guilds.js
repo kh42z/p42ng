@@ -57,7 +57,7 @@ templates['guilds'] = template({"1":function(container,depth0,helpers,partials,d
         return undefined
     };
 
-  return "<div class=\"content\">\n"
+  return "<div>\n"
     + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"row") : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":2,"column":4},"end":{"line":18,"column":13}}})) != null ? stack1 : "")
     + "</div>\n";
 },"useData":true});

@@ -2,5 +2,25 @@
 	position: relative;
 }
 
-.subTopNav {
+.subNavBar {
+	list-style-type: none;
+	padding-top: 25px;
+	margin: 0px;
+	width: 100%;
+	text-align: center;
+}
+
+.subNavBar li {
+	font-family: Quantico-regular;
+	font-size: 30px;
+	display: inline-block;
+}
+
+.subNavBar .subNavBarEl {
+	border: 15px solid transparent;
+	padding: 15px;
+}
+
+.subNavBar .subNavBarEl:hover {
+	text-decoration: underline;
 }

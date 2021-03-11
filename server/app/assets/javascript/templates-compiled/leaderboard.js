@@ -27,7 +27,7 @@ templates['leaderboard'] = template({"1":function(container,depth0,helpers,parti
         return undefined
     };
 
-  return "<div class=\"content\">\n	<div class=title> Leaderboard : </div>\n"
+  return "<div>\n	<div class=title> Leaderboard : </div>\n"
     + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"row") : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":3,"column":1},"end":{"line":7,"column":10}}})) != null ? stack1 : "")
     + "</div>\n";
 },"useData":true});

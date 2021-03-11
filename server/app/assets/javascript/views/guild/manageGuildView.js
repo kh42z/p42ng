@@ -127,6 +127,7 @@ export const ManageGuildView = Backbone.View.extend({
         const response = await this.createRequest('/members' + '/' + id, 'POST')
         this.updateLists([this.membersList, this.nonMembersList], nickname, id)
         this.users.get(id).set({ guild_id: this.guild.id })
+        this.$el.find('#guildGlobalError').html('<p>User successfully added</p>')
       } catch (e) {
         this.renderError(e, '#guildGlobalError', Handlebars.templates.guildError)
         if (e.status == 200) {
@@ -153,6 +154,7 @@ export const ManageGuildView = Backbone.View.extend({
         const response = await this.createRequest('/members/' + id, 'DELETE')
         this.updateLists([this.nonMembersList, this.membersList], nickname, id)
         this.users.get(id).set({ guild_id: null })
+        this.$el.find('#guildGlobalError').html('<p>User successfully kicked</p>')
       } catch (e) {
         console.log(e)
         this.renderError(e, '#guildGlobalError', Handlebars.templates.guildError)
@@ -180,11 +182,12 @@ export const ManageGuildView = Backbone.View.extend({
       try {
         const response = await this.createRequest('/officers/' + id, 'POST')
         this.renderError(response, '#guildGlobalError', Handlebars.templates.guildError)
-        this.updateLists([this.officersList, []], nickname, id)
+        this.updateLists([this.officersList, Array()], nickname, id)
         this.guild.get('officer_ids').push(id)
       } catch (e) {
         console.log(e)
         this.renderError(e, '#guildGlobalError', Handlebars.templates.guildError)
+        this.$el.find('#guildGlobalError').html('<p>User successfully promoted</p>')
         if (e.status == 200) {
           this.updateLists([this.officersList, []], nickname, id)
           this.guild.get('officer_ids').push(id)
@@ -209,6 +212,7 @@ export const ManageGuildView = Backbone.View.extend({
         const response = await this.createRequest('/officers/' + id, 'DELETE')
         this.updateLists([Array(), this.officersList], nickname, id)
         this.guild.set({ officer_ids: this.guild.get('officer_ids').filter(el => el != id) })
+        this.$el.find('#guildGlobalError').html('<p>User successfully relegated</p>')
       } catch (e) {
         this.renderError(e, '#guildGlobalError', Handlebars.templates.guildError)
         if (e.status == 200) {

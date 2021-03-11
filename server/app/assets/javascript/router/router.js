@@ -1,6 +1,5 @@
 // views
 import { HomeView } from '../views/home_view.js'
-import { UsersView } from '../views/profile/usersView.js'
 import { PongView } from '../views/pong/pong_view.js'
 import { HeaderView } from '../views/header_view'
 import { LeaderboardView } from '../views/leaderboard/leaderboardView.js'
@@ -57,11 +56,11 @@ export const Router = Backbone.Router.extend({
     user_page: 'users_view', // Achanger nom de route et tout
     home: 'home_view',
     pong: 'pong_view',
-    'profile/:id(/:page)': 'profile_view',
-    'profile/:id(/:page)/': 'profile_view',
+    'profile/(:id)/': 'profile_view',
+    'profile/(:id)': 'profile_view',
     guilds: 'guilds_view',
-    'guild/:id(/:page)': 'guild_view',
-    'guild/:id(/:page)/': 'guild_view',
+    'guild/(:id)/': 'guild_view',
+    'guild/(:id)': 'guild_view',
     'chat/:id(/:page)': 'chat_view',
     chat: 'chat_view',
     leaderboard: 'leaderboard_view',
@@ -167,10 +166,10 @@ export const Router = Backbone.Router.extend({
     const pongView = new PongView()
   },
 
-  profile_view: function (id, page) {
+  profile_view: function (id) {
     if (this.accessPage()) { return }
     console.log('profile view')
-    this.profileController.loadView(id, page, this.loadWrapper())
+    this.profileController.loadView(id, this.loadWrapper())
   },
 
   guilds_view: function () {
@@ -180,7 +179,7 @@ export const Router = Backbone.Router.extend({
 
   guild_view: function (id, page) {
     if (this.accessPage()) { return }
-    this.guildController.loadView(id, page, this.loadWrapper())
+    this.guildController.loadView(id, this.loadWrapper())
   },
 
   chat_view: function (id, page) {

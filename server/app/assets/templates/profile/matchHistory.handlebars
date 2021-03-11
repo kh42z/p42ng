@@ -1,0 +1,12 @@
+<section class="profileBlock" id="matchHistoryBlock">
+<ul>
+		{{#each matchs}}
+		<li>
+			<span>{{result}}: </span>
+			<a href="#profile/{{player_left_id}}/">{{player_left_nickname}}</a>
+			<span> {{game_type}} </span>
+			<a href="#profile/{{player_right_id}}/">{{player_right_nickname}}</a>
+			<span>date:   {{created_at}} </span>
+			{{/each}}
+</ul>
+</section>
