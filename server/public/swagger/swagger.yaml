@@ -164,7 +164,7 @@ paths:
 
   "/api/chats/{id}/messages":
     post:
-      summary: use http to broadcast websocket message
+      summary: Use http to broadcast a websocket message
       tags:
         - Chats
       parameters:

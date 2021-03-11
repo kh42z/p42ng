@@ -21,7 +21,6 @@ RSpec.describe "Api::Messages", type: :request do
       expect(ChatMessage.all.count).to eq(0)
     end
 
-
     it "should not create chat_message: message too long" do
       ChatParticipant.create(chat: current_chat, user: auth)
       post "/api/chats/#{current_chat.id}/messages", headers: access_token, params: { content: "0" * 500 }

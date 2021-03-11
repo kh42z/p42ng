@@ -29,6 +29,6 @@ FactoryBot.define do
   factory :chat_message do
     chat
     sender_id { create(:user) }
-    content { Faker::Address }
+    content { Faker::Books::Lovecraft.paragraph_by_chars(characters: 256) }
   end
 end
