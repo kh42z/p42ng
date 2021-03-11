@@ -36,6 +36,12 @@ RSpec.describe "Api::Messages", type: :request do
       expect(response.status).to eq 401
       expect(ChatMessage.all.count).to eq(0)
     end
+
+    it 'should not return 500 error without content parameter', test:true do
+      ChatParticipant.create(chat: current_chat, user: auth)
+      post "/api/chats/#{current_chat.id}/messages", headers: access_token
+      expect(json['error']).to eq 'param is missing or the value is empty: content'
+    end
   end
 
   describe "#get" do

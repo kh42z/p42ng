@@ -7,7 +7,7 @@ module Api
     def create
       return render_not_allowed unless send_forbidden? == false
 
-      content = message_params['content']
+      content = message_params.fetch('content')
       raise MessageTooLongError if content.length > 300
 
       ActionCable.server.broadcast("chat_#{@chat_id}",
@@ -41,7 +41,7 @@ module Api
 
     def authorize
       set_chat_id
-      return render_not_allowed if reject_user?
+      render_not_allowed if reject_user?
     end
   end
 end
