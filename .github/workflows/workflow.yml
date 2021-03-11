@@ -2,7 +2,7 @@
 
 defaults:
   run:
-    working-directory: server
+    working-directory: srcs
 env:
   RUBY_VERSION: 2.7
   PG_USER: postgres
@@ -83,9 +83,9 @@ jobs:
         if: always()
         with:
           name: coverage-report
-          path: server/coverage
+          path: srcs/coverage
       - name: Simplecov Report
         uses: aki77/simplecov-report-action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          resultPath: server/coverage
+          resultPath: srcs/coverage

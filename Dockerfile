@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
   apt-get update && apt-get install -y nodejs yarn
 RUN npm install -g bower
 RUN git clone  https://github.com/kh42z/omniauth-marvin.git && cd omniauth-marvin && gem build omniauth-marvin.gemspec && gem install omniauth-marvin && gem uninstall -i /usr/local/lib/ruby/gems/2.7.0 minitest
-COPY server/ /app
+COPY srcs/ /app
 RUN bundle install
 RUN yarn install
 ADD build/rails/heroku-entrypoint.sh /heroku-entrypoint.sh
