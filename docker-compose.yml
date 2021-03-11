@@ -20,7 +20,7 @@ services:
       dockerfile: build/rails/Dockerfile
     container_name: pong
     volumes:
-      - ./server/:/app
+      - ./srcs/:/app
     ports:
       - "3000:3000"
     depends_on:

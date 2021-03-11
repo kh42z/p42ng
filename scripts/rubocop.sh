@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 set -e
-cd "${0%/*}/../../server"
+cd "${0%/*}/../../srcs"
 
 
 echo "Running rubocop"

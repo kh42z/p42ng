@@ -2,77 +2,77 @@ database/*
 *.rbc
 capybara-*.html
 .rspec
-server/db/*.sqlite3
-server/db/*.sqlite3-journal
-server/db/*.sqlite3-[0-9]*
-server/public/system
-server/coverage/
-server/spec/tmp
+srcs/db/*.sqlite3
+srcs/db/*.sqlite3-journal
+srcs/db/*.sqlite3-[0-9]*
+srcs/public/system
+srcs/coverage/
+srcs/spec/tmp
 *.orig
-server/rerun.txt
-server.pickle-email-*.html
+srcs/rerun.txt
+srcs.pickle-email-*.html
 
 # Ignore all logfiles and tempfiles.
-server/log/*
-server/tmp/*
-!/server/log/.keep
-!/server/tmp/.keep
+srcs/log/*
+srcs/tmp/*
+!/srcs/log/.keep
+!/srcs/tmp/.keep
 
 # TODO Comment out this rule if you are OK with secrets being uploaded to the repo
-server/config/initializers/secret_token.rb
-server/config/master.key
+srcs/config/initializers/secret_token.rb
+srcs/config/master.key
 
 # Only include if you have production secrets in this file, which is no longer a Rails default
 # config/secrets.yml
 
 # dotenv, dotenv-rails
 # TODO Comment out these rules if environment variables can be committed
-server/.env
-server/.env.*
+srcs/.env
+srcs/.env.*
 
 ## Environment normalization:
-server/.bundle
-server/vendor/bundle
+srcs/.bundle
+srcs/vendor/bundle
 
 # these should all be checked in to normalize the environment:
 # Gemfile.lock, .ruby-version, .ruby-gemset
 
 # unless supporting rvm < 1.11.0 or doing something fancy, ignore this:
-server/.rvmrc
+srcs/.rvmrc
 
 # if using bower-rails ignore default bower_components path bower.json files
 /vendor/assets/bower_components
 
 # Ignore pow environment settings
-server/.powenv
+srcs/.powenv
 
 # Ignore Byebug command history file.
-server/.byebug_history
+srcs/.byebug_history
 
 # Ignore node_modules
-server/node_modules/
+srcs/node_modules/
 node_modules/
 
 # Ignore precompiled javascript packs
-server/public/packs
-server/public/packs-test
-server/public/assets
+srcs/public/packs
+srcs/public/packs-test
+srcs/public/assets
 
 # Ignore yarn files
-server/yarn-error.log
-server/yarn-debug.log*
-server/.yarn-integrity
+srcs/yarn-error.log
+srcs/yarn-debug.log*
+srcs/.yarn-integrity
 
 # Ignore uploaded files in development
-server/storage/*
-!/server/storage/.keep
-server/public/uploads
+srcs/storage/*
+!/srcs/storage/.keep
+srcs/public/uploads
 
 #
-server/swagger/v1/swagger.json
-server/vendor/assets
-server/.config
-server/coverage
+srcs/swagger/v1/swagger.json
+srcs/vendor/assets
+srcs/.config
+srcs/coverage
 .idea
 
 node_modules
