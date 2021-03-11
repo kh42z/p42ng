@@ -1,6 +1,6 @@
 (function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
-templates['guildError'] = template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+templates['guildGlobalError'] = template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var alias1=container.lambda, alias2=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -8,7 +8,7 @@ templates['guildError'] = template({"compiler":[8,">= 4.3.0"],"main":function(co
         return undefined
     };
 
-  return "<style>\n#guildError {\ncolor: red;\n}\n</style>\n<span id=\"guildError\">"
+  return "<span>"
     + alias2(alias1((depth0 != null ? lookupProperty(depth0,"status") : depth0), depth0))
     + ": "
     + alias2(alias1((depth0 != null ? lookupProperty(depth0,"statusText") : depth0), depth0))

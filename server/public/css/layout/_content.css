@@ -1,5 +1,12 @@
 .content{
 	/*margin-top: 90px;*/
-	position: relative;
-	padding-top: 90px;
+	background-color: white;
+	position: absolute;
+	display flex;
+	height:100%;
+	margin-top: 343px;
+	width: 100%;
+	left:0;
+	margin-left: 0;
+	margin-right: 0;
 }

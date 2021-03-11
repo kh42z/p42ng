@@ -1,0 +1,59 @@
+<section class="guildBlock" class="lastWarsBlock">
+	<table id="membersList">
+	<tr id="guildMembersIndex">
+		<th>12?? gamers</th>
+		<th></th>
+		<th></th>
+		<th>Pseudo</th>
+		<th>league Rank</th>
+		<th>General Rank</th>
+		<th>Victories</th>
+		<th>Total Games</th>
+		<th>Status</th>
+		<th>Status</th>
+	</tr>
+
+	<tr class="membersListEl">
+		<td>Gold</td>
+		<td>1</td>
+		<td>profilePic</td>
+		<td><a href="#profile/{{owner_id}}/">{{owner_nickname}}</a></td>
+		<td>1</td>
+		<td>1000</td>
+		<td>42</td>
+		<td>1001</td>
+		<td>online</td>
+		<td>Owner</td>
+	</tr>
+
+		{{#each officers}}
+		<tr class="membersListEl">
+				<td>Gold</td>
+				<td>1</td>
+				<td>profilePic</td>
+				<td><a href="#profile/{{id}}/">{{nickname}}</a></td>
+				<td>2</td>
+				<td>3500</td>
+				<td>12</td>
+				<td>50</td>
+				<td>offline</td>
+				<td>Officer</td>
+		</tr>
+		{{/each}}
+
+		{{#each members}}
+		<tr class="membersListEl">
+				<td>Gold</td>
+				<td>1</td>
+				<td>profilePic</td>
+				<td><a href="#profile/{{id}}/">{{nickname}}</a></td>
+				<td>2</td>
+				<td>4</td>
+				<td>1</td>
+				<td>2</td>
+				<td>offline</td>
+				<td>Member</td>
+		</tr>
+		{{/each}}
+	</table>
+</section>
