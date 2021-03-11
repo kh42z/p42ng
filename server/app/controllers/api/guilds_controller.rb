@@ -30,8 +30,7 @@ module Api
     end
 
     def create_members
-      member = params.fetch(:tid)
-      GuildMember.create!(user_id: member, guild: @guild) if request.post?
+      GuildMember.create!(user_id: params.fetch(:tid), guild: @guild)
       head :ok
     end
 

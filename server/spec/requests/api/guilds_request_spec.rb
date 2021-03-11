@@ -29,14 +29,11 @@ describe "Guild", type: :request do
       get api_user_url(auth), headers: access_token
       expect(json["guild_id"]).to eq Guild.first.id
     end
-    it 'should let relation return officers of a guild' do
-      user_1, user_2 = create_list(:user, 2)
+    it 'should return guild with owner_id', test:true do
       post api_guilds_url, headers: access_token, params: attributes
-      post "/api/guilds/#{Guild.first.id}/members/#{user_1.id}", headers: access_token
-      post "/api/guilds/#{Guild.first.id}/members/#{user_2.id}", headers: access_token
-      post "/api/guilds/#{Guild.first.id}/officers/#{user_1.id}", headers: access_token
-      post "/api/guilds/#{Guild.first.id}/officers/#{user_2.id}", headers: access_token
-      expect(Guild.first.officers.count).to eq 2
+      get api_guild_url(Guild.first.id), headers: access_token
+      expect(json["owner_id"][0]).to eq auth.id
+      expect(json["member_ids"][0]).to eq auth.id
     end
   end
 
@@ -152,7 +149,7 @@ describe "Guild", type: :request do
       expect(Guild.first.officers.count).to eq 1
       expect(response.status).to eq 200
     end
-    it 'should not add an officer who is already officer in another guild', test:true do
+    it 'should not add an officer who is already officer in another guild' do
       post "/api/guilds/#{Guild.first.id}/officers/#{user_1.id}", headers: access_token
       post api_guilds_url, headers: access_token_2, params: attributes_2
       post "/api/guilds/#{Guild.last.id}/officers/#{user_1.id}", headers: access_token_2
