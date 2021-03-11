@@ -12,6 +12,13 @@ class ApiController < ApplicationController
   end
   rescue_from WrongPasswordError, with: :response_error
 
+  class MessageTooLongError < StandardError
+    def message
+      I18n.t('messageTooLong')
+    end
+  end
+  rescue_from MessageTooLongError, with: :response_error
+
   private
 
   def response_error(error)

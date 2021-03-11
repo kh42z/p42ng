@@ -164,7 +164,7 @@ paths:
 
   "/api/chats/{id}/messages":
     post:
-      summary: broadcast a message
+      summary: use http to broadcast websocket message
       tags:
         - Chats
       parameters:
@@ -190,7 +190,24 @@ paths:
                 properties:
                   content:
                     type: string
-
+    get:
+      summary: Retrieves the last 10 messages sent
+      tags:
+        - Chats
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ChatID
+      responses:
+        '200':
+          description: messages found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/arrayOfMessages"
   "/api/chats/{id}/mutes":
     post:
       summary: Mutes an user
@@ -778,6 +795,10 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/achievement'
+    arrayOfMessages:
+      type: array
+      items:
+        $ref: '#/components/schemas/message'
     achievement:
       type: object
       properties:
@@ -801,6 +822,17 @@ components:
         game_type:
           type: string
           enum: [duel, ladder, tournament]
+        created_at:
+          type: string
+    message:
+      type: object
+      properties:
+        id:
+          type: integer
+        sender_id:
+          type: integer
+        content:
+          type: string
         created_at:
           type: string
     game:

@@ -44,16 +44,6 @@ module Api
       head :no_content
     end
 
-    def messages
-      # not using set_chat to avoid select
-      id = params['id']
-
-      return render_not_allowed unless send_forbidden?(id) == false
-
-      ActionCable.server.broadcast("chat_#{id}", { sender_id: current_user.id, content: params['content'] })
-      json_response(content: params['content'])
-    end
-
     def mutes
       Rails.cache.write("timeout_chat_#{@chat.id}_#{params.fetch(:user_id)}", 0,
                         expires_in: params.fetch(:duration).to_i.seconds)
@@ -126,10 +116,6 @@ module Api
 
     def set_chat
       @chat = Chat.find(params[:id])
-    end
-
-    def send_forbidden?(id)
-      chat_ban?(id, current_user.id) || chat_timeout?(id, current_user.id)
     end
   end
 end
