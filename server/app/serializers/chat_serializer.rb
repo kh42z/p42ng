@@ -18,19 +18,13 @@ class ChatSerializer < ActiveModel::Serializer
     object.chat_participants.pluck(:user_id)
   end
 
+  # https://stackoverflow.com/questions/13485468/how-to-map-and-remove-nil-values-in-ruby
+  # https://stackoverflow.com/questions/44003201/ruby-passing-key-as-an-argument-to-map-instead-of-a-block
   def timeout_ids
-    arr = []
-    object.chat_participants.each do |e|
-      arr << e if Rails.cache.exist?("timeout_chat_#{object.id}_#{e}")
-    end
-    arr
+    object.chat_participants.select { |e| Rails.cache.exist?("timeout_chat_#{object.id}_#{e.user_id}") }.map(&:user_id)
   end
 
   def ban_ids
-    arr = []
-    object.chat_participants.each do |e|
-      arr << e if Rails.cache.exist?("ban_chat_#{object.id}_#{e}")
-    end
-    arr
+    object.chat_participants.select { |e| Rails.cache.exist?("ban_chat_#{object.id}_#{e.user_id}") }.map(&:user_id)
   end
 end

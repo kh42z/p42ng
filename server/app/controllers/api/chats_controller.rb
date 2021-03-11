@@ -3,6 +3,7 @@
 module Api
   class ChatsController < ApiController
     before_action :set_chat
+    before_action :permission, only: %i[update invite create_admins destory_admins destroy]
     skip_before_action :set_chat, only: %i[index create messages]
 
     ChatReducer = Rack::Reducer.new(
@@ -16,14 +17,12 @@ module Api
     end
 
     def update
-      return render_not_allowed if @chat.owner != current_user
-
       @chat.update!(chat_params)
       head :ok
     end
 
     def create
-      chat = Chat.create!(chat_params_create)
+      chat = Chat.create!(chat_params.merge!({ owner: current_user }))
       ChatAdmin.create!(user: current_user, chat: chat)
       add_participants(chat, [current_user.id])
       add_participants(chat, params[:participant_ids])
@@ -58,18 +57,18 @@ module Api
     end
 
     def invites
-      return render_not_allowed if current_user != @chat.owner
-
       add_participants(@chat, params[:participant_ids])
       head :ok
     end
 
-    def admins
-      return unless current_user == @chat.owner
+    def create_admins
+      ChatAdmin.create!(user_id: params.fetch(:tid), chat: @chat)
+      head :ok
+    end
 
-      tid = params.fetch(:tid)
-      json_response(ChatAdmin.create!(user_id: tid, chat: @chat)) if request.post?
-      json_response(ChatAdmin.where(chat: @chat, user: tid).destroy_all, 204) if request.delete?
+    def destroy_admins
+      ChatAdmin.where(chat: @chat, user: params.fetch(:tid)).destroy_all
+      head :no_content
     end
 
     def show
@@ -77,13 +76,15 @@ module Api
     end
 
     def destroy
-      return render_not_allowed unless current_user == @chat.owner || current_user.admin == true
-
       @chat.destroy
       head :no_content
     end
 
     private
+
+    def permission
+      render_not_allowed unless current_user == @chat.owner || current_user.admin == true
+    end
 
     def manage_admin
       if ChatAdmin.first
@@ -107,11 +108,6 @@ module Api
 
     def chat_params
       params.permit(:privacy, :password, :name)
-    end
-
-    def chat_params_create
-      filtered_params = params.permit(:privacy, :password, :name)
-      filtered_params.merge!({ owner: current_user })
     end
 
     def set_chat
