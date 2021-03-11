@@ -81,7 +81,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/chat_response"
-    patch:
+    put:
       summary: Modifies a chat
       description: Allows an chat_admin to modify chatroom settings
       tags:
@@ -182,8 +182,8 @@ paths:
                 content:
                   type: string
       responses:
-        '200':
-          description: chats found
+        '201':
+          description: Message created
           content:
             application/json:
               schema:
@@ -325,7 +325,7 @@ paths:
             schema:
               $ref: "#/components/schemas/game"
       responses:
-        '204':
+        '201':
           description: invitations sent
   "/api/games/{id}":
     delete:
@@ -395,7 +395,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/guild_response"
-    patch:
+    put:
       summary: Modifies a guild
       tags:
         - Guilds
@@ -589,11 +589,10 @@ paths:
         required: true
         schema:
           type: string
-    patch:
+    put:
       summary: Modifies an user
       tags:
         - Users
-      operationId: patchUser
       parameters: [ ]
       responses:
         '200':

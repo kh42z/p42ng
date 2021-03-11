@@ -51,8 +51,8 @@ RSpec.describe "Games", type: :request do
           post "/api/games", headers: auth.create_new_auth_token, params: {game_type: "duel", opponent_id: to.id}
         end
 
-        it "returns status code 200" do
-          expect(response).to have_http_status(200)
+        it "returns status code 201" do
+          expect(response).to have_http_status(201)
           expect(json).not_to be_empty
         end
       end

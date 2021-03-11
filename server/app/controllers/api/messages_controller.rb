@@ -10,9 +10,11 @@ module Api
       content = message_params.fetch('content')
       raise MessageTooLongError if content.length > 300
 
+      message = ChatMessage.create!(content: content, sender_id: current_user.id, chat_id: @chat_id)
       ActionCable.server.broadcast("chat_#{@chat_id}",
-                                   { sender_id: current_user.id, content: content })
-      json_response(ChatMessage.create!(content: content, sender_id: current_user.id, chat_id: @chat_id))
+                                   { sender_id: current_user.id, content: content,
+                                     created_at: message.created_at.to_s })
+      json_response(message, 201)
     end
 
     def index

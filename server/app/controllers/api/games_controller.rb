@@ -21,7 +21,7 @@ module Api
 
       return render_error('opponentNotAvailable') unless opponent_available?
 
-      json_response(create_game)
+      json_response(create_game, 201)
     end
 
     def destroy

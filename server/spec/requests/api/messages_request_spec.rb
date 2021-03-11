@@ -11,7 +11,7 @@ RSpec.describe "Api::Messages", type: :request do
       ChatParticipant.create(chat: current_chat, user: auth)
       post "/api/chats/#{current_chat.id}/messages", headers: access_token, params: { content: "Hey"}
       expect(json.size).to eq 4
-      expect(response.status).to eq 200
+      expect(response.status).to eq 201
       expect(ChatMessage.all.count).to eq(1)
     end
 
