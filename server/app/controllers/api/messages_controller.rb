@@ -30,7 +30,7 @@ module Api
     end
 
     def message_params
-      params.require(:chat_message).permit(:content)
+      params.permit(:content)
     end
 
     def reject_user?
