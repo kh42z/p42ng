@@ -44,6 +44,22 @@ RSpec.describe "Chats", type: :request do
       #expect(Chat.first.chat_bans.first).to be_instance_of(ChatBan)
       #expect(Chat.first.chat_timeouts.first).to be_instance_of(ChatTimeout)
     end
+    it "should get timeout_id of muted participant" do
+      user_1 = create(:user)
+      post api_chats_url, headers: access_token, params: {name: "Hop" }
+      post invites_api_chat_url(Chat.first.id), headers: access_token, params: { participant_ids: [user_1.id] }
+      post mutes_api_chat_url(Chat.first.id), headers: access_token, params: { user_id: user_1.id, duration: 10 }
+      get api_chat_url(Chat.first.id), headers: access_token
+      expect(json['timeout_ids'][0]).to eq user_1.id
+    end
+    it "should get timeout_id of banned participant" do
+      user_1 = create(:user)
+      post api_chats_url, headers: access_token, params: {name: "Hop" }
+      post invites_api_chat_url(Chat.first.id), headers: access_token, params: { participant_ids: [user_1.id] }
+      post bans_api_chat_url(Chat.first.id), headers: access_token, params: { user_id: user_1.id, duration: 10 }
+      get api_chat_url(Chat.first.id), headers: access_token
+      expect(json['ban_ids'][0]).to eq user_1.id
+    end
   end
 
   describe "#post" do
@@ -168,7 +184,7 @@ RSpec.describe "Chats", type: :request do
     end
   end
 
-  describe "#destroy_participant", test:true do
+  describe "#destroy_participant" do
     let(:user) { create(:user) }
     let(:chat) { create(:chat) }
     let(:access) { user.create_new_auth_token }
@@ -199,7 +215,7 @@ RSpec.describe "Chats", type: :request do
       expect(ChatAdmin.count).to eq(0)
       expect(Chat.first).to eq nil
     end
-    it "should destroy last ChatAdmin and set another participant admin/owner", test:true do
+    it "should destroy last ChatAdmin and set another participant admin/owner" do
       post api_chats_url, headers: access_token, params: { name: 'Hop', participant_ids: [user.id] }
       delete participants_api_chat_url(Chat.first.id), headers: access_token
       expect(ChatParticipant.count).to eq(1)
@@ -252,7 +268,7 @@ RSpec.describe "Chats", type: :request do
       expect(Chat.first.chat_participants.count).to eq 3
     end
   end
-  describe '#admins', test:true do
+  describe '#admins' do
     it 'should promote a user as admin' do
       user = create(:user)
       post api_chats_url, headers: access_token, params: { name: 'Hop' }

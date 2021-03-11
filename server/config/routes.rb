@@ -23,8 +23,8 @@ Rails.application.routes.draw do
         post 'mutes'
         post 'bans'
         post 'invites'
-        post 'admins/:tid', to: 'chats#admins'
-        delete 'admins/:tid', to: 'chats#admins'
+        post 'admins/:tid', to: 'chats#create_admins'
+        delete 'admins/:tid', to: 'chats#destroy_admins'
       end
     end
     resources :users do
