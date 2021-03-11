@@ -37,6 +37,18 @@ RSpec.describe "Users", type: :request do
         expect(response).to have_http_status(200)
       end
     end
+
+    context "search with guild_id" do
+      before do
+        guild = create(:guild)
+        GuildMember.create(guild: guild, user: first)
+        get "/api/users", headers: first.create_new_auth_token, params: {guild_id: guild.id}
+      end
+      it "returns users" do
+        expect(json.size).to eq(1)
+        expect(response).to have_http_status(200)
+      end
+    end
   end
 
   describe "retrieves one user" do

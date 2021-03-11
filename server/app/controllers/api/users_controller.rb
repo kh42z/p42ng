@@ -12,9 +12,9 @@ module Api
     UserReducer = Rack::Reducer.new(
       User.all.order(id: :asc),
       ->(ladder_id:) { where(ladder_id: ladder_id) },
-      ->(status:) { where(status: status) }
+      ->(status:) { where(status: status) },
+      ->(guild_id:) { joins(:guild_member).where(guild_members: { guild_id: guild_id }) }
     )
-    #      ->(guild_id:) { where(guild_id: guild_id) }
 
     def index
       @users = UserReducer.apply(params)
