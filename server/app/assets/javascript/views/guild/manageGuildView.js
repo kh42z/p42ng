@@ -149,6 +149,7 @@ export const ManageGuildView = Backbone.View.extend({
       console.log('error') // a gerer
       return
     }
+    console.log(this.guild.get('id'))
     const kickMember = async () => {
       try {
         const response = await this.createRequest('/members/' + id, 'DELETE')

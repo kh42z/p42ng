@@ -11,15 +11,16 @@ export const GuildView = Backbone.View.extend({
     this.ladders = this.model.get('ladders').get('obj')
     console.log(this.id)
     if (this.id === null) { this.id = this.userId }
-    console.log(this.id)
+    // console.log(this.id)
     this.$el.html(Handlebars.templates.guild({}))
+    this.$el.find('#guildSubNavBar').html(Handlebars.templates.guildSubNavBar({}))
+    this.renderPannel()
     this.listenTo(this.guilds, 'sync', function () { this.getUsers() }, this)
   },
 
   getUsers: function () {
     this.listenTo(this.users, 'sync', function () { this.currentWar() }, this)
-    this.$el.find('#guildSubNavBar').html(Handlebars.templates.guildSubNavBar({}))
-    this.renderPannel()
+    this.currentWar()
   },
 
   currentWar: function () {
