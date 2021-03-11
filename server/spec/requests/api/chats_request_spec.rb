@@ -44,7 +44,7 @@ RSpec.describe "Chats", type: :request do
       #expect(Chat.first.chat_bans.first).to be_instance_of(ChatBan)
       #expect(Chat.first.chat_timeouts.first).to be_instance_of(ChatTimeout)
     end
-    it "should get timeout_id of muted participant" do
+    it "should get timeout_id of muted participant",test:true do
       user_1 = create(:user)
       post api_chats_url, headers: access_token, params: {name: "Hop" }
       post invites_api_chat_url(Chat.first.id), headers: access_token, params: { participant_ids: [user_1.id] }
@@ -52,7 +52,7 @@ RSpec.describe "Chats", type: :request do
       get api_chat_url(Chat.first.id), headers: access_token
       expect(json['timeout_ids'][0]).to eq user_1.id
     end
-    it "should get ban_id of banned participant" do
+    it "should get ban_id of banned participant",test:true do
       user_1 = create(:user)
       post api_chats_url, headers: access_token, params: {name: "Hop" }
       post invites_api_chat_url(Chat.first.id), headers: access_token, params: { participant_ids: [user_1.id] }
