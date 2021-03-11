@@ -11,6 +11,7 @@ export const GuildView = Backbone.View.extend({
     this.ladders = this.model.get('ladders').get('obj')
     console.log(this.id)
     if (this.id === null) { this.id = this.userId }
+    console.log(this.id)
     this.$el.html(Handlebars.templates.guild({}))
     this.listenTo(this.guilds, 'sync', function () { this.getUsers() }, this)
   },
@@ -52,7 +53,7 @@ export const GuildView = Backbone.View.extend({
         id: this.users.get(this.guilds.get(this.id).get('officer_ids')[i]).get('id')
       })
     }
-
+    console.log(this.guilds.get(this.id).get('owner_id'))
     const context = {
       name: this.guilds.get(this.id).get('name'),
       id: this.id,
