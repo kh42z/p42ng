@@ -18,7 +18,7 @@ module Api
 
     def update
       @chat.update!(chat_params)
-      head :ok
+      json_response(@chat, 200)
     end
 
     def create
