@@ -9,7 +9,7 @@ env:
   PG_PASSWORD: secure
   PG_HOST: localhost
 
-name: Rails
+name: Backend
 on:
   push:
     branches:

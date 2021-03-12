@@ -1,4 +1,4 @@
-# Pong [![](https://github.com/kh42z/pong/workflows/Rails/badge.svg) ![Coverage Status](https://coveralls.io/repos/github/kh42z/pong/badge.svg?t=aSZhOk)](https://coveralls.io/github/kh42z/pong)
+# Pong [![API](https://github.com/kh42z/pong/workflows/Backend/badge.svg) ![Coverage Status](https://coveralls.io/repos/github/kh42z/pong/badge.svg?t=aSZhOk)](https://coveralls.io/github/kh42z/pong)
 
 ### Heroku:
 https://p42ng.herokuapp.com/
@@ -13,5 +13,3 @@ https://p42ng.herokuapp.com/
 ### OpenAPI Documentation
 
 https://localhost:3000/api-docs
-
-*Front linting: [![ESlint](https://github.com/kh42z/pong/actions/workflows/front.yml/badge.svg?branch=master)](https://github.com/kh42z/pong/actions/workflows/front.yml)*
