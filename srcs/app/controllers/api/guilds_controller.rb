@@ -14,7 +14,7 @@ module Api
       return render_not_allowed if @guild.owner != current_user
 
       @guild.update!(guild_params)
-      head :ok
+      json_response(@guild)
     end
 
     def create
@@ -30,8 +30,8 @@ module Api
     end
 
     def create_members
-      GuildMember.create!(user_id: params.fetch(:tid), guild: @guild)
-      head :ok
+      to_ret = GuildMember.create!(user_id: params.fetch(:tid), guild: @guild)
+      json_response(to_ret, 201)
     end
 
     def destroy_members
@@ -44,8 +44,8 @@ module Api
     def create_officers
       return render_not_allowed unless current_user == @guild.owner
 
-      GuildMember.where(user_id: params.fetch(:tid), guild: @guild).update(rank: 'officer').first
-      head :ok
+      to_ret = GuildMember.where(user_id: params.fetch(:tid), guild: @guild).update(rank: 'officer').first
+      json_response(to_ret, 201)
     end
 
     def destroy_officers

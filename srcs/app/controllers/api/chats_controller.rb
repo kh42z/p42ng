@@ -32,8 +32,7 @@ module Api
     def create_participant
       raise WrongPasswordError if @chat.privacy == 'protected' && !@chat.authenticate(params.fetch(:password))
 
-      ChatParticipant.create!(user: current_user, chat: @chat)
-      head :ok
+      json_response(ChatParticipant.create!(user: current_user, chat: @chat), 201)
     end
 
     def destroy_participant
@@ -44,24 +43,27 @@ module Api
     end
 
     def mutes
-      timeout_user_from_chat(@chat.id, params.fetch(:user_id), params.fetch(:duration))
-      head :no_content
+      user = params.fetch(:user_id)
+      timer = params.fetch(:duration)
+      timeout_user_from_chat(@chat.id, user, timer)
+      json_response("User #{user} muted for #{timer}seconds".to_json, 201)
     end
 
     def bans
-      ban_user_from_chat(@chat.id, params.fetch(:user_id), params.fetch(:duration))
-      disconnect_banned_user(params.fetch(:user_id))
-      head :no_content
+      user = params.fetch(:user_id)
+      timer = params.fetch(:duration)
+      ban_user_from_chat(@chat.id, user, timer)
+      disconnect_banned_user(user)
+      json_response("User #{user} banned for #{timer}seconds".to_json, 201)
     end
 
     def invites
       add_participants(@chat, params[:participant_ids])
-      head :ok
+      json_response(params[:participant_ids], 201)
     end
 
     def create_admins
-      ChatAdmin.create!(user_id: params.fetch(:tid), chat: @chat)
-      head :ok
+      json_response(ChatAdmin.create!(user_id: params.fetch(:tid), chat: @chat), 201)
     end
 
     def destroy_admins

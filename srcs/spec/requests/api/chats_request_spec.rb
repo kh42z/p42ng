@@ -44,7 +44,7 @@ RSpec.describe "Chats", type: :request do
       #expect(Chat.first.chat_bans.first).to be_instance_of(ChatBan)
       #expect(Chat.first.chat_timeouts.first).to be_instance_of(ChatTimeout)
     end
-    it "should get timeout_id of muted participant",test:true do
+    it "should get timeout_id of muted participant" do
       user_1 = create(:user)
       post api_chats_url, headers: access_token, params: {name: "Hop" }
       post invites_api_chat_url(Chat.first.id), headers: access_token, params: { participant_ids: [user_1.id] }
@@ -52,7 +52,7 @@ RSpec.describe "Chats", type: :request do
       get api_chat_url(Chat.first.id), headers: access_token
       expect(json['timeout_ids'][0]).to eq user_1.id
     end
-    it "should get ban_id of banned participant",test:true do
+    it "should get ban_id of banned participant" do
       user_1 = create(:user)
       post api_chats_url, headers: access_token, params: {name: "Hop" }
       post invites_api_chat_url(Chat.first.id), headers: access_token, params: { participant_ids: [user_1.id] }
@@ -111,7 +111,7 @@ RSpec.describe "Chats", type: :request do
     before { post api_chats_url, headers: access_token, params: chat_attributes }
     it "should let a user join a protected chat" do
       post participants_api_chat_url(Chat.first.id), headers: user_access, params: { password: 'abc' }
-      expect(response.status).to eq 200
+      expect(response.status).to eq 201
       expect(ChatParticipant.count).to eq(2)
     end
     it "should return error: passwordRequired" do
@@ -128,7 +128,7 @@ RSpec.describe "Chats", type: :request do
     end
     it "should not let user join twice" do
       post participants_api_chat_url(Chat.first.id), headers: user_access, params: { password: 'abc' }
-      expect(response.status).to eq 200
+      expect(response.status).to eq 201
       post participants_api_chat_url(Chat.first.id), headers: user_access, params: { password: 'abc' }
       expect(json["message"]).to eq 'Validation failed: User has already been taken'
       expect(response.status).to eq 422
@@ -137,11 +137,11 @@ RSpec.describe "Chats", type: :request do
   describe "#mutes" do
     let(:user) { create(:user) }
     let(:chat) { create(:chat) }
-    it "should mute a participant" do
+    it "should mute a participant", test:true do
       timer = 2
       post participants_api_chat_url(chat.id), headers: access_token, params: {user: user, chat: chat}
       post mutes_api_chat_url(chat.id), headers: access_token, params: {user_id: user.id, duration: timer}
-      expect(response).to have_http_status(204)
+      expect(response).to have_http_status(201)
       expect(Rails.cache.exist?("timeout_chat_#{chat.id}_#{user.id}")).to eq(true)
       sleep((timer + 1).seconds)
       expect(Rails.cache.exist?("timeout_chat_#{chat.id}_#{user.id}")).to eq(false)
@@ -158,7 +158,7 @@ RSpec.describe "Chats", type: :request do
       timer = 2
       post participants_api_chat_url(chat.id), headers: access_token, params: {user: user, chat: chat}
       post bans_api_chat_url(chat.id), headers: access_token, params: {user_id: user.id, duration: timer}
-      expect(response).to have_http_status(204)
+      expect(response).to have_http_status(201)
       expect(Rails.cache.exist?("ban_chat_#{chat.id}_#{user.id}")).to eq(true)
     end
     it "should return an error, due to bad parameters" do
@@ -264,7 +264,7 @@ RSpec.describe "Chats", type: :request do
       user_1, user_2 = create_list(:user, 2)
       post api_chats_url, headers: access_token, params: { name: 'Hop' }
       post invites_api_chat_url(Chat.first), headers: access_token, params: { participant_ids: [user_1.id, user_2.id] }
-      expect(response.status).to eq 200
+      expect(response.status).to eq 201
       expect(Chat.first.participants.count).to eq 3
     end
   end
@@ -274,7 +274,7 @@ RSpec.describe "Chats", type: :request do
       post api_chats_url, headers: access_token, params: { name: 'Hop' }
       post participants_api_chat_url(Chat.first.id), headers: access_token
       post "/api/chats/#{Chat.first.id}/admins/#{user.id}", headers: access_token
-      expect(response.status).to eq 200
+      expect(response.status).to eq 201
       expect(ChatAdmin.count).to eq 2
       expect(ChatAdmin.where(user: user, chat: Chat.first)).to exist
     end

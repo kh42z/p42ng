@@ -29,7 +29,7 @@ describe "Guild", type: :request do
       get api_user_url(auth), headers: access_token
       expect(json["guild_id"]).to eq Guild.first.id
     end
-    it 'should return guild with owner_id', test:true do
+    it 'should return guild with owner_id' do
       post api_guilds_url, headers: access_token, params: attributes
       get api_guild_url(Guild.first.id), headers: access_token
       expect(json["owner_id"][0]).to eq auth.id
@@ -81,7 +81,7 @@ describe "Guild", type: :request do
     it 'owner should add members' do
       post "/api/guilds/#{Guild.first.id}/members/#{user_1.id}", headers: access_token
       expect(Guild.first.members.count).to eq 2
-      expect(response.status).to eq 200
+      expect(response.status).to eq 201
     end
     it 'should let officers add members' do
       user_1_access = user_1.create_new_auth_token
@@ -89,7 +89,7 @@ describe "Guild", type: :request do
       post "/api/guilds/#{Guild.first.id}/officers/#{user_1.id}", headers: access_token
       post "/api/guilds/#{Guild.first.id}/members/#{user_2.id}", headers: user_1_access
       expect(Guild.first.officers.count).to eq 1
-      expect(response.status).to eq 200
+      expect(response.status).to eq 201
     end
     it 'should not let members add members' do
       user_1_access = user_1.create_new_auth_token
@@ -144,10 +144,10 @@ describe "Guild", type: :request do
       post api_guilds_url, headers: access_token, params: attributes
       post "/api/guilds/#{Guild.first.id}/members/#{user_1.id}", headers: access_token
     }
-    it '(owner) should add officers' do
+    it 'should let owner add officers', test:true do
       post "/api/guilds/#{Guild.first.id}/officers/#{user_1.id}", headers: access_token
       expect(Guild.first.officers.count).to eq 1
-      expect(response.status).to eq 200
+      expect(response.status).to eq 201
     end
     it 'should not add an officer who is already officer in another guild' do
       post "/api/guilds/#{Guild.first.id}/officers/#{user_1.id}", headers: access_token
@@ -161,7 +161,7 @@ describe "Guild", type: :request do
       post "/api/guilds/#{Guild.first.id}/officers/#{user_1.id}", headers: access_token
       expect(Guild.first.officers.count).to eq 1
     end
-    it '(owner) should destroy an officer' do
+    it 'should let owner demote an officer' do
       post "/api/guilds/#{Guild.first.id}/officers/#{user_1.id}", headers: access_token
       delete "/api/guilds/#{Guild.first.id}/officers/#{user_1.id}", headers: access_token
       expect(Guild.first.officers.count).to eq 0
