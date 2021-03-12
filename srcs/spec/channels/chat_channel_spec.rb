@@ -21,6 +21,13 @@ RSpec.describe ChatChannel, type: :channel do
       subscribe(id: @chat.id)
       expect(subscription).to be_rejected
     end
+
+    it "should broadcast" do
+      create(:chat_participant, chat: @chat, user: current_user)
+      stub_connection current_user: current_user
+      subscribe(id: @chat.id)
+      expect { perform :received, message: 'toto' }.to have_broadcasted_to("chat_#{@chat.id}").with(sender_id: current_user.id, content: "toto")
+    end
   end
 
   describe 'Bans' do
