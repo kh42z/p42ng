@@ -2,7 +2,6 @@
 set -x
 rm -f /tmp/rails.pid
 bower install --allow-root
-#rails db:environment:set RAILS_ENV=development
 rails db:reset
 rails db:migrate:reset
 rails db:seed
