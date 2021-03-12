@@ -8,7 +8,7 @@ module Api
 
     ChatReducer = Rack::Reducer.new(
       Chat.all.order(:updated_at),
-      ->(participant_id:) { joins(:chat_participants).where(chat_participants: { user_id: participant_id }) }
+      ->(participant_id:) { joins(:participants).where(chat_participants: { user_id: participant_id }) }
     )
 
     def index

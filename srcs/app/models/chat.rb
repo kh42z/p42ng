@@ -9,9 +9,9 @@ class Chat < ApplicationRecord
   validates_presence_of :password, if: :password_enabled?
   validates_confirmation_of :password, if: :password_enabled?
   belongs_to :owner, class_name: 'User'
-  has_many :chat_admins, dependent: :destroy
-  has_many :chat_participants, dependent: :destroy
-  has_many :chat_messages, dependent: :destroy
+  has_many :admins, class_name: 'ChatAdmin', dependent: :destroy
+  has_many :participants, class_name: 'ChatParticipant', dependent: :destroy
+  has_many :messages, class_name: 'ChatMessage', dependent: :destroy
 
   def password_enabled?
     privacy == 'protected'
