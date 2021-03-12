@@ -9,7 +9,8 @@ RSpec.describe "Api::Messages", type: :request do
   describe "#post" do
     it "should create message" do
       ChatParticipant.create(chat: current_chat, user: auth)
-      post "/api/chats/#{current_chat.id}/messages", headers: access_token, params: { content: "Hey"}
+      expect { post "/api/chats/#{current_chat.id}/messages", headers: access_token, params: { content: "Hey"} }.to have_broadcasted_to("chat_#{current_chat.id}").exactly(:once)
+      #.with(sender_id: auth.id, content: "Hey", created_at: Time.now() )
       expect(json.size).to eq 4
       expect(response.status).to eq 201
       expect(ChatMessage.all.count).to eq(1)
