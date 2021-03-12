@@ -36,7 +36,7 @@ module Api
     end
 
     def reject_user?
-      return true if Rails.cache.exist?("ban_chat_#{@chat_id}_#{current_user.id}")
+      return true if chat_ban?(@chat_id, current_user.id)
 
       ChatParticipant.where(user_id: current_user.id, chat_id: @chat_id).empty?
     end

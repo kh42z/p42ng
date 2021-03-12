@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ChatSerializer < ActiveModel::Serializer
-  include(Chan)
+  include(CacheHelper)
   attributes :id,
              :owner_id,
              :privacy,

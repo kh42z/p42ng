@@ -44,14 +44,12 @@ module Api
     end
 
     def mutes
-      Rails.cache.write("timeout_chat_#{@chat.id}_#{params.fetch(:user_id)}", 0,
-                        expires_in: params.fetch(:duration).to_i.seconds)
+      timeout_user_from_chat(@chat.id, params.fetch(:user_id), params.fetch(:duration))
       head :no_content
     end
 
     def bans
-      Rails.cache.write("ban_chat_#{@chat.id}_#{params.fetch(:user_id)}", 0,
-                        expires_in: params.fetch(:duration).to_i.seconds)
+      ban_user_from_chat(@chat.id, params.fetch(:user_id), params.fetch(:duration))
       disconnect_banned_user(params.fetch(:user_id))
       head :no_content
     end

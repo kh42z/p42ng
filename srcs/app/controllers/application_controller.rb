@@ -3,5 +3,6 @@
 class ApplicationController < ActionController::API
   include ExceptionHandler
   include Response
-  include Chan
+  include CacheHelper
+  include Websocket
 end

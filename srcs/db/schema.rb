@@ -120,8 +120,6 @@ ActiveRecord::Schema.define(version: 2021_03_11_090451) do
     t.integer "score", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "owner_id"
-    t.index ["owner_id"], name: "index_guilds_on_owner_id"
   end
 
   create_table "ladders", force: :cascade do |t|
@@ -243,7 +241,6 @@ ActiveRecord::Schema.define(version: 2021_03_11_090451) do
   add_foreign_key "games", "users", column: "winner_id"
   add_foreign_key "guild_members", "guilds"
   add_foreign_key "guild_members", "users"
-  add_foreign_key "guilds", "users", column: "owner_id"
   add_foreign_key "user_achievements", "achievements"
   add_foreign_key "user_achievements", "users"
   add_foreign_key "user_ignores", "users"
