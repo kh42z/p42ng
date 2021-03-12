@@ -9,7 +9,7 @@ class ChatChannel < ApplicationCable::Channel
   end
 
   def received(data)
-    return if chat_timeout?(@chat_id, current_user.id)
+    return if user_timeout_from_chat?(@chat_id, current_user.id)
 
     ActionCable.server.broadcast("chat_#{@chat_id}", { sender_id: current_user.id, content: data['message'] })
   end
@@ -19,7 +19,7 @@ class ChatChannel < ApplicationCable::Channel
   private
 
   def reject_user?
-    return true if chat_ban?(@chat_id, current_user.id)
+    return true if user_banned_from_chat?(@chat_id, current_user.id)
 
     ChatParticipant.where(user_id: current_user.id, chat_id: @chat_id).empty?
   end

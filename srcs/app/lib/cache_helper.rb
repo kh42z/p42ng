@@ -5,7 +5,7 @@ module CacheHelper
 
   BAN_KEY_PREFIX = 'ban_chat_'
 
-  def chat_ban?(chat_id, user_id)
+  def user_banned_from_chat?(chat_id, user_id)
     Rails.cache.exist?(CacheHelper::BAN_KEY_PREFIX + "#{chat_id}_#{user_id}")
   end
 
@@ -19,7 +19,7 @@ module CacheHelper
                       expires_in: duration.to_i.seconds)
   end
 
-  def chat_timeout?(chat_id, user_id)
+  def user_timeout_from_chat?(chat_id, user_id)
     Rails.cache.exist?(CacheHelper::TIMEOUT_KEY_PREFIX + "#{chat_id}_#{user_id}")
   end
 end

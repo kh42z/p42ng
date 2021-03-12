@@ -22,10 +22,10 @@ class ChatSerializer < ActiveModel::Serializer
   # https://stackoverflow.com/questions/13485468/how-to-map-and-remove-nil-values-in-ruby
   # https://stackoverflow.com/questions/44003201/ruby-passing-key-as-an-argument-to-map-instead-of-a-block
   def timeout_ids
-    object.participants.select { |e| chat_timeout?(object.id, e.user.id) }.map(&:user_id)
+    object.participants.select { |e| user_timeout_from_chat?(object.id, e.user.id) }.map(&:user_id)
   end
 
   def ban_ids
-    object.participants.select { |e| chat_ban?(object.id, e.user.id) }.map(&:user_id)
+    object.participants.select { |e| user_banned_from_chat?(object.id, e.user.id) }.map(&:user_id)
   end
 end

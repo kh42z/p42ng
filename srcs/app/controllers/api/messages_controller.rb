@@ -28,7 +28,7 @@ module Api
     end
 
     def send_forbidden?
-      chat_timeout?(@chat_id, current_user.id)
+      user_timeout_from_chat?(@chat_id, current_user.id)
     end
 
     def message_params
@@ -36,7 +36,7 @@ module Api
     end
 
     def reject_user?
-      return true if chat_ban?(@chat_id, current_user.id)
+      return true if user_banned_from_chat?(@chat_id, current_user.id)
 
       ChatParticipant.where(user_id: current_user.id, chat_id: @chat_id).empty?
     end
