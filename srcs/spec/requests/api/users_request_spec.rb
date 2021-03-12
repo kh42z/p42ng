@@ -38,6 +38,18 @@ RSpec.describe "Users", type: :request do
       end
     end
 
+    context "search with ladder" do
+      before do
+        ladder = Ladder.create(name: "Bronze")
+        User.first.update(ladder_id: ladder.id)
+        get "/api/users", headers: first.create_new_auth_token, params: {ladder_id: ladder.id}
+      end
+      it "returns users" do
+        expect(json.size).to eq(1)
+        expect(response).to have_http_status(200)
+      end
+    end
+
     context "search with guild_id" do
       before do
         guild = create(:guild)
@@ -58,6 +70,15 @@ RSpec.describe "Users", type: :request do
     it "returns user" do
       expect(json).not_to be_empty
       expect(response).to have_http_status(200)
+    end
+  end
+
+  describe "it upload an avatar" do
+    it 'attaches the uploaded file' do
+      file = fixture_file_upload(Rails.root.join('public', 'images', 'profile-pic.jpg'), 'image/jpg')
+      expect {
+        post "/api/users/#{user_id}/avatar", headers: users.last.create_new_auth_token, params: { avatar: file }
+      }.to change(ActiveStorage::Attachment, :count).by(1)
     end
   end
 
@@ -83,20 +104,6 @@ RSpec.describe "Users", type: :request do
       end
     end
 
-    # specific route used now : DELETE /api/guilds/{id}/members{tid} - Removes a guild member
-    #
-    # context "when he leaves a guild" do
-    #   before do
-    #     guild = FactoryBot.create(:guild, owner: users.last)
-    #     users.last.update!(guild: guild)
-    #     patch "/api/users/#{user_id}", params: { user: {"guild_id" => nil }}, headers: users.last.create_new_auth_token
-    #   end
-    #   it "returns 200" do
-    #     expect(response).to have_http_status(200)
-    #     users.last.reload
-    #     expect(users.last.guild).to be_nil
-    #   end
-    # end
 
     context "when the user is trying to modify someone else" do
       before do
