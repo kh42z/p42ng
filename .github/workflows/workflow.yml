@@ -89,3 +89,9 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           resultPath: srcs/coverage
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          base-path: srcs
+          path-to-lcov: srcs/coverage/lcov.info
+          github-token: ${{ secrets.GITHUB_TOKEN }}
