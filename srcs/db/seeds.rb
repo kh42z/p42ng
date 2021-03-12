@@ -15,25 +15,23 @@ ChatParticipant.create(user: alfred, chat: general_chat_room)
 
 if Rails.env.development?
 
-  FactoryBot.create_list(:user, 20)
-  FactoryBot.create_list(:guild_with_officers, 5)
-  FactoryBot.create_list(:chat, 2)
-  FactoryBot.create_list(:war, 4)
-
-  def chat_with_participants(count: 1)
-    FactoryBot.create(:chat) do |chat|
-      FactoryBot.create_list(:chat_participant, count, chat: chat)
-    end
+  user = FactoryBot.create_list(:user, 5)
+  guild = FactoryBot.create(:guild)
+  FactoryBot.create(:guild_member, guild: guild, rank: 'owner', user: user[0])
+  1.upto(2) do |i|
+    FactoryBot.create(:guild_member, guild: guild, rank: 'officer', user: user[i])
   end
-  chat_with_participants(count: 2)
-
-  (1..20).each do |id|
-    GuildMember.create(user_id: id, guild: Guild.find(rand(1..5)))
+  3.upto(4) do |i|
+    FactoryBot.create(:guild_member, guild: guild, user: user[i])
   end
 
-  (1..20).each do |id|
-    winner = User.find(rand(1..20))
-    FactoryBot.create(:game, winner: winner, player_left: winner, player_right: User.find(rand(1..20)), game_type: 'ladder')
+  3.times do |i|
+    chat = FactoryBot.create(:chat, owner: user[i])
+    FactoryBot.create_list(:chat_participant, 3, chat: chat)
   end
 
+  10.times do |i|
+    winner = User.find(0..7)
+    FactoryBot.create(:game, winner: winner, player_left: winner, player_right: User.find(8..15), game_type: 'ladder')
+  end
 end

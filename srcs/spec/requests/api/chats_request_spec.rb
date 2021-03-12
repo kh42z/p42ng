@@ -33,14 +33,14 @@ RSpec.describe "Chats", type: :request do
       chat = chat_with_participants(count: 2)
       get api_chat_url(chat.id), headers: access_token
       expect(response).to have_http_status(200)
-      expect(Chat.first.chat_participants.count).to eq(2)
+      expect(Chat.first.participants.count).to eq(2)
     end
     it "should get a chat with admins, participants, timeouts and bans" do
       chat = chat_full
       get api_chat_url(chat.id), headers: access_token
       expect(response).to have_http_status(200)
-      expect(Chat.first.chat_participants.first).to be_instance_of(ChatParticipant)
-      expect(Chat.first.chat_admins.first).to be_instance_of(ChatAdmin)
+      expect(Chat.first.participants.first).to be_instance_of(ChatParticipant)
+      expect(Chat.first.admins.first).to be_instance_of(ChatAdmin)
       #expect(Chat.first.chat_bans.first).to be_instance_of(ChatBan)
       #expect(Chat.first.chat_timeouts.first).to be_instance_of(ChatTimeout)
     end
@@ -265,7 +265,7 @@ RSpec.describe "Chats", type: :request do
       post api_chats_url, headers: access_token, params: { name: 'Hop' }
       post invites_api_chat_url(Chat.first), headers: access_token, params: { participant_ids: [user_1.id, user_2.id] }
       expect(response.status).to eq 200
-      expect(Chat.first.chat_participants.count).to eq 3
+      expect(Chat.first.participants.count).to eq 3
     end
   end
   describe '#admins' do
@@ -296,12 +296,6 @@ def chat_full
     create(:chat_admin, chat: chat)
     create(:chat_participant, chat: chat)
     #TODO: write in cache for to/bans?
-  end
-end
-
-def chat_with_admins(count: 1)
-  create(:chat) do |chat|
-    create_list(:chat_admin, count, chat: chat)
   end
 end
 
