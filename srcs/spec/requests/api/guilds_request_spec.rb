@@ -144,7 +144,7 @@ describe "Guild", type: :request do
       post api_guilds_url, headers: access_token, params: attributes
       post "/api/guilds/#{Guild.first.id}/members/#{user_1.id}", headers: access_token
     }
-    it 'should let owner add officers', test:true do
+    it 'should let owner add officers' do
       post "/api/guilds/#{Guild.first.id}/officers/#{user_1.id}", headers: access_token
       expect(Guild.first.officers.count).to eq 1
       expect(response.status).to eq 201
@@ -172,6 +172,34 @@ describe "Guild", type: :request do
       post api_guilds_url, headers: access_token_2, params: attributes_2
       delete "/api/guilds/#{Guild.last.id}/officers/#{user_1.id}", headers: access_token_2
       expect(Guild.first.officers.count).to eq 1
+    end
+  end
+
+  describe "#Invitations" do
+    include(CacheHelper)
+    let(:user) { create(:user, status: 'online') }
+    let(:user_access) { user.create_new_auth_token }
+    let(:memory_store) { ActiveSupport::Cache.lookup_store(:memory_store) }
+    let(:cache) { Rails.cache }
+    before {
+      post api_guilds_url, headers: access_token, params: attributes
+      allow(Rails).to receive(:cache).and_return(memory_store)
+      Rails.cache.clear
+      post invites_api_guild_url(Guild.first.id), headers: access_token, params: { user_id: user.id }
+    }
+    context "#invites" do
+      it 'should send an invite', test:true do
+        expect(response.status).to eq 201
+        expect(json).to eq "User #{user.id} invited to guild #{Guild.first.id}"
+        expect(guild_pending_invite?(Guild.first.id, user.id)).to be_truthy
+      end
+    end
+    context "#members" do
+      it 'should let invited member join guild', test:true do
+        post members_api_guild_url(Guild.first.id), headers: user_access
+        expect(response.status).to eq 201
+        expect(guild_pending_invite?(Guild.first.id, user.id)).to be_falsey
+      end
     end
   end
 end
