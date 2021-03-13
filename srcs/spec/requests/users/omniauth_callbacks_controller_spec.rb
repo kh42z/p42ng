@@ -14,10 +14,23 @@ RSpec.describe "OmniauthCallbacksController", type: :request do
       expect(response.status).to eq 200
     end
 
-    it "should'nt allow a banned user" do
+    it "should not sign-in a banned user" do
       FactoryBot.create(:user, banned: true, uid: 1000, provider: "marvin", two_factor: false)
       login
       expect(response.status).to eq 403
+    end
+
+    it "should not sign-in a banned user with 2FA" do
+      FactoryBot.create(:user, banned: true, uid: 1000, provider: "marvin", two_factor: true)
+      login
+      expect(response.status).to eq 403
+    end
+
+    it "should not sign-in a user with 2FA" do
+      FactoryBot.create(:user, banned: false, uid: 1000, provider: "marvin", two_factor: true)
+      login
+      expect(response.status).to eq 200
+      # TODO: find a way to chech query params and assert two_factor
     end
   end
 
@@ -33,7 +46,6 @@ RSpec.describe "OmniauthCallbacksController", type: :request do
 
   def valid_marvin_login_setup
     if Rails.env.test?
-      OmniAuth.config.logger = Rails.logger
       OmniAuth.config.test_mode = true
       OmniAuth.config.mock_auth[:marvin] = OmniAuth::AuthHash.new({
         provider: "marvin",
