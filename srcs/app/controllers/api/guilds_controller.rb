@@ -55,12 +55,19 @@ module Api
       head :no_content
     end
 
-    def members
+    def accept_invites
       return unless guild_pending_invite?(@guild.id, current_user.id)
 
       to_ret = GuildMember.create!(user: current_user, guild: @guild)
       guild_delete_invite(@guild.id, current_user.id)
       json_response(to_ret, 201)
+    end
+
+    def refuse_invites
+      return unless guild_pending_invite?(@guild.id, current_user.id)
+
+      guild_delete_invite(@guild.id, current_user.id)
+      head :no_content
     end
 
     def invites

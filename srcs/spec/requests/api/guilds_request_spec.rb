@@ -175,7 +175,7 @@ describe "Guild", type: :request do
     end
   end
 
-  describe "#Invitations" do
+  describe "#Invitations", test:true do
     include(CacheHelper)
     let(:user) { create(:user, status: 'online') }
     let(:user_access) { user.create_new_auth_token }
@@ -187,19 +187,20 @@ describe "Guild", type: :request do
       Rails.cache.clear
       post invites_api_guild_url(Guild.first.id), headers: access_token, params: { user_id: user.id }
     }
-    context "#invites" do
-      it 'should send an invite', test:true do
-        expect(response.status).to eq 201
-        expect(json).to eq "User #{user.id} invited to guild #{Guild.first.id}"
-        expect(guild_pending_invite?(Guild.first.id, user.id)).to be_truthy
-      end
+    it 'should send an invite' do
+      expect(response.status).to eq 201
+      expect(json).to eq "User #{user.id} invited to guild #{Guild.first.id}"
+      expect(guild_pending_invite?(Guild.first.id, user.id)).to be_truthy
     end
-    context "#members" do
-      it 'should let invited member join guild', test:true do
-        post members_api_guild_url(Guild.first.id), headers: user_access
-        expect(response.status).to eq 201
-        expect(guild_pending_invite?(Guild.first.id, user.id)).to be_falsey
-      end
+    it 'should let invited user join guild' do
+      post accept_invites_api_guild_url(Guild.first.id), headers: user_access
+      expect(response.status).to eq 201
+      expect(guild_pending_invite?(Guild.first.id, user.id)).to be_falsey
+    end
+    it 'should let invited user refuse' do
+      delete refuse_invites_api_guild_url(Guild.first.id), headers: user_access
+      expect(response.status).to eq 204
+      expect(guild_pending_invite?(Guild.first.id, user.id)).to be_falsey
     end
   end
 end

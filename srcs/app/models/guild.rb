@@ -4,7 +4,7 @@ class Guild < ApplicationRecord
   validates_presence_of :name
   validates_presence_of :anagram
   validates :name, uniqueness: true
-  validates :anagram, length: { is: 5 }, allow_blank: false, uniqueness: true
+  validates :anagram, length: 3..5, allow_blank: false, uniqueness: true
   has_many :members, class_name: 'GuildMember', dependent: :destroy
   has_many :wars, dependent: :destroy
   def officers
