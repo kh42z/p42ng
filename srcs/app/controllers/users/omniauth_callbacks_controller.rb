@@ -56,8 +56,6 @@ module Users
     def omniauth_success
       get_resource_from_auth_hash
 
-      return handle_two_factor if @resource.two_factor?
-
       set_token_on_resource
 
       @resource.skip_confirmation! if confirmable_enabled?
@@ -66,6 +64,7 @@ module Users
       @resource.save!
       @resource.reload
       return if banned?
+      return handle_two_factor if @resource.two_factor?
 
       create_auth_params
 
