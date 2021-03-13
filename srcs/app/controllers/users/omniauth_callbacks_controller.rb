@@ -4,10 +4,6 @@ module Users
   class OmniauthCallbacksController < DeviseTokenAuth::OmniauthCallbacksController
     include LetterAvatar::AvatarHelper
 
-    def default_devise_mapping
-      raise NotImplementedError('Marvin not found')
-    end
-
     def assign_provider_attrs(user, auth_hash)
       return unless @resource.new_record?
 
@@ -56,8 +52,6 @@ module Users
     def omniauth_success
       get_resource_from_auth_hash
 
-      return handle_two_factor if @resource.two_factor?
-
       set_token_on_resource
 
       @resource.skip_confirmation! if confirmable_enabled?
@@ -66,6 +60,7 @@ module Users
       @resource.save!
       @resource.reload
       return if banned?
+      return handle_two_factor if @resource.two_factor?
 
       create_auth_params
 
@@ -83,12 +78,12 @@ module Users
 
     def send_mail(user)
       code = 6.times.map { rand(10) }.join
-      mg_client = Mailgun::Client.new ENV['MAILGUN_SECRET']
-      message_params = { from: 'no-reply@student.42.fr',
-                         to: user.email,
-                         subject: 'Pong: Your Code!',
-                         text: "Enter this code: #{code}" }
-      mg_client.send_message(ENV['MAILGUN_DOMAIN'], message_params)
+      # mg_client = Mailgun::Client.new ENV['MAILGUN_SECRET']
+      # message_params = { from: 'no-reply@student.42.fr',
+      #                   to: user.email,
+      #                   subject: 'Pong: Your Code!',
+      #                  text: "Enter this code: #{code}" }
+      # mg_client.send_message(ENV['MAILGUN_DOMAIN'], message_params)
       user.update!(two_factor_code: code)
     end
 
