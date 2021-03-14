@@ -14,7 +14,7 @@ RSpec.describe War, type: :model do
 
   it 'should have correct association' do
     should belong_to(:guild)
-    should have_many(:war_terms)
+    should have_many(:war_addons)
     should have_one(:war_time)
   end
 end

@@ -6,6 +6,6 @@ RSpec.describe WarAddon, type: :model do
   end
 
   it 'should have correct association' do
-    should belong_to(:war_term)
+    should belong_to(:war)
   end
 end

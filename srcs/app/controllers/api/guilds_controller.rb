@@ -18,7 +18,7 @@ module Api
     end
 
     def create
-      return render_error('hasGuildAlready') unless current_user.guild_member.nil?
+      return render_error_message('hasGuildAlready') unless current_user.guild_member.nil?
 
       guild = Guild.create!(guild_params)
       GuildMember.create!(user: current_user, guild: guild, rank: 'owner')

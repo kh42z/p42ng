@@ -2,5 +2,5 @@
 
 class WarAddon < ApplicationRecord
   validates_presence_of :name
-  belongs_to :war_term
+  belongs_to :war
 end

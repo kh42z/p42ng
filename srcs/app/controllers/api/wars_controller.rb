@@ -2,8 +2,7 @@
 
 module Api
   class WarsController < ApiController
-    before_action :set_war, only: %i[show update]
-    before_action :set_from, only: %i[create war_params war_params_create]
+    before_action :set_war, only: %i[update update show officer_permission?]
 
     UserReducer = Rack::Reducer.new(War.all.order(war_end: :desc), ->(guild_id:) { where(guild_id: guild_id) })
 
@@ -13,19 +12,19 @@ module Api
     end
 
     def create
-      unless current_user == @from.owner || GuildMember.where(user_id: current_user, guild_id: @from.id,
-                                                              rank: 'officer')[0]
-        return render_not_allowed
-      end
+      return render_not_allowed unless Guild.find(params_create[:from]).owner == current_user
 
-      war = War.create!(war_params_create)
-      json_response(war, :created)
+      war = War.create!(params_create)
+      json_response(war, 201)
     end
 
     def update
-      return unless current_user == Guild.find(@war.from).owner
+      return unless owners?
+      return terms_accepted_response if params_update.empty?
+      return render_error('notNegotiated', 401) unless turn_to_negotiate?
 
-      @war.update!(war_params)
+      @war.toggle(:negotiation)
+      @war.update!(params_update)
       json_response(@war)
     end
 
@@ -35,20 +34,49 @@ module Api
 
     private
 
-    def war_params
-      params.permit(:on, :war_start, :war_end, :prize, :max_unanswered)
+    def terms_accepted_response
+      if @war.terms_accepted == false
+        @war.toggle!(:terms_accepted)
+        json_response(I18n.t('termsAccepted').to_json, 200)
+      else
+        render_error('termsAccepted', 401)
+      end
     end
 
-    def war_params_create
-      params.permit(:on, :war_start, :war_end, :prize, :max_unanswered).merge!(from: @from.id, guild_id: @from.id)
+    def turn_to_negotiate?
+      if current_user == @from.owner
+        @war.negotiation?
+      else
+        @war.negotiation == false
+      end
+    end
+
+    def from_owner?
+      current_user == @from.owner
+    end
+
+    def owners?
+      current_user == @from.owner || current_user == @on.owner
+    end
+
+    def officer_permission?
+      @war.from.officers.include?(current_user.guild_member)
+    end
+
+    def params_update
+      params.permit(:war_start, :war_end, :prize, :max_unanswered, :addon_ids)
+    end
+
+    def params_create
+      attacker = Guild.find(GuildMember.where(user: current_user).first.guild_id)
+      tmp = params.permit(:on, :war_start, :war_end, :prize, :max_unanswered)
+      tmp.merge!(from: attacker.id, guild_id: attacker.id)
     end
 
     def set_war
       @war = War.find(params[:id])
-    end
-
-    def set_from
-      @from = Guild.find(current_user.guild_id)
+      @from = Guild.find(@war.from)
+      @on = Guild.find(@war.on)
     end
   end
 end

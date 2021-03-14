@@ -185,21 +185,10 @@ ActiveRecord::Schema.define(version: 2021_03_11_090451) do
 
   create_table "war_addons", force: :cascade do |t|
     t.string "name"
-    t.bigint "war_term_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["war_term_id"], name: "index_war_addons_on_war_term_id"
-  end
-
-  create_table "war_terms", force: :cascade do |t|
-    t.datetime "start"
-    t.datetime "end"
-    t.boolean "ladder", default: false
-    t.boolean "agreed", default: false
     t.bigint "war_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["war_id"], name: "index_war_terms_on_war_id"
+    t.index ["war_id"], name: "index_war_addons_on_war_id"
   end
 
   create_table "war_times", force: :cascade do |t|
@@ -220,6 +209,8 @@ ActiveRecord::Schema.define(version: 2021_03_11_090451) do
     t.integer "from_score", default: 0
     t.integer "on_score", default: 0
     t.integer "max_unanswered"
+    t.boolean "negotiation", default: false
+    t.boolean "terms_accepted", default: false
     t.bigint "guild_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -246,8 +237,7 @@ ActiveRecord::Schema.define(version: 2021_03_11_090451) do
   add_foreign_key "user_ignores", "users"
   add_foreign_key "user_ignores", "users", column: "ignored_id"
   add_foreign_key "users", "ladders"
-  add_foreign_key "war_addons", "war_terms"
-  add_foreign_key "war_terms", "wars"
+  add_foreign_key "war_addons", "wars"
   add_foreign_key "war_times", "wars"
   add_foreign_key "wars", "guilds"
 end

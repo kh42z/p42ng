@@ -2,7 +2,7 @@
 
 class TwoFactorController < ApplicationController
   def show
-    return render_error('missingCode') unless params.key?('code')
+    return render_error_message('missingCode') unless params.key?('code')
 
     user = User.find(params[:id])
     # authenticate is hardcoded to use password (and Devise already use password)

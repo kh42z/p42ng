@@ -11,11 +11,11 @@ module Response
     }, status: 401
   end
 
-  def render_error(arg)
+  def render_error_message(arg)
     render json: { errors: [I18n.t(arg)] }, status: 403
   end
 
-  # def render_error(arg, status)
-  #   render json: { errors: [I18n.t(arg)] }, status: status
-  # end
+  def render_error(arg, status)
+    render json: { errors: [I18n.t(arg)] }, status: status
+  end
 end

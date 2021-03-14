@@ -42,3 +42,5 @@ en:
   twoFactorRequired: "You need to authenticate with your two_factor_code"
   opponentNotAvailable: "Your opponent is not available"
   messageTooLong: "Your message contains more than 300 characters"
+  notNegotiated: "Your opponent has not negotiated war terms yet"
+  termsAccepted: "War terms have been accepted, cannot update anymore"
