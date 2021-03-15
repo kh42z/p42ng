@@ -3,7 +3,7 @@
 module Api
   class GuildsController < ApiController
     before_action :set_guild
-    before_action :permission, only: %i[create_members destroy_members]
+    before_action :permission, only: %i[create_members create_invitation destroy_members]
     skip_before_action :set_guild, only: %i[index create guild_params manage_ownership]
 
     def index
@@ -72,7 +72,7 @@ module Api
 
     def create_invitation
       user_id = params.fetch(:user_id)
-      return unless user_available?(user_id)
+      return render_error('userOffline', 403) unless user_available?(user_id)
 
       guild_invite_user(@guild.id, user_id)
       ActionCable.server.broadcast("user_#{user_id}", { action: 'guild_invitation', id: @guild.id })
@@ -82,7 +82,8 @@ module Api
     private
 
     def permission
-      render_not_allowed unless current_user == @guild.owner || @guild.officers.where(user_id: current_user).first
+      render_not_allowed if GuildMember.where(user_id: current_user.id,
+                                              guild_id: @guild.id).where.not(rank: 'member').empty?
     end
 
     def user_available?(user)
