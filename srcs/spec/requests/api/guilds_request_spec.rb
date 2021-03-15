@@ -208,20 +208,18 @@ describe "Guild", type: :request do
     include_context "with cache"
     let(:user) { create(:user, status: 'online') }
     let(:current_guild) { create(:guild) }
-    let(:spoof) { create(:user, status: 'online') }
-    let(:user_access) { user.create_new_auth_token }
 
     it "should not invite an offline user" do
       GuildMember.create(guild: current_guild, rank: 'officer', user: auth)
-      spoof.update(status: 'offline')
-      spoof.reload
-      post invitations_api_guild_url(current_guild.id), headers: access_token, params: { user_id: spoof.id }
+      user.update(status: 'offline')
+      user.reload
+      post invitations_api_guild_url(current_guild.id), headers: access_token, params: { user_id: user.id }
       expect(response.status).to eq 403
       expect(json.size).to eq(1)
     end
 
     it "should not invite an user if you arent officer or owner" do
-      post invitations_api_guild_url(current_guild.id), headers: access_token, params: { user_id: spoof.id }
+      post invitations_api_guild_url(current_guild.id), headers: access_token, params: { user_id: user.id }
       expect(response.status).to eq 401
       expect(json.size).to eq(1)
     end

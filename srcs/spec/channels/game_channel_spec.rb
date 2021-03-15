@@ -1,5 +1,6 @@
 require 'rails_helper'
 
+
 RSpec.describe GameChannel, type: :channel do
   let!(:player_left) { create(:user) }
   let!(:player_right) { create(:user) }
@@ -23,6 +24,23 @@ RSpec.describe GameChannel, type: :channel do
       stub_connection current_user: unknow
       subscribe(id: game.id)
       expect(subscription).to be_rejected
+    end
+  end
+
+  describe  "Game" do
+    it "should start" do
+      stub_connection current_user: player_left
+      subscribe(id: game.id)
+      stub_connection current_user: player_right
+      subscribe(id: game.id)
+    end
+
+    it "should receive data" do
+      stub_connection current_user: player_left
+      subscribe(id: game.id)
+      stub_connection current_user: player_right
+      subscribe(id: game.id)
+      perform :received, message: { y: 10}
     end
   end
 end
