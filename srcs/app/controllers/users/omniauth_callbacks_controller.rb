@@ -72,19 +72,19 @@ module Users
     private
 
     def send_code(user)
-      send_mail(user)
+      code = 6.times.map { rand(10) }.join
+      user.update!(two_factor_code: code)
       timer_job(user)
+      TwoFactorMailer.with(user: user, code: code).reset_email.deliver_later
     end
 
     def send_mail(user)
-      code = 6.times.map { rand(10) }.join
-      # mg_client = Mailgun::Client.new ENV['MAILGUN_SECRET']
-      # message_params = { from: 'no-reply@student.42.fr',
-      #                   to: user.email,
-      #                   subject: 'Pong: Your Code!',
-      #                  text: "Enter this code: #{code}" }
-      # mg_client.send_message(ENV['MAILGUN_DOMAIN'], message_params)
-      user.update!(two_factor_code: code)
+      mg_client = Mailgun::Client.new ENV['MAILGUN_SECRET']
+      message_params = { from: 'no-reply@student.42.fr',
+                         to: user.email,
+                         subject: 'Pong: Your Code!',
+                         text: "Enter this code: #{code}" }
+      mg_client.send_message(ENV['MAILGUN_DOMAIN'], message_params)
     end
 
     def timer_job(user)

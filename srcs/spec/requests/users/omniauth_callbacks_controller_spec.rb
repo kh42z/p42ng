@@ -27,10 +27,12 @@ RSpec.describe "OmniauthCallbacksController", type: :request do
     end
 
     it "should not sign-in a user with 2FA" do
-      FactoryBot.create(:user, banned: false, uid: 1000, provider: "marvin", two_factor: true)
-      login
+      FactoryBot.create(:user, banned: false, uid: 1000, provider: "marvin", two_factor: true, two_factor_code: "1234")
+      ActiveJob::Base.queue_adapter = :test
+      expect {
+        login
+      }.to have_enqueued_job(TwoFactorResetJob)
       expect(response.status).to eq 200
-      # TODO: find a way to chech query params and assert two_factor
     end
   end
 
