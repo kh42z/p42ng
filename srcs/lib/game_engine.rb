@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class GameEngine
+  attr_accessor :players
+
   def initialize(game)
     @game = game
     @players = []
@@ -13,8 +15,8 @@ class GameEngine
     # puts "GAME STARTED"
   end
 
-  def set_dir(user_id, direction)
-    @players[user_id] = direction
+  def move(user_id, position)
+    @players[user_id].position = position
   end
 
   def tick
@@ -33,10 +35,10 @@ class GameEngine
   private
 
   def other_one(user_id)
-    if @game.player_left == user_id
-      @game.player_right
+    if @game.player_left.id == user_id
+      @game.player_right.id
     else
-      @game.player_left
+      @game.player_left.id
     end
   end
 

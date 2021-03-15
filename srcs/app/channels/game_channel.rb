@@ -4,7 +4,7 @@ class GameChannel < ApplicationCable::Channel
   def subscribed
     @game = Game.find(params[:id])
 
-    return reject if accept_user? == false
+    return reject if player? == false && @game.state.zero?
 
     stream_from "game_#{@game.id}"
     @game.update!(state: @game.state + 1)
@@ -16,22 +16,18 @@ class GameChannel < ApplicationCable::Channel
   end
 
   def received(data)
-    return if @pong.nil?
+    return if @pong.nil? || player? == false
 
-    @pong.set_dir(current_user.id, data['direction'])
+    @pong.move(current_user.id, data['position'])
   end
 
   def unsubscribed
-    if @pong.nil?
-      @game.update!(state: @game.state - 1)
-    else
-      @pong.forfeit(current_user.id)
-    end
+    @game.update!(state: @game.state - 1) if @pong.nil?
   end
 
   private
 
-  def accept_user?
+  def player?
     @game.player_left.id == current_user.id || @game.player_right.id == current_user.id
   end
 end
