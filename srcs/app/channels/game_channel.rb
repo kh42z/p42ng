@@ -11,11 +11,13 @@ class GameChannel < ApplicationCable::Channel
 
     return unless @game.state > 1
 
-    @pong = Pong.new(@game)
+    @pong = GameEngine.new(@game)
     @pong.start
   end
 
   def received(data)
+    return if @pong.nil?
+
     @pong.set_dir(current_user.id, data['direction'])
   end
 

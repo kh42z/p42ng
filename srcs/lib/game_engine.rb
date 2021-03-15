@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
-class Pong
+class GameEngine
   def initialize(game)
     @game = game
     @players = []
-    @players[game.player_left] = Player.new('left')
-    @players[game.player_right] = Player.new('right')
+    @players[game.player_left.id] = Player.new('left')
+    @players[game.player_right.id] = Player.new('right')
     @ball = { x: 10, y: 10 }
   end
 
-  def self.start
-    # TODO: Launch ActiveJob
+  def start
+    # puts "GAME STARTED"
   end
 
   def set_dir(user_id, direction)

@@ -47,6 +47,7 @@ Shoulda::Matchers.configure do |config|
 end
 
 Dir[Rails.root.join('spec/support/**/*.rb')].sort.each { |f| require f }
+Dir[Rails.root.join('lib/*.rb')].sort.each { |f| require f }
 
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures

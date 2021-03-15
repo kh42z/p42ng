@@ -175,29 +175,53 @@ describe "Guild", type: :request do
     end
   end
 
-  describe "#Invitations", test:true do # Already called invitations ?!
+  describe "#Invitations", test:true do
     include(CacheHelper)
     include_context "with cache"
     let(:user) { create(:user, status: 'online') }
     let(:user_access) { user.create_new_auth_token }
+    let(:current_guild) { create(:guild) }
     before {
+      GuildMember.create(guild: current_guild, rank: 'owner', user: auth)
       post api_guilds_url, headers: access_token, params: attributes
-      post invitations_api_guild_url(Guild.first.id), headers: access_token, params: { user_id: user.id }
+      post invitations_api_guild_url(current_guild.id), headers: access_token, params: { user_id: user.id }
     }
-    it 'should send an invite' do
+    it 'should send an invitation' do
       expect(response.status).to eq 201
       expect(json['user_id']).to eq user.id
-      expect(guild_pending_invitation?(Guild.first.id, user.id)).to be_truthy
+      expect(guild_pending_invitation?(current_guild.id, user.id)).to be_truthy
     end
     it 'should let invited user join guild' do
-      post members_api_guild_url(Guild.first.id), headers: user_access
+      post members_api_guild_url(current_guild.id), headers: user_access
       expect(response.status).to eq 201
-      expect(guild_pending_invitation?(Guild.first.id, user.id)).to be_falsey
+      expect(guild_pending_invitation?(current_guild.id, user.id)).to be_falsey
     end
     it 'should let invited user refuse' do
-      delete invitations_api_guild_url(Guild.first.id), headers: user_access
+      delete invitations_api_guild_url(current_guild.id), headers: user_access
       expect(response.status).to eq 204
-      expect(guild_pending_invitation?(Guild.first.id, user.id)).to be_falsey
+      expect(guild_pending_invitation?(current_guild.id, user.id)).to be_falsey
+    end
+  end
+
+  describe "#NoInvitations", test: true do
+    include(CacheHelper)
+    include_context "with cache"
+    let(:user) { create(:user, status: 'online') }
+    let(:current_guild) { create(:guild) }
+
+    it "should not invite an offline user" do
+      GuildMember.create(guild: current_guild, rank: 'officer', user: auth)
+      user.update(status: 'offline')
+      user.reload
+      post invitations_api_guild_url(current_guild.id), headers: access_token, params: { user_id: user.id }
+      expect(response.status).to eq 403
+      expect(json.size).to eq(1)
+    end
+
+    it "should not invite an user if you arent officer or owner" do
+      post invitations_api_guild_url(current_guild.id), headers: access_token, params: { user_id: user.id }
+      expect(response.status).to eq 401
+      expect(json.size).to eq(1)
     end
   end
 end
