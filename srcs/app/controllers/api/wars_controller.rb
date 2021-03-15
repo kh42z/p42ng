@@ -20,7 +20,7 @@ module Api
 
     def update
       return unless owners?
-      return terms_accepted_response if params_update.empty?
+      return terms_accepted_response if param_accept['accept_terms'] == 'true' || @war.terms_accepted == true
       return render_error('notNegotiated', 401) unless turn_to_negotiate?
 
       @war.toggle(:negotiation)
@@ -53,14 +53,6 @@ module Api
       false
     end
 
-    # def war_on_entangled?
-    #   @on.wars.without(@war).each do |t|
-    #     return true if @war.war_start.between?(t.war_start, t.war_end)
-    #     return true if @war.war_end.between?(t.war_start, t.war_end)
-    #   end
-    #   false
-    # end
-
     def turn_to_negotiate?
       if current_user == @from.owner
         @war.negotiation?
@@ -83,6 +75,10 @@ module Api
 
     def params_update
       params.permit(:war_start, :war_end, :prize, :max_unanswered, :addon_ids)
+    end
+
+    def param_accept
+      params.permit(:accept_terms)
     end
 
     def params_create

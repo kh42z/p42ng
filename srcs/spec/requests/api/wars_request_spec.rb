@@ -92,21 +92,21 @@ RSpec.describe "Wars", type: :request do
       put api_war_url(War.first.id), headers: access_token_2, params: { max_unanswered: 9 }
       expect(response.status).to eq 401
     end
-    it 'should accept terms if update without params' do
-      put api_war_url(War.first.id), headers: access_token_2
+    it 'should accept terms if accept_terms == true' do
+      put api_war_url(War.first.id), headers: access_token_2, params: { accept_terms: true }
       expect(response.status).to eq 200
       expect(json).to eq 'War terms have been accepted, cannot update anymore'
       expect(War.first.terms_accepted).to be_truthy
     end
     it 'should not let update if terms are accepted' do
-      put api_war_url(War.first.id), headers: access_token_2
-      put api_war_url(War.first.id), headers: access_token
+      put api_war_url(War.first.id), headers: access_token_2, params: { accept_terms: true }
+      put api_war_url(War.first.id), headers: access_token, params: { max_unanswered: 8 }
       expect(json['errors']).to eq ['War terms have been accepted, cannot update anymore']
       expect(response.status).to eq 403
     end
   end
     describe "#accept_terms" do
-      it 'should let accept terms if no war dates entanglement', test:true do
+      it 'should let accept terms if no war dates entanglement' do
         create(:guild, anagram: 'BODD')
         guild_bang_id = Guild.where(anagram: 'ABCDE').first.id
         guild_nos_id = Guild.where(anagram: 'NOS').first.id
@@ -119,10 +119,10 @@ RSpec.describe "Wars", type: :request do
         expect(response.status).to eq 201
         post api_wars_url, headers: access_token, params: attributes_2 # NOS VS BANG
         expect(response.status).to eq 201
-        put api_war_url(War.where(on: guild_bang_id).first.id), headers: access_token # NOS VS BANG - ACCEPT
+        put api_war_url(War.where(on: guild_bang_id).first.id), headers: access_token, params: { accept_terms: true } # NOS VS BANG - ACCEPT
         expect(response.status).to eq 200
       end
-      it 'should not let accept terms if war dates entanglement', test:true do
+      it 'should not let accept terms if war dates entanglement' do
         create(:guild, anagram: 'BODD')
         guild_bang_id = Guild.where(anagram: 'ABCDE').first.id
         guild_nos_id = Guild.where(anagram: 'NOS').first.id
@@ -135,9 +135,9 @@ RSpec.describe "Wars", type: :request do
         expect(response.status).to eq 201
         post api_wars_url, headers: access_token, params: attributes_2 # NOS VS BANG
         expect(response.status).to eq 201
-        put api_war_url(War.where(on: guild_bang_id).first.id), headers: access_token # NOS VS BANG - ACCEPT
+        put api_war_url(War.where(on: guild_bang_id).first.id), headers: access_token, params: { accept_terms: true } # NOS VS BANG - ACCEPT
         expect(response.status).to eq 200
-        put api_war_url(War.where(on: guild_nos_id).first.id), headers: access_token_2 # BANG VS NOS - ACCEPT
+        put api_war_url(War.where(on: guild_nos_id).first.id), headers: access_token_2, params: { accept_terms: true } # BANG VS NOS - ACCEPT
         expect(response.status).to eq 403
         expect(json['errors']).to eq ['War dates are entangled with another war']
       end
