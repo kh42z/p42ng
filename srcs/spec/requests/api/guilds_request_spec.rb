@@ -177,14 +177,11 @@ describe "Guild", type: :request do
 
   describe "#Invitations", test:true do
     include(CacheHelper)
+    include_context "with cache"
     let(:user) { create(:user, status: 'online') }
     let(:user_access) { user.create_new_auth_token }
-    let(:memory_store) { ActiveSupport::Cache.lookup_store(:memory_store) }
-    let(:cache) { Rails.cache }
     before {
       post api_guilds_url, headers: access_token, params: attributes
-      allow(Rails).to receive(:cache).and_return(memory_store)
-      Rails.cache.clear
       post invites_api_guild_url(Guild.first.id), headers: access_token, params: { user_id: user.id }
     }
     it 'should send an invite' do

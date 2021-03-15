@@ -44,3 +44,4 @@ en:
   messageTooLong: "Your message contains more than 300 characters"
   notNegotiated: "Your opponent has not negotiated war terms yet"
   termsAccepted: "War terms have been accepted, cannot update anymore"
+  warsEntangled: "War dates are entangled with another war"

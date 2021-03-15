@@ -36,12 +36,30 @@ module Api
 
     def terms_accepted_response
       if @war.terms_accepted == false
+        return render_error('warsEntangled', 403) if war_entangled?
+
         @war.toggle!(:terms_accepted)
         json_response(I18n.t('termsAccepted').to_json, 200)
       else
-        render_error('termsAccepted', 401)
+        render_error('termsAccepted', 403)
       end
     end
+
+    def war_entangled?
+      (@from.wars + @on.wars).without(@war).each do |t|
+        return true if @war.war_start.between?(t.war_start, t.war_end)
+        return true if @war.war_end.between?(t.war_start, t.war_end)
+      end
+      false
+    end
+
+    # def war_on_entangled?
+    #   @on.wars.without(@war).each do |t|
+    #     return true if @war.war_start.between?(t.war_start, t.war_end)
+    #     return true if @war.war_end.between?(t.war_start, t.war_end)
+    #   end
+    #   false
+    # end
 
     def turn_to_negotiate?
       if current_user == @from.owner

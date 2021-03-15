@@ -5,7 +5,8 @@ RSpec.describe "Wars", type: :request do
   let(:auth_2) { create(:user) }
   let(:access_token) { auth.create_new_auth_token }
   let(:access_token_2) { auth_2.create_new_auth_token }
-  let(:valid_attributes) { { on: Guild.last.id, war_start: DateTime.now, war_end: DateTime.new(2022, 03, 10, 11, 11, 0), prize: 1000, max_unanswered: 10 } }
+  let(:valid_attributes) { { on: Guild.last.id, war_start: DateTime.now, war_end: DateTime.new(2022, 01, 01, 00, 00, 0), prize: 1000, max_unanswered: 10 } }
+  let(:valid_attributes_2) { { on: Guild.last.id, war_start: DateTime.new(2023, 01, 01, 00, 00, 0), war_end: DateTime.new(2024, 01, 01, 00, 00, 0), prize: 1000, max_unanswered: 10 } }
   before {
     post api_guilds_url, headers: access_token, params: { name: "NoShroud", anagram: "NOS" }
     post api_guilds_url, headers: access_token_2, params: { name: "BANG", anagram: "ABCDE" }
@@ -59,9 +60,7 @@ RSpec.describe "Wars", type: :request do
     end
   end
   describe "#update" do
-    before {
-      post api_wars_url, headers: access_token, params: valid_attributes
-    }
+    before { post api_wars_url, headers: access_token, params: valid_attributes }
     it 'should update a war' do
       put api_war_url(War.first.id), headers: access_token_2, params: { war_end: DateTime.new(2022, 03, 10, 11, 11, 0), max_unanswered: 12 }
       expect(response.status).to eq 200
@@ -99,11 +98,48 @@ RSpec.describe "Wars", type: :request do
       expect(json).to eq 'War terms have been accepted, cannot update anymore'
       expect(War.first.terms_accepted).to be_truthy
     end
-    it 'should not let update if terms are accepted', test:true do
+    it 'should not let update if terms are accepted' do
       put api_war_url(War.first.id), headers: access_token_2
       put api_war_url(War.first.id), headers: access_token
       expect(json['errors']).to eq ['War terms have been accepted, cannot update anymore']
-      expect(response.status).to eq 401
+      expect(response.status).to eq 403
     end
   end
+    describe "#accept_terms" do
+      it 'should let accept terms if no war dates entanglement', test:true do
+        create(:guild, anagram: 'BODD')
+        guild_bang_id = Guild.where(anagram: 'ABCDE').first.id
+        guild_nos_id = Guild.where(anagram: 'NOS').first.id
+        attributes = { on: guild_nos_id, war_start: DateTime.new(2023, 01, 01, 00, 00, 0), war_end: DateTime.new(2024, 01, 01, 00, 00, 0), prize: 1000, max_unanswered: 10 }
+        attributes_2 = { on: guild_bang_id, war_start: DateTime.new(2025, 06, 06, 00, 00, 0), war_end: DateTime.new(2026, 01, 01, 00, 00, 0), prize: 1000, max_unanswered: 10 }
+
+        post api_wars_url, headers: access_token, params: valid_attributes # NOS VS BODD
+        expect(response.status).to eq 201
+        post api_wars_url, headers: access_token_2, params: attributes # BANG VS NOS
+        expect(response.status).to eq 201
+        post api_wars_url, headers: access_token, params: attributes_2 # NOS VS BANG
+        expect(response.status).to eq 201
+        put api_war_url(War.where(on: guild_bang_id).first.id), headers: access_token # NOS VS BANG - ACCEPT
+        expect(response.status).to eq 200
+      end
+      it 'should not let accept terms if war dates entanglement', test:true do
+        create(:guild, anagram: 'BODD')
+        guild_bang_id = Guild.where(anagram: 'ABCDE').first.id
+        guild_nos_id = Guild.where(anagram: 'NOS').first.id
+        attributes = { on: guild_nos_id, war_start: DateTime.new(2021, 06, 06, 00, 00, 0), war_end: DateTime.new(2024, 01, 01, 00, 00, 0), prize: 1000, max_unanswered: 10 }
+        attributes_2 = { on: guild_bang_id, war_start: DateTime.new(2025, 06, 06, 00, 00, 0), war_end: DateTime.new(2026, 01, 01, 00, 00, 0), prize: 1000, max_unanswered: 10 }
+
+        post api_wars_url, headers: access_token, params: valid_attributes # NOS VS BODD
+        expect(response.status).to eq 201
+        post api_wars_url, headers: access_token_2, params: attributes # BANG VS NOS
+        expect(response.status).to eq 201
+        post api_wars_url, headers: access_token, params: attributes_2 # NOS VS BANG
+        expect(response.status).to eq 201
+        put api_war_url(War.where(on: guild_bang_id).first.id), headers: access_token # NOS VS BANG - ACCEPT
+        expect(response.status).to eq 200
+        put api_war_url(War.where(on: guild_nos_id).first.id), headers: access_token_2 # BANG VS NOS - ACCEPT
+        expect(response.status).to eq 403
+        expect(json['errors']).to eq ['War dates are entangled with another war']
+      end
+    end
 end
