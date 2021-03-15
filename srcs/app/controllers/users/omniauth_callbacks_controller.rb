@@ -78,15 +78,6 @@ module Users
       TwoFactorMailer.with(user: user, code: code).reset_email.deliver_later
     end
 
-    def send_mail(user)
-      mg_client = Mailgun::Client.new ENV['MAILGUN_SECRET']
-      message_params = { from: 'no-reply@student.42.fr',
-                         to: user.email,
-                         subject: 'Pong: Your Code!',
-                         text: "Enter this code: #{code}" }
-      mg_client.send_message(ENV['MAILGUN_DOMAIN'], message_params)
-    end
-
     def timer_job(user)
       TwoFactorResetJob.set(wait: 300).perform_later(user)
     end
