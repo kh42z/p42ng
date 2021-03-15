@@ -27,11 +27,11 @@ module CacheHelper
     Rails.cache.write(CacheHelper::GUILD_INVITE_KEY_PREFIX + "#{guild_id}_#{user_id}", 0)
   end
 
-  def guild_pending_invite?(guild_id, user_id)
+  def guild_pending_invitation?(guild_id, user_id)
     Rails.cache.exist?(CacheHelper::GUILD_INVITE_KEY_PREFIX + "#{guild_id}_#{user_id}")
   end
 
-  def guild_delete_invite(guild_id, user_id)
+  def guild_delete_invitation(guild_id, user_id)
     Rails.cache.delete(CacheHelper::GUILD_INVITE_KEY_PREFIX + "#{guild_id}_#{user_id}")
   end
 end

@@ -56,27 +56,27 @@ module Api
     end
 
     def accept_invites
-      return unless guild_pending_invite?(@guild.id, current_user.id)
+      return unless guild_pending_invitation?(@guild.id, current_user.id)
 
       to_ret = GuildMember.create!(user: current_user, guild: @guild)
-      guild_delete_invite(@guild.id, current_user.id)
+      guild_delete_invitation(@guild.id, current_user.id)
       json_response(to_ret, 201)
     end
 
-    def refuse_invites
-      return unless guild_pending_invite?(@guild.id, current_user.id)
+    def refuse_invitation
+      return unless guild_pending_invitation?(@guild.id, current_user.id)
 
-      guild_delete_invite(@guild.id, current_user.id)
+      guild_delete_invitation(@guild.id, current_user.id)
       head :no_content
     end
 
-    def invites
+    def create_invitation
       user_id = params.fetch(:user_id)
       return unless user_available?(user_id)
 
       guild_invite_user(@guild.id, user_id)
       ActionCable.server.broadcast("user_#{user_id}", { action: 'guild_invitation', id: @guild.id })
-      json_response("User #{user_id} invited to guild #{@guild.id}".to_json, 201)
+      json_response("{ \"user_id\": #{user_id} }", 201)
     end
 
     private

@@ -5,10 +5,10 @@ Rails.application.routes.draw do
   namespace :api do
     resources :guilds do
       member do
-        post 'pending_invites', to: 'guilds#accept_invites'
-        delete 'pending_invites', to: 'guilds#refuse_invites'
-        post 'invites'
-        post 'members/:tid', to: 'guilds#create_members'
+        post 'invitations', to: 'guilds#create_invitation'
+        delete 'invitations', to: 'guilds#refuse_invitation'
+        post 'members', to: 'guilds#accept_invites'
+        post 'members/:tid', to: 'guilds#create_members' # TODO: remove
         delete 'members/:tid', to: 'guilds#destroy_members'
         post 'officers/:tid', to: 'guilds#create_officers'
         delete 'officers/:tid', to: 'guilds#destroy_officers'

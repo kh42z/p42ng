@@ -175,29 +175,29 @@ describe "Guild", type: :request do
     end
   end
 
-  describe "#Invitations", test:true do
+  describe "#Invitations", test:true do # Already called invitations ?!
     include(CacheHelper)
     include_context "with cache"
     let(:user) { create(:user, status: 'online') }
     let(:user_access) { user.create_new_auth_token }
     before {
       post api_guilds_url, headers: access_token, params: attributes
-      post invites_api_guild_url(Guild.first.id), headers: access_token, params: { user_id: user.id }
+      post invitations_api_guild_url(Guild.first.id), headers: access_token, params: { user_id: user.id }
     }
     it 'should send an invite' do
       expect(response.status).to eq 201
-      expect(json).to eq "User #{user.id} invited to guild #{Guild.first.id}"
-      expect(guild_pending_invite?(Guild.first.id, user.id)).to be_truthy
+      expect(json['user_id']).to eq user.id
+      expect(guild_pending_invitation?(Guild.first.id, user.id)).to be_truthy
     end
     it 'should let invited user join guild' do
-      post pending_invites_api_guild_url(Guild.first.id), headers: user_access
+      post members_api_guild_url(Guild.first.id), headers: user_access
       expect(response.status).to eq 201
-      expect(guild_pending_invite?(Guild.first.id, user.id)).to be_falsey
+      expect(guild_pending_invitation?(Guild.first.id, user.id)).to be_falsey
     end
     it 'should let invited user refuse' do
-      delete pending_invites_api_guild_url(Guild.first.id), headers: user_access
+      delete invitations_api_guild_url(Guild.first.id), headers: user_access
       expect(response.status).to eq 204
-      expect(guild_pending_invite?(Guild.first.id, user.id)).to be_falsey
+      expect(guild_pending_invitation?(Guild.first.id, user.id)).to be_falsey
     end
   end
 end
