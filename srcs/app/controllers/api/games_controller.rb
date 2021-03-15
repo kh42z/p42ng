@@ -19,13 +19,13 @@ module Api
       @games_params = params.permit(:game_type)
       set_duel if @games_params[:game_type] == 'duel'
 
-      return render_forbidden_message('opponentNotAvailable') unless opponent_available?
+      return render_error('opponentNotAvailable', 403) unless opponent_available?
 
       json_response(create_game, 201)
     end
 
     def destroy
-      return render_forbidden_message('gameAlreadyStarted') if @game.state > 1
+      return render_error('gameAlreadyStarted', 403) if @game.state > 1
 
       @game.destroy
       head :no_content
