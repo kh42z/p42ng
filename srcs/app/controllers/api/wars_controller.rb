@@ -46,7 +46,7 @@ module Api
     end
 
     def war_entangled?
-      (@from.wars + @on.wars).without(@war).each do |t|
+      (@from.wars + @on.wars).uniq.without(@war).each do |t|
         return true if @war.war_start.between?(t.war_start, t.war_end)
         return true if @war.war_end.between?(t.war_start, t.war_end)
       end
