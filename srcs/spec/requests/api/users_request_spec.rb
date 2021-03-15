@@ -65,11 +65,13 @@ RSpec.describe "Users", type: :request do
 
   describe "retrieves one user" do
     before do
+      Friendship.create(friend_a: users.last , friend_b: first)
       get "/api/users/#{user_id}", headers: first.create_new_auth_token
     end
     it "returns user" do
       expect(json).not_to be_empty
       expect(response).to have_http_status(200)
+      expect(json['friends'][0]['friend_id']).to eq(first.id)
     end
   end
 
@@ -178,6 +180,7 @@ RSpec.describe "Users", type: :request do
       # unicity
       post "/api/users/#{auth.id}/friends", params: { friend_id: user.id.to_i }, headers: access_token
       expect(response).to have_http_status(422)
+
     end
     it "should delete a friendship" do
       Friendship.create!(friend_a: user, friend_b_id: auth.id)
@@ -187,24 +190,4 @@ RSpec.describe "Users", type: :request do
     end
   end
 
-  #describe "delete one user" do
-  #  before do
-  #    @last = users.last
-  #    delete "/api/users/#{@last.id}", headers: @last.create_new_auth_token
-  #  end
-  #  it "returns status code 204" do
-  #    expect(response).to have_http_status(204)
-  #  end
-  #end
-
-  # describe 'create one user avatar' do
-  #  before {
-  #    post "/api/users/#{user_id}/avatar", headers: users.last.create_new_auth_token,
-  #                                         params: {'avatar': File.open(File.join(Rails.root, "/public/images/image.jpg"))}
-  #  }
-  #
-  #  it 'returns status code 200' do
-  #    expect(response).to have_http_status(200)
-  #  end
-  # end
 end
