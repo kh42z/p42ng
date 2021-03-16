@@ -1,22 +1,29 @@
 # frozen_string_literal: true
 
-class Player
-  attr_accessor :score, :position, :side, :direction
+require 'pong_base'
 
-  def initialize(side)
+class Player < PongBase
+  attr_accessor :score, :side, :updated
+  attr_reader :user_id, :position
+
+  def initialize(side, user_id)
+    super()
+    @user_id = user_id
     @score = 0
     @position = 0
     @side = side
-    @speed = 0
-    @direction = nil
+    @updated = false
   end
 
-  def move
-    case direction
-    when 'up'
-      @position += 1
-    when 'down'
-      @position -= 1
-    end
+  def move(position)
+    return unless within_vertical_boundary?(position)
+
+    @position = position
+    @updated = true
+  end
+
+  def read_position
+    @updated = false
+    @position
   end
 end

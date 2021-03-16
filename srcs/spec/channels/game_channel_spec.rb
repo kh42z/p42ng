@@ -50,7 +50,7 @@ RSpec.describe GameChannel, type: :channel do
       subscribe(id: game.id)
       stub_connection current_user: player_right
       subscribe(id: game.id)
-      perform :received, message: { y: 10}
+      perform :received, message: { position: 10}.to_json
     end
   end
 end
