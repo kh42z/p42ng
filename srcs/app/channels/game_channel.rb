@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class GameChannel < ApplicationCable::Channel
+  periodically :tick, every: 1.seconds
+
   def subscribed
     @game = Game.find(params[:id])
 
@@ -16,9 +18,10 @@ class GameChannel < ApplicationCable::Channel
   end
 
   def received(data)
-    return if @pong.nil? || player? == false
+    return if @pong.nil? || player? == false || data.key?('message') == false
 
-    @pong.move(current_user.id, data['position'])
+    d = JSON.parse(data['message'])
+    @pong.move(current_user.id, d['position'])
   end
 
   def unsubscribed
@@ -26,6 +29,12 @@ class GameChannel < ApplicationCable::Channel
   end
 
   private
+
+  def tick
+    return if @pong.nil?
+
+    @pong.tick
+  end
 
   def player?
     @game.player_left.id == current_user.id || @game.player_right.id == current_user.id
