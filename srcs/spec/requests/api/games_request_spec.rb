@@ -49,11 +49,12 @@ RSpec.describe 'Games', type: :request do
       describe 'a valid duel game' do
         it 'returns status code 201' do
           to = create(:user, status: 'online')
+          create(:game)
           auth.update(status: 'online')
           expect do
             post '/api/games', headers: auth.create_new_auth_token,
                                params: { game_type: 'duel', opponent_id: to.id }
-          end.to have_broadcasted_to("user_#{to.id}").exactly(:once)
+          end.to have_broadcasted_to("user_#{to.id}").exactly(:once).with(sender_id: auth.id, action: "game_invitation", id: Game.maximum(:id).next)
           expect(response).to have_http_status(201)
           expect(json).not_to be_empty
         end
