@@ -46,7 +46,8 @@ module Api
     end
 
     def invite(user_id, game_id)
-      ActionCable.server.broadcast("user_#{user_id}", { action: 'game_invitation', id: game_id })
+      ActionCable.server.broadcast("user_#{user_id}",
+                                   { action: 'game_invitation', id: game_id, sender_id: current_user.id })
     end
 
     def opponent_available?

@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe ChatMessagesRotateJob, type: :job do
-  it "prunes every chat_messages except the last 10" do
+  it 'prunes every chat_messages except the last 10' do
     chat_full = FactoryBot.create(:chat_with_messages, messages_count: 15)
     chat = FactoryBot.create(:chat)
     ActiveJob::Base.queue_adapter = :test

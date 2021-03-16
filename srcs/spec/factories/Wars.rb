@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :war do
     from { create(:guild).id }
@@ -11,4 +13,3 @@ FactoryBot.define do
     guild_id { from }
   end
 end
-

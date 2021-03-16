@@ -24,7 +24,7 @@ Rails.application.routes.draw do
     resources :games
     resources :achievements
     resources :chats do
-      resources :messages, only: [:index, :create]
+      resources :messages, only: %i[index create]
       member do
         post 'participants', to: 'chats#create_participant'
         delete 'participants', to: 'chats#destroy_participant'
@@ -46,7 +46,7 @@ Rails.application.routes.draw do
     end
   end
   mount_devise_token_auth_for 'User', at: 'auth', controllers: {
-    omniauth_callbacks: 'users/omniauth_callbacks' }
+    omniauth_callbacks: 'users/omniauth_callbacks'
+  }
   mount Rswag::Ui::Engine, at: 'api-docs'
 end
-

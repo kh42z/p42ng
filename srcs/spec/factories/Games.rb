@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :game do
     player_left { FactoryBot.create(:user) }
@@ -5,4 +7,3 @@ FactoryBot.define do
     game_type { 'duel' }
   end
 end
-

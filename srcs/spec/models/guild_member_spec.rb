@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe GuildMember, type: :model do
@@ -11,7 +13,9 @@ RSpec.describe GuildMember, type: :model do
     guild = create(:guild)
     create(:guild_member, guild: guild, rank: 'owner')
     member = create(:guild_member, guild: guild)
-    expect { member.owner! }.to raise_error(ActiveRecord::RecordInvalid, 'Validation failed: Rank has already been taken')
+    expect do
+      member.owner!
+    end.to raise_error(ActiveRecord::RecordInvalid, 'Validation failed: Rank has already been taken')
   end
   it 'should allow member duplicate' do
     create(:guild_member)

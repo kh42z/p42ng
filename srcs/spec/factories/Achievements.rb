@@ -1,5 +1,6 @@
-FactoryBot.define do
+# frozen_string_literal: true
 
+FactoryBot.define do
   factory :user_achievement do
     achievement { FactoryBot.create(:achievement) }
     user { FactoryBot.create(:user) }
