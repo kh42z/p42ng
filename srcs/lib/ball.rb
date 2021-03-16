@@ -1,29 +1,38 @@
 # frozen_string_literal: true
 
-class Ball
+require 'pong_base'
+
+class Ball < PongBase
   attr_accessor :x, :y, :up, :left
 
-  def initialize(v_limit, h_limit)
-    @v_limit = v_limit
-    @h_limit = h_limit
+  def initialize
+    super()
     @x = 256
-    @y = rand(v_limit / 4..v_limit / 2)
+    @y = rand(VERTICAL_LIMIT / 4..VERTICAL_LIMIT / 2)
     @up = [true, false].sample
     @left = [true, false].sample
   end
 
-  def move
-    @up = !up if vertically_inside?(@y) == false
+  def move(left_paddle_y, right_paddle_y)
+    @up = !@up if within_vertical_boundary?(@y) == false
+
+    @left = !@left if hit_paddle(left_paddle_y) || hit_paddle(right_paddle_y)
 
     move_h
     move_y
   end
 
-  def score?
-    horizontally_inside?(@x) == false
+  def scores?
+    within_horizontal_boundary?(@x) == false
   end
 
   private
+
+  def hit_paddle(paddle_y)
+    return unless (@x == PADDLE_PADDING + 1 && @left) || (@x == HORIZONTAL_LIMIT - PADDLE_PADDING - 1 && @left == false)
+
+    @y.between?(paddle_y - PADDLE_SIZE, paddle_y + PADDLE_SIZE)
+  end
 
   def move_h
     if @up == true
@@ -39,13 +48,5 @@ class Ball
     else
       @x += 1
     end
-  end
-
-  def vertically_inside?(pos)
-    pos.positive? && pos < @v_limit
-  end
-
-  def horizontally_inside?(pos)
-    pos.positive? && pos < @h_limit
   end
 end

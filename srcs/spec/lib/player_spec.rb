@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Player do
-  let(:player) { Player.new('left') }
+  let(:player) { Player.new('left', 1) }
   it 'constructor allows to set side' do
     expect(player.side).to eq('left')
   end

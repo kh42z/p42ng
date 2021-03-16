@@ -2,34 +2,31 @@
 
 class GameEngine
   attr_accessor :ball
-  attr_reader :players, :left, :right
+  attr_reader :left, :right
 
-  HORIZONTAL_LIMIT = 512
-  VERTICAL_LIMIT = 256
   SCORE_LIMIT = 21
 
   def initialize(game)
     @game = game
-    @left = Player.new('left')
-    @right = Player.new('right')
-    @players = []
-    @players[@game.player_left.id] = @left
-    @players[@game.player_right.id] = @right
+    @left = Player.new('left', @game.player_left.id)
+    @right = Player.new('right', @game.player_right.id)
   end
 
   def start
-    @ball = Ball.new(VERTICAL_LIMIT, HORIZONTAL_LIMIT)
+    @ball = Ball.new
   end
 
   def move(user_id, position)
-    return unless vertically_inside?(position)
-
-    @players[user_id].move(position)
+    if left.user_id == user_id
+      left.move(position)
+    else
+      right.move(position)
+    end
   end
 
   def tick
-    @ball.move
-    give_point if @ball.score?
+    @ball.move(left.position, right.position)
+    give_point if @ball.scores?
 
     game_state = { player_left: { pos: @left.read_position, score: @left.score },
                    player_right: { pos: @right.read_position,
@@ -60,13 +57,9 @@ class GameEngine
   end
 
   def left_score
-    @players[@game.player_left.id].score += 1
+    @left.score += 1
     forfeit(@game.player_right.id) if @left.score > SCORE_LIMIT
     start
-  end
-
-  def vertically_inside?(pos)
-    pos.positive? && pos < VERTICAL_LIMIT
   end
 
   def other_one(user_id)
