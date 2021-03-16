@@ -14,7 +14,12 @@ Rails.application.routes.draw do
         delete 'officers/:tid', to: 'guilds#destroy_officers'
       end
     end
-    resources :wars
+    resources :wars do
+      member do
+        post 'times', to: 'wars#create_times'
+        delete 'times', to: 'wars#destroy_times'
+      end
+    end
     resources :ladders
     resources :games
     resources :achievements

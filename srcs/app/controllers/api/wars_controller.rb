@@ -2,7 +2,9 @@
 
 module Api
   class WarsController < ApiController
-    before_action :set_war, only: %i[update update show officer_permission?]
+    before_action :set_war, except: %i[index create]
+    before_action :owners_permission, only: %i[update create_times destroy_times]
+    before_action :terms_accepted?, only: %i[update create_times destroy_times]
 
     UserReducer = Rack::Reducer.new(War.all.order(war_end: :desc), ->(guild_id:) { where(guild_id: guild_id) })
 
@@ -19,13 +21,23 @@ module Api
     end
 
     def update
-      return unless owners?
-      return terms_accepted_response if param_accept['accept_terms'] == 'true' || @war.terms_accepted == true
-      return render_error('notNegotiated', 401) unless turn_to_negotiate?
+      return render_error('notNegotiated', 403) unless turn_to_negotiate?
 
       @war.toggle(:negotiation)
       @war.update!(params_update)
       json_response(@war)
+    end
+
+    def create_times
+      return render_error('timeSlotEntangled', 403) if times_entangled?
+
+      war_time = WarTime.create!(time_params_create)
+      json_response(war_time, 201)
+    end
+
+    def destroy_times
+      WarTime.find(params[:tid]).destroy!
+      head :no_content
     end
 
     def show
@@ -34,9 +46,13 @@ module Api
 
     private
 
+    def terms_accepted?
+      terms_accepted_response if param_accept || @war.terms_accepted == true
+    end
+
     def terms_accepted_response
       if @war.terms_accepted == false
-        return render_error('warsEntangled', 403) if war_entangled?
+        return render_error('timeSlotEntangled', 403) if wars_entangled?
 
         @war.toggle!(:terms_accepted)
         json_response(I18n.t('termsAccepted').to_json, 200)
@@ -45,7 +61,7 @@ module Api
       end
     end
 
-    def war_entangled?
+    def wars_entangled?
       (@from.wars + @on.wars).uniq.without(@war).each do |t|
         return true if @war.war_start.between?(t.war_start, t.war_end)
         return true if @war.war_end.between?(t.war_start, t.war_end)
@@ -53,38 +69,39 @@ module Api
       false
     end
 
-    def turn_to_negotiate?
-      if current_user == @from.owner
-        @war.negotiation?
-      else
-        @war.negotiation == false
+    def times_entangled?
+      @war.war_times.each do |t|
+        return true if time_params_create[:start].between?(t.start, t.end)
+        return true if time_params_create[:end].between?(t.start, t.end)
       end
+      false
     end
 
-    def from_owner?
-      current_user == @from.owner
+    def turn_to_negotiate?
+      current_user == @from.owner ? @war.negotiation? : @war.negotiation == false
     end
 
-    def owners?
-      current_user == @from.owner || current_user == @on.owner
-    end
-
-    def officer_permission?
-      @war.from.officers.include?(current_user.guild_member)
+    def owners_permission
+      render_not_allowed unless current_user == @from.owner || current_user == @on.owner
     end
 
     def params_update
-      params.permit(:war_start, :war_end, :prize, :max_unanswered, :addon_ids)
+      params.permit(:war_start, :war_end, :prize, :max_unanswered, :ladder_effort, :tournament_effort)
     end
 
     def param_accept
-      params.permit(:accept_terms)
+      tmp = params.permit(:accept_terms)
+      tmp[:accept_terms] == 'true'
     end
 
     def params_create
       attacker = Guild.find(GuildMember.where(user: current_user).first.guild_id)
       tmp = params.permit(:on, :war_start, :war_end, :prize, :max_unanswered)
       tmp.merge!(from: attacker.id, guild_id: attacker.id)
+    end
+
+    def time_params_create
+      params.permit(:start, :end).merge!(war: @war)
     end
 
     def set_war

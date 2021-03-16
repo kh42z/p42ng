@@ -69,7 +69,7 @@ RSpec.describe "Wars", type: :request do
     end
     it 'should not let owner update after creation' do
       put api_war_url(War.first.id), headers: access_token, params: { max_unanswered: 12 }
-      expect(response.status).to eq 401
+      expect(response.status).to eq 403
       expect(json['errors']).to eq ['Your opponent has not negotiated war terms yet']
     end
     it 'should let update works alternately' do
@@ -90,7 +90,7 @@ RSpec.describe "Wars", type: :request do
       put api_war_url(War.first.id), headers: access_token_2, params: { max_unanswered: 10 }
       expect(response.status).to eq 200
       put api_war_url(War.first.id), headers: access_token_2, params: { max_unanswered: 9 }
-      expect(response.status).to eq 401
+      expect(response.status).to eq 403
     end
     it 'should accept terms if accept_terms == true' do
       put api_war_url(War.first.id), headers: access_token_2, params: { accept_terms: true }
@@ -139,7 +139,41 @@ RSpec.describe "Wars", type: :request do
         expect(response.status).to eq 200
         put api_war_url(War.where(on: guild_nos_id).first.id), headers: access_token_2, params: { accept_terms: true } # BANG VS NOS - ACCEPT
         expect(response.status).to eq 403
-        expect(json['errors']).to eq ['War dates are entangled with another war']
+        expect(json['errors']).to eq ['Time slot you provided is entangled with another slot']
       end
     end
+  describe "#create_war_time" do
+    before { post api_wars_url, headers: access_token, params: valid_attributes }
+    it 'should create a war time' do
+      post times_api_war_url(War.first.id), headers: access_token, params: { start: DateTime.new(2021,1,1), end: DateTime.new(2022,1,1) }
+      expect(response.status).to eq 201
+    end
+    it 'should not create entangled war time' do
+      post times_api_war_url(War.first.id), headers: access_token, params: { start: DateTime.new(2021,1,1), end: DateTime.new(2022,1,1) }
+      post times_api_war_url(War.first.id), headers: access_token, params: { start: DateTime.new(2021,1,1), end: DateTime.new(2022,1,1) }
+      expect(response.status).to eq 403
+      expect(json['errors']).to eq ['Time slot you provided is entangled with another slot']
+    end
+    it 'should not create war time if war terms are accepted' do
+      put api_war_url(War.first.id), headers: access_token, params: { accept_terms: true }
+      post times_api_war_url(War.first.id), headers: access_token, params: { start: DateTime.new(2021,1,1), end: DateTime.new(2022,1,1) }
+    end
+  end
+  describe "#destroy_war_time" do
+    before {
+      post api_wars_url, headers: access_token, params: valid_attributes
+      post times_api_war_url(War.first.id), headers: access_token, params: { start: DateTime.new(2021,1,1), end: DateTime.new(2022,1,1) }
+    }
+    it 'should destroy a war time' do
+      delete times_api_war_url(War.first.id), headers: access_token, params: { tid: WarTime.first.id }
+      expect(response.status).to eq 204
+      expect(WarTime.count).to eq 0
+    end
+    it 'should not destroy a war time if terms accepted', test:true do
+      put api_war_url(War.first.id), headers: access_token_2, params: { accept_terms: true }
+      delete times_api_war_url(War.first.id), headers: access_token, params: { tid: WarTime.first.id }
+      expect(response.status).to eq 403
+      expect(WarTime.count).to eq 1
+    end
+  end
 end

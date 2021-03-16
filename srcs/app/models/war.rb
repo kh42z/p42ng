@@ -3,7 +3,6 @@
 class War < ApplicationRecord
   validates_presence_of :from
   validates_presence_of :on
-  #  validates_uniqueness_of :on, scope: :guild
   validates_presence_of :war_start
   validates_presence_of :war_end
   validates_presence_of :prize
@@ -15,7 +14,7 @@ class War < ApplicationRecord
 
   belongs_to :guild
   has_many :war_addons
-  has_one :war_time
+  has_many :war_times
 
   def from_must_not_eq_on
     valid = from && on && from != on
