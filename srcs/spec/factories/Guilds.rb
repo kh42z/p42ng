@@ -1,5 +1,6 @@
-FactoryBot.define do
+# frozen_string_literal: true
 
+FactoryBot.define do
   factory :guild do
     name { Faker::Games::ElderScrolls.unique.creature }
     anagram { Faker::Name.initials(number: 5) }
@@ -19,5 +20,4 @@ FactoryBot.define do
     guild
     rank { 'member' }
   end
-
 end

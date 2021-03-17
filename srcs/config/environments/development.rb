@@ -22,8 +22,8 @@ Rails.application.configure do
       'Cache-Control' => "public, max-age=#{2.days.to_i}"
     }
   else
-    #config.action_controller.perform_caching = false
-    #config.cache_store = :null_store
+    # config.action_controller.perform_caching = false
+    # config.cache_store = :null_store
 
     config.cache_store = :memory_store, { size: 64.megabytes }
     config.action_controller.perform_caching = true
@@ -52,19 +52,19 @@ Rails.application.configure do
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
-  #config.action_mailer.default_url_options = { host: 'localhost', port: '3000' }
+  # config.action_mailer.default_url_options = { host: 'localhost', port: '3000' }
 
   config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+  config.action_mailer.default_url_options = { host: 'localhost:3000' }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    :authentication => :plain,
-    :address => "smtp.mailgun.org",
-    :port => 587,
-    :domain => ENV['MAILGUN_DOMAIN'],
-    :user_name => "postmaster@" + ENV['MAILGUN_DOMAIN'],
-    :password => ENV['MAILGUN_PASSWORD'],
-    :enable_starttls_auto => true,
+    authentication: :plain,
+    address: 'smtp.mailgun.org',
+    port: 587,
+    domain: ENV['MAILGUN_DOMAIN'],
+    user_name: "postmaster@#{ENV['MAILGUN_DOMAIN']}",
+    password: ENV['MAILGUN_PASSWORD'],
+    enable_starttls_auto: true
 
   }
 end

@@ -9,7 +9,7 @@
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
-  config.omniauth :marvin, ENV["MARVIN_APP_ID"], ENV["MARVIN_APP_SECRET"]
+  config.omniauth :marvin, ENV['MARVIN_APP_ID'], ENV['MARVIN_APP_SECRET']
   require 'devise/orm/active_record'
   config.navigational_formats = [:json]
   OmniAuth.config.logger = Rails.logger if Rails.env.development?

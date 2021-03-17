@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Ball do
@@ -45,7 +47,6 @@ RSpec.describe Ball do
     expect(ball.x).to eq(PongBase::HORIZONTAL_LIMIT - PongBase::PADDLE_PADDING - 2)
   end
 
-
   it 'should miss the right paddle' do
     ball.x = PongBase::HORIZONTAL_LIMIT - PongBase::PADDLE_PADDING - 1
     ball.y = 128
@@ -54,7 +55,6 @@ RSpec.describe Ball do
     expect(ball.left).to eq(false)
     expect(ball.x).to eq(PongBase::HORIZONTAL_LIMIT - PongBase::PADDLE_PADDING)
   end
-
 
   it 'should miss the left paddle' do
     ball.x = PongBase::PADDLE_PADDING + 1

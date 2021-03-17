@@ -7,9 +7,9 @@ RSpec.describe 'Ladders', type: :request do
   let(:ladder_id) { ladders.first.id }
 
   describe 'requires auth token' do
-    before {
+    before do
       get '/api/ladders'
-    }
+    end
 
     it 'returns status code 401' do
       expect(response).to have_http_status(401)
@@ -17,10 +17,10 @@ RSpec.describe 'Ladders', type: :request do
   end
 
   describe 'retrieves one ladder' do
-    before {
+    before do
       @user = FactoryBot.create(:user, ladder: ladders.first)
       get "/api/ladders/#{ladder_id}", headers: @user.create_new_auth_token
-    }
+    end
     it 'returns ladder' do
       expect(json).not_to be_empty
     end
@@ -31,10 +31,10 @@ RSpec.describe 'Ladders', type: :request do
   end
 
   describe 'retrieves all ladders' do
-    before {
+    before do
       @user = FactoryBot.create(:user, ladder: ladders.first)
       get '/api/ladders', headers: @user.create_new_auth_token
-    }
+    end
 
     it 'returns ladders' do
       expect(json).not_to be_empty

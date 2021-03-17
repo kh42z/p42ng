@@ -32,7 +32,7 @@ class GameEngine
                    player_right: { pos: @right.read_position,
                                    score: @right.score },
                    ball: @ball }
-    ActionCable.server.broadcast("game_#{@game.id}", game_state.to_json)
+    ActionCable.server.broadcast("game_#{@game.id}", game_state)
   end
 
   def forfeit(user_id)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Chat, type: :model do
@@ -7,24 +9,24 @@ RSpec.describe Chat, type: :model do
   it { should have_secure_password }
   it { should belong_to(:owner) }
 
-  it "is not valid without attributes" do
+  it 'is not valid without attributes' do
     expect(Chat.new).to_not be_valid
   end
 
-  it "validates uniqueness of name" do
+  it 'validates uniqueness of name' do
     create(:chat, name: 'unique')
     should validate_uniqueness_of(:name)
   end
 
-  it "is not valid when set to protected without password" do
+  it 'is not valid when set to protected without password' do
     expect { create(:chat, privacy: 'protected') }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
-  it "is valid when set to protected and a password" do
+  it 'is valid when set to protected and a password' do
     subject { described_class.new }
     subject.name = 'Hop'
     subject.privacy = 'protected'
-    subject.password = "asd"
+    subject.password = 'asd'
     subject.owner = create(:user)
     expect(subject).to be_valid
   end

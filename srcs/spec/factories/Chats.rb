@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-
   factory :chat do
     privacy { %w[public private].sample }
     owner_id { create(:user).id }
