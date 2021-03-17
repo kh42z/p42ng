@@ -11,8 +11,8 @@ class GameEngineJob < ApplicationJob
   end
 
   def turn(pong)
-    paddle_left = game_get_paddle_pos(game.id, game.player_left.id)
-    paddle_right = game_get_paddle_pos(game.id, game.player_right.id)
+    paddle_left = game_get_paddle_pos(pong.game.id, pong.game.player_left.id)
+    paddle_right = game_get_paddle_pos(pong.game.id, pong.game.player_right.id)
     pong.tick(paddle_left, paddle_right)
     sleep(0.5.seconds)
   end

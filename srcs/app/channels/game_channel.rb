@@ -26,7 +26,7 @@ class GameChannel < ApplicationCable::Channel
 
   def unsubscribed
     @game.reload
-    # if players leaves before the game started
+    # if players leaves before the game starts
     @game.update!(state: @game.state - 1) if @game.state <= 2 && player?
   end
 

@@ -21,7 +21,7 @@ RSpec.describe GameChannel, type: :channel do
       unsubscribe
     end
 
-    it 'shoul subscribe even if game isnt started' do
+    it 'should subscribe even if game isnt started' do
       stub_connection current_user: viewer
       subscribe(id: game.id)
       expect(subscription).to be_confirmed
