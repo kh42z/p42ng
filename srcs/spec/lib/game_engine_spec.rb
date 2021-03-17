@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe GameEngine do
+  include_context 'with cache'
+  include(CacheHelper)
   let(:left) { create(:user) }
   let(:right) { create(:user) }
   let(:game) { create(:game, player_left: left, player_right: right) }
@@ -13,16 +15,17 @@ RSpec.describe GameEngine do
   end
 
   it 'valid move set player position' do
-    ge.move(left.id, 20)
-    expect(ge.left.read_position).to eq(20)
+    ge.start
+    ge.tick(20, 128)
+    expect(ge.left.position).to eq(20)
   end
 
   it 'invalid move doesnt set player position' do
-    ge.move(left.id, 20)
-    ge.move(left.id, 0)
-    expect(ge.left.read_position).to eq(20)
-    ge.move(left.id, 256)
-    expect(ge.left.read_position).to eq(20)
+    ge.start
+    ge.tick(20, 1)
+    expect(ge.left.position).to eq(20)
+    ge.tick(256, 1)
+    expect(ge.left.position).to eq(20)
   end
 
   it 'left forfeit should' do
@@ -55,6 +58,6 @@ RSpec.describe GameEngine do
 
   it 'assert tick broadcast' do
     ge.start
-    expect { ge.tick }.to have_broadcasted_to("game_#{game.id}").exactly(:once)
+    expect { ge.tick(128, 128) }.to have_broadcasted_to("game_#{game.id}").exactly(:once)
   end
 end

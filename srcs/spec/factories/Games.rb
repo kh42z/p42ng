@@ -5,5 +5,6 @@ FactoryBot.define do
     player_left { FactoryBot.create(:user) }
     player_right { FactoryBot.create(:user) }
     game_type { 'duel' }
+    state { 0 }
   end
 end

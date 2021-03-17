@@ -30,38 +30,38 @@ RSpec.describe Ball do
   end
 
   it 'should hit left paddle' do
-    ball.x = PongBase::PADDLE_PADDING + 1
+    ball.x = Player::PADDLE_PADDING + 1
     ball.y = 119
     ball.left = true
     ball.move(128, 1)
     expect(ball.left).to eq(false)
-    expect(ball.x).to eq(PongBase::PADDLE_PADDING + 2)
+    expect(ball.x).to eq(Player::PADDLE_PADDING + 2)
   end
 
   it 'should hit right paddle' do
-    ball.x = PongBase::HORIZONTAL_LIMIT - PongBase::PADDLE_PADDING - 1
+    ball.x = BoardObject::HORIZONTAL_LIMIT - Player::PADDLE_PADDING - 1
     ball.y = 119
     ball.left = false
     ball.move(1, 128)
     expect(ball.left).to eq(true)
-    expect(ball.x).to eq(PongBase::HORIZONTAL_LIMIT - PongBase::PADDLE_PADDING - 2)
+    expect(ball.x).to eq(BoardObject::HORIZONTAL_LIMIT - Player::PADDLE_PADDING - 2)
   end
 
   it 'should miss the right paddle' do
-    ball.x = PongBase::HORIZONTAL_LIMIT - PongBase::PADDLE_PADDING - 1
+    ball.x = BoardObject::HORIZONTAL_LIMIT - Player::PADDLE_PADDING - 1
     ball.y = 128
     ball.left = false
     ball.move(1, 117)
     expect(ball.left).to eq(false)
-    expect(ball.x).to eq(PongBase::HORIZONTAL_LIMIT - PongBase::PADDLE_PADDING)
+    expect(ball.x).to eq(BoardObject::HORIZONTAL_LIMIT - Player::PADDLE_PADDING)
   end
 
   it 'should miss the left paddle' do
-    ball.x = PongBase::PADDLE_PADDING + 1
+    ball.x = Player::PADDLE_PADDING + 1
     ball.y = 128
     ball.left = true
     ball.move(139, 1)
     expect(ball.left).to eq(true)
-    expect(ball.x).to eq(PongBase::PADDLE_PADDING)
+    expect(ball.x).to eq(Player::PADDLE_PADDING)
   end
 end

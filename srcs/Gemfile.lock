@@ -288,6 +288,7 @@ DEPENDENCIES
   bcrypt (~> 3.1.7)
   bootsnap (>= 1.4.2)
   byebug
+  concurrent-ruby
   devise_token_auth (~> 1.1.4)
   factory_bot_rails (~> 4.0)
   faker

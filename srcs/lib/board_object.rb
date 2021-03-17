@@ -1,10 +1,15 @@
 # frozen_string_literal: true
 
-class PongBase
+class BoardObject
+  attr_accessor :updated
+
   HORIZONTAL_LIMIT = 512
   VERTICAL_LIMIT = 256
-  PADDLE_PADDING = 10
-  PADDLE_SIZE = 10
+
+  def initialize
+    super
+    @updated = true
+  end
 
   protected
 

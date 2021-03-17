@@ -11,7 +11,6 @@ RSpec.describe Player do
   it 'updated attribute changes' do
     player.move(20)
     expect(player.updated).to eq(true)
-    expect(player.read_position).to eq(20)
-    expect(player.updated).to eq(false)
+    expect(player.position).to eq(20)
   end
 end

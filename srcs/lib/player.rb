@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
-require 'pong_base'
+require 'board_object'
 
-class Player < PongBase
+class Player < BoardObject
   attr_accessor :score, :side, :updated
   attr_reader :user_id, :position
+
+  PADDLE_PADDING = 10
+  PADDLE_SIZE = 10
 
   def initialize(side, user_id)
     super()
@@ -18,12 +21,9 @@ class Player < PongBase
   def move(position)
     return unless within_vertical_boundary?(position)
 
+    return if position == @position
+
     @position = position
     @updated = true
-  end
-
-  def read_position
-    @updated = false
-    @position
   end
 end

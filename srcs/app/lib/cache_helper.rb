@@ -4,6 +4,7 @@ module CacheHelper
   TIMEOUT_KEY_PREFIX = 'timeout_chat_'
   BAN_KEY_PREFIX = 'ban_chat_'
   GUILD_INVITE_KEY_PREFIX = 'pending_invite_'
+  GE_PADDLE_POSITION = 'game_engine_paddle_pos_'
 
   def user_banned_from_chat?(chat_id, user_id)
     Rails.cache.exist?(CacheHelper::BAN_KEY_PREFIX + "#{chat_id}_#{user_id}")
@@ -33,5 +34,15 @@ module CacheHelper
 
   def guild_delete_invitation(guild_id, user_id)
     Rails.cache.delete(CacheHelper::GUILD_INVITE_KEY_PREFIX + "#{guild_id}_#{user_id}")
+  end
+
+  def game_set_paddle_pos(game_id, user_id, pos)
+    Rails.cache.write(CacheHelper::GE_PADDLE_POSITION + "#{game_id}_#{user_id}", pos)
+  end
+
+  def game_get_paddle_pos(game_id, user_id)
+    Rails.cache.fetch(CacheHelper::GE_PADDLE_POSITION + "#{game_id}_#{user_id}") do
+      return 128
+    end
   end
 end
