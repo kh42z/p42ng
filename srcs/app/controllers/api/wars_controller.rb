@@ -3,7 +3,7 @@
 module Api
   class WarsController < ApiController
     before_action :set_war, except: %i[index create]
-    before_action :owners_permission, only: %i[update create_times destroy_times agreement]
+    before_action :owners_permission, only: %i[update create_times destroy_times agreements]
     before_action :pending_agreement?, only: %i[update create_times destroy_times]
 
     UserReducer = Rack::Reducer.new(War.all.order(war_end: :desc), ->(guild_id:) { where(guild_id: guild_id) })
@@ -28,7 +28,7 @@ module Api
       json_response(@war)
     end
 
-    def agreement
+    def agreements
       return render_error('timeSlotEntangled', 403) if wars_entangled?
 
       if current_user.guild_member.guild_id == @from.id
