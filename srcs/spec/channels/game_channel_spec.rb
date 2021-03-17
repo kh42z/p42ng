@@ -26,14 +26,22 @@ RSpec.describe GameChannel, type: :channel do
       subscribe(id: game.id)
       expect(subscription).to be_confirmed
     end
+
+
+    it 'shouldnt subscribe if game is closed' do
+      stub_connection current_user: player_left
+      game.update!(state: 3)
+      subscribe(id: game.id)
+      expect(subscription).to be_rejected
+    end
   end
 
   describe 'Game' do
     it 'should start' do
       stub_connection current_user: player_left
       subscribe(id: game.id)
-      #stub_connection current_user: player_right
-      #subscribe(id: game.id)
+      # stub_connection current_user: player_right
+      # subscribe(id: game.id)
       stub_connection current_user: viewer
       subscribe(id: game.id)
       expect(subscription).to be_confirmed
@@ -43,8 +51,8 @@ RSpec.describe GameChannel, type: :channel do
     it 'should receive data' do
       stub_connection current_user: player_left
       subscribe(id: game.id)
-      #stub_connection current_user: player_right
-      #subscribe(id: game.id)
+      # stub_connection current_user: player_right
+      # subscribe(id: game.id)
       perform :received, message: { position: 10 }.to_json
     end
   end

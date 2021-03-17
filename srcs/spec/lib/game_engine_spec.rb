@@ -17,15 +17,15 @@ RSpec.describe GameEngine do
   it 'valid move set player position' do
     ge.start
     ge.tick(20, 128)
-    expect(ge.left.read_position).to eq(20)
+    expect(ge.left.position).to eq(20)
   end
 
   it 'invalid move doesnt set player position' do
     ge.start
     ge.tick(20, 1)
-    expect(ge.left.read_position).to eq(20)
+    expect(ge.left.position).to eq(20)
     ge.tick(256, 1)
-    expect(ge.left.read_position).to eq(20)
+    expect(ge.left.position).to eq(20)
   end
 
   it 'left forfeit should' do
