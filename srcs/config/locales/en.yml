@@ -45,5 +45,5 @@ en:
   messageTooLong: "Your message contains more than 300 characters"
   notNegotiated: "Your opponent has not negotiated war terms yet"
   termsAccepted: "War terms have been accepted, cannot update anymore"
-  timeSlotEntangled: "Time slot you provided is entangled with another slot"
-  warTimesNotAccepted: "War times are not accepted"
+  timeSlotEntangled: "Entity dates are entangled with another one"
+  pendingAgreement: "One side has agree war terms, accept or decline agreement"
