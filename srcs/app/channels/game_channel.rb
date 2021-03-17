@@ -1,40 +1,36 @@
 # frozen_string_literal: true
 
 class GameChannel < ApplicationCable::Channel
-  periodically :tick, every: 1.seconds
-
   def subscribed
     @game = Game.find(params[:id])
 
-    return reject if player? == false && @game.state.zero?
+    return reject if @game.state > 2
 
     stream_from "game_#{@game.id}"
+
+    return unless player?
+
     @game.update!(state: @game.state + 1)
 
     return unless @game.state > 1
 
-    @pong = GameEngine.new(@game)
-    @pong.start
+    GameEngineJob.perform_now(GameEngine.new(@game))
   end
 
   def received(data)
-    return if @pong.nil? || player? == false || data.key?('message') == false
+    return if player? == false || data.key?('message') == false
 
-    d = JSON.parse(data['message'])
-    @pong.move(current_user.id, d['position'])
+    msg = JSON.parse(data['message'])
+    game_set_paddle_pos(@game.id, current_user.id, msg['position']) if msg.key?('position')
   end
 
   def unsubscribed
-    @game.update!(state: @game.state - 1) if @pong.nil?
+    @game.reload
+    # if players leaves before the game started
+    @game.update!(state: @game.state - 1) if @game.state <= 2 && player?
   end
 
   private
-
-  def tick
-    return if @pong.nil?
-
-    @pong.tick
-  end
 
   def player?
     @game.player_left.id == current_user.id || @game.player_right.id == current_user.id

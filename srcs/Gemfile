@@ -29,7 +29,7 @@ gem 'rack-cors', require: 'rack/cors'
 gem 'rack-reducer', require: 'rack/reducer'
 gem 'rswag-api'
 gem 'rswag-ui'
-gem 'whenever'
+gem 'whenever' # Trash design thanks to #97
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'

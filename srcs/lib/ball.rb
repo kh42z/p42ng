@@ -13,11 +13,10 @@ class Ball < PongBase
     @left = [true, false].sample
   end
 
-  def move(left_paddle_y, right_paddle_y)
+  def move(paddle_left, paddle_right)
     @up = !@up if within_vertical_boundary?(@y) == false
 
-    @left = !@left if hit_paddle(left_paddle_y) || hit_paddle(right_paddle_y)
-
+    change_horizontal_direction(paddle_left, paddle_right)
     move_h
     move_y
   end
@@ -28,8 +27,16 @@ class Ball < PongBase
 
   private
 
+  def change_horizontal_direction(paddle_left, paddle_right)
+    if @left
+      @left = false if hit_paddle(paddle_left)
+    elsif hit_paddle(paddle_right)
+      @left = true
+    end
+  end
+
   def hit_paddle(paddle_y)
-    return unless (@x == PADDLE_PADDING + 1 && @left) || (@x == HORIZONTAL_LIMIT - PADDLE_PADDING - 1 && @left == false)
+    return unless @x == PADDLE_PADDING + 1 || @x == HORIZONTAL_LIMIT - PADDLE_PADDING - 1
 
     @y.between?(paddle_y - PADDLE_SIZE, paddle_y + PADDLE_SIZE)
   end

@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 class GameEngine
-  attr_accessor :ball
-  attr_reader :left, :right
+  attr_accessor :ball, :over
+  attr_reader :left, :right, :game
 
   SCORE_LIMIT = 21
 
   def initialize(game)
     @game = game
+    @over = false
     @left = Player.new('left', @game.player_left.id)
     @right = Player.new('right', @game.player_right.id)
   end
@@ -16,20 +17,14 @@ class GameEngine
     @ball = Ball.new
   end
 
-  def move(user_id, position)
-    if left.user_id == user_id
-      left.move(position)
-    else
-      right.move(position)
-    end
-  end
-
-  def tick
-    @ball.move(left.position, right.position)
+  def tick(paddle_left, paddle_right)
+    @left.move(paddle_left)
+    @right.move(paddle_right)
+    @ball.move(@left.position, @right.position)
     give_point if @ball.scores?
 
-    game_state = { player_left: { pos: @left.read_position, score: @left.score },
-                   player_right: { pos: @right.read_position,
+    game_state = { player_left: { pos: paddle_left, score: @left.score },
+                   player_right: { pos: paddle_right,
                                    score: @right.score },
                    ball: @ball }
     ActionCable.server.broadcast("game_#{@game.id}", game_state)
@@ -38,6 +33,7 @@ class GameEngine
   def forfeit(user_id)
     winner(other_one(user_id))
     notify_looser(user_id)
+    @over = true
   end
 
   def give_point
