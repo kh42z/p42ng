@@ -3,8 +3,8 @@
 module Api
   class WarsController < ApiController
     before_action :set_war, except: %i[index create]
-    before_action :owners_permission, only: %i[update create_times destroy_times]
-    before_action :terms_accepted?, only: %i[update create_times destroy_times]
+    before_action :owners_permission, only: %i[update create_times destroy_times agreement]
+    before_action :pending_agreement?, only: %i[update create_times destroy_times]
 
     UserReducer = Rack::Reducer.new(War.all.order(war_end: :desc), ->(guild_id:) { where(guild_id: guild_id) })
 
@@ -28,6 +28,18 @@ module Api
       json_response(@war)
     end
 
+    def agreement
+      return render_error('timeSlotEntangled', 403) if wars_entangled?
+
+      if current_user.guild_member.guild_id == @from.id
+        @war.update!(from_agreement: param_agreement)
+      else
+        @war.update!(on_agreement: param_agreement)
+      end
+      @war.update!(terms_agreed: true) if @war.from_agreement? && @war.on_agreement?
+      json_response(@war, 201)
+    end
+
     def create_times
       return render_error('timeSlotEntangled', 403) if times_entangled?
 
@@ -46,23 +58,15 @@ module Api
 
     private
 
-    def terms_accepted?
-      terms_accepted_response if param_accept || @war.terms_accepted == true
-    end
+    def pending_agreement?
+      return unless @war.from_agreement? || @war.on_agreement?
 
-    def terms_accepted_response
-      if @war.terms_accepted == false
-        return render_error('timeSlotEntangled', 403) if wars_entangled?
-
-        @war.toggle!(:terms_accepted)
-        json_response(I18n.t('termsAccepted').to_json, 200)
-      else
-        render_error('termsAccepted', 403)
-      end
+      render_error('pendingAgreement', 403) if @war.terms_agreed == false
+      render_error('termsAccepted', 403) if @war.terms_agreed == true
     end
 
     def wars_entangled?
-      (@from.wars + @on.wars).uniq.without(@war).each do |t|
+      (@from.wars + @on.wars).uniq.without(@war).filter { |i| i.terms_agreed == true }.each do |t|
         return true if @war.war_start.between?(t.war_start, t.war_end)
         return true if @war.war_end.between?(t.war_start, t.war_end)
       end
@@ -89,9 +93,9 @@ module Api
       params.permit(:war_start, :war_end, :prize, :max_unanswered, :ladder_effort, :tournament_effort)
     end
 
-    def param_accept
-      tmp = params.permit(:accept_terms)
-      tmp[:accept_terms] == 'true'
+    def param_agreement
+      param = params.fetch(:agree_terms)
+      param == 'true'
     end
 
     def params_create

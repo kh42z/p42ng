@@ -210,9 +210,11 @@ ActiveRecord::Schema.define(version: 2021_03_11_090451) do
     t.integer "on_score", default: 0
     t.integer "max_unanswered"
     t.boolean "negotiation", default: false
-    t.boolean "terms_accepted", default: false
     t.boolean "ladder_effort", default: false
     t.boolean "tournament_effort", default: false
+    t.boolean "from_agreement", default: false
+    t.boolean "on_agreement", default: false
+    t.boolean "terms_agreed", default: false
     t.bigint "guild_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

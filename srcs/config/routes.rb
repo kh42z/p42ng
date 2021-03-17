@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       member do
         post 'times', to: 'wars#create_times'
         delete 'times', to: 'wars#destroy_times'
+        post 'agreement'
       end
     end
     resources :ladders
