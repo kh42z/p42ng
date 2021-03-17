@@ -10,11 +10,12 @@ class GameChannel < ApplicationCable::Channel
 
     return unless player?
 
-    @game.update!(state: @game.state + 1)
-
-    return unless @game.state > 1
-
-    GameEngineJob.perform_now(GameEngine.new(@game))
+    @game.with_lock do
+      @game.reload
+      @game.state += 1
+      GameEngineJob.perform_now(GameEngine.new(@game)) if @game.state > 1
+      @game.save!
+    end
   end
 
   def received(data)
