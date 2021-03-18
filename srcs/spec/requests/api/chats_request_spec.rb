@@ -135,7 +135,7 @@ RSpec.describe 'Chats', type: :request do
   describe '#mutes' do
     let(:user) { create(:user) }
     let(:chat) { create(:chat, owner: auth) }
-    it 'should mute a participant', test:true do
+    it 'should mute a participant', test: true do
       timer = 2
       post participants_api_chat_url(chat.id), headers: access_token, params: { user: user, chat: chat }
       post mutes_api_chat_url(chat.id), headers: access_token, params: { user_id: user.id, duration: timer }
@@ -235,9 +235,10 @@ RSpec.describe 'Chats', type: :request do
     let(:user) { create(:user) }
     let(:user_2) { create(:user) }
     let(:access) { user.create_new_auth_token }
-    before {
-      post api_chats_url, headers: access_token, params: { name: 'Hop', privacy: 'private', participant_ids: [user.id, user_2.id] }
-    }
+    before do
+      post api_chats_url, headers: access_token,
+                          params: { name: 'Hop', privacy: 'private', participant_ids: [user.id, user_2.id] }
+    end
     it 'should kick a participant' do
       delete "/api/chats/#{Chat.first.id}/participants/#{user.id}", headers: access_token
       expect(response.status).to eq 204

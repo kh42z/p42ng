@@ -33,6 +33,7 @@ if Rails.env.development?
 
   10.times do |_i|
     winner = User.find(0..7)
-    FactoryBot.create(:game, winner: winner, player_left: winner, player_right: User.find(8..15), mode: 'ladder', status: 'played')
+    FactoryBot.create(:game, winner: winner, player_left: winner, player_right: User.find(8..15), mode: 'ladder',
+                             status: 'played')
   end
 end

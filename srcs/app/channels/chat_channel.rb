@@ -11,7 +11,9 @@ class ChatChannel < ApplicationCable::Channel
   def received(data)
     return if user_timeout_from_chat?(@chat_id, current_user.id)
 
-    ActionCable.server.broadcast("chat_#{@chat_id}", { sender_id: current_user.id, content: data.fetch('message') })
+    ActionCable.server.broadcast("chat_#{@chat_id}",
+                                 { action: 'message', sender_id: current_user.id, content: data.fetch('message'),
+                                   created_at: Time.now.strftime('%Y-%m-%d %H:%M:%S') })
   end
 
   def unsubscribed; end

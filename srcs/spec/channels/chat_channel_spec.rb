@@ -30,7 +30,8 @@ RSpec.describe ChatChannel, type: :channel do
       expect do
         perform :received,
                 message: 'toto'
-      end.to have_broadcasted_to("chat_#{@chat.id}").with(sender_id: current_user.id, content: 'toto')
+      end.to have_broadcasted_to("chat_#{@chat.id}").with(action: 'message', sender_id: current_user.id,
+                                                          content: 'toto', created_at: Time.now.strftime('%Y-%m-%d %H:%M:%S'))
     end
   end
 

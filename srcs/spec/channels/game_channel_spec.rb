@@ -27,7 +27,6 @@ RSpec.describe GameChannel, type: :channel do
       expect(subscription).to be_confirmed
     end
 
-
     it 'shouldnt subscribe if game is closed' do
       stub_connection current_user: player_left
       game.update!(status: 'played')
