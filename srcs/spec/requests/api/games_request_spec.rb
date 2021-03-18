@@ -99,6 +99,15 @@ RSpec.describe 'Games', type: :request do
         expect(response).to have_http_status(422)
         expect(json).not_to be_empty
       end
+
+      it 'already in another duel game' do
+        from = create(:user, status: 'online')
+        auth.update!(status: 'online')
+        create(:game, player_left: auth, status: 'pending')
+        post '/api/games', headers: from.create_new_auth_token, params: { mode: 'duel', opponent_id: auth.id }
+        expect(response).to have_http_status(422)
+        expect(json).not_to be_empty
+      end
     end
 
     context 'delete' do

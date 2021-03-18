@@ -37,8 +37,8 @@ module Api
     def set_duel
       raise ActiveRecord::RecordInvalid if params.key?(:opponent_id) == false
 
-      @games_params[:player_left_id], @games_params[:player_right_id] = [current_user.id,
-                                                                         params[:opponent_id].to_i].shuffle
+      @games_params[:player_left_id] = current_user.id
+      @games_params[:player_right_id] = params[:opponent_id].to_i
     end
 
     def send_invites(game)
