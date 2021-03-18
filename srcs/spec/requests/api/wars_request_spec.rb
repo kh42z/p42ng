@@ -123,7 +123,7 @@ RSpec.describe "Wars", type: :request do
   end
   describe '#agreement' do
     before { post api_wars_url, headers: access_token, params: valid_attributes }
-    it 'should agree war terms', test:true do
+    it 'should agree war terms' do
       post agreements_api_war_url(War.first.id), headers: access_token, params: { agree_terms: true }
       expect(War.first.from_agreement).to be_truthy
       post agreements_api_war_url(War.first.id), headers: access_token_2, params: { agree_terms: true }
@@ -147,19 +147,25 @@ RSpec.describe "Wars", type: :request do
     end
   end
   describe '#wars_entangled?' do
-    it 'should consider war with agreed terms' do
+    before {
       post api_wars_url, headers: access_token, params: valid_attributes
       post api_wars_url, headers: access_token_2, params: { on: Guild.first.id, war_start: DateTime.now, war_end: DateTime.new(2022, 01, 01, 00, 00, 0), prize: 1000, max_unanswered: 10 }
       post agreements_api_war_url(War.first.id), headers: access_token, params: { agree_terms: true }
+    }
+    it 'should consider war with agreed terms (start dates entangled)' do
+      post agreements_api_war_url(War.first.id), headers: access_token_2, params: { agree_terms: true }
+      post agreements_api_war_url(War.last.id), headers: access_token, params: { agree_terms: true }
+      expect(json['errors']).to eq ['Entity dates are entangled with another one']
+      expect(response.status).to eq 403
+    end
+    it 'should consider war with agreed terms (end dates entangled)',test:true do
+      post api_wars_url, headers: access_token_2, params: { on: Guild.first.id, war_start: DateTime.new(2020, 1, 1), war_end: DateTime.new(2021, 6, 6), prize: 1000, max_unanswered: 10 }
       post agreements_api_war_url(War.first.id), headers: access_token_2, params: { agree_terms: true }
       post agreements_api_war_url(War.last.id), headers: access_token, params: { agree_terms: true }
       expect(json['errors']).to eq ['Entity dates are entangled with another one']
       expect(response.status).to eq 403
     end
     it 'should not consider war without agreed terms' do
-      post api_wars_url, headers: access_token, params: valid_attributes
-      post api_wars_url, headers: access_token_2, params: { on: Guild.first.id, war_start: DateTime.now, war_end: DateTime.new(2022, 01, 01, 00, 00, 0), prize: 1000, max_unanswered: 10 }
-      post agreements_api_war_url(War.last.id), headers: access_token, params: { agree_terms: true }
       expect(response.status).to eq 201
     end
   end
