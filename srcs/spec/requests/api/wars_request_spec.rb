@@ -96,9 +96,15 @@ RSpec.describe "Wars", type: :request do
       post times_api_war_url(War.first.id), headers: access_token, params: { start: DateTime.new(2021,1,1), end: DateTime.new(2022,1,1) }
       expect(response.status).to eq 201
     end
-    it 'should not create entangled war time' do
-      post times_api_war_url(War.first.id), headers: access_token, params: { start: DateTime.new(2021,1,1), end: DateTime.new(2022,1,1) }
-      post times_api_war_url(War.first.id), headers: access_token, params: { start: DateTime.new(2021,1,1), end: DateTime.new(2022,1,1) }
+    it 'should not create entangled war time (start dates entangled)' do
+      post times_api_war_url(War.first.id), headers: access_token, params: { start: DateTime.new(2021,1,1), end: DateTime.new(2022,6,6) }
+      post times_api_war_url(War.first.id), headers: access_token, params: { start: DateTime.new(2021,2,2), end: DateTime.new(2022,1,1) }
+      expect(response.status).to eq 403
+      expect(json['errors']).to eq ['Entity dates are entangled with another one']
+    end
+    it 'should not create entangled war time (end dates entangled)' do
+      post times_api_war_url(War.first.id), headers: access_token, params: { start: DateTime.new(2022), end: DateTime.new(2024) }
+      post times_api_war_url(War.first.id), headers: access_token, params: { start: DateTime.new(2021), end: DateTime.new(2023) }
       expect(response.status).to eq 403
       expect(json['errors']).to eq ['Entity dates are entangled with another one']
     end
@@ -158,7 +164,7 @@ RSpec.describe "Wars", type: :request do
       expect(json['errors']).to eq ['Entity dates are entangled with another one']
       expect(response.status).to eq 403
     end
-    it 'should consider war with agreed terms (end dates entangled)',test:true do
+    it 'should consider war with agreed terms (end dates entangled)' do
       post api_wars_url, headers: access_token_2, params: { on: Guild.first.id, war_start: DateTime.new(2020, 1, 1), war_end: DateTime.new(2021, 6, 6), prize: 1000, max_unanswered: 10 }
       post agreements_api_war_url(War.first.id), headers: access_token_2, params: { agree_terms: true }
       post agreements_api_war_url(War.last.id), headers: access_token, params: { agree_terms: true }

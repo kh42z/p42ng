@@ -53,13 +53,13 @@ module Api
 
     def mutes
       timeout_user_from_chat(@chat.id, params.fetch(:user_id), params.fetch(:duration))
-      json_response("User #{params[:user]} muted for #{params[:duration]}seconds".to_json, 201)
+      json_response({ 'user' => params[:user_id].to_i, 'duration' => params[:duration].to_i }, 201)
     end
 
     def bans
       ban_user_from_chat(@chat.id, params.fetch(:user_id), params.fetch(:duration))
       disconnect_banned_user(params[:user])
-      json_response("User #{params[:user]} banned for #{params[:duration]}seconds".to_json, 201)
+      json_response({ 'user' => params[:user_id].to_i, 'duration' => params[:duration].to_i }, 201)
     end
 
     def invites

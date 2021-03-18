@@ -135,7 +135,7 @@ RSpec.describe 'Chats', type: :request do
   describe '#mutes' do
     let(:user) { create(:user) }
     let(:chat) { create(:chat, owner: auth) }
-    it 'should mute a participant' do
+    it 'should mute a participant', test:true do
       timer = 2
       post participants_api_chat_url(chat.id), headers: access_token, params: { user: user, chat: chat }
       post mutes_api_chat_url(chat.id), headers: access_token, params: { user_id: user.id, duration: timer }

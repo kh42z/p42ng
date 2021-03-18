@@ -175,7 +175,7 @@ describe 'Guild', type: :request do
     end
   end
 
-  describe '#Invitations', test: true do
+  describe '#Invitations' do
     include(CacheHelper)
     include_context 'with cache'
     let(:user) { create(:user, status: 'online') }
@@ -186,7 +186,7 @@ describe 'Guild', type: :request do
       post api_guilds_url, headers: access_token, params: attributes
       post invitations_api_guild_url(current_guild.id), headers: access_token, params: { user_id: user.id }
     end
-    it 'should send an invitation' do
+    it 'should send an invitation',test:true do
       expect(response.status).to eq 201
       expect(json['user_id']).to eq user.id
       expect(guild_pending_invitation?(current_guild.id, user.id)).to be_truthy
@@ -203,7 +203,7 @@ describe 'Guild', type: :request do
     end
   end
 
-  describe '#NoInvitations', test: true do
+  describe '#NoInvitations' do
     include(CacheHelper)
     include_context 'with cache'
     let(:user) { create(:user, status: 'online') }

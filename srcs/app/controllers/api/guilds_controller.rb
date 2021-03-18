@@ -3,22 +3,21 @@
 module Api
   class GuildsController < ApiController
     before_action :set_guild
-    before_action :permission, only: %i[create_members create_invitation destroy_members]
     skip_before_action :set_guild, only: %i[index create guild_params manage_ownership]
+    before_action :permission,
+                  only: %i[create_members destroy_members create_officers destroy_officers create_invitation update]
 
     def index
       json_response(Guild.all.order(score: :desc))
     end
 
     def update
-      return render_not_allowed if @guild.owner != current_user
-
       @guild.update!(guild_params)
       json_response(@guild)
     end
 
     def create
-      return render_error('hasGuildAlready', 403) unless current_user.guild_member.nil?
+      return render_error('hasGuildAlready', 403) if current_user.guild_member
 
       guild = Guild.create!(guild_params)
       GuildMember.create!(user: current_user, guild: guild, rank: 'owner')
@@ -35,22 +34,20 @@ module Api
     end
 
     def destroy_members
-      member = params.fetch(:tid)
-      GuildMember.where(user_id: member, guild_id: @guild.id).destroy_all
-      manage_ownership(@guild) if current_user.id == member.to_i
+      return if mutiny?
+
+      owner_leaving_the_ship = true if current_user.id == params.fetch(:tid).to_i
+      GuildMember.where(user_id: params[:tid], guild_id: @guild.id).destroy_all
+      manage_ownership(@guild) if owner_leaving_the_ship
       head :no_content
     end
 
     def create_officers
-      return render_not_allowed unless current_user == @guild.owner
-
       to_ret = GuildMember.where(user_id: params.fetch(:tid), guild: @guild).update(rank: 'officer').first
       json_response(to_ret, 201)
     end
 
     def destroy_officers
-      return render_not_allowed unless current_user == @guild.owner
-
       GuildMember.where(user_id: params.fetch(:tid), guild: @guild).update(rank: 'member').first
       head :no_content
     end
@@ -76,14 +73,17 @@ module Api
 
       guild_invite_user(@guild.id, user_id)
       ActionCable.server.broadcast("user_#{user_id}", { action: 'guild_invitation', id: @guild.id })
-      json_response("{ \"user_id\": #{user_id} }", 201)
+      json_response({ user_id: user_id.to_i }, 201)
     end
 
     private
 
+    def mutiny?
+      render_not_allowed if current_user.guild_member.officer? && @guild.owner.id == member.to_i
+    end
+
     def permission
-      render_not_allowed if GuildMember.where(user_id: current_user.id,
-                                              guild_id: @guild.id).where.not(rank: 'member').empty?
+      render_not_allowed unless @guild.owner == current_user || current_user.guild_member&.officer?
     end
 
     def user_available?(user)

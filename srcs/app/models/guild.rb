@@ -12,6 +12,6 @@ class Guild < ApplicationRecord
   end
 
   def owner
-    User.find(members.where(rank: 'owner').pluck(:user_id).first)
+    User.where(id: members.where(rank: 'owner').pluck(:user_id)).first
   end
 end
