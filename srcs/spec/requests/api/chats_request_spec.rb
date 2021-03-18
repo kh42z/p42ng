@@ -6,8 +6,7 @@ RSpec.describe 'Chats', type: :request do
   include_context 'with cache'
   let(:auth) { create(:user) }
   let(:access_token) { auth.create_new_auth_token }
-
-  describe '#get' do
+  describe '#index' do
     it 'should get chats' do
       create_list(:chat, 2)
       get api_chats_url, headers: access_token
@@ -60,7 +59,7 @@ RSpec.describe 'Chats', type: :request do
     end
   end
 
-  describe '#post' do
+  describe '#create' do
     it "should return 201 & current_user should be chat's owner/participant/admin" do
       post api_chats_url, headers: access_token, params: { name: 'Hop', privacy: 'protected', password: 'asd' }
       expect(response).to have_http_status(201)
@@ -102,7 +101,8 @@ RSpec.describe 'Chats', type: :request do
       expect(response).to have_http_status(201)
     end
   end
-  describe '#create_participant' do
+
+  describe '#join' do
     let(:chat_attributes) { { name: 'Hop', privacy: 'protected', password: 'abc' } }
     let(:user) { create(:user) }
     let(:user_access) { user.create_new_auth_token }
@@ -134,8 +134,8 @@ RSpec.describe 'Chats', type: :request do
   end
   describe '#mutes' do
     let(:user) { create(:user) }
-    let(:chat) { create(:chat) }
-    it 'should mute a participant', test: true do
+    let(:chat) { create(:chat, owner: auth) }
+    it 'should mute a participant' do
       timer = 2
       post participants_api_chat_url(chat.id), headers: access_token, params: { user: user, chat: chat }
       post mutes_api_chat_url(chat.id), headers: access_token, params: { user_id: user.id, duration: timer }
@@ -148,10 +148,17 @@ RSpec.describe 'Chats', type: :request do
       post mutes_api_chat_url(chat.id), headers: access_token, params: { useP: user, duration: 2 }
       expect(response).to have_http_status(422)
     end
+    it 'should not let participant mute' do
+      access = user.create_new_auth_token
+      post participants_api_chat_url(chat.id), headers: access, params: { user: user, chat: chat }
+      post mutes_api_chat_url(chat.id), headers: access, params: { user_id: user.id, duration: 2 }
+      expect(response).to have_http_status(401)
+      expect(json['errors']).to eq ['This action is not allowed with your current privileges.']
+    end
   end
   describe '#bans' do
     let(:user) { create(:user) }
-    let(:chat) { create(:chat) }
+    let(:chat) { create(:chat, owner: auth) }
     it 'should ban a participant' do
       timer = 2
       post participants_api_chat_url(chat.id), headers: access_token, params: { user: user, chat: chat }
@@ -162,6 +169,13 @@ RSpec.describe 'Chats', type: :request do
     it 'should return an error, due to bad parameters' do
       post bans_api_chat_url(chat.id), headers: access_token, params: { userP: user, duration: 2 }
       expect(response).to have_http_status(422)
+    end
+    it 'should not let participant ban' do
+      access = user.create_new_auth_token
+      post participants_api_chat_url(chat.id), headers: access, params: { user: user, chat: chat }
+      post bans_api_chat_url(chat.id), headers: access, params: { user_id: user.id, duration: 2 }
+      expect(response).to have_http_status(401)
+      expect(json['errors']).to eq ['This action is not allowed with your current privileges.']
     end
   end
 
@@ -182,38 +196,30 @@ RSpec.describe 'Chats', type: :request do
     end
   end
 
-  describe '#destroy_participant' do
+  describe '#leave' do
     let(:user) { create(:user) }
     let(:chat) { create(:chat) }
     let(:access) { user.create_new_auth_token }
-    it 'should destroy a participant' do
+    it 'should let participant leave chat' do
       post participants_api_chat_url(chat.id), headers: access, params: { user: user, chat: chat }
       delete participants_api_chat_url(chat.id), headers: access
       expect(ChatParticipant.count).to eq(0)
     end
-    it 'should destroy a participant from protected chat' do
+    it 'should let participant leave protected chat' do
       post api_chats_url, headers: access_token, params: { name: 'Hop', privacy: 'protected', password: 'abc' }
       delete participants_api_chat_url(Chat.first.id), headers: access_token
       expect(ChatParticipant.count).to eq(0)
       expect(response.status).to eq 204
       expect(Chat.first).to eq nil
     end
-    it 'should destroy a participant from updated chat' do
-      post api_chats_url, headers: access_token, params: { name: 'Hop' }
-      put api_chat_url(Chat.first.id), headers: access_token, params: { privacy: 'protected', password: 'abc' }
-      delete participants_api_chat_url(Chat.first.id), headers: access_token
-      expect(ChatParticipant.count).to eq(0)
-      expect(response.status).to eq 204
-      expect(Chat.first).to eq nil
-    end
-    it 'should destroy admin/participant and chat' do
+    it 'should demote participant, delete participant and chat' do
       post api_chats_url, headers: access, params: { name: 'Hop' }
       delete participants_api_chat_url(Chat.first.id), headers: access
       expect(ChatParticipant.count).to eq(0)
       expect(ChatAdmin.count).to eq(0)
       expect(Chat.first).to eq nil
     end
-    it 'should destroy last ChatAdmin and set another participant admin/owner' do
+    it 'should demote participant and set another admin and owner' do
       post api_chats_url, headers: access_token, params: { name: 'Hop', participant_ids: [user.id] }
       delete participants_api_chat_url(Chat.first.id), headers: access_token
       expect(ChatParticipant.count).to eq(1)
@@ -223,13 +229,43 @@ RSpec.describe 'Chats', type: :request do
       expect(Chat.first.owner_id).to eq(user.id)
       expect(response).to have_http_status(204)
     end
-    it 'should destroy last ChatAdmin and destroy chat' do
-      post api_chats_url, headers: access_token, params: { name: 'Hop' }
-      delete participants_api_chat_url(Chat.first.id), headers: access_token
-      expect(ChatParticipant.count).to eq(0)
-      expect(ChatAdmin.count).to eq(0)
-      expect(Chat.count).to eq(0)
-      expect(response).to have_http_status(204)
+  end
+
+  describe '#kick' do
+    let(:user) { create(:user) }
+    let(:user_2) { create(:user) }
+    let(:access) { user.create_new_auth_token }
+    before {
+      post api_chats_url, headers: access_token, params: { name: 'Hop', privacy: 'private', participant_ids: [user.id, user_2.id] }
+    }
+    it 'should kick a participant' do
+      delete "/api/chats/#{Chat.first.id}/participants/#{user.id}", headers: access_token
+      expect(response.status).to eq 204
+      expect(ChatParticipant.where(user: user, chat: Chat.first).first).to eq nil
+    end
+    it 'should not let participant kick a participant' do
+      delete "/api/chats/#{Chat.first.id}/participants/#{user.id}", headers: access
+      expect(response.status).to eq 401
+      expect(ChatParticipant.count).to eq 3
+    end
+    it 'should let admin kick a participant' do
+      post "/api/chats/#{Chat.first.id}/admins/#{user.id}", headers: access_token
+      delete "/api/chats/#{Chat.first.id}/participants/#{user_2.id}", headers: access
+      expect(response.status).to eq 204
+      expect(ChatParticipant.where(user: user_2, chat: Chat.first).first).to eq nil
+    end
+    it 'should not let admin kick the owner' do
+      post "/api/chats/#{Chat.first.id}/admins/#{user.id}", headers: access_token
+      delete "/api/chats/#{Chat.first.id}/participants/#{auth.id}", headers: access
+      expect(response.status).to eq 401
+      expect(ChatParticipant.where(user: auth, chat: Chat.first)).to exist
+    end
+    it 'should let admin kick admin' do
+      post "/api/chats/#{Chat.first.id}/admins/#{user.id}", headers: access_token
+      post "/api/chats/#{Chat.first.id}/admins/#{user_2.id}", headers: access_token
+      delete "/api/chats/#{Chat.first.id}/participants/#{user_2.id}", headers: access
+      expect(response.status).to eq 204
+      expect(ChatParticipant.where(user: user_2, chat: Chat.first)).to_not exist
     end
   end
 
@@ -267,7 +303,7 @@ RSpec.describe 'Chats', type: :request do
     end
   end
   describe '#admins' do
-    it 'should promote a user as admin' do
+    it 'should promote a participant' do
       user = create(:user)
       post api_chats_url, headers: access_token, params: { name: 'Hop' }
       post participants_api_chat_url(Chat.first.id), headers: access_token

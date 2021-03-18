@@ -27,13 +27,14 @@ Rails.application.routes.draw do
     resources :chats do
       resources :messages, only: %i[index create]
       member do
-        post 'participants', to: 'chats#create_participant'
-        delete 'participants', to: 'chats#destroy_participant'
+        post 'participants', to: 'chats#join'
+        delete 'participants', to: 'chats#leave'
+        delete 'participants/:tid', to: 'chats#kick'
         post 'mutes'
         post 'bans'
         post 'invites'
-        post 'admins/:tid', to: 'chats#create_admins'
-        delete 'admins/:tid', to: 'chats#destroy_admins'
+        post 'admins/:tid', to: 'chats#promote'
+        delete 'admins/:tid', to: 'chats#demote'
       end
     end
     resources :users do
