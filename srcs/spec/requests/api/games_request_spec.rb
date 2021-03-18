@@ -31,6 +31,19 @@ RSpec.describe 'Games', type: :request do
       end
     end
 
+    context 'search with user_id and status' do
+      before do
+        create_list(:game, 2)
+        Game.first.update!(status: 'inprogress')
+        get '/api/games', headers: auth.create_new_auth_token, params: { status: 'inprogress' }
+      end
+      it 'returns all games played' do
+        expect(json).not_to be_empty
+        expect(json.size).to eq(1)
+        expect(response).to have_http_status(200)
+      end
+    end
+
     context 'everything' do
       before do
         create_list(:game, 2)

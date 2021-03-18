@@ -7,6 +7,7 @@ module Api
     GameReducer = Rack::Reducer.new(
       Game.all,
       ->(user_id:) { Game.where(player_left: user_id).or(Game.where(player_right: user_id)) },
+      ->(status:) { where(status: status) },
       ->(mode:) { where(mode: mode) }
     )
 
