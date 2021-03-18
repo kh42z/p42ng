@@ -8,8 +8,8 @@ RSpec.describe ScoreHelper do
       let(:nos) { create(:guild) }
       let(:tom) { create(:user, nickname: 'tom') }
       let(:alan) { create(:user, nickname: 'alan') }
-      let(:game) { create(:game, player_left: tom, player_right: alan, winner: tom) }
-      let(:game_2) { create(:game, player_left: tom, player_right: alan, winner: alan) }
+      let(:game) { create(:game, player_left: tom, player_right: alan, winner: tom, status: 'played') }
+      let(:game_2) { create(:game, player_left: tom, player_right: alan, winner: alan, status: 'played') }
       before {
         create(:guild_member, user: tom, guild: bang, rank: 'owner')
         create(:guild_member, user: alan, guild: nos, rank: 'owner')

@@ -86,17 +86,21 @@ RSpec.describe 'Games', type: :request do
         end
       end
 
-      describe 'a duel game without opponent_id' do
-        before do
-          post '/api/games', headers: auth.create_new_auth_token, params: { mode: 'duel' }
-        end
+      it 'a duel game without opponent_id' do
+        post '/api/games', headers: auth.create_new_auth_token, params: { mode: 'duel' }
+        expect(response).to have_http_status(422)
+        expect(json).not_to be_empty
+      end
 
-        it 'returns status code 422' do
-          expect(response).to have_http_status(422)
-          expect(json).not_to be_empty
-        end
+      it 'already in another duel game' do
+        create(:game, player_right: auth, status: 'pending')
+        to = create(:user, status: 'online')
+        post '/api/games', headers: auth.create_new_auth_token, params: { mode: 'duel', opponent_id: to.id }
+        expect(response).to have_http_status(422)
+        expect(json).not_to be_empty
       end
     end
+
     context 'delete' do
       describe 'cancel invitation' do
         before do
