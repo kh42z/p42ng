@@ -12,7 +12,7 @@ RSpec.describe GameEngineJob, type: :job do
     ActiveJob::Base.queue_adapter.perform_enqueued_jobs = true
     GameEngineJob.perform_later(game, 1)
     game.reload
-    expect(game.state).to eq(3)
+    expect(game.status).to eq('played')
     player_left.reload
     expect(player_left.status).to eq('online')
   end

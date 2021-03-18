@@ -7,7 +7,8 @@ module Api
     GameReducer = Rack::Reducer.new(
       Game.all,
       ->(user_id:) { Game.where(player_left: user_id).or(Game.where(player_right: user_id)) },
-      ->(game_type:) { where(game_type: game_type) }
+      ->(status:) { where(status: status) },
+      ->(mode:) { where(mode: mode) }
     )
 
     def index
@@ -16,8 +17,8 @@ module Api
     end
 
     def create
-      @games_params = params.permit(:game_type)
-      set_duel if @games_params[:game_type] == 'duel'
+      @games_params = params.permit(:mode)
+      set_duel if @games_params[:mode] == 'duel'
 
       return render_error('opponentNotAvailable', 403) unless opponent_available?
 
@@ -25,7 +26,7 @@ module Api
     end
 
     def destroy
-      return render_error('gameAlreadyStarted', 403) if @game.state > 1
+      return render_error('gameAlreadyStarted', 403) if @game.status != 'pending'
 
       @game.destroy
       head :no_content

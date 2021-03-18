@@ -95,8 +95,9 @@ ActiveRecord::Schema.define(version: 2021_03_11_090451) do
     t.bigint "winner_id"
     t.bigint "player_left_id"
     t.bigint "player_right_id"
-    t.integer "state", default: 0
-    t.string "game_type"
+    t.integer "connected_players", default: 0
+    t.string "status", default: "pending"
+    t.string "mode"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["player_left_id"], name: "index_games_on_player_left_id"

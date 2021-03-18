@@ -5,6 +5,7 @@ module CacheHelper
   BAN_KEY_PREFIX = 'ban_chat_'
   GUILD_INVITE_KEY_PREFIX = 'pending_invite_'
   GE_PADDLE_POSITION = 'game_engine_paddle_pos_'
+  GE_STOP = 'game_engine_stop_'
 
   def user_banned_from_chat?(chat_id, user_id)
     Rails.cache.exist?(CacheHelper::BAN_KEY_PREFIX + "#{chat_id}_#{user_id}")

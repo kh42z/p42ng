@@ -7,7 +7,7 @@ module ScoreHelper
     winner_side(game)
     @winner.guild_member&.guild&.increment!(:score, POINTS)
     war_effort_point if set_war
-    ladder_point unless game.game_type['ladder'] == 'ladder'
+    ladder_point unless game.mode['ladder'] == 'ladder'
   end
 
   def winner_side(game)
@@ -26,9 +26,9 @@ module ScoreHelper
   end
 
   def war_effort_point
-    war_point(POINTS) if game.game_type['duel'] == 'duel'
-    war_point(POINTS) if game.game_type['ladder'] == 'ladder' && @war.ladder_effort == true
-    # war_point(game.tournament_prize) if game.game_type['tournament'] == 'tournament' && @war.tournament_effort == true
+    war_point(POINTS) if game.mode['duel'] == 'duel'
+    war_point(POINTS) if game.mode['ladder'] == 'ladder' && @war.ladder_effort == true
+    # war_point(game.tournament_prize) if game.mode['tournament'] == 'tournament' && @war.tournament_effort == true
   end
 
   def war_point(points)

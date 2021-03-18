@@ -4,7 +4,7 @@ class GameChannel < ApplicationCable::Channel
   def subscribed
     @game = Game.find(params[:id])
 
-    return reject if @game.state > 2
+    return reject if @game.status == 'played'
 
     stream_from "game_#{@game.id}"
 
@@ -12,8 +12,8 @@ class GameChannel < ApplicationCable::Channel
 
     @game.with_lock do
       @game.reload
-      @game.state += 1
-      GameEngineJob.perform_later(@game, 0) if @game.state > 1
+      @game.connected_players += 1
+      GameEngineJob.perform_later(@game, 0) if @game.connected_players == 2
       @game.save!
     end
   end
@@ -30,7 +30,7 @@ class GameChannel < ApplicationCable::Channel
 
     @game.with_lock do
       @game.reload
-      @game.state -= 1 if @game.state <= 2
+      @game.connected_players -= 1
       @game.save!
     end
   end

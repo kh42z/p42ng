@@ -14,7 +14,7 @@ class UserChannel < ApplicationCable::Channel
 
   def unsubscribed
     update_user_status(@user, 'offline')
-    stop_all_streams
+    # stop_stream_from("user_#{@user.id}")
   end
 
   private
