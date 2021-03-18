@@ -76,7 +76,7 @@ describe 'Guild', type: :request do
     end
   end
 
-  describe '#members' do
+  describe '#create_members' do
     before { post api_guilds_url, headers: access_token, params: attributes }
     it 'owner should add members' do
       post "/api/guilds/#{Guild.first.id}/members/#{user_1.id}", headers: access_token
@@ -104,6 +104,9 @@ describe 'Guild', type: :request do
       expect(json['message']).to eq 'Validation failed: User has already been taken'
       expect(GuildMember.where(user_id: user_1.id, guild_id: Guild.last.id)[0]).to eq nil
     end
+  end
+  describe '#destroy_members' do
+    before { post api_guilds_url, headers: access_token, params: attributes }
     it 'should destroy a member' do
       post "/api/guilds/#{Guild.first.id}/members/#{user_1.id}", headers: access_token
       expect(Guild.first.members.count).to eq 2
@@ -116,6 +119,13 @@ describe 'Guild', type: :request do
       post "/api/guilds/#{Guild.first.id}/members/#{user_1.id}", headers: access_token
       delete "/api/guilds/#{Guild.last.id}/members/#{user_1.id}", headers: access_token_2
       expect(GuildMember.where(user_id: user_1.id, guild_id: Guild.first.id)).to exist
+    end
+    it 'should not let officer destroy owner', test:true do
+      post "/api/guilds/#{Guild.first.id}/members/#{auth_2.id}", headers: access_token
+      post "/api/guilds/#{Guild.first.id}/officers/#{auth_2.id}", headers: access_token
+      delete "/api/guilds/#{Guild.last.id}/members/#{auth.id}", headers: access_token_2
+      expect(response.status).to eq 401
+      expect(Guild.first.owner).to eq auth
     end
     context 'if owner leaves' do
       it 'should destroy guild if he is the last to leave' do
@@ -186,7 +196,7 @@ describe 'Guild', type: :request do
       post api_guilds_url, headers: access_token, params: attributes
       post invitations_api_guild_url(current_guild.id), headers: access_token, params: { user_id: user.id }
     end
-    it 'should send an invitation',test:true do
+    it 'should send an invitation' do
       expect(response.status).to eq 201
       expect(json['user_id']).to eq user.id
       expect(guild_pending_invitation?(current_guild.id, user.id)).to be_truthy

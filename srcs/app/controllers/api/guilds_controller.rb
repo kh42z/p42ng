@@ -79,7 +79,7 @@ module Api
     private
 
     def mutiny?
-      render_not_allowed if current_user.guild_member.officer? && @guild.owner.id == member.to_i
+      render_not_allowed if current_user.guild_member.officer? && @guild.owner.id == params[:tid].to_i
     end
 
     def permission
