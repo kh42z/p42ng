@@ -19,7 +19,7 @@ RSpec.describe 'Games', type: :request do
     context 'search with user_id' do
       before do
         create_list(:game, 2)
-        get '/api/games', headers: auth.create_new_auth_token, params: { user_id: User.last.id, game_type: 'duel' }
+        get '/api/games', headers: auth.create_new_auth_token, params: { user_id: User.last.id, mode: 'duel' }
       end
       it 'returns all games played' do
         expect(json).not_to be_empty
@@ -53,7 +53,7 @@ RSpec.describe 'Games', type: :request do
           auth.update(status: 'online')
           expect do
             post '/api/games', headers: auth.create_new_auth_token,
-                               params: { game_type: 'duel', opponent_id: to.id }
+                               params: { mode: 'duel', opponent_id: to.id }
           end.to have_broadcasted_to("user_#{to.id}").exactly(:once).with(sender_id: auth.id, action: "game_invitation", id: Game.maximum(:id).next)
           expect(response).to have_http_status(201)
           expect(json).not_to be_empty
@@ -64,7 +64,7 @@ RSpec.describe 'Games', type: :request do
         before do
           to = create(:user, status: 'ingame')
           auth.update(status: 'online')
-          post '/api/games', headers: auth.create_new_auth_token, params: { game_type: 'duel', opponent_id: to.id }
+          post '/api/games', headers: auth.create_new_auth_token, params: { mode: 'duel', opponent_id: to.id }
         end
 
         it 'returns status code 403' do
@@ -75,7 +75,7 @@ RSpec.describe 'Games', type: :request do
 
       describe 'a duel game without opponent_id' do
         before do
-          post '/api/games', headers: auth.create_new_auth_token, params: { game_type: 'duel' }
+          post '/api/games', headers: auth.create_new_auth_token, params: { mode: 'duel' }
         end
 
         it 'returns status code 422' do
@@ -97,7 +97,7 @@ RSpec.describe 'Games', type: :request do
       describe 'is not allowed after game started' do
         before do
           game = create(:game)
-          game.update!(state: 2)
+          game.update!(status: 'played')
           delete "/api/games/#{game.id}", headers: auth.create_new_auth_token
         end
         it 'returns status code 403' do

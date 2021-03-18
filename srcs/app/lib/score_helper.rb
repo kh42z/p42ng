@@ -6,7 +6,7 @@ module ScoreHelper
   def game_point_assignment(game)
     winner_side(game)
     @winner.guild_member&.guild&.increment!(:score, SCORE_INCREMENT)
-    war_duel_point unless game.game_type['duel'].nil?
+    war_duel_point unless game.mode['duel'].nil?
   end
 
   def winner_side(game)

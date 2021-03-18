@@ -7,10 +7,12 @@ class GameEngineJob < ApplicationJob
 
   def perform(game, turns_limit)
     change_players_status(game, 'ingame')
+    game.update!(status: 'inprogress')
     pong = GameEngine.new(game, turns_limit)
     pong.start
     turn(pong) until pong.over
-    pong.game.update(state: 3)
+    game.update!(status: 'played')
+    # stop_stream_from("game_#{game.id}")
     change_players_status(game, 'online')
   end
 
