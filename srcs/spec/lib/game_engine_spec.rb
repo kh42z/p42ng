@@ -8,7 +8,7 @@ RSpec.describe GameEngine do
   let(:left) { create(:user) }
   let(:right) { create(:user) }
   let(:game) { create(:game, player_left: left, player_right: right) }
-  let(:ge) { GameEngine.new(game) }
+  let(:ge) { GameEngine.new(game, 0) }
   it 'constructor sets players side' do
     expect(ge.left.user_id).to eq(left.id)
     expect(ge.right.user_id).to eq(right.id)

@@ -7,10 +7,10 @@ class GameEngine
   SCORE_LIMIT = 21
   REFRESH_RATE = 100
 
-  def initialize(game)
+  def initialize(game, turns_limit)
     @game = game
     @turns = 0
-    @turns_limit = 0
+    @turns_limit = turns_limit
     @over = false
     @left = Player.new('left', @game.player_left.id)
     @right = Player.new('right', @game.player_right.id)
