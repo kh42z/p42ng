@@ -8,11 +8,12 @@ RSpec.describe UserChannel, type: :channel do
   describe 'User' do
     it 'should subscribe' do
       stub_connection current_user: current_user
-      subscribe(id: current_user.id)
+      expect { subscribe(id: current_user.id) }.to have_broadcasted_to("activity").exactly(:once).with(action: 'user_update_status', id: current_user.id, status: 'online')
       expect(subscription).to be_confirmed
       current_user.reload
       expect(current_user.status).to eq('online')
       unsubscribe
+      expect { unsubscribe }.to have_broadcasted_to("activity").exactly(:once).with(action: 'user_update_status', id: current_user.id, status: 'offline')
       current_user.reload
       expect(current_user.status).to eq('offline')
     end
