@@ -10,14 +10,13 @@ module Users
       attach_avatar(user, auth_hash)
       user.assign_attributes({
                                email: auth_hash['info']['email'],
-                               nickname: auth_hash['info']['nickname'],
-                               image_url: url_for(user.avatar)
+                               nickname: auth_hash['info']['nickname']
                              })
     end
 
     def attach_avatar(user, auth_hash)
-      LetterAvatar.generate(auth_hash['info']['nickname'], 200)
-      user.avatar.attach(io: File.open(letter_avatar_for(auth_hash['info']['nickname'], 500)), filename: '500.png')
+      path = LetterAvatar.generate(auth_hash['info']['nickname'], 500)
+      user.avatar.attach(io: File.open(path), filename: '500.png', content_type: 'image/png')
     end
 
     def set_random_password

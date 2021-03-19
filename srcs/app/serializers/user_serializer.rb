@@ -17,6 +17,12 @@ class UserSerializer < ActiveModel::Serializer
              :ignores,
              :friends
 
+  def image_url
+    return '/images/profile-pic.jpg' unless object.avatar.attached?
+
+    Rails.application.routes.url_helpers.rails_blob_url(object.avatar, only_path: true)
+  end
+
   def ignores
     ActiveModelSerializers::SerializableResource.new(object.ignores, each_serializer: IgnoreUserSerializer)
   end

@@ -39,7 +39,6 @@ class DeviseTokenAuthCreateUsers < ActiveRecord::Migration[6.0]
       t.json :tokens
 
       ###
-      t.string :image_url
       t.boolean :two_factor, default: false
       t.string :two_factor_code_digest, null: false
       t.boolean :first_login, default: true

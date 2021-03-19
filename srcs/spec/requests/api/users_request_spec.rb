@@ -78,6 +78,7 @@ RSpec.describe "Users", type: :request do
   describe "it upload an avatar" do
     it 'attaches the uploaded file' do
       file = fixture_file_upload(Rails.root.join('public', 'images', 'profile-pic.jpg'), 'image/jpg')
+      users.last.avatar.purge
       expect {
         post "/api/users/#{user_id}/avatar", headers: users.last.create_new_auth_token, params: { avatar: file }
       }.to change(ActiveStorage::Attachment, :count).by(1)

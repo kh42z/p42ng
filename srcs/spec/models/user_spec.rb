@@ -4,7 +4,6 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
   it { should validate_presence_of(:nickname) }
-  it { should validate_presence_of(:image_url) }
   it { should allow_values(true, false).for(:two_factor) }
   it { should allow_values(true, false).for(:first_login) }
   it { should allow_values(true, false).for(:admin) }

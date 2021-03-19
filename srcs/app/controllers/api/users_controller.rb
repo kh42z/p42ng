@@ -42,7 +42,6 @@ module Api
 
       @user.avatar.attach(params[:avatar])
       url = url_for(@user.avatar)
-      @user.update(image_url: url)
       json_response({ image_url: url })
     end
 
