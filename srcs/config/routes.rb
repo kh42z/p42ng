@@ -39,7 +39,7 @@ Rails.application.routes.draw do
     end
     resources :users do
       member do
-        post :avatar, constraints: lambda { |req| req.format == 'text/html' }, to: 'users#upload_avatar'
+        post :avatar, to: 'users#upload_avatar'
         post 'ignores', to: 'users#create_ignore'
         delete 'ignores/:ignored_id', to: 'users#destroy_ignore'
         post 'friends', to: 'users#create_friendship'
