@@ -35,11 +35,10 @@ module Api
     end
 
     def upload_avatar
-      return unless params.key?(:avatar)
+      return render_error('Malformed', 422) unless params.key?(:avatar)
 
       mini_image = MiniMagick::Image.new(params[:avatar].tempfile.path)
       mini_image.resize '1200x1200'
-
       @user.avatar.attach(params[:avatar])
       url = url_for(@user.avatar)
       json_response({ image_url: url })

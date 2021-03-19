@@ -75,13 +75,22 @@ RSpec.describe "Users", type: :request do
     end
   end
 
-  describe "it upload an avatar" do
-    it 'attaches the uploaded file' do
-      file = fixture_file_upload(Rails.root.join('public', 'images', 'profile-pic.jpg'), 'image/jpg')
+  describe "avatar" do
+    before do
+      @file = fixture_file_upload(Rails.root.join('public', 'images', 'profile-pic.jpg'), 'image/jpg')
       users.last.avatar.purge
+    end
+    it 'attaches the uploaded file' do
       expect {
-        post "/api/users/#{user_id}/avatar", headers: users.last.create_new_auth_token, params: { avatar: file }
+        post "/api/users/#{user_id}/avatar", params: { avatar: @file }, headers: users.last.create_new_auth_token
       }.to change(ActiveStorage::Attachment, :count).by(1)
+    end
+
+    it 'failed to uploaded file if avatar is missing' do
+      headers = users.last.create_new_auth_token
+      #headers['Content-Type'] = "application/json"
+      post "/api/users/#{user_id}/avatar", headers:  headers
+      expect(response).to have_http_status(422)
     end
   end
 
