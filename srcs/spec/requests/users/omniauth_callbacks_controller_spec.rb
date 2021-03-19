@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "OmniauthCallbacksController", type: :request do
   describe "Oauth" do
     it "should register a new client" do
-      login
+      expect { login }.to change(ActiveStorage::Attachment, :count).by(1)
       expect(User.all.count).to eq(1)
       expect(response.status).to eq 200
     end

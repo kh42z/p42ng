@@ -7,12 +7,17 @@ module Users
     def assign_provider_attrs(user, auth_hash)
       return unless @resource.new_record?
 
-      LetterAvatar.generate(auth_hash['info']['nickname'], 500)
+      attach_avatar(user, auth_hash)
       user.assign_attributes({
                                email: auth_hash['info']['email'],
                                nickname: auth_hash['info']['nickname'],
-                               image_url: letter_avatar_url(auth_hash['info']['nickname'], 500)
+                               image_url: url_for(user.avatar)
                              })
+    end
+
+    def attach_avatar(user, auth_hash)
+      LetterAvatar.generate(auth_hash['info']['nickname'], 200)
+      user.avatar.attach(io: File.open(letter_avatar_for(auth_hash['info']['nickname'], 500)), filename: '500.png')
     end
 
     def set_random_password
