@@ -35,4 +35,8 @@ if Rails.env.development?
     FactoryBot.create(:game, winner: winner, player_left: winner, player_right: User.find(8..15), mode: 'ladder',
                              status: 'played')
   end
+
+  User.all.each do |t|
+    t.update!(ladder_id: rand(1..5))
+  end
 end
