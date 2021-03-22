@@ -25,6 +25,7 @@ gem 'letter_avatar'
 gem 'mailgun-ruby'
 gem 'mini_magick'
 gem 'omniauth-marvin', '1.1.0'
+gem 'pundit'
 gem 'rack-cors', require: 'rack/cors'
 gem 'rack-reducer', require: 'rack/reducer'
 gem 'rswag-api'
@@ -55,6 +56,7 @@ end
 group :test do
   gem 'factory_bot_rails', '~> 4.0'
   gem 'faker'
+  gem 'pundit-matchers', '~> 1.6.0'
   gem 'shoulda-matchers', '~> 3.1'
   gem 'simplecov', require: false
   gem 'simplecov-lcov', require: false

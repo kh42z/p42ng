@@ -2,6 +2,7 @@
 
 class ApiController < ApplicationController
   include DeviseTokenAuth::Concerns::SetUserByToken
+  include Pundit
   before_action :authenticate_user!
   rescue_from ActionController::ParameterMissing, with: :response_error
 
@@ -23,5 +24,9 @@ class ApiController < ApplicationController
 
   def response_error(error)
     json_response({ error: error.message }, 422)
+  end
+
+  def pundit_user
+    current_user
   end
 end
