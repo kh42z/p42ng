@@ -25,7 +25,7 @@ RSpec.describe ScoreHelper do
       context 'in war and duels a war enemy' do
         before do
           attributes = { from: nos.id, on: bang.id, war_start: DateTime.now,
-                         war_end: DateTime.new(2022, 0o1, 0o1, 0o0, 0o0, 0), prize: 1000, max_unanswered: 10, from_score: 0, on_score: 0 }
+                         war_end: DateTime.new(2022), prize: 1000, max_unanswered: 10, from_score: 0, on_score: 0 }
           create(:war, attributes)
         end
         it 'should assign point to war score (winner side_on)' do

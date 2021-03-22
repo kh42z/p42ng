@@ -15,20 +15,22 @@ ChatParticipant.create(user: alfred, chat: general_chat_room)
 
 if Rails.env.development?
 
-  user = FactoryBot.create_list(:user, 5)
-  guild = FactoryBot.create(:guild)
-  FactoryBot.create(:guild_member, guild: guild, rank: 'owner', user: user[0])
-  1.upto(2) do |i|
-    FactoryBot.create(:guild_member, guild: guild, rank: 'officer', user: user[i])
-  end
-  3.upto(4) do |i|
-    FactoryBot.create(:guild_member, guild: guild, user: user[i])
+  guilds = FactoryBot.create_list(:guild, 5)
+  guilds.each do |guild|
+    users = FactoryBot.create_list(:user, 5)
+    FactoryBot.create(:guild_member, guild: guild, rank: 'owner', user: users[0])
+    1.upto(2) do |i|
+      FactoryBot.create(:guild_member, guild: guild, rank: 'officer', user: users[i])
+    end
+    3.upto(4) do |i|
+      FactoryBot.create(:guild_member, guild: guild, user: users[i])
+    end
+    chat = FactoryBot.create(:chat, owner: users[0])
+    1.upto(4) do |i|
+      FactoryBot.create(:chat_participant, user: users[i], chat: chat)
+    end
   end
 
-  3.times do |i|
-    chat = FactoryBot.create(:chat, owner: user[i])
-    FactoryBot.create_list(:chat_participant, 3, chat: chat)
-  end
 
   10.times do |_i|
     winner = User.find(0..7)
