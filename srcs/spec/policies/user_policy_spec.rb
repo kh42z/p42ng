@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe UserPolicy do
-  let(:auth) { create(:user ) }
+  let(:auth) { create(:user) }
   let(:admin) { create(:user, admin: true)}
   let(:other) { create(:user) }
   subject { described_class }

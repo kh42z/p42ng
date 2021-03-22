@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :guild do
-    name { Faker::Games::ElderScrolls.unique.creature }
+    name { Faker::Name.unique.name }
     anagram { Faker::Name.initials(number: 5) }
     score { rand(0..100) }
     factory :guild_with_officers do

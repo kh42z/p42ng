@@ -4,14 +4,14 @@ module Api
   class GuildsController < ApiController
     before_action :set_guild
     skip_before_action :set_guild, only: %i[index create guild_params manage_ownership]
-    before_action :permission,
-                  only: %i[create_members destroy_members create_officers destroy_officers create_invitation update]
+    after_action :verify_authorized, except: %i[index show create]
 
     def index
       json_response(Guild.all.order(score: :desc))
     end
 
     def update
+      authorize @guild
       @guild.update!(guild_params)
       json_response(@guild)
     end
@@ -29,12 +29,14 @@ module Api
     end
 
     def create_members
+      authorize @guild
       to_ret = GuildMember.create!(user_id: params.fetch(:tid), guild: @guild)
       json_response(to_ret, 201)
     end
 
     def destroy_members
-      return if mutiny?
+      authorize @guild
+      return render_error('guildOwnerDeletion', 403) if mutiny?
 
       owner_leaving_the_ship = true if current_user.id == params.fetch(:tid).to_i
       GuildMember.where(user_id: params[:tid], guild_id: @guild.id).destroy_all
@@ -43,31 +45,33 @@ module Api
     end
 
     def create_officers
+      authorize @guild
       to_ret = GuildMember.where(user_id: params.fetch(:tid), guild: @guild).update(rank: 'officer').first
       json_response(to_ret, 201)
     end
 
     def destroy_officers
+      authorize @guild
       GuildMember.where(user_id: params.fetch(:tid), guild: @guild).update(rank: 'member').first
       head :no_content
     end
 
     def accept_invites
-      return unless guild_pending_invitation?(@guild.id, current_user.id)
-
+      authorize @guild
       to_ret = GuildMember.create!(user: current_user, guild: @guild)
       guild_delete_invitation(@guild.id, current_user.id)
       json_response(to_ret, 201)
     end
 
     def refuse_invitation
-      return unless guild_pending_invitation?(@guild.id, current_user.id)
+      authorize @guild
 
       guild_delete_invitation(@guild.id, current_user.id)
       head :no_content
     end
 
     def create_invitation
+      authorize @guild
       user_id = params.fetch(:user_id)
       return render_error('userOffline', 403) unless user_available?(user_id)
 
@@ -79,11 +83,7 @@ module Api
     private
 
     def mutiny?
-      render_not_allowed if current_user.guild_member.officer? && @guild.owner.id == params[:tid].to_i
-    end
-
-    def permission
-      render_not_allowed unless @guild.owner == current_user || current_user.guild_member&.officer?
+      current_user.guild_member.officer? && @guild.owner.id == params[:tid].to_i
     end
 
     def user_available?(user)

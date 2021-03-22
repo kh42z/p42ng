@@ -12,11 +12,22 @@ FactoryBot.define do
     ladder_games_won { Faker::Number.number(digits: 3) }
     ladder_games_lost { Faker::Number.number(digits: 3) }
     status { 'offline' }
-    # association :ladder
+
+    factory :user_with_guild do
+      transient do
+        guild { guild }
+        rank { rank }
+      end
+      after(:create) do |user, evaluator|
+        create(:guild_member, guild: evaluator.guild, user: user, rank: evaluator.rank)
+      end
+    end
   end
 
   factory :ignore do
     user { create(:user) }
     user_ignored { create(:user) }
   end
+
+
 end
