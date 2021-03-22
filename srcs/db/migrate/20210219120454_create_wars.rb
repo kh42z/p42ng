@@ -17,6 +17,7 @@ class CreateWars < ActiveRecord::Migration[6.0]
       t.boolean :from_agreement, default: false
       t.boolean :on_agreement, default: false
       t.boolean :terms_agreed, default: false
+      t.boolean :war_closed, default: false
       t.references :guild, foreign_key: true
       t.timestamps
     end

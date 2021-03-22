@@ -215,6 +215,7 @@ ActiveRecord::Schema.define(version: 2021_03_11_090451) do
     t.boolean "from_agreement", default: false
     t.boolean "on_agreement", default: false
     t.boolean "terms_agreed", default: false
+    t.boolean "war_closed", default: false
     t.bigint "guild_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
