@@ -25,7 +25,6 @@ module Api
     def create
       chat = Chat.create!(chat_params)
       ChatParticipant.create!(user: current_user, chat: chat, role: 'owner')
-      add_participants(chat, [current_user.id])
       add_participants(chat, params[:participant_ids])
       json_response(chat, 201)
     end
