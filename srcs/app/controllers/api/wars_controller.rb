@@ -44,6 +44,8 @@ module Api
       return render_error('timeSlotEntangled', 403) if times_entangled?
 
       war_time = WarTime.create!(time_params_create)
+      WarTimeOpenerJob.set(wait_until: war_time.start).perform_later(war_time)
+      WarTimeCloserJob.set(wait_until: war_time.end).perform_later(war_time)
       json_response(war_time, 201)
     end
 
@@ -60,7 +62,8 @@ module Api
 
     def start_war(war)
       war.update!(terms_agreed: true)
-      WarEndJob.set(wait_until: war.war_end).perform_later(war)
+      WarOpenerJob.set(wait_until: war.war_start).perform_later(war)
+      WarCloserJob.set(wait_until: war.war_end).perform_later(war)
     end
 
     def pending_agreement?
@@ -91,8 +94,9 @@ module Api
     end
 
     def permission
-      render_not_allowed unless current_user == @from.owner || current_user == @on.owner
-      render_error('warClosed', 403) unless @war.war_closed == false
+      return render_not_allowed unless current_user == @from.owner || current_user == @on.owner
+      return render_error('warOngoing', 403) if @war.opened?
+      return render_error('warClosed', 403) if @war.closed?
     end
 
     def params_update

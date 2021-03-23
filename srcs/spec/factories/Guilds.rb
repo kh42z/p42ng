@@ -13,6 +13,12 @@ FactoryBot.define do
         create_list(:guild_member, evaluator.officers_count, guild: guild, rank: 'officer')
       end
     end
+    factory :guild_with_members do
+      transient { count {2} }
+      after(:create) do |guild, evaluator|
+        create_list(:guild_member, evaluator.count, guild: guild, rank: 'member')
+      end
+    end
   end
 
   factory :guild_member do

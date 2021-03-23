@@ -33,4 +33,16 @@ class User < ApplicationRecord
   validates_presence_of :ladder_games_lost
 
   has_secure_password :two_factor_code, validations: false
+
+  def guild
+    guild_member&.guild
+  end
+
+  def wars
+    guild&.wars
+  end
+
+  def wars_from_enemy
+    guild&.wars_from_enemy
+  end
 end

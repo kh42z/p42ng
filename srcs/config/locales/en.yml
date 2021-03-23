@@ -48,3 +48,5 @@ en:
   timeSlotEntangled: "Entity dates are entangled with another one"
   pendingAgreement: "One side has agree war terms, accept or decline agreement"
   warClosed: "This war has ended"
+  warOngoing: "War ongoing"
+  warTimeMatchLimit: "Your guild is already playing a war time match against this guild"
