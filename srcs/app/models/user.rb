@@ -7,6 +7,11 @@ class User < ApplicationRecord
   belongs_to :ladder, optional: true
 
   has_one :guild_member, dependent: :destroy
+  has_one :guild, through: :guild_member
+
+  # has_many :wars, through: :guild
+  # has_many :wars_from_enemy, through: :guild
+
   has_one_attached :avatar
 
   has_many :chats, foreign_key: 'owner_id', dependent: :destroy
@@ -27,16 +32,4 @@ class User < ApplicationRecord
   validates_presence_of :ladder_games_lost
 
   has_secure_password :two_factor_code, validations: false
-
-  def guild
-    guild_member&.guild
-  end
-
-  def wars
-    guild&.wars
-  end
-
-  def wars_from_enemy
-    guild&.wars_from_enemy
-  end
 end
