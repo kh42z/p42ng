@@ -83,12 +83,12 @@ ActiveRecord::Schema.define(version: 2021_03_11_090451) do
   end
 
   create_table "friendships", force: :cascade do |t|
-    t.bigint "friend_a_id"
-    t.bigint "friend_b_id"
+    t.bigint "user_id"
+    t.bigint "friend_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["friend_a_id"], name: "index_friendships_on_friend_a_id"
-    t.index ["friend_b_id"], name: "index_friendships_on_friend_b_id"
+    t.index ["friend_id"], name: "index_friendships_on_friend_id"
+    t.index ["user_id"], name: "index_friendships_on_user_id"
   end
 
   create_table "games", force: :cascade do |t|
@@ -230,8 +230,8 @@ ActiveRecord::Schema.define(version: 2021_03_11_090451) do
   add_foreign_key "chat_participants", "chats"
   add_foreign_key "chat_participants", "users"
   add_foreign_key "chats", "users", column: "owner_id"
-  add_foreign_key "friendships", "users", column: "friend_a_id"
-  add_foreign_key "friendships", "users", column: "friend_b_id"
+  add_foreign_key "friendships", "users"
+  add_foreign_key "friendships", "users", column: "friend_id"
   add_foreign_key "games", "users", column: "player_left_id"
   add_foreign_key "games", "users", column: "player_right_id"
   add_foreign_key "games", "users", column: "winner_id"

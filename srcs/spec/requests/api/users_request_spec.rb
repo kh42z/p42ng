@@ -65,7 +65,7 @@ RSpec.describe "Users", type: :request do
 
   describe "retrieves one user" do
     before do
-      Friendship.create(friend_a: users.last , friend_b: first)
+      Friendship.create(user: users.last , friend: first)
       get "/api/users/#{user_id}", headers: first.create_new_auth_token
     end
     it "returns user" do
@@ -84,6 +84,8 @@ RSpec.describe "Users", type: :request do
       expect {
         post "/api/users/#{user_id}/avatar", params: { avatar: @file }, headers: users.last.create_new_auth_token
       }.to change(ActiveStorage::Attachment, :count).by(1)
+      get "/api/users/#{user_id}", headers: users.last.create_new_auth_token
+      expect(json['image_url']).to_not be_empty
     end
 
     it 'failed to uploaded file if avatar is missing' do
@@ -164,7 +166,7 @@ RSpec.describe "Users", type: :request do
     let(:access_token) { auth.create_new_auth_token }
     it "should ignore a user" do
       post "/api/users/#{auth.id}/ignores", params: { ignored_id: user.id.to_i }, headers: access_token
-      expect(response).to have_http_status(200)
+      expect(response).to have_http_status(201)
       expect(UserIgnore.count).to eq(1)
       expect(json['ignored_id']).to eq(user.id)
     end
@@ -184,7 +186,7 @@ RSpec.describe "Users", type: :request do
     let(:access_token) { auth.create_new_auth_token }
     it "should create a friendship" do
       post "/api/users/#{auth.id}/friends", params: { friend_id: user.id.to_i }, headers: access_token
-      expect(response).to have_http_status(200)
+      expect(response).to have_http_status(201)
       expect(Friendship.count).to eq(1)
       expect(json['friend_id'].to_i).to eq(user.id)
       # unicity
@@ -193,11 +195,10 @@ RSpec.describe "Users", type: :request do
 
     end
     it "should delete a friendship" do
-      Friendship.create!(friend_a: user, friend_b_id: auth.id)
+      Friendship.create!(user: auth, friend_id: user.id)
       delete "/api/users/#{auth.id}/friends/#{user.id}", headers: access_token
       expect(response).to have_http_status(204)
       expect(Friendship.count).to eq(0)
     end
   end
-
 end

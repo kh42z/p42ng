@@ -48,7 +48,7 @@ module Api
       authorize @user
       p = ignore_params
       UserIgnore.create!(user: @user, ignored_id: p[:ignored_id])
-      json_response({ ignored_id: p[:ignored_id].to_i })
+      json_response({ ignored_id: p[:ignored_id].to_i }, 201)
     end
 
     def destroy_ignore
@@ -61,16 +61,14 @@ module Api
     def create_friendship
       authorize @user
       p = friendship_params
-      Friendship.create!(friend_a: @user, friend_b_id: p[:friend_id])
-      json_response({ friend_id: p[:friend_id].to_i })
+      Friendship.create!(user: @user, friend_id: p[:friend_id])
+      json_response({ friend_id: p[:friend_id].to_i }, 201)
     end
 
     def destroy_friendship
       authorize @user
-      id = params.fetch(:friend_id)
-      Friendship.where('friend_a_id = ? or friend_b_id = ?', @user.id, @user.id).where(
-        'friend_a_id = ? or friend_b_id = ?', id, id
-      ).destroy_all
+      friend_id = params.fetch(:friend_id)
+      Friendship.where(user_id: current_user.id, friend_id: friend_id).destroy_all
       head :no_content
     end
 

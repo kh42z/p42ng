@@ -49,5 +49,9 @@ FactoryBot.define do
     user_ignored { create(:user) }
   end
 
+  factory :friend do
+    user { create(:user) }
+    friend { create(:user) }
+  end
 
 end

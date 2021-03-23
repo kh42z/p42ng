@@ -32,14 +32,6 @@ class UserSerializer < ActiveModel::Serializer
   end
 
   def friends
-    arr = []
-    object.friendships.each do |e|
-      arr.push(if e.friend_a_id == object.id
-                 { friend_id: e.friend_b_id }
-               else
-                 { friend_id: e.friend_a_id }
-               end)
-    end
-    arr
+    ActiveModelSerializers::SerializableResource.new(object.friendship, each_serializer: FriendSerializer)
   end
 end
