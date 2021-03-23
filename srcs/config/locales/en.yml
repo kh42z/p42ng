@@ -52,3 +52,4 @@ en:
   warTimeMatchLimit: "Your guild is already playing a war time match against this guild"
   guildOwnerDeletion: "Officers can't remove guild owner"
   twoFactorFailed: "Your code is either expired or invalid"
+  notFound: "Resource can not be found"

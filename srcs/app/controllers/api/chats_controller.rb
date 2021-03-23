@@ -73,7 +73,13 @@ module Api
     def promote
       authorize @chat
       target = params.fetch(:tid)
-      json_response(ChatParticipant.where(user_id: target, chat: @chat).first&.update!(role: 'admin'), 201)
+      return render_not_allowed if ChatParticipant.where(chat: @chat, user_id: target, role: 'owner').empty? == false
+
+      p = ChatParticipant.where(user_id: target, chat: @chat).first
+      return render_error('notFound', 404) if p.nil?
+
+      p.update!(role: 'admin')
+      json_response({ user_id: p.id, role: p.role }, 201)
     end
 
     def demote
