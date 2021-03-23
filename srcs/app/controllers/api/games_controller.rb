@@ -3,6 +3,7 @@
 module Api
   class GamesController < ApiController
     before_action :set_game, only: %i[destroy]
+    include(WarHelper)
 
     GameReducer = Rack::Reducer.new(
       Game.all,
@@ -17,9 +18,9 @@ module Api
     end
 
     def create
-      @games_params = params.permit(:mode)
-      set_duel if @games_params[:mode] == 'duel'
-
+      @games_params = params.permit(:mode, :war_time_id)
+      player_sides
+      return render_error('warTimeMatchLimit', 403) if war_time_match_ongoing?
       return render_error('opponentNotAvailable', 403) unless opponent_available?
 
       json_response(create_game, 201)
@@ -34,11 +35,17 @@ module Api
 
     protected
 
-    def set_duel
-      raise ActiveRecord::RecordInvalid if params.key?(:opponent_id) == false
-
+    def player_sides
       @games_params[:player_left_id] = current_user.id
-      @games_params[:player_right_id] = params[:opponent_id].to_i
+      @games_params[:player_right_id] = params.fetch(:opponent_id).to_i
+    end
+
+    def war_time_match_ongoing?
+      return unless @games_params[:mode] == 'war'
+
+      war = war_opened_side_help(current_user.guild, User.find(params[:opponent_id]).guild)
+      war_time = war.war_times.where(opened: true).first
+      Game.where(war_time_id: war_time.id).any?
     end
 
     def send_invites(game)

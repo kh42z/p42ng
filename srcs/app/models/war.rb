@@ -6,8 +6,6 @@ class War < ApplicationRecord
   validates_presence_of :war_start
   validates_presence_of :war_end
   validates_presence_of :prize
-  validates_presence_of :from_score
-  validates_presence_of :on_score
   validates_presence_of :max_unanswered
   validate :start_before_end
   validate :from_must_not_eq_on

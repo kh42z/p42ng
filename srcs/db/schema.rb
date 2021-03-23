@@ -96,6 +96,7 @@ ActiveRecord::Schema.define(version: 2021_03_11_090451) do
     t.bigint "player_left_id"
     t.bigint "player_right_id"
     t.integer "connected_players", default: 0
+    t.integer "war_time_id"
     t.string "status", default: "pending"
     t.string "mode"
     t.datetime "created_at", precision: 6, null: false
@@ -194,6 +195,8 @@ ActiveRecord::Schema.define(version: 2021_03_11_090451) do
   create_table "war_times", force: :cascade do |t|
     t.datetime "start"
     t.datetime "end"
+    t.boolean "opened", default: false
+    t.boolean "closed", default: false
     t.bigint "war_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -215,7 +218,8 @@ ActiveRecord::Schema.define(version: 2021_03_11_090451) do
     t.boolean "from_agreement", default: false
     t.boolean "on_agreement", default: false
     t.boolean "terms_agreed", default: false
-    t.boolean "war_closed", default: false
+    t.boolean "opened", default: false
+    t.boolean "closed", default: false
     t.bigint "guild_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

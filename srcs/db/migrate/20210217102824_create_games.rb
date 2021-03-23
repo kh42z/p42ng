@@ -7,6 +7,7 @@ class CreateGames < ActiveRecord::Migration[6.0]
       t.references :player_left, foreign_key: { to_table: :users }
       t.references :player_right, foreign_key: { to_table: :users }
       t.integer :connected_players, default: 0
+      t.integer :war_time_id
       t.string :status, default: 'pending'
       t.string :mode
       t.timestamps

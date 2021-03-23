@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module ScoreHelper
+  include(WarHelper)
   POINTS = 10
 
   def game_point_assignment(game)
@@ -8,16 +9,6 @@ module ScoreHelper
     @winner.guild_member&.guild&.increment!(:score, POINTS)
     war_effort_point if set_war
     ladder_point unless game.mode['ladder'] == 'ladder'
-  end
-
-  def winner_side(game)
-    if game.winner == game.player_left
-      @winner = game.player_left
-      @looser = game.player_right
-    else
-      @looser = game.player_left
-      @winner = game.player_right
-    end
   end
 
   def ladder_point
@@ -32,10 +23,20 @@ module ScoreHelper
   end
 
   def war_point(points)
-    if @side_from
+    if @winner_is_from
       @war.increment!(:from_score, points)
     else
       @war.increment!(:on_score, points)
+    end
+  end
+
+  def winner_side(game)
+    if game.winner == game.player_left
+      @winner = game.player_left
+      @looser = game.player_right
+    else
+      @looser = game.player_left
+      @winner = game.player_right
     end
   end
 
@@ -44,8 +45,8 @@ module ScoreHelper
     l_guild = @looser.guild_member&.guild
     return unless w_guild && l_guild
 
-    @side_from = true if (@war = War.where(from: w_guild, on: l_guild).first)
-    @war ||= War.where(from: l_guild, on: w_guild).first
-    @war
+    @war = war_opened_side_help(w_guild, l_guild)
+    @winner_is_from = w_guild.id == @war.from if @war.present?
+    @war.present?
   end
 end
