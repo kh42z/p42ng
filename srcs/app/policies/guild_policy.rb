@@ -2,7 +2,7 @@
 
 class GuildPolicy < ApplicationPolicy
   include(CacheHelper)
-  attr_reader :user, :guild
+  attr_reader :user, :record
 
   def initialize(user, record)
     super
@@ -11,7 +11,7 @@ class GuildPolicy < ApplicationPolicy
   end
 
   def update?
-    GuildMember.where(user_id: user.id, guild_id: record.id, rank: 'owner').empty? == false
+    GuildMember.where(user_id: user.id, guild_id: record.id, rank: 'owner').empty? == false || user.admin == true
   end
 
   def create_members?
@@ -45,6 +45,7 @@ class GuildPolicy < ApplicationPolicy
   private
 
   def allowed?
-    GuildMember.where(user_id: user.id, guild_id: record.id).where.not(rank: 'member').empty? == false
+    GuildMember.where(user_id: user.id,
+                      guild_id: record.id).where.not(rank: 'member').empty? == false || user.admin == true
   end
 end

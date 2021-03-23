@@ -38,8 +38,8 @@ RSpec.describe "Wars", type: :request do
       user_1_access = user_1.create_new_auth_token
       post "/api/guilds/#{Guild.first.id}/members/#{user_1.id}", headers: access_token
       post api_wars_url, headers: user_1_access, params: valid_attributes
-      expect(response.status).to eq 401
-      expect(response.message).to eq 'Unauthorized'
+      expect(response.status).to eq 403
+      expect(response.message).to eq 'Forbidden'
       expect(War.count).to eq 0
     end
     it 'should not let declare a war against himself' do

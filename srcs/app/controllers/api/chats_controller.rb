@@ -3,8 +3,8 @@
 module Api
   class ChatsController < ApiController
     before_action :set_chat
-    before_action :permission, only: %i[update invites kick mutes bans promote demote destroy]
     skip_before_action :set_chat, only: %i[index create messages]
+    after_action :verify_authorized, except: %i[index show create join leave]
 
     ChatReducer = Rack::Reducer.new(
       Chat.all.order(:updated_at),
@@ -17,6 +17,7 @@ module Api
     end
 
     def update
+      authorize @chat
       @chat.update!(chat_params)
       json_response(@chat, 200)
     end
@@ -43,6 +44,7 @@ module Api
     end
 
     def kick
+      authorize @chat
       target = params.fetch(:tid)
       return render_not_allowed if @chat.owner.id == target.to_i
 
@@ -52,28 +54,33 @@ module Api
     end
 
     def mutes
+      authorize @chat
       timeout_user_from_chat(@chat.id, params.fetch(:user_id), params.fetch(:duration))
       json_response({ user: params[:user_id].to_i, duration: params[:duration].to_i }, 201)
     end
 
     def bans
+      authorize @chat
       ban_user_from_chat(@chat.id, params.fetch(:user_id), params.fetch(:duration))
       disconnect_banned_user(params[:user])
       json_response({ user: params[:user_id].to_i, duration: params[:duration].to_i }, 201)
     end
 
     def invites
+      authorize @chat
       add_participants(@chat, params[:participant_ids])
       json_response(params[:participant_ids], 201)
     end
 
     def promote
+      authorize @chat
       target = params.fetch(:tid)
       User.find(target).toggle!(:admin)
       json_response(ChatAdmin.create!(user_id: target, chat: @chat), 201)
     end
 
     def demote
+      authorize @chat
       target = params.fetch(:tid)
       User.find(target).toggle!(:admin)
       ChatAdmin.where(chat: @chat, user: target).destroy_all
@@ -85,15 +92,12 @@ module Api
     end
 
     def destroy
+      authorize @chat
       @chat.destroy
       head :no_content
     end
 
     private
-
-    def permission
-      render_not_allowed unless current_user == @chat.owner || current_user.admin == true
-    end
 
     def manage_admin
       if ChatAdmin.first

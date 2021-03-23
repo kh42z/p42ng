@@ -3,11 +3,11 @@ require 'rails_helper'
 describe GuildPolicy do
   include(CacheHelper)
   include_context 'with cache'
-  let!(:user) { create(:user) }
-  let!(:guild) { create(:guild) }
-  let!(:owner) { create(:user_with_guild, guild: guild, rank: 'owner') }
-  let!(:member) { create(:user_with_guild, guild: guild, rank: 'member') }
-  let!(:officer) { create(:user_with_guild, guild: guild, rank: 'officer') }
+  let(:user) { create(:user) }
+  let!(:guild) { create(:guild, name: "test", anagram: "t3st") }
+  let(:owner) { create(:user_with_guild, guild: guild, rank: 'owner') }
+  let(:member) { create(:user_with_guild, guild: guild, rank: 'member') }
+  let(:officer) { create(:user_with_guild, guild: guild, rank: 'officer') }
   subject { described_class }
 
   permissions :update? do

@@ -49,3 +49,4 @@ en:
   pendingAgreement: "One side has agree war terms, accept or decline agreement"
   warClosed: "This war has ended"
   guildOwnerDeletion: "Officers can't remove guild owner"
+  twoFactorFailed: "Your code is either expired or invalid"
