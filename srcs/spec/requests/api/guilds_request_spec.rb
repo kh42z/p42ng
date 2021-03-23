@@ -69,10 +69,10 @@ describe 'Guild', type: :request do
       expect(Guild.count).to eq(1)
       expect(response.status).to eq 200
     end
-    it 'should return error: Unauthorized' do
+    it 'should return error: Forbidden' do
       put api_guild_url(Guild.first.id), headers: access_token_2, params: { name: 'Updated', anagram: 'upd4t' }
-      expect(response.message).to eq 'Unauthorized'
-      expect(response.status).to eq 401
+      expect(response.message).to eq 'Forbidden'
+      expect(response.status).to eq 403
     end
   end
 
@@ -95,7 +95,7 @@ describe 'Guild', type: :request do
       user_1_access = user_1.create_new_auth_token
       post "/api/guilds/#{Guild.first.id}/members/#{user_1.id}", headers: access_token
       post "/api/guilds/#{Guild.first.id}/members/#{user_2.id}", headers: user_1_access
-      expect(response.status).to eq 401
+      expect(response.status).to eq 403
     end
     it 'should not add a member who is already member of a guild' do
       post api_guilds_url, headers: access_token_2, params: attributes_2
@@ -124,7 +124,7 @@ describe 'Guild', type: :request do
       post "/api/guilds/#{Guild.first.id}/members/#{auth_2.id}", headers: access_token
       post "/api/guilds/#{Guild.first.id}/officers/#{auth_2.id}", headers: access_token
       delete "/api/guilds/#{Guild.last.id}/members/#{auth.id}", headers: access_token_2
-      expect(response.status).to eq 401
+      expect(response.status).to eq 403
       expect(Guild.first.owner).to eq auth
     end
     context 'if owner leaves' do
@@ -230,7 +230,7 @@ describe 'Guild', type: :request do
 
     it 'should not invite an user if you arent officer or owner' do
       post invitations_api_guild_url(current_guild.id), headers: access_token, params: { user_id: user.id }
-      expect(response.status).to eq 401
+      expect(response.status).to eq 403
       expect(json.size).to eq(1)
     end
   end

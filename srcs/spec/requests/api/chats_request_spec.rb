@@ -152,7 +152,7 @@ RSpec.describe 'Chats', type: :request do
       access = user.create_new_auth_token
       post participants_api_chat_url(chat.id), headers: access, params: { user: user, chat: chat }
       post mutes_api_chat_url(chat.id), headers: access, params: { user_id: user.id, duration: 2 }
-      expect(response).to have_http_status(401)
+      expect(response).to have_http_status(403)
       expect(json['errors']).to eq ['This action is not allowed with your current privileges.']
     end
   end
@@ -174,7 +174,7 @@ RSpec.describe 'Chats', type: :request do
       access = user.create_new_auth_token
       post participants_api_chat_url(chat.id), headers: access, params: { user: user, chat: chat }
       post bans_api_chat_url(chat.id), headers: access, params: { user_id: user.id, duration: 2 }
-      expect(response).to have_http_status(401)
+      expect(response).to have_http_status(403)
       expect(json['errors']).to eq ['This action is not allowed with your current privileges.']
     end
   end
@@ -191,7 +191,7 @@ RSpec.describe 'Chats', type: :request do
     it "should return 'not_allowed'" do
       post api_chats_url, headers: access_token, params: { name: 'Hop' }
       put api_chat_url(Chat.first.id), headers: access, params: { admin_ids: [user.id] }
-      expect(response).to have_http_status(401)
+      expect(response).to have_http_status(403)
       expect(response.body).to match(I18n.t('notAllowed'))
     end
   end
@@ -246,7 +246,7 @@ RSpec.describe 'Chats', type: :request do
     end
     it 'should not let participant kick a participant' do
       delete "/api/chats/#{Chat.first.id}/participants/#{user.id}", headers: access
-      expect(response.status).to eq 401
+      expect(response.status).to eq 403
       expect(ChatParticipant.count).to eq 3
     end
     it 'should let admin kick a participant' do
@@ -258,7 +258,7 @@ RSpec.describe 'Chats', type: :request do
     it 'should not let admin kick the owner' do
       post "/api/chats/#{Chat.first.id}/admins/#{user.id}", headers: access_token
       delete "/api/chats/#{Chat.first.id}/participants/#{auth.id}", headers: access
-      expect(response.status).to eq 401
+      expect(response.status).to eq 403
       expect(ChatParticipant.where(user: auth, chat: Chat.first)).to exist
     end
     it 'should let admin kick admin' do
@@ -289,7 +289,7 @@ RSpec.describe 'Chats', type: :request do
       post api_chats_url, headers: access_token, params: { name: 'ok', privacy: 'protected', password: 'abc' }
       post participants_api_chat_url(Chat.first.id), headers: user_access
       delete api_chat_url(Chat.first.id), headers: user_access
-      expect(response).to have_http_status(401)
+      expect(response).to have_http_status(403)
       expect(Chat.count).to eq(1)
     end
   end

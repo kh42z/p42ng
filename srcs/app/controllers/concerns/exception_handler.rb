@@ -13,8 +13,8 @@ module ExceptionHandler
       json_response({ message: e.message }, :unprocessable_entity)
     end
 
-    rescue_from Pundit::NotAuthorizedError do |e|
-      json_response({ message: e.message }, 403)
+    rescue_from Pundit::NotAuthorizedError do |_e|
+      json_response({ errors: [I18n.t('notAllowed')] }, 403)
     end
   end
 end

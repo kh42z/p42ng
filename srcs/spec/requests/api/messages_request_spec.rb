@@ -18,7 +18,7 @@ RSpec.describe "Api::Messages", type: :request do
 
     it "should not create chat_message: not a participant" do
       post "/api/chats/#{current_chat.id}/messages", headers: access_token, params: { content: "Hey"}
-      expect(response.status).to eq 401
+      expect(response.status).to eq 403
       expect(ChatMessage.all.count).to eq(0)
     end
 
@@ -34,7 +34,7 @@ RSpec.describe "Api::Messages", type: :request do
       ChatParticipant.create(chat: current_chat, user: auth)
       Rails.cache.write("timeout_chat_#{current_chat.id}_#{auth.id}", 1)
       post "/api/chats/#{current_chat.id}/messages", headers: access_token, params: { content: "0" * 500 }
-      expect(response.status).to eq 401
+      expect(response.status).to eq 403
       expect(ChatMessage.all.count).to eq(0)
     end
 
