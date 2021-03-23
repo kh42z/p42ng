@@ -23,8 +23,8 @@ module Api
     end
 
     def create
-      chat = Chat.create!(chat_params.merge!({ owner: current_user }))
-      ChatAdmin.create!(user: current_user, chat: chat)
+      chat = Chat.create!(chat_params)
+      ChatParticipant.create!(user: current_user, chat: chat, role: 'owner')
       add_participants(chat, [current_user.id])
       add_participants(chat, params[:participant_ids])
       json_response(chat, 201)
@@ -38,8 +38,7 @@ module Api
 
     def leave
       ChatParticipant.where(chat: @chat, user: current_user).destroy_all
-      ChatAdmin.where(chat: @chat, user: current_user).destroy_all
-      manage_admin if current_user == @chat.owner
+      manage_ownership if @chat.owner.nil?
       head :no_content
     end
 
@@ -49,7 +48,6 @@ module Api
       return render_not_allowed if @chat.owner.id == target.to_i
 
       ChatParticipant.where(chat: @chat, user: target).destroy_all
-      ChatAdmin.where(chat: @chat, user: target).destroy_all
       head :no_content
     end
 
@@ -75,15 +73,15 @@ module Api
     def promote
       authorize @chat
       target = params.fetch(:tid)
-      User.find(target).toggle!(:admin)
-      json_response(ChatAdmin.create!(user_id: target, chat: @chat), 201)
+      json_response(ChatParticipant.where(user_id: target, chat: @chat).first&.update!(role: 'admin'), 201)
     end
 
     def demote
       authorize @chat
       target = params.fetch(:tid)
-      User.find(target).toggle!(:admin)
-      ChatAdmin.where(chat: @chat, user: target).destroy_all
+      return render_not_allowed if ChatParticipant.where(chat: @chat, user_id: target, role: 'owner').empty? == false
+
+      ChatParticipant.where(chat: @chat, user: target).first&.update!(role: 'participant')
       head :no_content
     end
 
@@ -99,14 +97,13 @@ module Api
 
     private
 
-    def manage_admin
-      if ChatAdmin.first
-        @chat.update!(owner: ChatAdmin.first.user)
-      elsif ChatParticipant.first
-        @chat.update!(owner: ChatParticipant.first.user)
-        ChatAdmin.create!(user_id: @chat.owner_id, chat_id: @chat.id)
+    def manage_ownership
+      if (admin = ChatParticipant.where(chat: @chat, role: 'admin').first)
+        admin.update!(role: 'owner')
+      elsif (p = ChatParticipant.where(chat: @chat).first)
+        p.update!(role: 'owner')
       else
-        destroy
+        @chat.destroy
       end
     end
 

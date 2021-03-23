@@ -6,7 +6,6 @@ class CreateChats < ActiveRecord::Migration[6.0]
       t.string :name
       t.string :privacy, default: 'private'
       t.string :password_digest
-      t.references :owner, foreign_key: { to_table: :users }
       t.timestamps
     end
   end

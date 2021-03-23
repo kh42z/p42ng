@@ -14,8 +14,6 @@ RSpec.describe User, type: :model do
   it { should belong_to(:ladder) }
   it { should have_one(:guild_member).dependent(:destroy) }
   it { should have_many(:chat_participant).dependent(:destroy) }
-  it { should have_many(:chats).dependent(:destroy) }
-  it { should have_many(:chat_admin).dependent(:destroy) }
   it { should have_many(:ignores).dependent(:destroy) }
 
   it 'validates uniqueness of nickname' do

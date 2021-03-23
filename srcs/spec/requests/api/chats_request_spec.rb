@@ -30,14 +30,16 @@ RSpec.describe 'Chats', type: :request do
       chat = chat_with_participants(count: 2)
       get api_chat_url(chat.id), headers: access_token
       expect(response).to have_http_status(200)
-      expect(Chat.first.participants.count).to eq(2)
+      expect(Chat.first.participants.count).to eq(3)
     end
     it 'should get a chat with admins, participants, timeouts and bans' do
       chat = chat_full
       get api_chat_url(chat.id), headers: access_token
       expect(response).to have_http_status(200)
       expect(Chat.first.participants.first).to be_instance_of(ChatParticipant)
-      expect(Chat.first.admins.first).to be_instance_of(ChatAdmin)
+      expect(Chat.first.admins.first).to be_instance_of(ChatParticipant)
+      expect(Chat.first.admins.first.role).to eq('admin')
+
       # expect(Chat.first.chat_bans.first).to be_instance_of(ChatBan)
       # expect(Chat.first.chat_timeouts.first).to be_instance_of(ChatTimeout)
     end
@@ -63,9 +65,9 @@ RSpec.describe 'Chats', type: :request do
     it "should return 201 & current_user should be chat's owner/participant/admin" do
       post api_chats_url, headers: access_token, params: { name: 'Hop', privacy: 'protected', password: 'asd' }
       expect(response).to have_http_status(201)
-      expect(Chat.first.owner_id).to eq(auth.id)
+      expect(Chat.first.owner.id).to eq(auth.id)
       expect(ChatParticipant.first.user_id).to eq(auth.id)
-      expect(ChatAdmin.first.user_id).to eq(auth.id)
+      expect(ChatParticipant.first.role).to eq('owner')
       expect(Chat.first.name).to eq('Hop')
       expect(json).to include('name' => 'Hop')
     end
@@ -77,7 +79,7 @@ RSpec.describe 'Chats', type: :request do
     it 'should create a chat with owner as admin' do
       post api_chats_url, headers: access_token, params: { name: 'Hop' }
       expect(response).to have_http_status(201)
-      expect(ChatAdmin.first.user_id).to eq(auth.id)
+      expect(ChatParticipant.first.role).to eq('owner')
     end
     it 'should create a chat with two participants' do
       user = create(:user)
@@ -203,7 +205,7 @@ RSpec.describe 'Chats', type: :request do
     it 'should let participant leave chat' do
       post participants_api_chat_url(chat.id), headers: access, params: { user: user, chat: chat }
       delete participants_api_chat_url(chat.id), headers: access
-      expect(ChatParticipant.count).to eq(0)
+      expect(ChatParticipant.count).to eq(1)
     end
     it 'should let participant leave protected chat' do
       post api_chats_url, headers: access_token, params: { name: 'Hop', privacy: 'protected', password: 'abc' }
@@ -216,17 +218,16 @@ RSpec.describe 'Chats', type: :request do
       post api_chats_url, headers: access, params: { name: 'Hop' }
       delete participants_api_chat_url(Chat.first.id), headers: access
       expect(ChatParticipant.count).to eq(0)
-      expect(ChatAdmin.count).to eq(0)
       expect(Chat.first).to eq nil
     end
     it 'should demote participant and set another admin and owner' do
       post api_chats_url, headers: access_token, params: { name: 'Hop', participant_ids: [user.id] }
       delete participants_api_chat_url(Chat.first.id), headers: access_token
       expect(ChatParticipant.count).to eq(1)
-      expect(ChatAdmin.count).to eq(1)
+      expect(ChatParticipant.where(role: 'owner').count).to eq(1)
       expect(ChatParticipant.first.user_id).to eq(user.id)
-      expect(ChatAdmin.first.user_id).to eq(user.id)
-      expect(Chat.first.owner_id).to eq(user.id)
+      expect(ChatParticipant.where(role: 'owner').first.user_id).to eq(user.id)
+      expect(Chat.first.owner.id).to eq(user.id)
       expect(response).to have_http_status(204)
     end
   end
@@ -307,11 +308,11 @@ RSpec.describe 'Chats', type: :request do
     it 'should promote a participant' do
       user = create(:user)
       post api_chats_url, headers: access_token, params: { name: 'Hop' }
-      post participants_api_chat_url(Chat.first.id), headers: access_token
+      create(:chat_participant, chat_id: Chat.first.id, user: user)
       post "/api/chats/#{Chat.first.id}/admins/#{user.id}", headers: access_token
       expect(response.status).to eq 201
-      expect(ChatAdmin.count).to eq 2
-      expect(ChatAdmin.where(user: user, chat: Chat.first)).to exist
+      expect(ChatParticipant.where(chat: Chat.first, role: 'admin').count).to eq 1
+      expect(ChatParticipant.where(user: user, chat: Chat.first, role: 'admin')).to exist
     end
     it 'should demote an admin' do
       user = create(:user)
@@ -320,15 +321,15 @@ RSpec.describe 'Chats', type: :request do
       post "/api/chats/#{Chat.first.id}/admins/#{user.id}", headers: access_token
       delete "/api/chats/#{Chat.first.id}/admins/#{user.id}", headers: access_token
       expect(response.status).to eq 204
-      expect(ChatAdmin.count).to eq 1
-      expect(ChatAdmin.where(user: user, chat: Chat.first)).to_not exist
+      expect(ChatParticipant.where(chat: Chat.first, role: 'admin').count).to eq 0
+      expect(ChatParticipant.where(user: user, chat: Chat.first, role: 'admin')).to_not exist
     end
   end
 end
 
 def chat_full
   create(:chat) do |chat|
-    create(:chat_admin, chat: chat)
+    create(:chat_participant, chat: chat, role: 'admin')
     create(:chat_participant, chat: chat)
     # TODO: write in cache for to/bans?
   end
