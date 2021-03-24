@@ -18,14 +18,15 @@ module Api
       return render_not_allowed unless Guild.find(params_create[:from_id]).owner == current_user.guild_member
 
       war = War.create!(params_create)
+      war.update!(last_negotiation: current_user.guild.id)
       json_response(war, 201)
     end
 
     def update
       return render_error('notNegotiated', 403) unless turn_to_negotiate?
 
-      @war.toggle(:negotiation)
       @war.update!(params_update)
+      @war.update!(from_agreement: false, on_agreement: false)
       json_response(@war)
     end
 
@@ -91,7 +92,9 @@ module Api
     end
 
     def turn_to_negotiate?
-      current_user.guild_member == @from.owner ? @war.negotiation? : @war.negotiation == false
+      return false if @war.last_negotiation == current_user.guild.id
+
+      @war.last_negotiation = current_user.guild.id
     end
 
     def permission
