@@ -8,9 +8,10 @@ class Chat < ApplicationRecord
   has_secure_password validations: false
   validates_presence_of :password, if: :password_enabled?
   validates_confirmation_of :password, if: :password_enabled?
-  belongs_to :owner, class_name: 'User'
-  has_many :admins, class_name: 'ChatAdmin', dependent: :destroy
   has_many :participants, class_name: 'ChatParticipant', dependent: :destroy
+  has_many :admins, -> { where(role: 'admin') }, class_name: 'ChatParticipant'
+  has_one :chat_owner, -> { where(role: 'owner') }, class_name: 'ChatParticipant'
+  has_one :owner, through: :chat_owner, source: :user
   has_many :messages, class_name: 'ChatMessage', dependent: :destroy
 
   def password_enabled?

@@ -43,15 +43,6 @@ ActiveRecord::Schema.define(version: 2021_03_11_090451) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "chat_admins", force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "chat_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["chat_id"], name: "index_chat_admins_on_chat_id"
-    t.index ["user_id"], name: "index_chat_admins_on_user_id"
-  end
-
   create_table "chat_messages", force: :cascade do |t|
     t.bigint "sender_id"
     t.bigint "chat_id"
@@ -65,6 +56,7 @@ ActiveRecord::Schema.define(version: 2021_03_11_090451) do
   create_table "chat_participants", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "chat_id"
+    t.integer "role", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["chat_id"], name: "index_chat_participants_on_chat_id"
@@ -76,10 +68,8 @@ ActiveRecord::Schema.define(version: 2021_03_11_090451) do
     t.string "name"
     t.string "privacy", default: "private"
     t.string "password_digest"
-    t.bigint "owner_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["owner_id"], name: "index_chats_on_owner_id"
   end
 
   create_table "friendships", force: :cascade do |t|
@@ -88,6 +78,7 @@ ActiveRecord::Schema.define(version: 2021_03_11_090451) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["friend_id"], name: "index_friendships_on_friend_id"
+    t.index ["user_id", "friend_id"], name: "index_friendships_on_user_id_and_friend_id", unique: true
     t.index ["user_id"], name: "index_friendships_on_user_id"
   end
 
@@ -146,6 +137,7 @@ ActiveRecord::Schema.define(version: 2021_03_11_090451) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["ignored_id"], name: "index_user_ignores_on_ignored_id"
+    t.index ["user_id", "ignored_id"], name: "index_user_ignores_on_user_id_and_ignored_id", unique: true
     t.index ["user_id"], name: "index_user_ignores_on_user_id"
   end
 
@@ -227,13 +219,10 @@ ActiveRecord::Schema.define(version: 2021_03_11_090451) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "chat_admins", "chats"
-  add_foreign_key "chat_admins", "users"
   add_foreign_key "chat_messages", "chats"
   add_foreign_key "chat_messages", "users", column: "sender_id"
   add_foreign_key "chat_participants", "chats"
   add_foreign_key "chat_participants", "users"
-  add_foreign_key "chats", "users", column: "owner_id"
   add_foreign_key "friendships", "users"
   add_foreign_key "friendships", "users", column: "friend_id"
   add_foreign_key "games", "users", column: "player_left_id"

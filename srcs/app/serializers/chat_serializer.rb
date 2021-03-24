@@ -28,4 +28,8 @@ class ChatSerializer < ActiveModel::Serializer
   def ban_ids
     object.participants.select { |e| user_banned_from_chat?(object.id, e.user.id) }.map(&:user_id)
   end
+
+  def owner_id
+    object.owner.id
+  end
 end

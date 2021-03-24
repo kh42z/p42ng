@@ -10,7 +10,7 @@ Ladder.create(name: 'Platine', desc: 'mhe.')
 Ladder.create(name: 'Diamond', desc: 'mhe.')
 
 alfred = FactoryBot.create(:user, nickname: 'Alfred', email: '9000@student.42.fr', two_factor: true, two_factor_code: ENV['ALFRED_CODE'])
-general_chat_room = Chat.create(name: 'general', privacy: 'public', owner_id: alfred.id)
+general_chat_room = Chat.create(name: 'general', privacy: 'public', owner: alfred)
 ChatParticipant.create(user: alfred, chat: general_chat_room)
 
 if Rails.env.development?
