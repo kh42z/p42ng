@@ -9,7 +9,7 @@ Ladder.create(name: 'Gold', desc: 'ehm.')
 Ladder.create(name: 'Platine', desc: 'mhe.')
 Ladder.create(name: 'Diamond', desc: 'mhe.')
 
-ChatParticipant.create(user: alfred, chat: general_chat_room)
+Chat.create(name: 'general', privacy: 'public')
 
 if Rails.env.development?
 
@@ -42,5 +42,4 @@ if Rails.env.development?
     t.update!(ladder_id: Ladder.all.sample(1))
   end
 
-  Chat.create(name: 'general', privacy: 'public', owner: @users[0])
 end
