@@ -15,12 +15,12 @@ RUN git clone  https://github.com/kh42z/omniauth-marvin.git && cd omniauth-marvi
 COPY srcs/ /app
 RUN bundle install
 RUN yarn install
-# Crontab for whenever gem
-RUN crontab -l | { cat; echo ""; } | crontab - && bundle exec whenever --update-crontab
 ADD build/rails/heroku-entrypoint.sh /heroku-entrypoint.sh
 RUN chmod 0755 /heroku-entrypoint.sh
 RUN groupadd -r p42ng && useradd -r -s /bin/false -g p42ng p42ng
 RUN chown -R p42ng:p42ng /app
 USER p42ng
+# Crontab for whenever gem
+RUN crontab -l | { cat; echo ""; } | crontab - && bundle exec whenever --update-crontab
 EXPOSE 3000
 ENTRYPOINT ["/bin/bash","-c", "/heroku-entrypoint.sh"]

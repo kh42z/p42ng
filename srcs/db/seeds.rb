@@ -9,9 +9,7 @@ Ladder.create(name: 'Gold', desc: 'ehm.')
 Ladder.create(name: 'Platine', desc: 'mhe.')
 Ladder.create(name: 'Diamond', desc: 'mhe.')
 
-alfred = FactoryBot.create(:user, nickname: 'Alfred', email: '9000@student.42.fr', two_factor: true, two_factor_code: ENV['ALFRED_CODE'])
-general_chat_room = Chat.create(name: 'general', privacy: 'public', owner: alfred)
-ChatParticipant.create(user: alfred, chat: general_chat_room)
+Chat.create(name: 'general', privacy: 'public')
 
 if Rails.env.development?
 
@@ -43,4 +41,5 @@ if Rails.env.development?
   User.all.each do |t|
     t.update!(ladder_id: Ladder.all.sample.id)
   end
+
 end
