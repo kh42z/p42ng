@@ -3,8 +3,6 @@
 class CreateWars < ActiveRecord::Migration[6.0]
   def change
     create_table :wars do |t|
-      t.integer :from
-      t.integer :on
       t.datetime :war_start
       t.datetime :war_end
       t.integer :prize, unsigned: true
@@ -19,7 +17,8 @@ class CreateWars < ActiveRecord::Migration[6.0]
       t.boolean :terms_agreed, default: false
       t.boolean :opened, default: false
       t.boolean :closed, default: false
-      t.references :guild, foreign_key: true
+      t.references :from, foreign_key: { to_table: :guilds }
+      t.references :on, foreign_key: { to_table: :guilds }
       t.timestamps
     end
   end

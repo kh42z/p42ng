@@ -5,26 +5,28 @@ RSpec.describe "Wars", type: :request do
   let(:auth_2) { create(:user) }
   let(:access_token) { auth.create_new_auth_token }
   let(:access_token_2) { auth_2.create_new_auth_token }
-  let(:valid_attributes) { { on: Guild.last.id, war_start: DateTime.now, war_end: DateTime.new(2022, 01, 01, 00, 00, 0), prize: 1000, max_unanswered: 10 } }
+  let(:valid_attributes) { { on_id: Guild.last.id, war_start: DateTime.now, war_end: DateTime.new(2022, 01, 01, 00, 00, 0), prize: 1000, max_unanswered: 10 } }
   before {
     post api_guilds_url, headers: access_token, params: { name: "NoShroud", anagram: "NOS" }
     post api_guilds_url, headers: access_token_2, params: { name: "BANG", anagram: "ABCDE" }
   }
-  describe "#index" do
-    it 'should return wars' do
-      create_list(:war, 2)
-      get api_wars_url, headers: access_token
-      expect(json.size).to eq 2
-      expect(response.status).to eq 200
+  context '#get' do
+    let!(:war_1) { create(:war, from: Guild.first, on: Guild.last, war_start: DateTime.now, war_end: DateTime.new(2022)) }
+    let!(:war_2) { create(:war, on: Guild.first, from: Guild.last, war_start: DateTime.new(2023), war_end: DateTime.new(2024)) }
+    describe "#index" do
+      it 'should return wars' do
+        get api_wars_url, headers: access_token
+        expect(json.size).to eq 2
+        expect(response.status).to eq 200
+      end
     end
-  end
-  describe "#show" do
-    it 'should return a war' do
-      war_1, war_2 = create_list(:war, 2)
-      get api_war_url(war_1), headers: access_token
-      expect(response.status).to eq 200
-      expect(json['id']).to match(war_1.id)
-      expect(json['id']).to_not match(war_2.id)
+    describe "#show" do
+      it 'should return a war' do
+        get api_war_url(war_1), headers: access_token
+        expect(response.status).to eq 200
+        expect(json['id']).to match(war_1.id)
+        expect(json['id']).to_not match(war_2.id)
+      end
     end
   end
   describe "#create" do
@@ -43,7 +45,7 @@ RSpec.describe "Wars", type: :request do
       expect(War.count).to eq 0
     end
     it 'should not let declare a war against himself' do
-      valid_attributes = { on: Guild.first.id, war_start: DateTime.now, war_end: DateTime.new(2022, 03, 10, 11, 11, 0), prize: 1000, max_unanswered: 10 }
+      valid_attributes = { on_id: Guild.first.id, war_start: DateTime.now, war_end: DateTime.new(2022, 03, 10, 11, 11, 0), prize: 1000, max_unanswered: 10 }
       post api_wars_url, headers: access_token, params: valid_attributes
       expect(response.status).to eq 422
       expect(War.count).to eq(0)
@@ -51,7 +53,7 @@ RSpec.describe "Wars", type: :request do
   end
   describe "#update" do
     before { post api_wars_url, headers: access_token, params: valid_attributes }
-    it 'should update a war' do
+    it 'should update a war',test:true do
       put api_war_url(War.first.id), headers: access_token_2, params: { war_end: DateTime.new(2022, 03, 10, 11, 11, 0), max_unanswered: 12 }
       expect(response.status).to eq 200
       expect(War.first.war_end).to eq(DateTime.new(2022, 03, 10, 11, 11,0))
@@ -118,7 +120,7 @@ RSpec.describe "Wars", type: :request do
   describe '#wars_entangled?' do
     before {
       post api_wars_url, headers: access_token, params: valid_attributes
-      post api_wars_url, headers: access_token_2, params: { on: Guild.first.id, war_start: DateTime.now, war_end: DateTime.new(2022, 01, 01, 00, 00, 0), prize: 1000, max_unanswered: 10 }
+      post api_wars_url, headers: access_token_2, params: { on_id: Guild.first.id, war_start: DateTime.now, war_end: DateTime.new(2022, 01, 01, 00, 00, 0), prize: 1000, max_unanswered: 10 }
       post agreements_api_war_url(War.first.id), headers: access_token, params: { agree_terms: true }
     }
     it 'should consider war with agreed terms (start dates entangled)' do
@@ -128,7 +130,7 @@ RSpec.describe "Wars", type: :request do
       expect(response.status).to eq 403
     end
     it 'should consider war with agreed terms (end dates entangled)' do
-      post api_wars_url, headers: access_token_2, params: { on: Guild.first.id, war_start: DateTime.new(2020, 1, 1), war_end: DateTime.new(2021, 6, 6), prize: 1000, max_unanswered: 10 }
+      post api_wars_url, headers: access_token_2, params: { on_id: Guild.first.id, war_start: DateTime.new(2020, 1, 1), war_end: DateTime.new(2021, 6, 6), prize: 1000, max_unanswered: 10 }
       post agreements_api_war_url(War.first.id), headers: access_token_2, params: { agree_terms: true }
       post agreements_api_war_url(War.last.id), headers: access_token, params: { agree_terms: true }
       expect(json['errors']).to eq ['Entity dates are entangled with another one']
@@ -139,7 +141,7 @@ RSpec.describe "Wars", type: :request do
     end
   end
   describe 'lifecycle' do
-    let(:attributes) { { on: Guild.last.id, war_start: DateTime.now, war_end: DateTime.now.in_time_zone(1).in(2), prize: 1000, max_unanswered: 10 } }
+    let(:attributes) { { on_id: Guild.last.id, war_start: DateTime.now, war_end: DateTime.now.in_time_zone(1).in(2), prize: 1000, max_unanswered: 10 } }
     before {
       post api_wars_url, headers: access_token, params: attributes
       post agreements_api_war_url(War.first.id), headers: access_token, params: { agree_terms: true }
@@ -166,7 +168,7 @@ RSpec.describe "Wars", type: :request do
       end
     end
   end
-  describe "Times", test:true do
+  describe "Times" do
     before { post api_wars_url, headers: access_token, params: valid_attributes }
     context 'create' do
       it 'should create a war time' do

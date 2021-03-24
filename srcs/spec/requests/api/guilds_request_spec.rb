@@ -41,7 +41,7 @@ describe 'Guild', type: :request do
     it 'returns status code 201' do
       post api_guilds_url, headers: access_token, params: attributes
       expect(response).to have_http_status(201)
-      expect(Guild.first.owner).to eq(auth)
+      expect(Guild.first.owner).to eq(auth.guild_member)
     end
     it 'returns status code 422' do
       post api_guilds_url, headers: access_token
@@ -120,12 +120,12 @@ describe 'Guild', type: :request do
       delete "/api/guilds/#{Guild.last.id}/members/#{user_1.id}", headers: access_token_2
       expect(GuildMember.where(user_id: user_1.id, guild_id: Guild.first.id)).to exist
     end
-    it 'should not let officer destroy owner', test:true do
+    it 'should not let officer destroy owner' do
       post "/api/guilds/#{Guild.first.id}/members/#{auth_2.id}", headers: access_token
       post "/api/guilds/#{Guild.first.id}/officers/#{auth_2.id}", headers: access_token
       delete "/api/guilds/#{Guild.last.id}/members/#{auth.id}", headers: access_token_2
       expect(response.status).to eq 403
-      expect(Guild.first.owner).to eq auth
+      expect(Guild.first.owner).to eq auth.guild_member
     end
     context 'if owner leaves' do
       it 'should destroy guild if he is the last to leave' do
@@ -138,13 +138,13 @@ describe 'Guild', type: :request do
         post "/api/guilds/#{Guild.first.id}/officers/#{user_1.id}", headers: access_token
         delete "/api/guilds/#{Guild.first.id}/members/#{auth.id}", headers: access_token
         expect(response.status).to eq 204
-        expect(Guild.first.owner).to eq user_1
+        expect(Guild.first.owner).to eq user_1.guild_member
       end
       it 'should give ownership to first member' do
         post "/api/guilds/#{Guild.first.id}/members/#{user_1.id}", headers: access_token
         delete "/api/guilds/#{Guild.first.id}/members/#{auth.id}", headers: access_token
         expect(response.status).to eq 204
-        expect(Guild.first.owner).to eq user_1
+        expect(Guild.first.owner).to eq user_1.guild_member
       end
     end
   end

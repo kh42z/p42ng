@@ -46,7 +46,7 @@ module ScoreHelper
     return unless w_guild && l_guild
 
     @war = war_opened_side_help(w_guild, l_guild)
-    @winner_is_from = w_guild.id == @war.from if @war.present?
+    @winner_is_from = w_guild.id == @war.from_id if @war.present?
     @war.present?
   end
 end

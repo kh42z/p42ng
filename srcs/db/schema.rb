@@ -204,8 +204,6 @@ ActiveRecord::Schema.define(version: 2021_03_11_090451) do
   end
 
   create_table "wars", force: :cascade do |t|
-    t.integer "from"
-    t.integer "on"
     t.datetime "war_start"
     t.datetime "war_end"
     t.integer "prize"
@@ -220,10 +218,12 @@ ActiveRecord::Schema.define(version: 2021_03_11_090451) do
     t.boolean "terms_agreed", default: false
     t.boolean "opened", default: false
     t.boolean "closed", default: false
-    t.bigint "guild_id"
+    t.bigint "from_id"
+    t.bigint "on_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["guild_id"], name: "index_wars_on_guild_id"
+    t.index ["from_id"], name: "index_wars_on_from_id"
+    t.index ["on_id"], name: "index_wars_on_on_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -248,5 +248,6 @@ ActiveRecord::Schema.define(version: 2021_03_11_090451) do
   add_foreign_key "users", "ladders"
   add_foreign_key "war_addons", "wars"
   add_foreign_key "war_times", "wars"
-  add_foreign_key "wars", "guilds"
+  add_foreign_key "wars", "guilds", column: "from_id"
+  add_foreign_key "wars", "guilds", column: "on_id"
 end

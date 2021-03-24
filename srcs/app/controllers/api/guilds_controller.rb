@@ -83,7 +83,7 @@ module Api
     private
 
     def mutiny?
-      current_user.guild_member.officer? && @guild.owner.id == params[:tid].to_i
+      current_user.guild_member.officer? && @guild.owner.user_id == params[:tid].to_i
     end
 
     def user_available?(user)

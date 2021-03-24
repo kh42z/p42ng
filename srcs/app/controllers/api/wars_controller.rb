@@ -14,7 +14,7 @@ module Api
     end
 
     def create
-      return render_not_allowed unless Guild.find(params_create[:from]).owner == current_user
+      return render_not_allowed unless Guild.find(params_create[:from_id]).owner == current_user.guild_member
 
       war = War.create!(params_create)
       json_response(war, 201)
@@ -90,11 +90,13 @@ module Api
     end
 
     def turn_to_negotiate?
-      current_user == @from.owner ? @war.negotiation? : @war.negotiation == false
+      current_user.guild_member == @from.owner ? @war.negotiation? : @war.negotiation == false
     end
 
     def permission
-      return render_not_allowed unless current_user == @from.owner || current_user == @on.owner
+      unless current_user.guild_member == @from.owner || current_user.guild_member == @on.owner
+        return render_not_allowed
+      end
       return render_error('warOngoing', 403) if @war.opened?
       return render_error('warClosed', 403) if @war.closed?
     end
@@ -110,8 +112,8 @@ module Api
 
     def params_create
       attacker = Guild.find(GuildMember.where(user: current_user).first.guild_id)
-      tmp = params.permit(:on, :war_start, :war_end, :prize, :max_unanswered)
-      tmp.merge!(from: attacker.id, guild_id: attacker.id)
+      tmp = params.permit(:on_id, :war_start, :war_end, :prize, :max_unanswered)
+      tmp.merge!(from_id: attacker.id)
     end
 
     def time_params_create
@@ -120,8 +122,8 @@ module Api
 
     def set_war
       @war = War.find(params[:id])
-      @from = Guild.find(@war.from)
-      @on = Guild.find(@war.on)
+      @from = Guild.find(@war.from_id)
+      @on = Guild.find(@war.on_id)
     end
   end
 end

@@ -136,7 +136,7 @@ RSpec.describe 'Games', type: :request do
 
     context 'WarTime' do
       describe 'There can be only one "War time" match at the same time' do
-        let(:attributes) { { on: Guild.last.id, war_start: DateTime.now, war_end: DateTime.new(2022), prize: 1000, max_unanswered: 10 } }
+        let(:attributes) { { on_id: Guild.last.id, war_start: DateTime.now, war_end: DateTime.new(2022), prize: 1000, max_unanswered: 10 } }
         let(:auth_2) { create(:user) }
         let(:access_token) { auth.create_new_auth_token }
         let(:access_token_2) { auth_2.create_new_auth_token }

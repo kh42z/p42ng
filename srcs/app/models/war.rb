@@ -10,7 +10,8 @@ class War < ApplicationRecord
   validate :start_before_end
   validate :from_must_not_eq_on
 
-  belongs_to :guild
+  belongs_to :from, class_name: 'Guild'
+  belongs_to :on, class_name: 'Guild'
   has_many :war_addons
   has_many :war_times
 
@@ -22,5 +23,9 @@ class War < ApplicationRecord
   def start_before_end
     valid = war_start && war_end && war_start < war_end
     errors.add(:war_start, 'must be before end time') unless valid
+  end
+
+  def guilds
+    [from] + [on]
   end
 end
