@@ -202,7 +202,7 @@ ActiveRecord::Schema.define(version: 2021_03_11_090451) do
     t.integer "from_score", default: 0
     t.integer "on_score", default: 0
     t.integer "max_unanswered"
-    t.boolean "negotiation", default: false
+    t.integer "last_negotiation"
     t.boolean "ladder_effort", default: false
     t.boolean "tournament_effort", default: false
     t.boolean "from_agreement", default: false

@@ -9,7 +9,7 @@ class CreateWars < ActiveRecord::Migration[6.0]
       t.integer :from_score, unsigned: true, default: 0
       t.integer :on_score, unsigned: true, default: 0
       t.integer :max_unanswered, unsigned: true
-      t.boolean :negotiation, default: false
+      t.integer :last_negotiation
       t.boolean :ladder_effort, default: false
       t.boolean :tournament_effort, default: false
       t.boolean :from_agreement, default: false
