@@ -26,23 +26,6 @@ RSpec.describe 'Chats', type: :request do
       expect(response).to have_http_status(200)
       assert_equal chat.privacy, json['privacy']
     end
-    it 'should get chat with participants' do
-      chat = chat_with_participants(count: 2)
-      get api_chat_url(chat.id), headers: access_token
-      expect(response).to have_http_status(200)
-      expect(Chat.first.participants.count).to eq(3)
-    end
-    it 'should get a chat with admins, participants, timeouts and bans' do
-      chat = chat_full
-      get api_chat_url(chat.id), headers: access_token
-      expect(response).to have_http_status(200)
-      expect(Chat.first.participants.first).to be_instance_of(ChatParticipant)
-      expect(Chat.first.admins.first).to be_instance_of(ChatParticipant)
-      expect(Chat.first.admins.first.role).to eq('admin')
-
-      # expect(Chat.first.chat_bans.first).to be_instance_of(ChatBan)
-      # expect(Chat.first.chat_timeouts.first).to be_instance_of(ChatTimeout)
-    end
     it 'should get timeout_id of muted participant' do
       user_1 = create(:user)
       post api_chats_url, headers: access_token, params: { name: 'Hop' }
@@ -62,45 +45,54 @@ RSpec.describe 'Chats', type: :request do
   end
 
   describe '#create' do
-    it "should return 201 & current_user should be chat's owner/participant/admin" do
-      post api_chats_url, headers: access_token, params: { name: 'Hop', privacy: 'protected', password: 'asd' }
-      expect(response).to have_http_status(201)
-      expect(Chat.first.owner.id).to eq(auth.id)
-      expect(ChatParticipant.first.user_id).to eq(auth.id)
-      expect(ChatParticipant.first.role).to eq('owner')
-      expect(Chat.first.name).to eq('Hop')
-      expect(json).to include('name' => 'Hop')
+    context 'should create a chat with :' do
+      it 'owner as admin' do
+        post api_chats_url, headers: access_token, params: { name: 'Hop' }
+        expect(response).to have_http_status(201)
+        expect(ChatParticipant.first.role).to eq('owner')
+      end
+      it 'two participants' do
+        user = create(:user)
+        post api_chats_url, headers: access_token, params: { name: 'Hop', privacy: 'private', participant_ids: [user.id] }
+        expect(response).to have_http_status(201)
+        expect(ChatParticipant.first.user_id).to eq(auth.id)
+        expect(ChatParticipant.last.user_id).to eq(user.id)
+      end
+      it 'a name' do
+        post api_chats_url, headers: access_token, params: { name: 'DISCUSSION' }
+        expect(response).to have_http_status(201)
+        expect(Chat.first.name).to eq('DISCUSSION')
+      end
+      it 'bad participant ID param' do
+        post api_chats_url, headers: access_token, params: { name: 'Hop', participant_ids: [0] }
+        expect(response).to have_http_status(201)
+      end
+      it "current_user as chat's owner" do
+        post api_chats_url, headers: access_token, params: { name: 'Hop', privacy: 'protected', password: 'asd' }
+        expect(response).to have_http_status(201)
+        expect(Chat.first.owner.id).to eq(auth.id)
+        expect(ChatParticipant.first.user_id).to eq(auth.id)
+        expect(ChatParticipant.first.role).to eq('owner')
+        expect(Chat.first.name).to eq('Hop')
+        expect(json).to include('name' => 'Hop')
+      end
+      it 'two participants max if direct_message',test:true do
+        users = create_list(:user, 3)
+        post api_chats_url, headers: access_token, params: { name: 'Hop', privacy: 'direct_message', participant_ids: [users[0].id, users[1].id, users[2].id] }
+        expect(Chat.first.participants.count).to eq 2
+      end
     end
-    it 'should not create a protected chat without password' do
-      post api_chats_url, headers: access_token, params: { name: 'Hop', privacy: 'protected' }
-      expect(response).to have_http_status(422)
-      expect(response.body).to match("Validation failed: Password can't be blank")
-    end
-    it 'should create a chat with owner as admin' do
-      post api_chats_url, headers: access_token, params: { name: 'Hop' }
-      expect(response).to have_http_status(201)
-      expect(ChatParticipant.first.role).to eq('owner')
-    end
-    it 'should create a chat with two participants' do
-      user = create(:user)
-      post api_chats_url, headers: access_token, params: { name: 'Hop', privacy: 'private', participant_ids: [user.id] }
-      expect(response).to have_http_status(201)
-      expect(ChatParticipant.first.user_id).to eq(auth.id)
-      expect(ChatParticipant.last.user_id).to eq(user.id)
-    end
-    it 'should create a chat with a name' do
-      post api_chats_url, headers: access_token, params: { name: 'DISCUSSION' }
-      expect(response).to have_http_status(201)
-      expect(Chat.first.name).to eq('DISCUSSION')
-    end
-    it 'should not create a chat without a name' do
-      post api_chats_url, headers: access_token
-      expect(response).to have_http_status(422)
-      expect(response.body).to match("Validation failed: Name can't be blank")
-    end
-    it 'should create a chat with bad participant ID' do
-      post api_chats_url, headers: access_token, params: { name: 'Hop', participant_ids: [0] }
-      expect(response).to have_http_status(201)
+    context 'should not create :' do
+      it 'a protected chat without password' do
+        post api_chats_url, headers: access_token, params: { name: 'Hop', privacy: 'protected' }
+        expect(response).to have_http_status(422)
+        expect(response.body).to match("Validation failed: Password can't be blank")
+      end
+      it 'a chat without a name' do
+        post api_chats_url, headers: access_token
+        expect(response).to have_http_status(422)
+        expect(response.body).to match("Validation failed: Name can't be blank")
+      end
     end
   end
 
@@ -137,7 +129,7 @@ RSpec.describe 'Chats', type: :request do
   describe '#mutes' do
     let(:user) { create(:user) }
     let(:chat) { create(:chat, owner: auth) }
-    it 'should mute a participant', test: true do
+    it 'should mute a participant' do
       timer = 2
       post participants_api_chat_url(chat.id), headers: access_token, params: { user: user, chat: chat }
       post mutes_api_chat_url(chat.id), headers: access_token, params: { user_id: user.id, duration: timer }
@@ -214,13 +206,13 @@ RSpec.describe 'Chats', type: :request do
       expect(response.status).to eq 204
       expect(Chat.first).to eq nil
     end
-    it 'should demote participant, delete participant and chat' do
+    it 'should delete participant and chat' do
       post api_chats_url, headers: access, params: { name: 'Hop' }
       delete participants_api_chat_url(Chat.first.id), headers: access
       expect(ChatParticipant.count).to eq(0)
       expect(Chat.first).to eq nil
     end
-    it 'should demote participant and set another admin and owner' do
+    it 'should delete participant and set another admin and owner' do
       post api_chats_url, headers: access_token, params: { name: 'Hop', participant_ids: [user.id] }
       delete participants_api_chat_url(Chat.first.id), headers: access_token
       expect(ChatParticipant.count).to eq(1)
@@ -238,7 +230,7 @@ RSpec.describe 'Chats', type: :request do
     let(:access) { user.create_new_auth_token }
     before do
       post api_chats_url, headers: access_token,
-                          params: { name: 'Hop', privacy: 'private', participant_ids: [user.id, user_2.id] }
+           params: { name: 'Hop', privacy: 'private', participant_ids: [user.id, user_2.id] }
     end
     it 'should kick a participant' do
       delete "/api/chats/#{Chat.first.id}/participants/#{user.id}", headers: access_token
@@ -324,19 +316,5 @@ RSpec.describe 'Chats', type: :request do
       expect(ChatParticipant.where(chat: Chat.first, role: 'admin').count).to eq 0
       expect(ChatParticipant.where(user: user, chat: Chat.first, role: 'admin')).to_not exist
     end
-  end
-end
-
-def chat_full
-  create(:chat) do |chat|
-    create(:chat_participant, chat: chat, role: 'admin')
-    create(:chat_participant, chat: chat)
-    # TODO: write in cache for to/bans?
-  end
-end
-
-def chat_with_participants(count: 1)
-  create(:chat) do |chat|
-    create_list(:chat_participant, count, chat: chat)
   end
 end

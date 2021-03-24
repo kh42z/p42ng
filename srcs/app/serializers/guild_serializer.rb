@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class GuildSerializer < ActiveModel::Serializer
-  attributes :id, :name, :anagram, :owner_id, :officer_ids, :member_ids
+  attributes :id, :name, :anagram, :owner_id, :officer_ids, :member_ids, :score
 
   def officer_ids
     object.officers.pluck(:user_id)
