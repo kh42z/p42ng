@@ -14,13 +14,11 @@ class User < ApplicationRecord
 
   has_one_attached :avatar
 
-  has_many :chats, foreign_key: 'owner_id', dependent: :destroy
   has_many :chat_participant, dependent: :destroy
-  has_many :chat_admin, dependent: :destroy
   has_many :user_achievements, dependent: :destroy
   has_many :achievements, through: :user_achievements
   has_many :ignores, foreign_key: 'user_id', dependent: :destroy, class_name: 'UserIgnore'
-  has_many :friendship
+  has_many :friendship, foreign_key: 'user_id', dependent: :destroy, class_name: 'Friendship'
   validates_presence_of :nickname
   validates :nickname, uniqueness: true
   validates_inclusion_of :two_factor, in: [true, false]
