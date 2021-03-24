@@ -17,29 +17,30 @@ if Rails.env.development?
 
   guilds = FactoryBot.create_list(:guild, 5)
   guilds.each do |guild|
-    users = FactoryBot.create_list(:user, 5)
-    FactoryBot.create(:guild_member, guild: guild, rank: 'owner', user: users[0])
+    @users = FactoryBot.create_list(:user, 5)
+    FactoryBot.create(:guild_member, guild: guild, rank: 'owner', user: @users[0])
     1.upto(2) do |i|
-      FactoryBot.create(:guild_member, guild: guild, rank: 'officer', user: users[i])
+      FactoryBot.create(:guild_member, guild: guild, rank: 'officer', user: @users[i])
     end
     3.upto(4) do |i|
-      FactoryBot.create(:guild_member, guild: guild, user: users[i])
+      FactoryBot.create(:guild_member, guild: guild, user: @users[i])
     end
-    chat = FactoryBot.create(:chat, owner: users[0])
+    chat = FactoryBot.create(:chat, owner: @users[0])
     1.upto(4) do |i|
-      FactoryBot.create(:chat_participant, user: users[i], chat: chat)
+      FactoryBot.create(:chat_participant, user: @users[i], chat: chat)
+    end
+    guilds.without(guild).each do |on|
+      FactoryBot.create(:war, from: guild, on: on, war_start: DateTime.now + rand(-5..5), war_end: DateTime.now + rand(6..10))
     end
   end
 
-  FactoryBot.create(:war, from: guilds[0], on: guilds[1], war_start: DateTime.now, war_end: DateTime.new(2022))
-
   10.times do |_i|
-    winner = User.find(1..7)
-    FactoryBot.create(:game, winner: winner, player_left: winner, player_right: User.find(8..15), mode: 'ladder',
+    players = @users.sample(2)
+    FactoryBot.create(:game, winner: players[0], player_left: players[0], player_right: players[1], mode: 'ladder',
                              status: 'played')
   end
 
   User.all.each do |t|
-    t.update!(ladder_id: rand(1..5))
+    t.update!(ladder_id: Ladder.all.sample(1))
   end
 end

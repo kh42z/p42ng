@@ -35,6 +35,9 @@ describe 'Guild', type: :request do
       expect(json['owner_id'][0]).to eq auth.id
       expect(json['member_ids'][0]).to eq auth.id
     end
+    it 'should return guild wars' do
+      
+    end
   end
 
   describe '#create' do

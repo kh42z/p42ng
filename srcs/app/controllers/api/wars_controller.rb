@@ -6,7 +6,8 @@ module Api
     before_action :permission, only: %i[update create_times destroy_times agreements]
     before_action :pending_agreement?, only: %i[update create_times destroy_times]
 
-    UserReducer = Rack::Reducer.new(War.all.order(war_end: :desc), ->(guild_id:) { where(guild_id: guild_id) })
+    UserReducer = Rack::Reducer.new(War.all.order(war_end: :desc),
+                                    ->(guild_id:) { where(from_id: guild_id).or(where(on_id: guild_id)) })
 
     def index
       wars = UserReducer.apply(params)
