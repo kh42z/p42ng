@@ -19,5 +19,8 @@ RUN yarn install
 RUN crontab -l | { cat; echo ""; } | crontab - && bundle exec whenever --update-crontab
 ADD build/rails/heroku-entrypoint.sh /heroku-entrypoint.sh
 RUN chmod 0755 /heroku-entrypoint.sh
+RUN groupadd -r p42ng && useradd -r -s /bin/false -g p42ng p42ng
+RUN chown -R p42ng:p42ng /app
+USER p42ng
 EXPOSE 3000
 ENTRYPOINT ["/bin/bash","-c", "/heroku-entrypoint.sh"]

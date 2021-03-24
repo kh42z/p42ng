@@ -5,15 +5,6 @@ services:
     image: postgres:12.1
     environment:
       POSTGRES_PASSWORD: secure
-  alfred:
-    build:
-      context: ./build/alfred
-      dockerfile: Dockerfile
-    container_name: alfred
-    depends_on:
-      - rails
-    environment:
-      ALFRED_CODE: 13252eceff439797fa6f35e8172d244db71bf4696df286a8b7ffc2ad88dec88c
   rails:
     build:
       context: .
