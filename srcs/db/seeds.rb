@@ -39,7 +39,7 @@ if Rails.env.development?
   end
 
   User.all.each do |t|
-    t.update!(ladder_id: Ladder.all.sample(1))
+    t.update!(ladder_id: Ladder.all.sample.id)
   end
 
 end
