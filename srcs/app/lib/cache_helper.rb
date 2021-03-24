@@ -6,6 +6,7 @@ module CacheHelper
   GUILD_INVITE_KEY_PREFIX = 'pending_invite_'
   GE_PADDLE_POSITION = 'game_engine_paddle_pos_'
   GE_STOP = 'game_engine_stop_'
+  ACTIONCABLE_USER_CONNECTED = 'ac_connected_'
 
   def user_banned_from_chat?(chat_id, user_id)
     Rails.cache.exist?(CacheHelper::BAN_KEY_PREFIX + "#{chat_id}_#{user_id}")
@@ -45,5 +46,17 @@ module CacheHelper
     Rails.cache.fetch(CacheHelper::GE_PADDLE_POSITION + "#{game_id}_#{user_id}") do
       return 128
     end
+  end
+
+  def actioncable_set_user_connected(user_id)
+    Rails.cache.write(CacheHelper::ACTIONCABLE_USER_CONNECTED + user_id.to_s, 0)
+  end
+
+  def actioncable_is_user_connected?(user_id)
+    Rails.cache.exist?(CacheHelper::ACTIONCABLE_USER_CONNECTED + user_id.to_s)
+  end
+
+  def actioncable_set_user_disconnected(user_id)
+    Rails.cache.delete(CacheHelper::ACTIONCABLE_USER_CONNECTED + user_id.to_s)
   end
 end

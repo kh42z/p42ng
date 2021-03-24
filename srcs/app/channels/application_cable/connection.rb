@@ -2,10 +2,17 @@
 
 module ApplicationCable
   class Connection < ActionCable::Connection::Base
+    include(CacheHelper)
     identified_by :current_user
 
     def connect
       self.current_user = find_verified_user
+    end
+
+    def disconnect
+      return if current_user.nil?
+
+      actioncable_set_user_disconnected(current_user.id)
     end
 
     protected
@@ -32,11 +39,12 @@ module ApplicationCable
 
     def authenticate(uid, token, client_id)
       user = User.find_by_uid(uid)
-      if user&.valid_token?(token, client_id)
-        user
-      else
-        reject_unauthorized_connection
-      end
+      return reject_unauthorized_connection if user.nil?
+      return reject_unauthorized_connection if actioncable_is_user_connected?(user.id)
+      return reject_unauthorized_connection if user&.valid_token?(token, client_id) == false
+
+      actioncable_set_user_connected(user.id)
+      user
     end
   end
 end
