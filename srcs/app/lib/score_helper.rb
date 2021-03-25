@@ -7,27 +7,27 @@ module ScoreHelper
   def game_point_assignment(game)
     winner_side(game)
     @winner.guild_member&.guild&.increment!(:score, POINTS)
-    war_effort_point if set_war
-    ladder_point unless game.mode['ladder'] == 'ladder'
+    war_efforts if set_war
+    give_ladder_points unless game.mode['ladder'] == 'ladder'
   end
 
-  def ladder_point
-    @winner.increment!(:ladder_games_won)
-    @looser.increment!(:ladder_games_lost)
-  end
-
-  def war_effort_point
-    war_point(POINTS) if game.mode['duel'] == 'duel'
-    war_point(POINTS) if game.mode['ladder'] == 'ladder' && @war.ladder_effort == true
-    # war_point(game.tournament_prize) if game.mode['tournament'] == 'tournament' && @war.tournament_effort == true
-  end
-
-  def war_point(points)
+  def give_points(points)
     if @winner_is_from
       @war.increment!(:from_score, points)
     else
       @war.increment!(:on_score, points)
     end
+  end
+
+  def give_ladder_points
+    @winner.increment!(:ladder_games_won)
+    @looser.increment!(:ladder_games_lost)
+  end
+
+  def war_efforts
+    give_points(POINTS) if game.mode['duel'] == 'duel'
+    give_points(POINTS) if game.mode['ladder'] == 'ladder' && @war.ladder_effort == true
+    # give_point(game.tournament_prize) if game.mode['tournament'] == 'tournament' && @war.tournament_effort == true
   end
 
   def winner_side(game)

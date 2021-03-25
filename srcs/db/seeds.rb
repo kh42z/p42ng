@@ -41,5 +41,4 @@ if Rails.env.development?
   User.all.each do |t|
     t.update!(ladder_id: Ladder.all.sample.id)
   end
-
 end

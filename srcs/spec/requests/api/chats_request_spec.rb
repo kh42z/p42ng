@@ -7,37 +7,36 @@ RSpec.describe 'Chats', type: :request do
   let(:auth) { create(:user) }
   let(:access_token) { auth.create_new_auth_token }
   describe '#index' do
+    let!(:chats) { create_list(:chat, 2) }
     it 'should get chats' do
-      create_list(:chat, 2)
       get api_chats_url, headers: access_token
-      assert_response :success
+      expect(response.status).to eq 200
       expect(json.size).to eq(2)
     end
     it 'should get chats where participant_id equal' do
-      create_list(:chat, 2)
       ChatParticipant.create(chat: Chat.first, user: User.first)
       get api_chats_url, headers: access_token, params: { participant_id: User.first.id }
       expect(response).to have_http_status(200)
       expect(json.size).to eq(1)
     end
     it 'should get chat' do
-      chat = create(:chat)
-      get api_chat_url(chat.id), headers: access_token
+      get api_chat_url(Chat.first.id), headers: access_token
       expect(response).to have_http_status(200)
-      assert_equal chat.privacy, json['privacy']
+      assert_equal Chat.first.privacy, json['privacy']
     end
-    it 'should get timeout_id of muted participant' do
-      user_1 = create(:user)
+  end
+  describe "Ban/Mute responses", test:true do
+    let(:user_1) { create(:user) }
+    before {
       post api_chats_url, headers: access_token, params: { name: 'Hop' }
       post invites_api_chat_url(Chat.first.id), headers: access_token, params: { participant_ids: [user_1.id] }
+    }
+    it 'should get timeout_id' do
       post mutes_api_chat_url(Chat.first.id), headers: access_token, params: { user_id: user_1.id, duration: 10 }
       get api_chat_url(Chat.first.id), headers: access_token
       expect(json['timeout_ids'][0]).to eq user_1.id
     end
-    it 'should get ban_id of banned participant' do
-      user_1 = create(:user)
-      post api_chats_url, headers: access_token, params: { name: 'Hop' }
-      post invites_api_chat_url(Chat.first.id), headers: access_token, params: { participant_ids: [user_1.id] }
+    it 'should get ban_id' do
       post bans_api_chat_url(Chat.first.id), headers: access_token, params: { user_id: user_1.id, duration: 10 }
       get api_chat_url(Chat.first.id), headers: access_token
       expect(json['ban_ids'][0]).to eq user_1.id
@@ -76,7 +75,7 @@ RSpec.describe 'Chats', type: :request do
         expect(Chat.first.name).to eq('Hop')
         expect(json).to include('name' => 'Hop')
       end
-      it 'two participants max if direct_message',test:true do
+      it 'two participants max if direct_message' do
         users = create_list(:user, 3)
         post api_chats_url, headers: access_token, params: { name: 'Hop', privacy: 'direct_message', participant_ids: [users[0].id, users[1].id, users[2].id] }
         expect(Chat.first.participants.count).to eq 2

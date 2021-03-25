@@ -30,6 +30,6 @@ class ChatSerializer < ActiveModel::Serializer
   end
 
   def owner_id
-    object.owner.id
+    object.owner&.id
   end
 end
