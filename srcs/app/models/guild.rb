@@ -16,7 +16,7 @@ class Guild < ApplicationRecord
   #   User.where(id: members.where(rank: 'owner').pluck(:user_id)).first
   # end
 
-  def wars_from_enemy
-    War.where(on: id)
-  end
+  # def wars_from_enemy
+  #   War.where(on: id)
+  # end
 end

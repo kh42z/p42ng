@@ -25,7 +25,7 @@ class War < ApplicationRecord
     errors.add(:war_start, 'must be before end time') unless valid
   end
 
-  def guilds
-    [from] + [on]
-  end
+  # def guilds
+  #  [from] + [on]
+  # end
 end

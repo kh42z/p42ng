@@ -38,6 +38,17 @@ RSpec.describe Ball do
     expect(ball.x).to eq(Player::PADDLE_PADDING + 2)
   end
 
+
+  it 'should hit bottom border' do
+    ball.x = 128
+    ball.y = 0
+    ball.left = true
+    ball.up = false
+    ball.move(128, 128)
+    expect(ball.up).to eq(true)
+    expect(ball.y).to eq(1)
+  end
+
   it 'should hit right paddle' do
     ball.x = BoardObject::HORIZONTAL_LIMIT - Player::PADDLE_PADDING - 1
     ball.y = 119
