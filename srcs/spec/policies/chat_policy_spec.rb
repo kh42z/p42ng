@@ -50,4 +50,11 @@ describe ChatPolicy do
       end
     end
   end
+
+  permissions :leave? do
+    it 'true' do
+      expect(subject).to permit(owner, chat)
+      expect(subject).to permit(user, chat)
+    end
+  end
 end

@@ -18,7 +18,7 @@ module Api
     end
 
     def create
-      @games_params = params.permit(:mode, :war_time_id)
+      @games_params = params.permit(:mode)
       player_sides
       return render_error('warTimeMatchLimit', 403) if war_time_match_ongoing?
       return render_error('opponentNotAvailable', 403) unless opponent_available?
@@ -43,9 +43,14 @@ module Api
     def war_time_match_ongoing?
       return unless @games_params[:mode] == 'war'
 
-      war = war_opened_side_help(current_user.guild, User.find(params[:opponent_id]).guild)
-      war_time = war.war_times.where(opened: true).first
+      @games_params = @games_params.merge(war_time_id: war_time.id) unless war_time.nil?
+
       Game.where(war_time_id: war_time.id).any?
+    end
+
+    def war_time
+      war = war_opened_side_help(current_user.guild, User.find(params[:opponent_id]).guild)
+      war.war_times.where(opened: true).first
     end
 
     def send_invites(game)

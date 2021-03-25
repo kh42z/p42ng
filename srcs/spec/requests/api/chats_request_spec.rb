@@ -212,7 +212,7 @@ RSpec.describe 'Chats', type: :request do
       expect(ChatParticipant.count).to eq(0)
       expect(Chat.first).to eq nil
     end
-    it 'should delete participant and set another admin and owner' do
+    it 'should delete owner and set another user, owner' do
       post api_chats_url, headers: access_token, params: { name: 'Hop', participant_ids: [user.id] }
       delete participants_api_chat_url(Chat.first.id), headers: access_token
       expect(ChatParticipant.count).to eq(1)
@@ -220,6 +220,18 @@ RSpec.describe 'Chats', type: :request do
       expect(ChatParticipant.first.user_id).to eq(user.id)
       expect(ChatParticipant.where(role: 'owner').first.user_id).to eq(user.id)
       expect(Chat.first.owner.id).to eq(user.id)
+      expect(response).to have_http_status(204)
+    end
+    it 'should delete owner and set another admin, owner' do
+      admin = create(:user)
+      post api_chats_url, headers: access_token, params: { name: 'Hop', participant_ids: [admin.id, user.id] }
+      ChatParticipant.find_by(user_id: admin.id).update(role: 'admin')
+      delete participants_api_chat_url(Chat.first.id), headers: access_token
+      expect(ChatParticipant.count).to eq(2)
+      expect(ChatParticipant.where(role: 'owner').count).to eq(1)
+      expect(ChatParticipant.first.user_id).to eq(admin.id)
+      expect(ChatParticipant.where(role: 'owner').first.user_id).to eq(admin.id)
+      expect(Chat.first.owner.id).to eq(admin.id)
       expect(response).to have_http_status(204)
     end
   end

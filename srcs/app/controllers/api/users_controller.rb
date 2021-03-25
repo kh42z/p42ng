@@ -6,8 +6,6 @@ module Api
   class UsersController < ApiController
     before_action :set_user,
                   only: %i[show update upload_avatar create_ignore destroy_ignore create_friendship destroy_friendship]
-    # before_action :allowed?,
-    #              only: %i[update upload_avatar create_ignore destroy_ignore create_friendship destroy_friendship]
     after_action :verify_authorized, except: %i[index show]
 
     UserReducer = Rack::Reducer.new(
@@ -25,7 +23,9 @@ module Api
     def update
       authorize @user
 
-      disconnect_banned_user(@user.id) if user_params.key?(:banned) && user_params.fetch(:banned) == true
+      return render_not_allowed if banning? && @user.id == current_user.id
+
+      disconnect_banned_user(@user.id) if banning?
 
       @user.update!(user_params)
       json_response(@user)
@@ -73,6 +73,10 @@ module Api
     end
 
     private
+
+    def banning?
+      user_params.key?(:banned) && user_params[:banned]
+    end
 
     def ignore_params
       params.permit(:ignored_id)
