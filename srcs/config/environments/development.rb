@@ -65,6 +65,5 @@ Rails.application.configure do
     user_name: "postmaster@#{ENV['MAILGUN_DOMAIN']}",
     password: ENV['MAILGUN_PASSWORD'],
     enable_starttls_auto: true
-
   }
 end
