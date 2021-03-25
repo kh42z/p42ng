@@ -143,6 +143,8 @@ RSpec.describe "Users", type: :request do
       it "returns status code 200" do
         expect(response).to have_http_status(200)
         expect(json).not_to be_empty
+        user.reload
+        expect(user.banned).to eq(true)
       end
     end
 
