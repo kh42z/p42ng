@@ -17,7 +17,7 @@ RSpec.describe "Wars", type: :request do
       post api_wars_url, headers: access_token_2, params: attributes_2
     }
     describe "#index" do
-      it 'should return all wars' do
+      it 'should return all wars',test:true do
         get api_wars_url, headers: access_token
         expect(json.size).to eq 2
         expect(response.status).to eq 200
@@ -29,7 +29,7 @@ RSpec.describe "Wars", type: :request do
       end
     end
     describe "#show" do
-      it 'should return a war',test:true do
+      it 'should return a war' do
         get api_war_url(War.first), headers: access_token
         expect(response.status).to eq 200
         expect(json['id']).to match(War.first.id)

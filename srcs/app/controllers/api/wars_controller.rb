@@ -3,8 +3,8 @@
 module Api
   class WarsController < ApiController
     before_action :set_war, except: %i[index create]
-    before_action :permission, only: %i[update create_times destroy_times agreements]
-    before_action :pending_agreement?, only: %i[update create_times destroy_times]
+    before_action :war_editable?, only: %i[update create_times destroy_times]
+    after_action :verify_authorized, except: %i[index show]
 
     UserReducer = Rack::Reducer.new(War.all.order(war_end: :desc),
                                     ->(guild_id:) { where(from_id: guild_id).or(where(on_id: guild_id)) })
@@ -15,14 +15,15 @@ module Api
     end
 
     def create
-      return render_not_allowed unless Guild.find(params_create[:from_id]).owner == current_user.guild_member
-
-      war = War.create!(params_create)
-      war.update!(last_negotiation: current_user.guild.id)
+      war = War.new(params_create)
+      authorize war
+      war.last_negotiation = current_user.guild.id
+      war.save!
       json_response(war, 201)
     end
 
     def update
+      authorize @war
       return render_error('notNegotiated', 403) unless turn_to_negotiate?
 
       @war.update!(params_update)
@@ -31,6 +32,7 @@ module Api
     end
 
     def agreements
+      authorize @war
       return render_error('timeSlotEntangled', 403) if wars_entangled?
 
       if current_user.guild_member.guild_id == @from.id
@@ -43,6 +45,7 @@ module Api
     end
 
     def create_times
+      authorize @war
       return render_error('timeSlotEntangled', 403) if times_entangled?
 
       war_time = WarTime.create!(time_params_create)
@@ -52,6 +55,7 @@ module Api
     end
 
     def destroy_times
+      authorize @war
       WarTime.find(params[:tid]).destroy!
       head :no_content
     end
@@ -68,8 +72,10 @@ module Api
       WarCloserJob.set(wait_until: war.war_end).perform_later(war)
     end
 
-    def pending_agreement?
+    def war_editable?
       return unless @war.from_agreement? || @war.on_agreement?
+      return render_error('warOngoing', 403) if @war.opened?
+      return render_error('warClosed', 403) if @war.closed?
 
       render_error('pendingAgreement', 403) if @war.terms_agreed == false
       render_error('termsAccepted', 403) if @war.terms_agreed == true
@@ -95,14 +101,6 @@ module Api
       return false if @war.last_negotiation == current_user.guild.id
 
       @war.last_negotiation = current_user.guild.id
-    end
-
-    def permission
-      unless current_user.guild_member == @from.owner || current_user.guild_member == @on.owner
-        return render_not_allowed
-      end
-      return render_error('warOngoing', 403) if @war.opened?
-      return render_error('warClosed', 403) if @war.closed?
     end
 
     def params_update
