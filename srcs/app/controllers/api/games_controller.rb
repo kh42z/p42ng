@@ -27,8 +27,7 @@ module Api
     end
 
     def destroy
-      return render_error('gameAlreadyStarted', 403) if @game.status != 'pending'
-
+      authorize @game
       @game.destroy
       head :no_content
     end
