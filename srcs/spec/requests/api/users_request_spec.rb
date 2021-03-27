@@ -136,15 +136,17 @@ RSpec.describe "Users", type: :request do
     end
 
     context "when admins bans an user" do
-      before do
-        auth.update(admin: true)
-        patch "/api/users/#{user.id}", params: { user: {banned: true}}, headers: auth.create_new_auth_token
-      end
       it "returns status code 200" do
+        auth.update(admin: true)
+        user_token = user.create_new_auth_token
+        patch "/api/users/#{user.id}", params: { user: {banned: true} }, headers: auth.create_new_auth_token
         expect(response).to have_http_status(200)
         expect(json).not_to be_empty
         user.reload
         expect(user.banned).to eq(true)
+        # user shouldnt be able to use cred
+        get "/api/users", headers: user_token
+        expect(response).to have_http_status(401)
       end
     end
 

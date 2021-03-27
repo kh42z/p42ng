@@ -25,7 +25,7 @@ module Api
 
       return render_not_allowed if banning? && @user.id == current_user.id
 
-      disconnect_banned_user(@user.id) if banning?
+      ban_hammer if banning?
 
       @user.update!(user_params)
       json_response(@user)
@@ -76,6 +76,11 @@ module Api
 
     def banning?
       user_params.key?(:banned) && user_params[:banned]
+    end
+
+    def ban_hammer
+      @user.tokens = nil
+      disconnect_banned_user(@user.id)
     end
 
     def ignore_params
