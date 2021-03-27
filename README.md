@@ -5,7 +5,7 @@
 
 ### OpenAPI Documentation
 
-https://localhost:3000/api-docs
+http://localhost:3000/api-docs
 
 ### Rails Tests:
 
@@ -17,9 +17,3 @@ https://p42ng.herokuapp.com/
 ### Authors:
 
 @kh42z, @Shankhara
-
-# Front
-
-### Authors:
-
-@paulineggf, @jdurand42
