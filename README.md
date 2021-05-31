@@ -1,4 +1,4 @@
-# Backend [![Backend](https://github.com/kh42z/p42ng/actions/workflows/workflow.yml/badge.svg)](https://github.com/kh42z/p42ng/actions/workflows/workflow.yml) [![Coverage Status](https://coveralls.io/repos/github/kh42z/p42ng/badge.svg?t=aSZhOk)](https://coveralls.io/github/kh42z/p42ng)
+# Backend [![Backend](https://github.com/kh42z/p42ng/actions/workflows/workflow.yml/badge.svg)](https://github.com/kh42z/p42ng/actions/workflows/workflow.yml) [![Coverage Status](https://coveralls.io/repos/github/kh42z/p42ng/badge.svg?branch=master&t=t8ICMV)](https://coveralls.io/github/kh42z/p42ng?branch=master)
 
 ### Run:
 `docker-compose up --build`
