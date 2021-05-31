@@ -1,0 +1,1286 @@
+
+openapi: 3.0.1
+info:
+  version: v1
+  title: Pong API
+  description: Pong API
+paths:
+  "/api/achievements":
+    get:
+      summary: Retrieves all achievements
+      tags:
+        - Achievements
+      parameters:
+        - in: query
+          name: user_id
+          schema:
+            type: integer
+          description: filter by user_id
+      responses:
+        '200':
+          description: All achievements
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/arrayOfAchievements"
+  "/api/chats":
+    get:
+      summary: Retrieves chats
+      tags:
+        - Chats
+      parameters:
+        - in: query
+          name: participant_id
+          schema:
+            type: integer
+          description: filter by participant_id
+      responses:
+        '200':
+          description: chats found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/chat_response'
+    post:
+      summary: Creates a chat
+      tags:
+        - Chats
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                privacy:
+                  type: string
+                  enum: [public, private, protected]
+                password:
+                  type: string
+                participant_ids:
+                  $ref: '#/components/schemas/integer_list'
+      responses:
+        '201':
+          description: chat created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/chat"
+  "/api/chats/{id}":
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Chat ID
+    get:
+      summary: Retrieves a chat
+      tags:
+        - Chats
+      responses:
+        '200':
+          description: chat found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/chat_response"
+    put:
+      summary: Modifies a chat
+      description: Allows an chat_admin to modify chatroom settings
+      tags:
+        - Chats
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  type: string
+                privacy:
+                  type: string
+                  enum: [public, private, protected]
+                password:
+                  type: string
+                admin_ids:
+                  $ref: '#/components/schemas/integer_list'
+      responses:
+        '200':
+          description: chat modified
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/chat"
+    delete:
+      summary: Deletes a chat
+      tags:
+        - Chats
+      responses:
+        '204':
+          description: chat deleted
+  "/api/chats/{id}/admins/{tid}":
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Chat ID
+      - name: tid
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Target ID
+    post:
+      summary: Set participant as admin
+      description: Allows current_user to set participant as admin
+      tags:
+        - Chats
+      responses:
+        '201':
+          description: participant set as admin
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/chat_element"
+    delete:
+      summary: Demote admin
+      description: Allows current_user to ldemote admin
+      tags:
+        - Chats
+      responses:
+        '204':
+          description: admin demoted
+  "/api/chats/{id}/messages":
+    post:
+      summary: Use http to broadcast a websocket message
+      tags:
+        - Chats
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ChatID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                content:
+                  type: string
+      responses:
+        '201':
+          description: Message created
+          content:
+            application/json:
+              schema:
+                properties:
+                  content:
+                    type: string
+    get:
+      summary: Retrieves the last 10 messages sent
+      tags:
+        - Chats
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ChatID
+      responses:
+        '200':
+          description: messages found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/arrayOfMessages"
+  "/api/chats/{id}/mutes":
+    post:
+      summary: Mutes an user
+      description: Allows moderators to mute an user for a specified duration (in seconds)
+      tags:
+        - Chats
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Chat ID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ban"
+      responses:
+        '201':
+          description: user muted
+          content:
+            application/json:
+              schema:
+                type: string
+                example: 'User 1 muted for 100sec'
+  "/api/chats/{id}/bans":
+    post:
+      summary: Bans an user
+      description: Allows moderators to ban an user for a specified duration (in seconds)
+      tags:
+        - Chats
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Chat ID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ban"
+      responses:
+        '201':
+          description: user banned
+          content:
+            application/json:
+              schema:
+                type: string
+                example: 'User #{user_id} banned for #{duration}sec'
+
+  "/api/chats/{id}/participants":
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Chat ID
+    post:
+      summary: Joins a chatroom
+      description: Allows current_user to joins a chatroom
+      tags:
+        - Chats
+      parameters:
+        - in: query
+          name: password
+          schema:
+            type: string
+          description: Required password if privacy is set to protected
+      responses:
+        '201':
+          description: chat joined
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/chat_element"
+    delete:
+      summary: Leaves a chatroom
+      description: Allows current_user to leaves a chatroom
+      tags:
+        - Chats
+      responses:
+        '204':
+          description: chat left
+  "/api/chats/{id}/participants/{tid}":
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Chat ID
+      - name: tid
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Target ID
+    delete:
+      summary: Kicks a participant from a chatroom
+      description: Allows current_user to kick a participant
+      tags:
+        - Chats
+      responses:
+        '204':
+          description: participant kicked
+  "/api/chats/{id}/invites":
+    post:
+      summary: Adds participants to the chatroom
+      description: Allows current_user to add participants to the chatroom
+      tags:
+        - Chats
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Chat ID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                participant_ids:
+                  $ref: '#/components/schemas/integer_list'
+      responses:
+        '201':
+          description: participants added
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  participant_ids:
+                    $ref: '#/components/schemas/integer_list'
+
+  "/api/games":
+    get:
+      summary: Retrieves all games played
+      tags:
+        - Games
+      parameters:
+        - in: query
+          name: user_id
+          schema:
+            type: integer
+          description: filter by user_id (either win or loose)
+        - in: query
+          name: mode
+          schema:
+            type: string
+            enum: [duel, ladder, tournament]
+          description: filter by mode [Duel Ladder Tournament]
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [ pending, inprogress, played ]
+          description: filter by status
+      responses:
+        '200':
+          description: Games found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/arrayOfGames"
+    post:
+      summary: creates a game
+      description: Either queue for a ladder game or duel someone
+      tags:
+        - Games
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/game"
+      responses:
+        '201':
+          description: invitations sent
+  "/api/games/{id}":
+    delete:
+      summary: deletes a game
+      description: If the game has not started yet, you can decline by deleting the game
+      tags:
+        - Games
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: invitation declined
+  "/api/guilds":
+    get:
+      summary: Retrieves guilds
+      tags:
+        - Guilds
+      responses:
+        '200':
+          description: guilds found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/guild_response"
+    post:
+      summary: Creates a guild
+      tags:
+        - Guilds
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                anagram:
+                  type: string
+      responses:
+        '201':
+          description: guilds created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/guild"
+
+  "/api/guilds/{id}":
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Guild ID
+    get:
+      summary: Retrieves a guild
+      tags:
+        - Guilds
+      responses:
+        '200':
+          description: guild found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/guild_response"
+    put:
+      summary: Modifies a guild
+      tags:
+        - Guilds
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                anagram:
+                  type: string
+      responses:
+        '200':
+          description: guild modified
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/guild"
+
+  "/api/guilds/{id}/officers/{tid}":
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Guild ID
+      - name: tid
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Target ID
+    post:
+      summary: Adds a guild officer
+      description: Allows current_user to add a guild officer
+      tags:
+        - Guilds
+      responses:
+        '201':
+          description: member promoted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/guild_officer"
+    delete:
+      summary: Removes a guild officer
+      description: Allows current_user to remove a guild officer
+      tags:
+        - Guilds
+      responses:
+        '204':
+          description: officer removed
+  "/api/guilds/{id}/invitations":
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Guild ID
+    post:
+      summary: send an invitation
+      description: Allows current_user to invite
+      tags:
+        - Guilds
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+      responses:
+        '201':
+          description: invitation sent
+          content:
+            application/json:
+              schema:
+                type: string
+    delete:
+      summary: Invitation refused
+      description: Allows current_user to refuse invitation
+      tags:
+        - Guilds
+      responses:
+        '203':
+          description: invitation refused
+  "/api/guilds/{id}/members":
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Guild ID
+    post:
+      summary: If invited, current_user joins the guild
+      description: Allows current_user to add a guild member
+      tags:
+        - Guilds
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+      responses:
+        '201':
+          description: member added
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/guild_member"
+  "/api/guilds/{id}/members/{tid}":
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Guild ID
+      - name: tid
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Target ID
+    delete:
+      summary: Removes a guild member
+      description: Allows current_user to remove a guild member
+      tags:
+        - Guilds
+      responses:
+        '204':
+          description: member removed
+  "/api/wars":
+    get:
+      summary: Retrieves wars
+      tags:
+        - Wars
+      parameters:
+        - in: query
+          name: guild_id
+          schema:
+            type: integer
+          description: filter by guild_id
+      responses:
+        '200':
+          description: wars found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/war"
+    post:
+      summary: Declares a war
+      tags:
+        - Wars
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/war_declaration"
+      responses:
+        '201':
+          description: war declared
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/war"
+  "/api/wars/{id}":
+    put:
+      summary: Negociate war terms
+      description: Allows guild owners to update alternately a war
+      tags:
+        - Wars
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: War ID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/war_negociable"
+      responses:
+        '200':
+          description: guild found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/war"
+  "/api/wars/agreements":
+    post:
+      summary: Accepts or declines war terms
+      description: Allows current_user to accept or declines war terms
+      tags:
+        - Wars
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                agree_terms:
+                  type: boolean
+      responses:
+        '201':
+          description: war terms agreed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/war_negociable"
+  "/api/wars/{id}/times":
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: War ID
+    get:
+      summary: Retrieves war times
+      tags:
+        - Wars
+      responses:
+        '200':
+          description: wars times found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/war_time"
+    post:
+      summary: Creates war time
+      tags:
+        - Wars
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/war_time"
+      responses:
+        '200':
+          description: war time created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/war_time"
+
+  "/api/wars/{id}/times/{tid}":
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: War ID
+      - name: tid
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Target ID
+    delete:
+      summary: Removes war time
+      description: Allows current_user to remove a war time
+      tags:
+        - Wars
+      responses:
+        '204':
+          description: war time removed
+  "/api/ladders/{id}":
+    get:
+      summary: Retrieves a ladder
+      tags:
+        - Ladders
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ladder found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ladder"
+  "/api/ladders":
+    get:
+      summary: Retrieves all ladders
+      tags:
+        - Ladders
+      responses:
+        '200':
+          description: ladders found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ladder"
+  "/api/users":
+    get:
+      summary: Retrieves users
+      tags:
+        - Users
+      parameters:
+        - in: query
+          name: ladder_id
+          schema:
+            type: integer
+          description: filter by ladder_id
+        - in: query
+          name: guild_id
+          schema:
+            type: integer
+          description: filter by guild_id
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [offline, online, ingame]
+          description: filter by status
+      responses:
+        '200':
+          description: users found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/user_response"
+  "/api/users/{id}":
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    put:
+      summary: Modifies an user
+      tags:
+        - Users
+      parameters: [ ]
+      responses:
+        '200':
+          description: user modified
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - "$ref": "#/components/schemas/user_response"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                two_factor:
+                  type: boolean
+                first_login:
+                  type: boolean
+                nickname:
+                  type: string
+                banned:
+                  type: boolean
+                guild_id:
+                  type: integer
+    get:
+      summary: Retrieves an user
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: user found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - "$ref": "#/components/schemas/user_response"
+  "/api/users/{id}/friends":
+    post:
+      summary: Creates a friendship
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref : '#/components/schemas/friend'
+      responses:
+        '200':
+          description: friendship added
+          content:
+            application/json:
+              schema:
+                $ref : '#/components/schemas/friend'
+
+  "/api/users/{id}/friends/{friend_id}":
+    delete:
+      summary: Removes a friendship
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: friend_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: member removed
+  "/api/users/{id}/ignores":
+    post:
+      summary: Add user to ignore list
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref : '#/components/schemas/user_ignored'
+      responses:
+        '200':
+          description: ignore created
+          content:
+            application/json:
+              schema:
+                $ref : '#/components/schemas/user_ignored'
+  "/api/users/{id}/ignores/{ignored_id}":
+    delete:
+      summary: Removes ignored_id from ignore list
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: ignored_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: member removed
+  "/api/users/{id}/avatar":
+    post:
+      summary: Upload an user avatar
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                avatar:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: avatar created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  image_url:
+                    type: string
+servers:
+  - url: http://{defaultHost}:3000
+    variables:
+      defaultHost:
+        default: localhost
+  - url: https://p42ng.herokuapp.com
+security:
+  - client: []
+    access_token: []
+    uid: []
+components:
+  securitySchemes:
+    client:
+      type: apiKey
+      name: client
+      in: header
+    access_token:
+      type: apiKey
+      name: access-token
+      in: header
+    uid:
+      type: apiKey
+      name: uid
+      in: header
+  schemas:
+    arrayOfFriends:
+      type: array
+      items:
+        $ref: '#/components/schemas/friend'
+    arrayOfUserIgnored:
+      type: array
+      items:
+        $ref: '#/components/schemas/user_ignored'
+    arrayOfGames:
+      type: array
+      items:
+        $ref: '#/components/schemas/game_response'
+    arrayOfAchievements:
+      type: array
+      items:
+        $ref: '#/components/schemas/achievement'
+    arrayOfMessages:
+      type: array
+      items:
+        $ref: '#/components/schemas/message'
+    achievement:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        desc:
+          type: string
+    game_response:
+      type: object
+      properties:
+        winner_id:
+          type: integer
+          description: user_id
+        player_left_id:
+          type: integer
+          description: user_id
+        player_right_id:
+          type: integer
+        mode:
+          type: string
+          enum: [duel, ladder, tournament]
+        status:
+          type: string
+          enum: [pending, inprogress, played]
+        created_at:
+          type: string
+    message:
+      type: object
+      properties:
+        id:
+          type: integer
+        sender_id:
+          type: integer
+        content:
+          type: string
+        created_at:
+          type: string
+    game:
+      type: object
+      properties:
+        mode:
+          type: string
+          enum: [duel, ladder, war]
+          example: [duel, ladder, war]
+        opponent_id:
+          type: integer
+          description: user_id of your opponent
+    user:
+      type: object
+      properties:
+        image_url:
+          type: string
+        guild_id:
+          type: integer
+          nullable: true
+        status:
+          type: string
+          enum: [offline, online, ingame]
+          nullable: false
+        ladder_id:
+          type: integer
+          nullable: true
+        two_factor:
+          type: boolean
+        first_login:
+          type: boolean
+        admin:
+          type: boolean
+        banned:
+          type: boolean
+        nickname:
+          type: string
+        ladder_games_won:
+          type: integer
+        ladder_games_lost:
+          type: integer
+        uid:
+          type: string
+        friends:
+          $ref: '#/components/schemas/arrayOfFriends'
+        ignores:
+          $ref: '#/components/schemas/arrayOfUserIgnored'
+    guild_response:
+      allOf:
+        - $ref: "#/components/schemas/guild"
+        - type: object
+          properties:
+            id:
+              type: integer
+            score:
+              type: integer
+            officer_ids:
+              $ref: '#/components/schemas/integer_list'
+            owner_id:
+              type: integer
+            member_ids:
+              $ref: '#/components/schemas/integer_list'
+    user_response:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+        - $ref: "#/components/schemas/user"
+    chat_response:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+            admin_ids:
+              $ref: '#/components/schemas/integer_list'
+            participant_ids:
+              $ref: '#/components/schemas/integer_list'
+            timeout_ids:
+              $ref: '#/components/schemas/integer_list'
+            ban_ids:
+              $ref: '#/components/schemas/integer_list'
+        - $ref: "#/components/schemas/chat"
+    ladder:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        desc:
+          type: string
+          nullable: true
+      required:
+        - name
+    guild:
+      type: object
+      properties:
+        name:
+          type: string
+        anagram:
+          type: string
+        score:
+          type: integer
+    guild_officer:
+      type: object
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        guild_id:
+          type: integer
+        rank:
+          type: string
+          enum: [officer, owner, member]
+    guild_member:
+      type: object
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        guild_id:
+          type: integer
+        rank:
+          type: string
+          enum: [member, owner, officer]
+    ban:
+      type: object
+      properties:
+        user_id:
+          type: integer
+        duration:
+          type: integer
+          description: Duration in seconds
+    user_ignored:
+      type: object
+      properties:
+        ignored_id:
+          type: integer
+    friend:
+      type: object
+      properties:
+        friend_id:
+          type: integer
+    chat:
+      type: object
+      properties:
+        name:
+          type: string
+        privacy:
+          type: string
+          enum: [public, private, protected]
+        password:
+          type: string
+        owner_id:
+          type: integer
+    chat_element:
+      type: object
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        chat_id:
+          type: integer
+    war:
+      allOf:
+        - type: object
+          properties:
+            from_id:
+              type: integer
+            on_id:
+              type: integer
+            from_score:
+              type: integer
+            on_score:
+              type: integer
+            terms_agreed:
+              type: boolean
+            from_agreement:
+              type: boolean
+            on_agreement:
+              type: boolean
+            opened:
+              type: boolean
+            closed:
+              type: boolean
+            last_negotiation:
+              type: integer
+        - $ref: "#/components/schemas/war_negociable"
+    war_declaration:
+      allOf:
+        - type: object
+          properties:
+            on_id:
+              type: integer
+        - $ref: "#/components/schemas/war_negociable"
+    war_negociable:
+      type: object
+      properties:
+        war_start:
+          type: string
+          format: date-time
+        war_end:
+          type: string
+          format: date-time
+        prize:
+          type: integer
+        max_unanswered:
+          type: integer
+        tournament_effort:
+          type: boolean
+          example: false
+        ladder_effort:
+          type: boolean
+          example: false
+    war_time:
+      type: object
+      properties:
+        start:
+          type: string
+          format: date-time
+        end:
+          type: string
+          format: date-time
+
+    integer_list:
+      type: array
+      items:
+        type: integer
+  responses:
+    '201':
+      description: Created
+      content: { }
+    '422':
+      description: invalid request
+      content: { }
