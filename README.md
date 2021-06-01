@@ -29,7 +29,7 @@ Le `TDD` faisant partie integrante de Rails, il m'etait impossible de passer a c
 
 #### 3. CI/CD
 
-Un github workflow se declenchait sur chaque `push` sur `master`, si le rubocop/tests passaient la version etait deployee sur une instance d'Heroku en mode production.
+Un github workflow se declenchait sur chaque `push` sur `master`, si rubocop et les tests passaient la version etait deployee sur une instance d'Heroku en mode production.
 
 ### CONCLUSION
 
