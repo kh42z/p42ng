@@ -4,7 +4,7 @@
 
 ### SPECS
 
-Pour decrire le comportement de notre API nous avons opte pour OpenAPI/Swagger. Swagger a fait office de Spec en nous permettant de decrire ce qui est consomme par le front et produit par notre API. Idealement le front/comme le back pouvait s'accorder sur le comportement de l'API avant son implementation.
+Pour decrire le comportement de notre API nous avons opte pour OpenAPI/Swagger. Swagger a fait office de Spec en nous permettant de decrire ce qui est consomme par le front et produit par notre API. Idealement le front/back pouvaient s'accorder sur le comportement de l'API avant son implementation.
 
 #### DEV PROCESS
 
