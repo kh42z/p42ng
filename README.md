@@ -5,9 +5,16 @@
 ### SPECS
 
 Swagger a fait office de Spec en nous permettant de decrire ce qui est consomme par le front et produit par notre API. Idealement le front/back pouvaient s'accorder sur le comportement de l'API avant son implementation.
+
    ![image](https://user-images.githubusercontent.com/60870254/120332312-eb436680-c2ee-11eb-9cd1-aafe11403ae4.png)
+   
+Pour avoir une visibilite sur l'implementation des modeles, le schema de la base a ete entierement decrit [(dbdiagram)](https://dbdiagram.io/):
+
+![image](https://user-images.githubusercontent.com/60870254/120334875-4ece9380-c2f1-11eb-84e4-5d9d45d545fe.png)
+
 
 ### DEVELOPMENT
+
 #### 1. Linting 
 Nous avons choisi de mettre en place un linter pour gagner en lisibilite, coherence et en qualite de code. (`rubocop`)
 
