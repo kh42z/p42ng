@@ -20,7 +20,7 @@ Nous avons choisi de mettre en place un linter pour gagner en lisibilite, cohere
 
 #### 2. Tests
 
-Le `TDD` faisant partie integrante de Rails, il m'etait impossible de passer a cote. Nous avons mis en place le processus suivant:
+Le `TDD` faisant partie integrante de Rails, il m'etait difficile de passer a cote. Nous avons mis en place le processus suivant:
 - decrire le comportement attendue de l'api (`swagger`)
 - generer le squelette des `models`/`controllers`/`rspec`
 - ecrire la factory puis les tests (`factory-bot`/`rspec`/`shoulda-matcher`) 
