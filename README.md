@@ -36,7 +36,7 @@ Un github workflow se declenchait sur chaque `push` sur `master`, si rubocop et 
 
 J'ai pu monter en competence sur des sujets tres varies (`Ruby`, `Rest`, `Websocket`, `Oauth2`, `JWT`, `MVC`) et decouvrir un certain nombre des features de Rails (`ActiveStorage`, `Caching`, `ActiveJob`, `ActionCable`, `Mailer`, `Devise`, etc) mais l'interet principal de ce project restera pour moi la mise en place du `TDD`.
 
-Je ne regrette pas d'avoir investi du temps dans sa mise en place et son "evangelisation", le projet pourrait etre maintenu et etendu facilement sur la duree sans creer de dette technique. Cependant a l'avenir je ne l'utiliserais que pour tester le [comportement](https://www.youtube.com/watch?v=EZ05e7EMOLM) (ex `spec/requests`), garder les tests d'implementation ayant tendance a dissuader de refactor (...).
+Je ne regrette pas d'avoir investi du temps dans sa mise en place et son "evangelisation", le projet pourrait etre maintenu et etendu facilement sur la duree sans creer de dette technique. Cependant il est probable que je me concentre sur des tests de comportement (ex `spec/requests`), tester l'implementation revient a poser un carcan qui n'encourage pas a refactor.
 
 ## Run:
 `docker-compose up --build`
