@@ -4,12 +4,10 @@
 
 ### SPECS
 
-Pour decrire le comportement de notre API nous avons opte pour OpenAPI/Swagger. Swagger a fait office de Spec en nous permettant de decrire ce qui est consomme par le front et produit par notre API. Idealement le front/back pouvaient s'accorder sur le comportement de l'API avant son implementation.
+Swagger a fait office de Spec en nous permettant de decrire ce qui est consomme par le front et produit par notre API. Idealement le front/back pouvaient s'accorder sur le comportement de l'API avant son implementation.
+   ![image](https://user-images.githubusercontent.com/60870254/120332312-eb436680-c2ee-11eb-9cd1-aafe11403ae4.png)
 
-![image](https://user-images.githubusercontent.com/60870254/120331797-7112e200-c2ee-11eb-90be-4ad05aaa326c.png)
-
-#### DEV PROCESS
-
+### DEVELOPMENT
 #### 1. Linting 
 Nous avons choisi de mettre en place un linter pour gagner en lisibilite, coherence et en qualite de code. (`rubocop`)
 
@@ -28,9 +26,9 @@ Un github workflow se declenchait sur chaque `push` sur `master`, si le rubocop/
 
 ### CONCLUSION
 
-Il y a eue beaucoup de monter en competence sur des sujets tres varies (`Ruby`, `Rest`, `Websocket`, `Oauth2`, `JWT`, `MVC`) et decouvrir la majorite des features de Rails (`ActiveStorage`, `Caching`, `ActiveJob`, `ActionCable`, etc) mais l'interet principal de ce project restera pour moi la mise en place du `TDD`.
+J'ai pu monter en competence sur des sujets tres varies (`Ruby`, `Rest`, `Websocket`, `Oauth2`, `JWT`, `MVC`) et decouvrir la majorite des features de Rails (`ActiveStorage`, `Caching`, `ActiveJob`, `ActionCable`, etc) mais l'interet principal de ce project restera pour moi la mise en place du `TDD`.
 
-Je ne regrette pas d'avoir investi du temps dans sa mise en place et "evangelisation". Cependant a l'avenir je ne l'utiliserais que pour tester le [comportement](https://www.youtube.com/watch?v=EZ05e7EMOLM), garder les tests d'implementation a tendance a dissuader tout refactor (...).
+Je ne regrette pas d'avoir investi du temps dans sa mise en place et son "evangelisation", le projet pourrait etre maintenu et etendu facilement sur la duree sans creer de dette technique. Cependant a l'avenir je ne l'utiliserais que pour tester le [comportement](https://www.youtube.com/watch?v=EZ05e7EMOLM), garder les tests d'implementation a tendance a dissuader tout refactor (...).
 
 ## Run:
 `docker-compose up --build`
