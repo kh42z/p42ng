@@ -6,9 +6,9 @@
 
 Le point de depart a ete la conception du schema de la base de donnees (dbdiagram.io). 
 
-Pour decrire le comportement de notre API nous avons opte pour Swagger. Swagger a fait office de Spec en nous permettant de decrire ce qui est consomme par le front et produit par notre API.
+Puis pour decrire le comportement de notre API nous avons opte pour Swagger. Swagger a fait office de Spec en nous permettant de decrire ce qui est consomme par le front et produit par notre API.
 
-#### BACKEND DEV PROCESS
+#### DEV PROCESS
 
 #### 1. Linting 
 Nous avons choisi de mettre en place un linter pour gagner en lisibilite, coherence et en qualite de code. (`rubocop`)
@@ -16,7 +16,7 @@ Nous avons choisi de mettre en place un linter pour gagner en lisibilite, cohere
 #### 2. Tests
 
 Le `TDD` faisant partie integrante de Rails, il m'etait impossible de passer a cote. Nous avons mis en place le processus suivant:
-- decrire le fonctionnement attendu de l'api (`swagger`)
+- decrire le fonctionnement attendue de l'api (`swagger`)
 - generer le squelette des `models`/`controllers`/`rspec`
 - ecrire la factory puis les tests (`factory-bot`/`rspec`/`shoulda-matcher`) 
 - ecrire la migration, les contraintes du modele, ajouter les methodes du controller, la route
