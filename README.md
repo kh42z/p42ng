@@ -6,6 +6,8 @@
 
 Pour decrire le comportement de notre API nous avons opte pour OpenAPI/Swagger. Swagger a fait office de Spec en nous permettant de decrire ce qui est consomme par le front et produit par notre API. Idealement le front/back pouvaient s'accorder sur le comportement de l'API avant son implementation.
 
+![image](https://user-images.githubusercontent.com/60870254/120331797-7112e200-c2ee-11eb-90be-4ad05aaa326c.png)
+
 #### DEV PROCESS
 
 #### 1. Linting 
