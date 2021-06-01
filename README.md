@@ -4,7 +4,7 @@
 
 ### DESIGN
 
-Swagger a utilise nous permettant de decrire ce qui est consomme par le front et produit par notre API. Idealement le front/back pouvaient s'accorder sur le comportement de l'API (Spec) avant son implementation.
+Swagger permettant de decrire ce qui est consomme par le front et produit par notre API, nous l'avons utilise comme Spec. Idealement le front/back pouvaient s'accorder sur le comportement de l'API avant son implementation.
 
    ![image](https://user-images.githubusercontent.com/60870254/120332312-eb436680-c2ee-11eb-9cd1-aafe11403ae4.png)
    
