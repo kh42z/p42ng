@@ -4,9 +4,7 @@
 
 ### SPECS
 
-Le point de depart a ete la conception du schema de la base de donnees (dbdiagram.io). 
-
-Puis pour decrire le comportement de notre API nous avons opte pour Swagger. Swagger a fait office de Spec en nous permettant de decrire ce qui est consomme par le front et produit par notre API.
+Pour decrire le comportement de notre API nous avons opte pour OpenAPI/Swagger. Swagger a fait office de Spec en nous permettant de decrire ce qui est consomme par le front et produit par notre API. Idealement le front/comme le back pouvait s'accorder sur le comportement de l'API avant son implementation.
 
 #### DEV PROCESS
 
