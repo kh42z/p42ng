@@ -16,7 +16,7 @@ Pour avoir une visibilite sur l'implementation des modeles, le schema de la base
 ### DEVELOPMENT
 
 #### 1. Linting 
-Nous avons choisi de mettre en place un linter pour gagner en lisibilite, coherence et en qualite de code. (`rubocop`)
+Nous avons choisi de mettre en place un linter pour gagner en lisibilite, coherence et qualite de code. (`rubocop`)
 
 #### 2. Tests
 
